@@ -1,53 +1,56 @@
 {
-  "name": "@unbranded-ds/react",
-  "version": "0.1.0",
-  "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "sideEffects": false,
-  "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "test": "vitest run",
-    "test:unit": "vitest run --project unit",
-    "lint": "eslint src/",
-    "typecheck": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@unbranded-ds/tokens": "workspace:*",
-    "class-variance-authority": "^0.7",
-    "clsx": "^2",
-    "lucide-react": "^1.8.0",
-    "tailwind-merge": "^3"
-  },
-  "peerDependencies": {
-    "@base-ui-components/react": "^1.0.0-rc.0",
-    "react": "^18 || ^19",
-    "react-dom": "^18 || ^19"
-  },
-  "devDependencies": {
-    "@base-ui-components/react": "^1.0.0-rc.0",
-    "@testing-library/jest-dom": "^6",
-    "@testing-library/react": "^16",
-    "@testing-library/user-event": "^14.6.1",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "jsdom": "^25",
-    "react": "^19",
-    "react-dom": "^19",
-    "shadcn": "^4.2.0",
-    "tailwindcss": "^4",
-    "tsup": "^8",
-    "typescript": "^5",
-    "vitest": "^3"
-  }
+	"dependencies": {
+		"@unbranded-ds/tokens": "workspace:*",
+		"class-variance-authority": "^0.7",
+		"clsx": "^2",
+		"lucide-react": "^1.8.0",
+		"tailwind-merge": "^3"
+	},
+	"devDependencies": {
+		"@base-ui-components/react": "^1.0.0-rc.0",
+		"@testing-library/jest-dom": "^6",
+		"@testing-library/react": "^16",
+		"@testing-library/user-event": "^14.6.1",
+		"@types/node": "^25.6.0",
+		"@types/react": "^19.2.14",
+		"@types/react-dom": "^19.2.3",
+		"@vitejs/plugin-react": "^6.0.1",
+		"jsdom": "^25",
+		"react": "^19",
+		"react-dom": "^19",
+		"shadcn": "^4.2.0",
+		"tailwindcss": "^4",
+		"tsup": "^8",
+		"typescript": "^5",
+		"vite": "^6",
+		"vitest": "^3"
+	},
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"main": "./dist/index.js",
+	"name": "@unbranded-ds/react",
+	"peerDependencies": {
+		"@base-ui-components/react": "^1.0.0-rc.0",
+		"react": "^18 || ^19",
+		"react-dom": "^18 || ^19"
+	},
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"lint": "eslint src/",
+		"test": "vitest run",
+		"test:unit": "vitest run --project unit",
+		"typecheck": "tsc --noEmit"
+	},
+	"sideEffects": false,
+	"type": "module",
+	"types": "./dist/index.d.ts",
+	"version": "0.1.0"
 }
