@@ -10,7 +10,9 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "sideEffects": false,
   "scripts": {
     "build": "tsup",
@@ -24,6 +26,7 @@
     "@unbranded-ds/tokens": "workspace:*",
     "class-variance-authority": "^0.7",
     "clsx": "^2",
+    "lucide-react": "^1.8.0",
     "tailwind-merge": "^3"
   },
   "peerDependencies": {
@@ -33,14 +36,17 @@
   },
   "devDependencies": {
     "@base-ui-components/react": "^1.0.0-rc.0",
-    "@testing-library/react": "^16",
     "@testing-library/jest-dom": "^6",
+    "@testing-library/react": "^16",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "jsdom": "^25",
     "react": "^19",
     "react-dom": "^19",
+    "shadcn": "^4.2.0",
+    "tailwindcss": "^4",
     "tsup": "^8",
     "typescript": "^5",
-    "vitest": "^3",
-    "tailwindcss": "^4"
+    "vitest": "^3"
   }
 }
