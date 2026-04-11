@@ -1,0 +1,140 @@
+# ============================================
+# Dependencies
+# ============================================
+node_modules/
+.pnp
+.pnp.js
+.yarn/
+
+# pnpm
+.pnpm-debug.log*
+.pnpm-store/
+
+# ============================================
+# Testing
+# ============================================
+coverage/
+*.lcov
+.nyc_output
+.vitest/
+test-results/
+playwright-report/
+
+# ============================================
+# Next.js
+# ============================================
+.next/
+out/
+build/
+dist/
+
+# Production builds
+*.tsbuildinfo
+next-env.d.ts
+
+# ============================================
+# TypeScript
+# ============================================
+*.tsbuildinfo
+*.d.ts.map
+
+# ============================================
+# Environment Variables
+# ============================================
+.env
+.env*.local
+.env.development
+.env.production
+.env.test
+
+# ============================================
+# Build Tools
+# ============================================
+# Turbo
+.turbo/
+
+# tsup
+dist/
+
+# Tailwind
+.tailwindcss/
+
+# ============================================
+# Logs
+# ============================================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ============================================
+# IDEs and Editors
+# ============================================
+# VSCode
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ============================================
+# Vercel
+# ============================================
+.vercel
+
+# ============================================
+# TanStack Query
+# ============================================
+.tanstack/
+
+# ============================================
+# MacOS
+# ============================================
+.DS_Store
+*.pem
+Thumbs.db
+*~
+.AppleDouble
+.LSOverride
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# Lock files (keep pnpm-lock.yaml but ignore others)
+package-lock.json
+yarn.lock
+
+# ============================================
+# Spec-Kit / AI Agent Configuration
+# ============================================
+
+# Spec-Kit Output (generated artifacts)
+.specify/out/
+
+# Agent-specific local settings (personal preferences)
+.claude/settings.local.json
+.agents/settings.local.json
+
+# ============================================
+# Databricks Deploy
+# ============================================
+nee-poc/

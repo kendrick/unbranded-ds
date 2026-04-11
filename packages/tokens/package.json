@@ -1,0 +1,36 @@
+{
+  "name": "@unbranded-ds/tokens",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/ts/tokens.js",
+  "types": "./dist/ts/tokens.d.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
+    },
+    "./runtime": {
+      "import": "./src/runtime.ts",
+      "types": "./src/runtime.ts"
+    },
+    "./dist/css/*": "./dist/css/*",
+    "./dist/tailwind/*": "./dist/tailwind/*",
+    "./dist/json/*": "./dist/json/*"
+  },
+  "files": ["dist", "src", "themes"],
+  "scripts": {
+    "build": "style-dictionary build --config sd.config.ts && tsc",
+    "test": "vitest run",
+    "test:unit": "vitest run",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^3"
+  },
+  "devDependencies": {
+    "style-dictionary": "^4",
+    "typescript": "^5",
+    "vitest": "^3"
+  }
+}
