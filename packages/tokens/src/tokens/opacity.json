@@ -1,0 +1,12 @@
+{
+  "opacity": {
+    "disabled": {
+      "$value": "0.5",
+      "$type": "number"
+    },
+    "hover": {
+      "$value": "0.8",
+      "$type": "number"
+    }
+  }
+}

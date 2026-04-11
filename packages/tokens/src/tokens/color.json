@@ -1,0 +1,44 @@
+{
+  "color": {
+    "background": {
+      "$value": "oklch(1.0000 0.0000 89.88)",
+      "$type": "color"
+    },
+    "foreground": {
+      "$value": "oklch(0.1408 0.0044 285.82)",
+      "$type": "color"
+    },
+    "primary": {
+      "$value": "oklch(0.2103 0.0059 285.89)",
+      "$type": "color"
+    },
+    "primary-foreground": {
+      "$value": "oklch(0.9851 0.0000 89.88)",
+      "$type": "color"
+    },
+    "muted": {
+      "$value": "oklch(0.9674 0.0013 286.38)",
+      "$type": "color"
+    },
+    "muted-foreground": {
+      "$value": "oklch(0.5517 0.0138 285.94)",
+      "$type": "color"
+    },
+    "border": {
+      "$value": "oklch(0.9197 0.0040 286.32)",
+      "$type": "color"
+    },
+    "ring": {
+      "$value": "oklch(0.2103 0.0059 285.89)",
+      "$type": "color"
+    },
+    "destructive": {
+      "$value": "oklch(0.6368 0.2078 25.33)",
+      "$type": "color"
+    },
+    "destructive-foreground": {
+      "$value": "oklch(0.9851 0.0000 89.88)",
+      "$type": "color"
+    }
+  }
+}
