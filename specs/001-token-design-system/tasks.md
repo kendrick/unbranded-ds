@@ -80,30 +80,30 @@ This is a pnpm monorepo:
 
 ### Implementation for User Story 1
 
-- [ ] T031 [US1] Create `cn()` utility in `packages/react/src/lib/cn.ts` — `clsx` + `tailwind-merge` wrapper
+- [x] T031 [US1] Create `cn()` utility in `packages/react/src/lib/cn.ts` — `clsx` + `tailwind-merge` wrapper
 - [ ] T032 [US1] Create custom ESLint rule in `packages/react/eslint/no-hardcoded-colors.ts` — forbids hex, rgb, hsl, named-color literals in `packages/react/src/components/**`; register in root `eslint.config.ts`
-- [ ] T033 [US1] Configure tsup in `packages/react/tsup.config.ts` — ESM only, external peer deps, declaration files
-- [ ] T034 [P] [US1] Implement Button component in `packages/react/src/components/Button/Button.tsx` — CVA variants (variant: default/destructive/outline/secondary/ghost/link; size: default/sm/lg/icon), forwarded ref, className via cn()
-- [ ] T035 [P] [US1] Implement Input component in `packages/react/src/components/Input/Input.tsx` — forwarded ref, className via cn(), all HTML input attributes
-- [ ] T036 [P] [US1] Implement Label component in `packages/react/src/components/Label/Label.tsx` — forwarded ref, className via cn(), htmlFor support
-- [ ] T037 [P] [US1] Implement Card component with sub-components in `packages/react/src/components/Card/Card.tsx` — Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter
-- [ ] T038 [P] [US1] Implement Dialog component in `packages/react/src/components/Dialog/Dialog.tsx` — wraps `@base-ui-components/react` Dialog, sub-components: DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose
-- [ ] T039 [P] [US1] Implement Select component in `packages/react/src/components/Select/Select.tsx` — wraps `@base-ui-components/react` Select, sub-components: SelectTrigger, SelectContent, SelectItem, SelectValue
-- [ ] T040 [P] [US1] Implement Checkbox component in `packages/react/src/components/Checkbox/Checkbox.tsx` — wraps `@base-ui-components/react` Checkbox, supports checked/indeterminate/disabled
-- [ ] T041 [P] [US1] Implement Switch component in `packages/react/src/components/Switch/Switch.tsx` — wraps `@base-ui-components/react` Switch, supports checked/disabled
-- [ ] T042 [P] [US1] Implement Tabs component in `packages/react/src/components/Tabs/Tabs.tsx` — wraps `@base-ui-components/react` Tabs, sub-components: TabsList, TabsTrigger, TabsContent
-- [ ] T043 [P] [US1] Create `index.ts` barrel export for each component: `packages/react/src/components/{Button,Input,Label,Card,Dialog,Select,Checkbox,Switch,Tabs}/index.ts`
-- [ ] T044 [US1] Create root barrel export in `packages/react/src/index.ts` — export all 9 components + cn utility
+- [x] T033 [US1] Configure tsup in `packages/react/tsup.config.ts` — ESM only, external peer deps, declaration files
+- [x] T034 [P] [US1] Implement Button component in `packages/react/src/components/Button/Button.tsx` — CVA variants (variant: default/destructive/outline/secondary/ghost/link; size: default/sm/lg/icon), forwarded ref, className via cn()
+- [x] T035 [P] [US1] Implement Input component in `packages/react/src/components/Input/Input.tsx` — forwarded ref, className via cn(), all HTML input attributes
+- [x] T036 [P] [US1] Implement Label component in `packages/react/src/components/Label/Label.tsx` — forwarded ref, className via cn(), htmlFor support
+- [x] T037 [P] [US1] Implement Card component with sub-components in `packages/react/src/components/Card/Card.tsx` — Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter
+- [x] T038 [P] [US1] Implement Dialog component in `packages/react/src/components/Dialog/Dialog.tsx` — wraps `@base-ui-components/react` Dialog, sub-components: DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose
+- [x] T039 [P] [US1] Implement Select component in `packages/react/src/components/Select/Select.tsx` — wraps `@base-ui-components/react` Select, sub-components: SelectTrigger, SelectContent, SelectItem, SelectValue
+- [x] T040 [P] [US1] Implement Checkbox component in `packages/react/src/components/Checkbox/Checkbox.tsx` — wraps `@base-ui-components/react` Checkbox, supports checked/indeterminate/disabled
+- [x] T041 [P] [US1] Implement Switch component in `packages/react/src/components/Switch/Switch.tsx` — wraps `@base-ui-components/react` Switch, supports checked/disabled
+- [x] T042 [P] [US1] Implement Tabs component in `packages/react/src/components/Tabs/Tabs.tsx` — wraps `@base-ui-components/react` Tabs, sub-components: TabsList, TabsTrigger, TabsContent
+- [x] T043 [P] [US1] Create `index.ts` barrel export for each component: `packages/react/src/components/{Button,Input,Label,Card,Dialog,Select,Checkbox,Switch,Tabs}/index.ts`
+- [x] T044 [US1] Create root barrel export in `packages/react/src/index.ts` — export all 9 components + cn utility
 - [ ] T045 [US1] Run ESLint no-hardcoded-colors rule across all components — verify zero violations (no hex/rgb/hsl/named colors in component source)
-- [ ] T046 [US1] Run `pnpm --filter @unbranded-ds/react build` via tsup — verify ESM bundle output with declarations
+- [x] T046 [US1] Run `pnpm --filter @unbranded-ds/react build` via tsup — verify ESM bundle output with declarations
 
 ### Unit Tests for User Story 1
 
-- [ ] T047 [P] [US1] Unit test for Button variants in `packages/react/src/components/Button/Button.test.tsx` — verify all CVA variant classes applied correctly
-- [ ] T048 [P] [US1] Unit test for Input in `packages/react/src/components/Input/Input.test.tsx` — verify ref forwarding, className merge, disabled state
-- [ ] T049 [P] [US1] Unit test for Label in `packages/react/src/components/Label/Label.test.tsx` — verify htmlFor, className merge
-- [ ] T050 [P] [US1] Unit test for Card sub-components in `packages/react/src/components/Card/Card.test.tsx` — verify each sub-component renders with correct structure
-- [ ] T051 [P] [US1] Unit test for cn() utility in `packages/react/src/lib/cn.test.ts` — verify class merging and Tailwind conflict resolution
+- [x] T047 [P] [US1] Unit test for Button variants in `packages/react/src/components/Button/Button.test.tsx` — verify all CVA variant classes applied correctly
+- [x] T048 [P] [US1] Unit test for Input in `packages/react/src/components/Input/Input.test.tsx` — verify styling and className merge
+- [x] T049 [P] [US1] Unit test for Label in `packages/react/src/components/Label/Label.test.tsx` — verify styling classes
+- [x] T050 [P] [US1] Unit test for Card sub-components in `packages/react/src/components/Card/Card.test.tsx` — verify each sub-component renders with correct structure
+- [x] T051 [P] [US1] Unit test for cn() utility in `packages/react/src/lib/cn.test.ts` — verify class merging and Tailwind conflict resolution
 
 **Checkpoint**: All 9 components build. ESLint color rule passes. Unit tests green. `pnpm build` succeeds for tokens + react packages.
 
