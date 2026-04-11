@@ -1,0 +1,56 @@
+{
+  "typography": {
+    "font-sans": {
+      "$value": "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+      "$type": "fontFamily"
+    },
+    "font-mono": {
+      "$value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
+      "$type": "fontFamily"
+    },
+    "size-sm": {
+      "$value": "0.875rem",
+      "$type": "dimension"
+    },
+    "size-base": {
+      "$value": "1rem",
+      "$type": "dimension"
+    },
+    "size-lg": {
+      "$value": "1.125rem",
+      "$type": "dimension"
+    },
+    "size-xl": {
+      "$value": "1.25rem",
+      "$type": "dimension"
+    },
+    "weight-normal": {
+      "$value": "400",
+      "$type": "fontWeight"
+    },
+    "weight-medium": {
+      "$value": "500",
+      "$type": "fontWeight"
+    },
+    "weight-semibold": {
+      "$value": "600",
+      "$type": "fontWeight"
+    },
+    "weight-bold": {
+      "$value": "700",
+      "$type": "fontWeight"
+    },
+    "leading-normal": {
+      "$value": "1.5",
+      "$type": "number"
+    },
+    "leading-tight": {
+      "$value": "1.25",
+      "$type": "number"
+    },
+    "leading-relaxed": {
+      "$value": "1.625",
+      "$type": "number"
+    }
+  }
+}

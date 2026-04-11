@@ -17,9 +17,13 @@
     "./dist/tailwind/*": "./dist/tailwind/*",
     "./dist/json/*": "./dist/json/*"
   },
-  "files": ["dist", "src", "themes"],
+  "files": [
+    "dist",
+    "src",
+    "themes"
+  ],
   "scripts": {
-    "build": "style-dictionary build --config sd.config.ts && tsc",
+    "build": "tsx sd.config.ts && tsc",
     "test": "vitest run",
     "test:unit": "vitest run",
     "lint": "eslint src/",
@@ -30,6 +34,7 @@
   },
   "devDependencies": {
     "style-dictionary": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "vitest": "^3"
   }

@@ -50,23 +50,23 @@ This is a pnpm monorepo:
 
 **CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T014 [P] Author color tokens in W3C DTCG format in `packages/tokens/src/tokens/color.json` — background, foreground, primary, primary-foreground, muted, muted-foreground, border, ring, destructive, destructive-foreground (light theme values as `$value`)
-- [ ] T015 [P] Author spacing tokens in `packages/tokens/src/tokens/spacing.json` — spacing scale (1–16, px)
-- [ ] T016 [P] Author typography tokens in `packages/tokens/src/tokens/typography.json` — font-sans, font-mono, size-sm/base/lg/xl, weight-normal/medium/semibold/bold, leading-normal/tight/relaxed
-- [ ] T017 [P] Author radii tokens in `packages/tokens/src/tokens/radii.json` — sm, md, lg, full
-- [ ] T018 [P] Author shadow tokens in `packages/tokens/src/tokens/shadows.json` — sm, md, lg
-- [ ] T019 [P] Author opacity tokens in `packages/tokens/src/tokens/opacity.json` — disabled, hover
-- [ ] T020 Configure Style Dictionary v4 in `packages/tokens/sd.config.ts` — define 4 output platforms: CSS variables (scoped under `[data-theme]`), Tailwind v4 preset (CSS `@theme inline` block), TypeScript types, raw JSON
-- [ ] T021 [P] Author light theme in `packages/tokens/themes/light.json` with all required token values
-- [ ] T022 [P] Author dark theme in `packages/tokens/themes/dark.json` with all required token values
-- [ ] T023 [P] Author brand theme in `packages/tokens/themes/brand.json` with all required token values (visually distinct from light/dark)
-- [ ] T024 Implement Zod schema for theme validation in `packages/tokens/src/schema.ts` — schema mirrors token structure, enforces all tokens present with correct types
-- [ ] T025 Implement contrast pair declarations in `packages/tokens/src/schema.ts` — define foreground/background pairs (foreground↔background, primary-foreground↔primary, muted-foreground↔muted, destructive-foreground↔destructive) with WCAG AA thresholds
-- [ ] T026 Implement `validateTheme()` in `packages/tokens/src/validate.ts` — schema conformance via Zod + WCAG AA contrast checking for all declared pairs, returns `{ ok, theme }` or `{ ok, issues }`
-- [ ] T027 Implement `registerTheme()` in `packages/tokens/src/runtime.ts` — validates theme, injects `<style>` block scoped to `[data-theme="<name>"]`
-- [ ] T028 Create barrel export in `packages/tokens/src/index.ts` — export `validateTheme`, `themeSchema`, `tokenMap`, `registerTheme`, `contrastPairs`
-- [ ] T029 Run Style Dictionary build and verify 4 artifacts output to `packages/tokens/dist/` — CSS vars (3 theme files), Tailwind preset CSS, TypeScript types, raw JSON
-- [ ] T030 Verify Tailwind preset (`packages/tokens/dist/tailwind/preset.css`) contains `@theme inline` entries for all 6 token namespaces (`--color-*`, `--spacing-*`, `--font-*`, `--radius-*`, `--shadow-*`, `--opacity-*`)
+- [x] T014 [P] Author color tokens in W3C DTCG format in `packages/tokens/src/tokens/color.json` — background, foreground, primary, primary-foreground, muted, muted-foreground, border, ring, destructive, destructive-foreground (light theme values as `$value`)
+- [x] T015 [P] Author spacing tokens in `packages/tokens/src/tokens/spacing.json` — spacing scale (1–16, px)
+- [x] T016 [P] Author typography tokens in `packages/tokens/src/tokens/typography.json` — font-sans, font-mono, size-sm/base/lg/xl, weight-normal/medium/semibold/bold, leading-normal/tight/relaxed
+- [x] T017 [P] Author radii tokens in `packages/tokens/src/tokens/radii.json` — sm, md, lg, full
+- [x] T018 [P] Author shadow tokens in `packages/tokens/src/tokens/shadows.json` — sm, md, lg
+- [x] T019 [P] Author opacity tokens in `packages/tokens/src/tokens/opacity.json` — disabled, hover
+- [x] T020 Configure Style Dictionary v4 in `packages/tokens/sd.config.ts` — define 4 output platforms: CSS variables (scoped under `[data-theme]`), Tailwind v4 preset (CSS `@theme inline` block), TypeScript types, raw JSON
+- [x] T021 [P] Author light theme in `packages/tokens/themes/light.json` with all required token values
+- [x] T022 [P] Author dark theme in `packages/tokens/themes/dark.json` with all required token values
+- [x] T023 [P] Author brand theme in `packages/tokens/themes/brand.json` with all required token values (visually distinct from light/dark)
+- [x] T024 Implement Zod schema for theme validation in `packages/tokens/src/schema.ts` — schema mirrors token structure, enforces all tokens present with correct types
+- [x] T025 Implement contrast pair declarations in `packages/tokens/src/schema.ts` — define foreground/background pairs (foreground↔background, primary-foreground↔primary, muted-foreground↔muted, destructive-foreground↔destructive) with WCAG AA thresholds
+- [x] T026 Implement `validateTheme()` in `packages/tokens/src/validate.ts` — schema conformance via Zod + WCAG AA contrast checking for all declared pairs, returns `{ ok, theme }` or `{ ok, issues }`
+- [x] T027 Implement `registerTheme()` in `packages/tokens/src/runtime.ts` — validates theme, injects `<style>` block scoped to `[data-theme="<name>"]`
+- [x] T028 Create barrel export in `packages/tokens/src/index.ts` — export `validateTheme`, `themeSchema`, `tokenMap`, `registerTheme`, `contrastPairs`
+- [x] T029 Run Style Dictionary build and verify 4 artifacts output to `packages/tokens/dist/` — CSS vars (3 theme files), Tailwind preset CSS, TypeScript types, raw JSON
+- [x] T030 Verify Tailwind preset (`packages/tokens/dist/tailwind/preset.css`) contains `@theme inline` entries for all 6 token namespaces (`--color-*`, `--spacing-*`, `--font-*`, `--radius-*`, `--shadow-*`, `--opacity-*`)
 
 **Checkpoint**: `pnpm --filter @unbranded-ds/tokens build` succeeds. Four artifacts in `dist/`. `validateTheme()` accepts the 3 built-in themes and rejects a deliberately broken fixture.
 
