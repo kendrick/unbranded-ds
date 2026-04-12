@@ -1,4 +1,4 @@
-import { definePreview } from "@storybook/react-vite";
+import type { Preview } from "@storybook/react-vite";
 import React from "react";
 
 import "@unbranded-ds/tokens/dist/css/tokens-light.css";
@@ -7,7 +7,7 @@ import "@unbranded-ds/tokens/dist/css/tokens-brand.css";
 import "@unbranded-ds/tokens/dist/tailwind/preset.css";
 import "./styles.css";
 
-export default definePreview({
+const preview: Preview = {
 	globalTypes: {
 		theme: {
 			description: "Theme for components",
@@ -55,4 +55,6 @@ export default definePreview({
 			test: "error",
 		},
 	},
-});
+};
+
+export default preview;

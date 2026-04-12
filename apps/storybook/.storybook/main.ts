@@ -12,9 +12,6 @@ export default defineMain({
 		"@storybook/addon-a11y",
 		"@storybook/addon-mcp",
 	],
-	docs: {
-		autodocs: "tag",
-	},
 	viteFinal(config) {
 		config.plugins ??= [];
 		config.plugins.push(tailwindcss());
