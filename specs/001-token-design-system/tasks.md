@@ -170,10 +170,10 @@ This is a pnpm monorepo:
 
 ### Implementation for User Story 4
 
-- [ ] T075 [US4] Verify `@storybook/addon-mcp` is registered in `apps/storybook/.storybook/main.ts` (done in T052) and `/mcp` endpoint responds on local dev server
-- [ ] T076 [US4] Write MCP smoke test script in `scripts/mcp-smoke-test.ts` — sends JSON-RPC `tools/list` to a given endpoint URL, asserts expected tools are present (component listing, story retrieval), exits non-zero on failure
-- [ ] T077 [US4] Test smoke script locally against `http://localhost:6006/mcp` — verify it passes and lists all 9 components
-- [ ] T078 [US4] Document MCP connection in `README.md` — production Chromatic Storybook URL (placeholder), published MCP endpoint URL, copy-pasteable config blocks for Claude Code, Claude Desktop, and Cursor, example agent queries, public access note
+- [x] T075 [US4] Verify `@storybook/addon-mcp` is registered in `apps/storybook/.storybook/main.ts` (done in T052) and `/mcp` endpoint responds on local dev server
+- [x] T076 [US4] Write MCP smoke test script in `scripts/mcp-smoke-test.ts` — sends JSON-RPC `tools/list` to a given endpoint URL, asserts expected tools are present (component listing, story retrieval), exits non-zero on failure
+- [x] T077 [US4] Test smoke script locally against `http://localhost:6006/mcp` — verify it passes and lists all 9 components
+- [x] T078 [US4] Document MCP connection in `README.md` — production Chromatic Storybook URL (placeholder), published MCP endpoint URL, copy-pasteable config blocks for Claude Code, Claude Desktop, and Cursor, example agent queries, public access note
 
 **Checkpoint**: Local `/mcp` endpoint responds to `tools/list`. Smoke test script passes locally. README has MCP documentation.
 
