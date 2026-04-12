@@ -37,7 +37,15 @@ export default definePreview({
 
 			return React.createElement(
 				"div",
-				{ "data-theme": theme },
+				{
+					"data-theme": theme,
+					style: {
+						backgroundColor: "var(--color-background)",
+						color: "var(--color-foreground)",
+						minHeight: "100vh",
+						padding: "1rem",
+					},
+				},
 				React.createElement(Story),
 			);
 		},

@@ -131,7 +131,7 @@ This is a pnpm monorepo:
 - [ ] T063 [P] [US2] Write Checkbox stories in `packages/react/src/components/Checkbox/Checkbox.stories.tsx` — Default, Checked, Indeterminate, Disabled, WithLabel; play function: toggle + verify
 - [ ] T064 [P] [US2] Write Switch stories in `packages/react/src/components/Switch/Switch.stories.tsx` — Default, Checked, Disabled, WithLabel; play function: toggle + verify
 - [ ] T065 [P] [US2] Write Tabs stories in `packages/react/src/components/Tabs/Tabs.stories.tsx` — Default, Controlled, ManyTabs, Disabled; play function: click tab → verify panel switch
-- [ ] T066 [US2] Verify Storybook runs locally with `pnpm dev` — all 9 components listed, autodocs render, theme switcher works, Tests panel shows green, Accessibility panel shows no serious/critical violations
+- [ ] T066 [US2] Verify Storybook runs locally with `pnpm dev` — install Chrome DevTools MCP for programmatic testing, verify all 9 components listed, autodocs render, theme switcher works, Tests panel shows green, Accessibility panel shows no serious/critical violations
 - [ ] T067 [US2] Verify FOUC prevention — switch to dark theme, hard-reload page, confirm no flash of light theme
 
 **Checkpoint**: Storybook runs locally. All 9 components documented with stories. Theme switcher works without FOUC. All play functions pass. Zero serious/critical a11y violations.
