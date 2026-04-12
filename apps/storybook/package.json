@@ -11,8 +11,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@unbranded-ds/tokens": "workspace:*",
-    "@unbranded-ds/react": "workspace:*"
+    "@unbranded-ds/react": "workspace:*",
+    "@unbranded-ds/tokens": "workspace:*"
   },
   "devDependencies": {
     "@base-ui-components/react": "^1.0.0-rc.0",
@@ -20,11 +20,13 @@
     "@storybook/addon-mcp": "^0.5.0",
     "@storybook/addon-vitest": "^10.3",
     "@storybook/react-vite": "^10.3",
-    "storybook": "^10.3",
+    "@tailwindcss/vite": "^4",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "react": "^19",
     "react-dom": "^19",
+    "storybook": "^10.3",
     "tailwindcss": "^4",
-    "@tailwindcss/vite": "^4",
     "typescript": "^5",
     "vite": "^6",
     "vitest": "^3"

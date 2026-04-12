@@ -117,22 +117,22 @@ This is a pnpm monorepo:
 
 ### Implementation for User Story 2
 
-- [ ] T052 [US2] Configure Storybook main config in `apps/storybook/.storybook/main.ts` — addons: `@storybook/addon-vitest`, `@storybook/addon-a11y`, `@storybook/addon-mcp`; framework: `@storybook/react-vite`; autodocs enabled globally
-- [ ] T053 [US2] Configure Storybook preview in `apps/storybook/.storybook/preview.ts` — global decorators for theme provider, toolbar items for theme switcher (light/dark/brand), `parameters.a11y.test: 'error'` for CI failures
-- [ ] T054 [US2] Create FOUC-prevention blocking script in `apps/storybook/.storybook/preview-head.html` — reads `ds-theme` from localStorage, sets `data-theme` + inline `<style>` of CSS variables before first paint
-- [ ] T055 [US2] Configure Vitest workspace in `packages/react/vitest.config.ts` — two projects: project 1 (`**/*.test.tsx`, standard Vitest), project 2 (`**/*.stories.tsx`, `@storybook/addon-vitest` plugin with `.storybook/vitest.setup.ts`)
-- [ ] T056 [US2] Create Storybook Vitest setup file in `apps/storybook/.storybook/vitest.setup.ts` — initialize Storybook test environment
-- [ ] T057 [P] [US2] Write Button stories in `packages/react/src/components/Button/Button.stories.tsx` — Default, all 6 variants, all 4 sizes, Disabled, Loading, WithIcon; play function: click + verify
-- [ ] T058 [P] [US2] Write Input stories in `packages/react/src/components/Input/Input.stories.tsx` — Default, Disabled, WithPlaceholder, WithLabel, File; play function: type + verify value
-- [ ] T059 [P] [US2] Write Label stories in `packages/react/src/components/Label/Label.stories.tsx` — Default, WithInput, Required; argTypes with prop descriptions
-- [ ] T060 [P] [US2] Write Card stories in `packages/react/src/components/Card/Card.stories.tsx` — Default, WithHeader, WithFooter, FullExample; argTypes for all sub-components
-- [ ] T061 [P] [US2] Write Dialog stories in `packages/react/src/components/Dialog/Dialog.stories.tsx` — Default, Controlled, WithForm, Nested; play function: open → interact → close
-- [ ] T062 [P] [US2] Write Select stories in `packages/react/src/components/Select/Select.stories.tsx` — Default, WithPlaceholder, Disabled, ManyOptions; play function: open → select → verify
-- [ ] T063 [P] [US2] Write Checkbox stories in `packages/react/src/components/Checkbox/Checkbox.stories.tsx` — Default, Checked, Indeterminate, Disabled, WithLabel; play function: toggle + verify
-- [ ] T064 [P] [US2] Write Switch stories in `packages/react/src/components/Switch/Switch.stories.tsx` — Default, Checked, Disabled, WithLabel; play function: toggle + verify
-- [ ] T065 [P] [US2] Write Tabs stories in `packages/react/src/components/Tabs/Tabs.stories.tsx` — Default, Controlled, ManyTabs, Disabled; play function: click tab → verify panel switch
-- [ ] T066 [US2] Verify Storybook runs locally with `pnpm dev` — all 9 components listed, autodocs render, theme switcher works, Tests panel shows green, Accessibility panel shows no serious/critical violations
-- [ ] T067 [US2] Verify FOUC prevention — switch to dark theme, hard-reload page, confirm no flash of light theme
+- [x] T052 [US2] Configure Storybook main config in `apps/storybook/.storybook/main.ts` — addons: `@storybook/addon-vitest`, `@storybook/addon-a11y`, `@storybook/addon-mcp`; framework: `@storybook/react-vite`; autodocs enabled globally
+- [x] T053 [US2] Configure Storybook preview in `apps/storybook/.storybook/preview.ts` — global decorators for theme provider, toolbar items for theme switcher (light/dark/brand), `parameters.a11y.test: 'error'` for CI failures
+- [x] T054 [US2] Create FOUC-prevention blocking script in `apps/storybook/.storybook/preview-head.html` — reads `ds-theme` from localStorage, sets `data-theme` + inline `<style>` of CSS variables before first paint
+- [x] T055 [US2] Configure Vitest workspace in `packages/react/vitest.config.ts` — two projects: project 1 (`**/*.test.tsx`, standard Vitest), project 2 (`**/*.stories.tsx`, `@storybook/addon-vitest` plugin with `.storybook/vitest.setup.ts`)
+- [x] T056 [US2] Create Storybook Vitest setup file in `apps/storybook/.storybook/vitest.setup.ts` — initialize Storybook test environment
+- [x] T057 [P] [US2] Write Button stories in `packages/react/src/components/Button/Button.stories.tsx` — Default, all 6 variants, all 4 sizes, Disabled, Loading, WithIcon; play function: click + verify
+- [x] T058 [P] [US2] Write Input stories in `packages/react/src/components/Input/Input.stories.tsx` — Default, Disabled, WithPlaceholder, WithLabel, File; play function: type + verify value
+- [x] T059 [P] [US2] Write Label stories in `packages/react/src/components/Label/Label.stories.tsx` — Default, WithInput, Required; argTypes with prop descriptions
+- [x] T060 [P] [US2] Write Card stories in `packages/react/src/components/Card/Card.stories.tsx` — Default, WithHeader, WithFooter, FullExample; argTypes for all sub-components
+- [x] T061 [P] [US2] Write Dialog stories in `packages/react/src/components/Dialog/Dialog.stories.tsx` — Default, Controlled, WithForm, Nested; play function: open → interact → close
+- [x] T062 [P] [US2] Write Select stories in `packages/react/src/components/Select/Select.stories.tsx` — Default, WithPlaceholder, Disabled, ManyOptions; play function: open → select → verify
+- [x] T063 [P] [US2] Write Checkbox stories in `packages/react/src/components/Checkbox/Checkbox.stories.tsx` — Default, Checked, Indeterminate, Disabled, WithLabel; play function: toggle + verify
+- [x] T064 [P] [US2] Write Switch stories in `packages/react/src/components/Switch/Switch.stories.tsx` — Default, Checked, Disabled, WithLabel; play function: toggle + verify
+- [x] T065 [P] [US2] Write Tabs stories in `packages/react/src/components/Tabs/Tabs.stories.tsx` — Default, Controlled, ManyTabs, Disabled; play function: click tab → verify panel switch
+- [x] T066 [US2] Verify Storybook runs locally with `pnpm dev` — install Chrome DevTools MCP for programmatic testing, verify all 9 components listed, autodocs render, theme switcher works, Tests panel shows green, Accessibility panel shows no serious/critical violations
+- [x] T067 [US2] Verify FOUC prevention — switch to dark theme, hard-reload page, confirm no flash of light theme
 
 **Checkpoint**: Storybook runs locally. All 9 components documented with stories. Theme switcher works without FOUC. All play functions pass. Zero serious/critical a11y violations.
 
