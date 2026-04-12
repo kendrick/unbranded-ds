@@ -16,6 +16,7 @@
 ## Path Conventions
 
 This is a pnpm monorepo:
+
 - `packages/tokens/` — `@unbranded-ds/tokens`
 - `packages/react/` — `@unbranded-ds/react`
 - `apps/storybook/` — Storybook 10.3 app
@@ -146,16 +147,16 @@ This is a pnpm monorepo:
 
 ### Unit Tests for User Story 3
 
-- [ ] T068 [P] [US3] Create valid theme fixture in `packages/tokens/src/__fixtures__/valid-custom.json` — schema-complete with passing contrast
-- [ ] T069 [P] [US3] Create missing-token fixture in `packages/tokens/src/__fixtures__/missing-token.json` — omit `color.primary` to trigger schema error
-- [ ] T070 [P] [US3] Create bad-contrast fixture in `packages/tokens/src/__fixtures__/bad-contrast.json` — set `color.foreground` to low-contrast value against `color.background`
-- [ ] T071 [P] [US3] Create extra-tokens fixture in `packages/tokens/src/__fixtures__/extra-tokens.json` — valid theme plus unknown token names
+- [x] T068 [P] [US3] Create valid theme fixture in `packages/tokens/src/__fixtures__/valid-custom.json` — schema-complete with passing contrast
+- [x] T069 [P] [US3] Create missing-token fixture in `packages/tokens/src/__fixtures__/missing-token.json` — omit `color.primary` to trigger schema error
+- [x] T070 [P] [US3] Create bad-contrast fixture in `packages/tokens/src/__fixtures__/bad-contrast.json` — set `color.foreground` to low-contrast value against `color.background`
+- [x] T071 [P] [US3] Create extra-tokens fixture in `packages/tokens/src/__fixtures__/extra-tokens.json` — valid theme plus unknown token names
 
 ### Implementation for User Story 3
 
-- [ ] T072 [US3] Unit test `validateTheme()` in `packages/tokens/src/validate.test.ts` — test valid theme returns `{ ok: true }`, missing token returns `MISSING_TOKEN` issue with correct path, bad contrast returns `CONTRAST_FAILURE` with ratio and threshold, extra tokens accepted with warning
-- [ ] T073 [US3] Unit test Zod schema in `packages/tokens/src/schema.test.ts` — test schema rejects malformed input, accepts all 3 built-in themes
-- [ ] T074 [US3] Verify `THEMING.md` at repo root documents: how to author a theme, how to validate, how to apply at runtime, FOUC-prevention pattern — update if incomplete
+- [x] T072 [US3] Unit test `validateTheme()` in `packages/tokens/src/validate.test.ts` — test valid theme returns `{ ok: true }`, missing token returns `MISSING_TOKEN` issue with correct path, bad contrast returns `CONTRAST_FAILURE` with ratio and threshold, extra tokens accepted with warning
+- [x] T073 [US3] Unit test Zod schema in `packages/tokens/src/schema.test.ts` — test schema rejects malformed input, accepts all 3 built-in themes. Test some hex color values and oklch color values as both formats should be valid and accepted as theme values.
+- [x] T074 [US3] Verify `THEMING.md` at repo root documents: how to author a theme, how to validate, how to apply at runtime, FOUC-prevention pattern — update if incomplete or if patterns/guidance has changed since creation.
 
 **Checkpoint**: validateTheme unit tests green. All 3 built-in themes pass validation. Broken fixtures rejected with specific error messages.
 
@@ -308,6 +309,7 @@ Task T058: "Write Input stories in packages/react/src/components/Input/Input.sto
 ### Parallel Opportunities Summary
 
 With multiple developers:
+
 1. **All together**: Phase 1 (Setup) + Phase 2 (Token Pipeline)
 2. **Split**: Developer A on US1 (Components), Developer B on US3 (Validation)
 3. **After US1**: Developer A on US2 (Storybook), Developer B on US4 (MCP prep)

@@ -175,10 +175,10 @@ export function hexToOklch(value: string): string {
 	const lab = linearRgbToOklab(linear);
 	const [L, C, H] = oklabToOklch(lab);
 
-	// Round to reasonable precision
-	const lStr = L.toFixed(4);
-	const cStr = C.toFixed(4);
-	const hStr = H.toFixed(2);
+	// High precision to minimize round-trip contrast drift
+	const lStr = L.toFixed(6);
+	const cStr = C.toFixed(6);
+	const hStr = H.toFixed(4);
 
 	return `oklch(${lStr} ${cStr} ${hStr})`;
 }
