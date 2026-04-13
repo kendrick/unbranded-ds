@@ -10,12 +10,13 @@
  * Exits 0 on success, non-zero on failure.
  */
 
+// Tools available on any MCP endpoint (dev or published).
+// Published Storybook is a static build and doesn't expose interactive
+// tools like run-story-tests or preview-stories — those need a live runtime.
 const REQUIRED_TOOLS = [
 	"list-all-documentation",
 	"get-documentation",
 	"get-documentation-for-story",
-	"run-story-tests",
-	"preview-stories",
 ];
 
 const DEFAULT_ENDPOINT = "http://localhost:6006/mcp";
