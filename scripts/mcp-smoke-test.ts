@@ -67,7 +67,11 @@ async function callMcp(
 }
 
 async function main() {
-	const endpoint = process.argv[2] ?? DEFAULT_ENDPOINT;
+	// Normalize: collapse repeated slashes after the protocol so both
+	// `https://host/` + `/mcp` (yielding `//mcp`) and `https://host` + `mcp`
+	// resolve to the same URL.
+	const rawEndpoint = process.argv[2] ?? DEFAULT_ENDPOINT;
+	const endpoint = rawEndpoint.replace(/([^:])\/{2,}/g, "$1/");
 	let failed = false;
 
 	console.log(`MCP smoke test against ${endpoint}\n`);
