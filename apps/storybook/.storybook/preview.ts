@@ -54,6 +54,9 @@ const preview: Preview = {
 		a11y: {
 			test: "error",
 		},
+		chromatic: {
+			disableSnapshot: true,
+		},
 	},
 };
 

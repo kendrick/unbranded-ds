@@ -73,7 +73,6 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           workingDir: apps/storybook
           buildScriptName: build
-          skip: true
           exitZeroOnChanges: true
 
       - name: MCP smoke test
