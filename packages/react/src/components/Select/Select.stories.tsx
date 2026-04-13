@@ -8,7 +8,6 @@ import {
 	SelectGroup,
 	SelectLabel,
 } from "./Select";
-import React from "react";
 
 const meta = {
 	title: "Components/Select",
@@ -23,7 +22,7 @@ export const Default: Story = {
 	render: () => (
 		<Select>
 			<SelectTrigger style={{ width: "200px" }}>
-				<SelectValue placeholder="Select a fruit" />
+				<SelectValue>Select a fruit</SelectValue>
 			</SelectTrigger>
 			<SelectContent>
 				<SelectItem value="apple">Apple</SelectItem>
@@ -38,7 +37,7 @@ export const WithGroups: Story = {
 	render: () => (
 		<Select>
 			<SelectTrigger style={{ width: "200px" }}>
-				<SelectValue placeholder="Select a food" />
+				<SelectValue>Select a food</SelectValue>
 			</SelectTrigger>
 			<SelectContent>
 				<SelectGroup>
@@ -60,7 +59,7 @@ export const Disabled: Story = {
 	render: () => (
 		<Select disabled>
 			<SelectTrigger style={{ width: "200px" }}>
-				<SelectValue placeholder="Disabled" />
+				<SelectValue>Disabled</SelectValue>
 			</SelectTrigger>
 			<SelectContent>
 				<SelectItem value="a">Option A</SelectItem>
@@ -73,7 +72,7 @@ export const ManyOptions: Story = {
 	render: () => (
 		<Select>
 			<SelectTrigger style={{ width: "200px" }}>
-				<SelectValue placeholder="Pick a number" />
+				<SelectValue>Pick a number</SelectValue>
 			</SelectTrigger>
 			<SelectContent>
 				{Array.from({ length: 20 }, (_, i) => (

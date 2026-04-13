@@ -10,7 +10,6 @@ import {
 import { Button } from "../Button/Button";
 import { Input } from "../Input/Input";
 import { Label } from "../Label/Label";
-import React from "react";
 
 const meta = {
 	title: "Components/Card",

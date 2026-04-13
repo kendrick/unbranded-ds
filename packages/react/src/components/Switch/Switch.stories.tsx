@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within, userEvent } from "storybook/test";
 import { Switch } from "./Switch";
 import { Label } from "../Label/Label";
-import React from "react";
 
 const meta = {
 	title: "Components/Switch",

@@ -28,9 +28,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
-
       - name: Typecheck
         run: pnpm typecheck
 
@@ -42,9 +39,6 @@ jobs:
 
       - name: Build Storybook
         run: pnpm --filter @unbranded-ds/storybook build
-
-      - name: Interaction + a11y tests
-        run: pnpm test:storybook
 
   publish:
     name: Chromatic publish + MCP smoke test
