@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within, userEvent } from "storybook/test";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./Tabs";
-import React from "react";
 
 const meta = {
 	title: "Components/Tabs",

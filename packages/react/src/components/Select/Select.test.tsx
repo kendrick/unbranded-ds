@@ -7,7 +7,7 @@ describe("Select", () => {
 		const { container } = render(
 			<Select>
 				<SelectTrigger>
-					<SelectValue placeholder="Pick one" />
+					<SelectValue>Pick one</SelectValue>
 				</SelectTrigger>
 			</Select>,
 		);

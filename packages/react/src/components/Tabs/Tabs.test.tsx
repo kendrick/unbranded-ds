@@ -21,7 +21,7 @@ describe("Tabs", () => {
 
 	it("exports tabsListVariants for standalone use", () => {
 		expect(typeof tabsListVariants).toBe("function");
-		const classes = tabsListVariants({ variant: "outline" });
+		const classes = tabsListVariants({ variant: "line" });
 		expect(typeof classes).toBe("string");
 	});
 });

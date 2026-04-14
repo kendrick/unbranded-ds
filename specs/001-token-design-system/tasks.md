@@ -187,10 +187,10 @@ This is a pnpm monorepo:
 
 ### Implementation for User Story 5
 
-- [ ] T079 [US5] Create GitHub Actions workflow in `.github/workflows/ci.yml` — trigger on PR and push to main; job graph: pnpm install (with cache) → lint → typecheck → unit tests → build all → build storybook → interaction + a11y tests → Chromatic publish (with `skip: true` for VR) → MCP smoke test
-- [ ] T080 [US5] Configure Chromatic publish step — use `chromaui/action` with `projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}`, `skip: true`, `exitZeroOnChanges: true`; requires `fetch-depth: 0` in checkout
-- [ ] T081 [US5] Configure MCP smoke test step — run `scripts/mcp-smoke-test.ts` against the Chromatic-published endpoint URL from the Chromatic action output
-- [ ] T082 [US5] Document Chromatic setup in `README.md` — how to obtain `CHROMATIC_PROJECT_TOKEN`, how to set it as a repository secret, what the CI pipeline does at each step
+- [x] T079 [US5] Create GitHub Actions workflow in `.github/workflows/ci.yml` — trigger on PR and push to main; job graph: pnpm install (with cache) → lint → typecheck → unit tests → build all → build storybook → interaction + a11y tests → Chromatic publish (with `skip: true` for VR) → MCP smoke test
+- [x] T080 [US5] Configure Chromatic publish step — use `chromaui/action` with `projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}`, `skip: true`, `exitZeroOnChanges: true`; requires `fetch-depth: 0` in checkout
+- [x] T081 [US5] Configure MCP smoke test step — run `scripts/mcp-smoke-test.ts` against the Chromatic-published endpoint URL from the Chromatic action output
+- [x] T082 [US5] Document Chromatic setup in `README.md` — how to obtain `CHROMATIC_PROJECT_TOKEN`, how to set it as a repository secret, what the CI pipeline does at each step
 
 **Checkpoint**: CI workflow file is valid. All steps defined in correct dependency order. Documentation complete.
 
