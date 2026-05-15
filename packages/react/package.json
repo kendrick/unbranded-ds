@@ -1,4 +1,6 @@
 {
+	"author": "Kendrick Arnett",
+	"bugs": "https://github.com/kendrick/unbranded-ds/issues",
 	"dependencies": {
 		"@unbranded-ds/tokens": "workspace:*",
 		"class-variance-authority": "^0.7",
@@ -6,6 +8,7 @@
 		"lucide-react": "^1.8.0",
 		"tailwind-merge": "^3"
 	},
+	"description": "React component primitives for the unbranded-ds design system: Base UI + shadcn-style components styled with the @unbranded-ds/tokens Tailwind v4 preset.",
 	"devDependencies": {
 		"@base-ui-components/react": "^1.0.0-rc.0",
 		"@storybook/react-vite": "^10.3",
@@ -29,19 +32,38 @@
 	},
 	"exports": {
 		".": {
-			"import": "./dist/index.js",
-			"types": "./dist/index.d.ts"
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
 		}
 	},
 	"files": [
 		"dist"
 	],
+	"homepage": "https://github.com/kendrick/unbranded-ds#readme",
+	"keywords": [
+		"design-system",
+		"react",
+		"components",
+		"base-ui",
+		"shadcn",
+		"tailwind",
+		"unbranded-ds"
+	],
+	"license": "MIT",
 	"main": "./dist/index.js",
 	"name": "@unbranded-ds/react",
 	"peerDependencies": {
 		"@base-ui-components/react": "^1.0.0-rc.0",
 		"react": "^18 || ^19",
 		"react-dom": "^18 || ^19"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kendrick/unbranded-ds.git",
+		"directory": "packages/react"
 	},
 	"scripts": {
 		"build": "tsup",

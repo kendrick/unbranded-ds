@@ -1,17 +1,35 @@
 {
   "name": "@unbranded-ds/tokens",
   "version": "0.1.0",
+  "description": "Design tokens for the unbranded-ds design system: DTCG-format JSON sources compiled via Style Dictionary to CSS variables, a Tailwind v4 @theme preset, JSON, and a typed TypeScript token map.",
+  "keywords": [
+    "design-tokens",
+    "design-system",
+    "dtcg",
+    "style-dictionary",
+    "tailwind",
+    "css-variables"
+  ],
+  "license": "MIT",
+  "author": "Kendrick Arnett",
+  "homepage": "https://github.com/kendrick/unbranded-ds#readme",
+  "bugs": "https://github.com/kendrick/unbranded-ds/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kendrick/unbranded-ds.git",
+    "directory": "packages/tokens"
+  },
   "type": "module",
-  "main": "./dist/ts/tokens.js",
-  "types": "./dist/ts/tokens.d.ts",
+  "main": "./dist/ts/index.js",
+  "types": "./dist/ts/index.d.ts",
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "types": "./src/index.ts"
+      "types": "./dist/ts/index.d.ts",
+      "import": "./dist/ts/index.js"
     },
     "./runtime": {
-      "import": "./src/runtime.ts",
-      "types": "./src/runtime.ts"
+      "types": "./dist/ts/runtime.d.ts",
+      "import": "./dist/ts/runtime.js"
     },
     "./dist/css/*": "./dist/css/*",
     "./dist/tailwind/*": "./dist/tailwind/*",
@@ -19,11 +37,13 @@
   },
   "files": [
     "dist",
-    "src",
     "themes"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "tsx sd.config.ts && tsc",
+    "build": "tsx sd.config.ts && tsc -p tsconfig.build.json",
     "test": "vitest run",
     "test:unit": "vitest run",
     "lint": "eslint src/",
