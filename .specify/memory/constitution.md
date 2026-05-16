@@ -1,27 +1,31 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change:  (none) → 1.0.0  [initial ratification from template]
-Bump rationale:  First complete fill of constitution-template.md. No prior versioned
-                 constitution existed; 1.0.0 establishes the baseline.
+Version change:  1.0.0 → 1.0.1  [PATCH — clarification to existing tooling and compliance machinery]
+Bump rationale:  Adopts `@changesets/cli` as the canonical versioning + changelog tool
+                 (Section VIII tool-list addition) and extends Section X Compliance Review
+                 with a per-PR changeset-presence rule. Both changes refine existing
+                 machinery rather than introducing new principles, so PATCH is the correct
+                 level per Section X's versioning policy.
 
-Modified principles:  N/A — initial fill.
-Added sections:       I – X (all new relative to blank template).
+Modified principles:
+  - Section VIII (Tooling baseline): added `@changesets/cli` to the locked tool list.
+  - Section X (Governance) Compliance Review: extended with a one-sentence rule requiring
+    a `.changeset/*.md` file on every PR touching packages/react/ or packages/tokens/.
+
+Added sections:       N/A (both edits extend existing sections).
 Removed sections:     N/A.
 
 Templates audited:
-  ✅ .specify/templates/plan-template.md   — Constitution Check gate aligns with Section IX DoD.
-                                             No changes required.
-  ✅ .specify/templates/spec-template.md   — Uses MUST language, consistent with constitution.
-                                             No changes required.
-  ✅ .specify/templates/tasks-template.md  — Phase structure consistent with constitution
-                                             testing/DoD requirements. No changes required.
+  ✅ .specify/templates/plan-template.md   — Constitution Check gate references Section X
+                                             compliance review; no template change needed
+                                             since the extension is within the same gate.
+  ✅ .specify/templates/spec-template.md   — No change required.
+  ✅ .specify/templates/tasks-template.md  — No change required.
 
-Changes made to constitution during this review:
-  - Section X renamed from "Amendment" → "Governance" and expanded with versioning policy
-    and compliance review requirements (previously absent; MINOR change, already folded
-    into v1.0.0 initial baseline).
-  - Version/Ratification/Last-Amended footer added (was missing from paste).
+Prior amendments:
+  - 1.0.0 (2026-04-10): Initial ratification from template. Section X renamed from
+    "Amendment" → "Governance" and expanded with versioning policy and compliance review.
 
 Deferred TODOs:
   - TODO(RATIFICATION_DATE): Set to the date the team formally adopted this document.
@@ -142,6 +146,7 @@ Non-negotiable toolchain choices, locked to keep specs from re-litigating them:
 - MCP: **`@storybook/addon-mcp`**, published remotely via Chromatic.
 - Linting: **ESLint** (flat config) + **Prettier**. A custom rule forbids hex/rgb/hsl literals in `packages/react/src/components/**`.
 - CI: **GitHub Actions**. One workflow, one job graph: install → lint → typecheck → unit → build → storybook build → storybook test-runner (interaction + a11y) → chromatic publish → MCP smoke test.
+- Versioning + changelog: **`@changesets/cli`** (workspace dev dependency). Per-PR `.changeset/*.md` files aggregate into per-package CHANGELOG.md entries and version bumps via `pnpm changeset version`. Publish via `changesets/action` GitHub Action.
 - Deploy: **Chromatic** (Storybook publishing only, VR disabled).
 
 Substituting any of these requires amending this constitution.
@@ -183,9 +188,12 @@ before the version is finalized.
 **Compliance review.** Every PR that touches `packages/react/`, `packages/tokens/`, or
 `apps/storybook/` MUST include a Constitution Check confirming the change does not violate
 any section of this document. The plan template's Constitution Check gate implements this
-requirement. A PR that cannot pass the check MUST either (a) not be merged, or (b) trigger
-a constitution amendment before merge.
+requirement. Additionally, every PR that touches `packages/react/` or `packages/tokens/`
+MUST include at least one `.changeset/*.md` file declaring which packages bump and at what
+level (per spec 003's adoption of `@changesets/cli`); the CI check `changeset-check.yml`
+enforces this. A PR that cannot pass either check MUST either (a) not be merged, or (b)
+trigger a constitution amendment before merge.
 
 ---
 
-**Version**: 1.0.0 | **Ratified**: TODO(RATIFICATION_DATE): set to original adoption date | **Last Amended**: 2026-04-10
+**Version**: 1.0.1 | **Ratified**: TODO(RATIFICATION_DATE): set to original adoption date | **Last Amended**: 2026-05-16

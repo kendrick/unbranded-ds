@@ -1,8 +1,10 @@
 # heliostat Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-05-15
+Auto-generated from all feature plans. Last updated: 2026-05-16
 
 ## Active Technologies
+- TypeScript 5.x (existing); no language additions (003-versioning-workflow)
+- filesystem only. `.changeset/*.md` files under `.changeset/`; `package.json` `version` field per package; `CHANGELOG.md` per package. No database, no external state. (003-versioning-workflow)
 
 - TypeScript 5.x, strict mode, no `any` (per constitution Section VIII) (002-consumer-dx-preset)
 - `localStorage` client-side, key `unbranded-ds-theme` (canonical, shared with future `useTheme` in spec 007) (002-consumer-dx-preset)
@@ -25,6 +27,7 @@ npm test && npm run lint
 TypeScript 5.x, strict mode, no `any` (EVER): Follow standard conventions
 
 ## Recent Changes
+- 003-versioning-workflow: Added TypeScript 5.x (existing); no language additions
 
 - 002-consumer-dx-preset: Added TypeScript 5.x, strict mode, no `any` (per constitution Section VIII)
 

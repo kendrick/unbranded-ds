@@ -1,0 +1,47 @@
+name: Changeset check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  changeset-check:
+    name: Verify changeset present for package changes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Detect package changes
+        id: detect
+        run: |
+          if git diff --name-only origin/main...HEAD | grep -qE '^packages/(tokens|react)/'; then
+            echo "package_changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "package_changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Verify changeset present
+        if: steps.detect.outputs.package_changed == 'true'
+        run: |
+          pnpm changeset status --since=origin/main --output=/tmp/status.json
+          NEW=$(jq '.changesets | length' /tmp/status.json)
+          if [ "$NEW" -eq 0 ]; then
+            echo "::error::PR touches packages/ but no .changeset/*.md file is present. Run 'pnpm changeset' from the repo root, pick the affected packages and bump levels, and commit the resulting file. See .changeset/README.md for the contributor workflow."
+            exit 1
+          fi
+          echo "✓ Found $NEW changeset(s) for this PR"
