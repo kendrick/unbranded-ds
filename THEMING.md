@@ -129,20 +129,48 @@ Or flip it in JS:
 document.documentElement.setAttribute('data-theme', 'my-theme');
 ```
 
-## Avoiding the theme flash (FOUC)
+## FOUC prevention: choosing your approach
 
-If you're saving theme preference to localStorage, the page will briefly show the default theme before your JS runs. Fix that with a blocking script in `<head>`:
+Theme-aware apps need to apply the saved theme before first paint. Two viable design paths exist; pick the one that matches your stack.
 
-```html
-<script>
-	(function () {
-		var theme = localStorage.getItem('ds-theme') || 'light';
-		document.documentElement.setAttribute('data-theme', theme);
-	})();
-</script>
+### Path 1: inline bootstrap script (recommended for most consumers)
+
+The canonical pattern: inline a tiny script in `<head>` that reads `localStorage` and sets `data-theme` synchronously before the body renders. `@unbranded-ds/tokens/runtime` exports this as a string so you do not need to copy-paste it.
+
+```tsx
+import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime'
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+      </head>
+      <body>{children}</body>
+    </html>
+  )
+}
 ```
 
-It runs before paint, so the right theme is already set when the page renders.
+Works in client-rendered SPAs and SSR apps alike. For a non-light default theme:
+
+```tsx
+import { getThemeBootstrapScript } from '@unbranded-ds/tokens/runtime'
+
+const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' })
+```
+
+Under a strict Content Security Policy that forbids `script-src 'unsafe-inline'`, attach a `nonce` to the `<script>` element to match the per-request CSP nonce, or compute the SHA hash of the bootstrap output and add it to your CSP allowlist. The factory's output is deterministic — compute the hash once at build time and trust it.
+
+### Path 2: cookie + server-rendered `data-theme` (roadmap)
+
+A CSP-clean alternative for SSR apps: persist theme preference in a cookie (server can read it), and have the framework emit `<html data-theme="dark">` directly on every request. No client-side script runs before first paint.
+
+This approach is **roadmap territory** — not yet shipped. The trade-offs are documented in [specs/002-consumer-dx-preset/spec.md](specs/002-consumer-dx-preset/spec.md) but the implementation needs its own spec covering server-side helpers, cookie attributes, framework recipes, and sync semantics between cookie and localStorage. For SSR consumers who want zero inline scripts, this is the long-term direction; expect it before the 0.3.0 release.
+
+### `prefers-color-scheme` complement
+
+CSS-only: respond to the OS-level color scheme via `@media (prefers-color-scheme: dark)`. Useful as a complement (catches users who never explicitly set a preference), not as a replacement (does not honor user override, does not support custom themes beyond light/dark).
 
 ## Using the built-in themes
 
@@ -163,3 +191,17 @@ Or as link tags:
 ```
 
 Switch between them by changing `data-theme`. No reload needed.
+
+## Future structural opportunities
+
+These are known design improvements not yet implemented. Documented here so consumers can evaluate the design space rather than just follow the recipe.
+
+### Light defaults at `:root` for graceful degradation
+
+Currently each built-in theme CSS file scopes its declarations under `[data-theme="<name>"]`. A consumer whose saved `unbranded-ds-theme` value does not match any currently-loaded theme (a custom theme registered at runtime but not yet loaded, a theme removed between versions, or garbage in localStorage) gets `data-theme="<value>"` set by the bootstrap script but no matching CSS. The page renders without theme CSS variables until JS loads and a valid theme is registered.
+
+If `tokens-light.css` additionally emitted its declarations at `:root` — making light the no-attribute default — unknown `data-theme` values would degrade gracefully to "looks light-themed" instead of "looks unstyled." This is a tokens-package structural change; flag for a follow-up spec.
+
+### Cookie-based server-side rendering
+
+See "Path 2" in the FOUC prevention section above. A CSP-clean alternative to the inline bootstrap script for SSR apps. Roadmap item for the 0.3.0 release line.

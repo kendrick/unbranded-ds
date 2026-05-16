@@ -15,8 +15,8 @@ A token-driven design system. Themes, a React component library, and a Storybook
 
 ## Packages
 
-- [`@unbranded-ds/tokens`](./packages/tokens) — W3C DTCG tokens, three built-in themes (light, dark, brand), theme validation with WCAG AA contrast checks
-- [`@unbranded-ds/react`](./packages/react) — 9 components from shadcn/ui's Base UI variant, styled through tokens only
+- [`@unbranded-ds/tokens`](./packages/tokens) — W3C DTCG tokens, three built-in themes (light, dark, brand), theme validation with WCAG AA contrast checks. [Migrating from 0.1.0 →](./packages/tokens/README.md#migrating-from-010)
+- [`@unbranded-ds/react`](./packages/react) — 10 React components styled through tokens only. Nine adopted from shadcn/ui's Base UI variant; `<VisuallyHidden>` rolled in-house. [Migrating from 0.1.0 →](./packages/react/README.md#migrating-from-010)
 - [`apps/storybook`](./apps/storybook) — Storybook 10.3 with a theme switcher, interaction tests, a11y audits, and an MCP server
 
 ## Docs

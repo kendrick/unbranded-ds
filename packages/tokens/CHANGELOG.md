@@ -1,0 +1,25 @@
+# @unbranded-ds/tokens changelog
+
+All notable changes to this package are documented here.
+
+This project adheres to semver. Pre-1.0 minor versions may include breaking changes.
+
+## 0.2.0 — 2026-05-15
+
+### Breaking changes
+
+- **Removed wildcard exports.** The `./dist/tailwind/*` and `./dist/css/*` wildcard entries are gone from `package.json` `exports`. Consumers using the old paths must migrate to the clean aliases — see [README.md#migrating-from-010](./README.md#migrating-from-010).
+- **Canonical localStorage key for theme persistence is now `unbranded-ds-theme`.** Earlier drafts used `ds-theme` (the snippet in THEMING.md from 0.1.0) or `theme` (proposed by an early consumer). The full org-prefixed key avoids collision with consumer apps that have their own theme persistence. Consumers who manually persisted to either older key lose their saved preference on first 0.2.0 load — their preference falls back to the default theme.
+
+### Added
+
+- **`./preset.css` clean export** mapping to `./dist/tailwind/preset.css`. Two-line Tailwind v4 wiring: `@import 'tailwindcss'; @import '@unbranded-ds/tokens/preset.css';`.
+- **FOUC prevention helpers** from `./runtime`: `themeBootstrapScript` (string constant) and `getThemeBootstrapScript({ defaultTheme })` (factory function). Inline as `<script dangerouslySetInnerHTML={{ __html: ... }} />` in `<head>` to prevent the flash-of-wrong-theme on page reload. The constant defaults to `'light'`; pass `{ defaultTheme: 'dark' }` to the factory for dark-by-default apps. Factory output is deterministic across builds so consumers using SHA hash-based Content Security Policies can compute the hash once and trust it. Bootstrap script size: 193 bytes.
+
+### Migration
+
+See [README.md#migrating-from-010](./README.md#migrating-from-010) for the complete consumer-side change list and example diffs.
+
+## 0.1.0 — 2026-04-10
+
+Initial release. W3C DTCG token sources compiled via Style Dictionary into CSS variables, a Tailwind v4 `@theme` preset, JSON output, and a typed TypeScript token map. Three built-in themes (light, dark, brand) with WCAG AA contrast validation.

@@ -148,15 +148,15 @@ No foundational tasks needed. The four user stories share no upstream dependenci
 
 ### Documentation
 
-- [ ] T022 [P] Update `packages/tokens/README.md` to: replace the existing quickstart with the two-line wiring example, add a "Bootstrap script" section documenting both `themeBootstrapScript` and `getThemeBootstrapScript` (with the discoverability rule from FR-013 — explain when to reach for which), add a "Migrating from 0.1.0" section per [contracts/migration.md](./contracts/migration.md), add a Content Security Policy section per FR-014 covering nonce-based and hash-based patterns.
-- [ ] T023 [P] Update `packages/react/README.md` to: replace the existing quickstart with the two-line wiring example, add a `<VisuallyHidden>` section with the canonical icon-button-label example, add a "Migrating from 0.1.0" section per [contracts/migration.md](./contracts/migration.md).
-- [ ] T024 [P] Update `THEMING.md` to: replace the existing FOUC inline-script block (lines 132–145) with a reference to `themeBootstrapScript`, add a "FOUC prevention: choosing your approach" section per FR-015 covering both the inline-script path and the cookie-based-SSR roadmap item, add a "Future structural opportunities" note pointing at the `:root` light-defaults idea from the spec's future-opportunities section.
-- [ ] T025 [P] Update root `README.md` to link the new migration sections from both packages where appropriate. Keep the existing top-level structure; this is a small additive edit.
+- [x] T022 [P] Update `packages/tokens/README.md` to: replace the existing quickstart with the two-line wiring example, add a "Bootstrap script" section documenting both `themeBootstrapScript` and `getThemeBootstrapScript` (with the discoverability rule from FR-013 — explain when to reach for which), add a "Migrating from 0.1.0" section per [contracts/migration.md](./contracts/migration.md), add a Content Security Policy section per FR-014 covering nonce-based and hash-based patterns.
+- [x] T023 [P] Update `packages/react/README.md` to: replace the existing quickstart with the two-line wiring example, add a `<VisuallyHidden>` section with the canonical icon-button-label example, add a "Migrating from 0.1.0" section per [contracts/migration.md](./contracts/migration.md).
+- [x] T024 [P] Update `THEMING.md` to: replace the existing FOUC inline-script block (lines 132–145) with a reference to `themeBootstrapScript`, add a "FOUC prevention: choosing your approach" section per FR-015 covering both the inline-script path and the cookie-based-SSR roadmap item, add a "Future structural opportunities" note pointing at the `:root` light-defaults idea from the spec's future-opportunities section.
+- [x] T025 [P] Update root `README.md` to link the new migration sections from both packages where appropriate. Keep the existing top-level structure; this is a small additive edit.
 
 ### Changelogs (hand-authored per FR-016)
 
-- [ ] T026 [P] Create `packages/tokens/CHANGELOG.md` with a 0.2.0 entry. Lead with "Breaking changes" section (wildcard export removal, `unbranded-ds-theme` localStorage key replacing the unstandardized prior pattern). Then "Added" (clean `./preset.css` export, `themeBootstrapScript`, `getThemeBootstrapScript`). Reference [contracts/migration.md](./contracts/migration.md) directly.
-- [ ] T027 [P] Create `packages/react/CHANGELOG.md` with a 0.2.0 entry. Lead with "Added" (clean `./preset.css` export, `<VisuallyHidden>` component). Note: no breaking changes to the React package itself — the breaking change is in the tokens package; this changelog cross-references.
+- [x] T026 [P] Create `packages/tokens/CHANGELOG.md` with a 0.2.0 entry. Lead with "Breaking changes" section (wildcard export removal, `unbranded-ds-theme` localStorage key replacing the unstandardized prior pattern). Then "Added" (clean `./preset.css` export, `themeBootstrapScript`, `getThemeBootstrapScript`). Reference [contracts/migration.md](./contracts/migration.md) directly.
+- [x] T027 [P] Create `packages/react/CHANGELOG.md` with a 0.2.0 entry. Lead with "Added" (clean `./preset.css` export, `<VisuallyHidden>` component). Note: no breaking changes to the React package itself — the breaking change is in the tokens package; this changelog cross-references.
 
 ### Verification (sequential after all impls)
 
