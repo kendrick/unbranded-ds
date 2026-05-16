@@ -63,8 +63,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build tokens
-        run: pnpm --filter @unbranded-ds/tokens build
+      - name: Build packages
+        run: pnpm --filter '@unbranded-ds/*' build
 
       - name: Publish to Chromatic
         id: chromatic
