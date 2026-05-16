@@ -31,8 +31,7 @@
       "types": "./dist/ts/runtime.d.ts",
       "import": "./dist/ts/runtime.js"
     },
-    "./dist/css/*": "./dist/css/*",
-    "./dist/tailwind/*": "./dist/tailwind/*",
+    "./preset.css": "./dist/tailwind/preset.css",
     "./dist/json/*": "./dist/json/*"
   },
   "files": [
