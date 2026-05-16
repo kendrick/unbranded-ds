@@ -4,6 +4,8 @@ All notable changes to this package are documented here.
 
 This project adheres to semver. Pre-1.0 minor versions may include breaking changes.
 
+> The 0.2.0 entry below was hand-authored before the Changesets workflow landed in spec 003. From 0.3.0 onward, entries are auto-generated from per-PR `.changeset/*.md` files. See [.changeset/README.md](../../.changeset/README.md) for the current contributor workflow.
+
 ## 0.2.0 — 2026-05-15
 
 ### Breaking changes
