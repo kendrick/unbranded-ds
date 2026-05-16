@@ -1,4 +1,5 @@
 import { defineConfig } from "tsup";
+import { copyFile } from "node:fs/promises";
 
 export default defineConfig({
 	entry: ["src/index.ts"],
@@ -7,4 +8,7 @@ export default defineConfig({
 	sourcemap: true,
 	clean: true,
 	external: ["react", "react-dom", "@base-ui-components/react"],
+	onSuccess: async () => {
+		await copyFile("src/preset.css", "dist/preset.css");
+	},
 });

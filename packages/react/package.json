@@ -34,7 +34,8 @@
 		".": {
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.js"
-		}
+		},
+		"./preset.css": "./dist/preset.css"
 	},
 	"files": [
 		"dist"
