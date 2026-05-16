@@ -8,6 +8,7 @@ export * from "./components/Select";
 export * from "./components/Checkbox";
 export * from "./components/Switch";
 export * from "./components/Tabs";
+export * from "./components/VisuallyHidden";
 
 // Utilities
 export { cn } from "./lib/cn";
