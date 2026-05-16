@@ -17,7 +17,7 @@
 - Q: Should the bootstrap script validate the localStorage theme value against a known-themes list? → A: No, trust the value (option A). The script is meant to be tiny and run before paint; it has no list of runtime-registered custom themes at bootstrap time, so validation would break custom-theme consumers. Validation belongs at runtime in `useTheme()` (spec 007). Edge case: a saved value that does not match any loaded theme CSS produces a brief flash of broken-looking page until JS loads — accepted as an edge case for 002, with a follow-up note (see structural opportunity below).
 - Q: What deprecation stance for the 0.1.0 wildcard exports (`./dist/tailwind/*`, `./dist/css/*`)? → A: Remove entirely in 0.2.0 (option C). This is a breaking change for any 0.1.0 consumer who has not migrated their imports. Acceptable because pre-1.0 semver permits breaking changes in minor bumps and we're committing to clear release notes, a migration guide, and prominent breaking-change announcement. Versioning workflow (Changesets adoption) becomes its own spec before 003 starts so subsequent breaking changes are managed via tooling.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 — Two-line Tailwind wiring for React consumers (Priority: P1)
 
@@ -96,7 +96,7 @@ A developer writing accessible markup needs to provide screen-reader-only text f
 
 - **Light defaults at `:root` for graceful degradation.** Currently each built-in theme CSS file scopes its declarations under `[data-theme="<name>"]`. If `tokens-light.css` additionally emitted the same declarations at `:root` (so light is the "no-attribute" default), the page would always have a coherent set of CSS variable values regardless of whether `data-theme` matches a loaded theme. Unknown `data-theme` values would degrade to "looks light-themed" instead of "looks unstyled." This is a tokens-package structural change; flag for a follow-up spec.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -128,7 +128,7 @@ A developer writing accessible markup needs to provide screen-reader-only text f
 - **`unbranded-ds-theme` localStorage key**: The canonical key for theme persistence in the design system. Shared by `themeBootstrapScript` (this spec) and any future theme hook (spec 007).
 - **`<VisuallyHidden>` component**: A new React component shipped from `@unbranded-ds/react`. Renders its children in a visually-hidden but assistive-technology-accessible manner. Polymorphic — accepts an `as` prop to specify the underlying element type. The class-based path (`.sr-only`) is provided by Tailwind's base layer, not by this design system.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

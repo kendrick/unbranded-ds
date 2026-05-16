@@ -1,38 +1,39 @@
-import { type ZodIssue } from "zod";
-import { themeSchema, contrastPairs, type Theme } from "./schema.js";
-import { parseColor, contrastRatio } from "./color.js";
+import type { ZodIssue } from 'zod';
+import type { Theme } from './schema.js';
+import { contrastRatio, parseColor } from './color.js';
+import { contrastPairs, themeSchema } from './schema.js';
 
 // ---------------------------------------------------------------------------
 // Public types
 // ---------------------------------------------------------------------------
 
-export type ValidationIssue = {
+export interface ValidationIssue {
 	path: string;
 	code:
-		| "MISSING_TOKEN"
-		| "INVALID_TYPE"
-		| "UNKNOWN_TOKEN"
-		| "CONTRAST_FAILURE";
+		| 'MISSING_TOKEN'
+		| 'INVALID_TYPE'
+		| 'UNKNOWN_TOKEN'
+		| 'CONTRAST_FAILURE';
 	message: string;
 	expected?: string;
 	actual?: string;
 	ratio?: number;
 	threshold?: number;
-};
+}
 
-export type ValidationResult =
-	| { ok: true; theme: Theme }
-	| { ok: false; issues: ValidationIssue[] };
+export type ValidationResult
+	= | { ok: true; theme: Theme }
+		| { ok: false; issues: ValidationIssue[] };
 
 // ---------------------------------------------------------------------------
 // Resolve a dot-path like "color.primary" to the token value in the theme
 // ---------------------------------------------------------------------------
 
 function resolveTokenValue(theme: Theme, dotPath: string): string | undefined {
-	const [category, ...rest] = dotPath.split(".");
-	const key = rest.join(".");
+	const [category, ...rest] = dotPath.split('.');
+	const key = rest.join('.');
 	const group = (theme.tokens as Record<string, Record<string, string>>)[
-		category ?? ""
+		category ?? ''
 	];
 	return group?.[key];
 }
@@ -48,22 +49,22 @@ export function validateTheme(themeJson: unknown): ValidationResult {
 	if (!result.success) {
 		const issues: ValidationIssue[] = result.error.issues.map(
 			(issue: ZodIssue) => {
-				const path = issue.path.join(".");
-				if (issue.code === "invalid_type" && issue.received === "undefined") {
+				const path = issue.path.join('.');
+				if (issue.code === 'invalid_type' && issue.received === 'undefined') {
 					return {
 						path,
-						code: "MISSING_TOKEN" as const,
+						code: 'MISSING_TOKEN' as const,
 						message: `Missing required token: ${path}`,
 						expected: issue.expected,
 					};
 				}
 				return {
 					path,
-					code: "INVALID_TYPE" as const,
+					code: 'INVALID_TYPE' as const,
 					message: issue.message,
 					expected:
-						"expected" in issue ? String(issue.expected) : undefined,
-					actual: "received" in issue ? String(issue.received) : undefined,
+						'expected' in issue ? String(issue.expected) : undefined,
+					actual: 'received' in issue ? String(issue.received) : undefined,
 				};
 			},
 		);
@@ -79,18 +80,20 @@ export function validateTheme(themeJson: unknown): ValidationResult {
 		const fgValue = resolveTokenValue(theme, pair.foreground);
 		const bgValue = resolveTokenValue(theme, pair.background);
 
-		if (!fgValue || !bgValue) continue;
+		if (!fgValue || !bgValue)
+			continue;
 
 		const fgLinear = parseColor(fgValue);
 		const bgLinear = parseColor(bgValue);
 
-		if (!fgLinear || !bgLinear) continue;
+		if (!fgLinear || !bgLinear)
+			continue;
 
 		const ratio = contrastRatio(fgLinear, bgLinear);
 		if (ratio < pair.threshold) {
 			contrastIssues.push({
 				path: `${pair.foreground} / ${pair.background}`,
-				code: "CONTRAST_FAILURE",
+				code: 'CONTRAST_FAILURE',
 				message: `Contrast ratio ${ratio.toFixed(2)}:1 is below the required ${pair.threshold}:1 threshold`,
 				ratio: Math.round(ratio * 100) / 100,
 				threshold: pair.threshold,

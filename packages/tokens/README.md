@@ -22,7 +22,7 @@ Or override token values directly in your own `:root`:
 
 ```css
 :root {
-  --color-primary: oklch(0.5 0.2 240);
+	--color-primary: oklch(0.5 0.2 240);
 }
 ```
 
@@ -41,17 +41,17 @@ Consumer overrides win by cascade order, not by selector specificity. No specifi
 Theme-aware apps benefit from a tiny script in `<head>` that applies the saved theme before first paint. Import the canonical helper:
 
 ```tsx
-import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime'
+import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime';
 
 export default function RootLayout({ children }) {
-  return (
-    <html>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
-      </head>
-      <body>{children}</body>
-    </html>
-  )
+	return (
+		<html>
+			<head>
+				<script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+			</head>
+			<body>{children}</body>
+		</html>
+	);
 }
 ```
 
@@ -62,11 +62,13 @@ It reads `localStorage.getItem('unbranded-ds-theme')` and applies `data-theme` t
 When your default is something other than light (museum kiosks, theater apps, video editors, sleep apps), reach for the factory:
 
 ```tsx
-import { getThemeBootstrapScript } from '@unbranded-ds/tokens/runtime'
+import { getThemeBootstrapScript } from '@unbranded-ds/tokens/runtime';
 
-const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' })
+const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' });
 
-<script dangerouslySetInnerHTML={{ __html: bootstrap }} />
+export function BootstrapScript() {
+	return <script dangerouslySetInnerHTML={{ __html: bootstrap }} />;
+}
 ```
 
 The factory's output is deterministic across builds for any given `defaultTheme` argument — consumers using SHA hash-based Content Security Policies can compute the hash once and trust it.
@@ -83,22 +85,22 @@ Both share the same canonical `unbranded-ds-theme` localStorage key. Neither val
 Under a strict CSP that forbids `script-src 'unsafe-inline'`, attach a `nonce` to the `<script>` element to match your CSP nonce:
 
 ```tsx
-import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime'
-import { headers } from 'next/headers'
+import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime';
+import { headers } from 'next/headers';
 
 export default async function RootLayout({ children }) {
-  const nonce = (await headers()).get('x-nonce') ?? undefined
-  return (
-    <html>
-      <head>
-        <script
-          nonce={nonce}
-          dangerouslySetInnerHTML={{ __html: themeBootstrapScript }}
-        />
-      </head>
-      <body>{children}</body>
-    </html>
-  )
+	const nonce = (await headers()).get('x-nonce') ?? undefined;
+	return (
+		<html>
+			<head>
+				<script
+					nonce={nonce}
+					dangerouslySetInnerHTML={{ __html: themeBootstrapScript }}
+				/>
+			</head>
+			<body>{children}</body>
+		</html>
+	);
 }
 ```
 

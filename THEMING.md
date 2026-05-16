@@ -86,7 +86,8 @@ const result = validateTheme(myTheme);
 
 if (result.ok) {
 	console.log('Theme is valid!');
-} else {
+}
+else {
 	for (const issue of result.issues) {
 		console.error(`${issue.code}: ${issue.message} (at ${issue.path})`);
 	}
@@ -138,26 +139,26 @@ Theme-aware apps need to apply the saved theme before first paint. Two viable de
 The canonical pattern: inline a tiny script in `<head>` that reads `localStorage` and sets `data-theme` synchronously before the body renders. `@unbranded-ds/tokens/runtime` exports this as a string so you do not need to copy-paste it.
 
 ```tsx
-import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime'
+import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime';
 
 export default function RootLayout({ children }) {
-  return (
-    <html>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
-      </head>
-      <body>{children}</body>
-    </html>
-  )
+	return (
+		<html>
+			<head>
+				<script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+			</head>
+			<body>{children}</body>
+		</html>
+	);
 }
 ```
 
 Works in client-rendered SPAs and SSR apps alike. For a non-light default theme:
 
 ```tsx
-import { getThemeBootstrapScript } from '@unbranded-ds/tokens/runtime'
+import { getThemeBootstrapScript } from '@unbranded-ds/tokens/runtime';
 
-const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' })
+const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' });
 ```
 
 Under a strict Content Security Policy that forbids `script-src 'unsafe-inline'`, attach a `nonce` to the `<script>` element to match the per-request CSP nonce, or compute the SHA hash of the bootstrap output and add it to your CSP allowlist. The factory's output is deterministic — compute the hash once at build time and trust it.

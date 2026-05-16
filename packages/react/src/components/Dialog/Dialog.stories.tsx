@@ -1,23 +1,23 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within, userEvent } from "storybook/test";
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
+import { Button } from '../Button/Button';
+import { Input } from '../Input/Input';
+import { Label } from '../Label/Label';
 import {
 	Dialog,
-	DialogTrigger,
+	DialogClose,
 	DialogContent,
-	DialogHeader,
-	DialogTitle,
 	DialogDescription,
 	DialogFooter,
-	DialogClose,
-} from "./Dialog";
-import { Button } from "../Button/Button";
-import { Input } from "../Input/Input";
-import { Label } from "../Label/Label";
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from './Dialog';
 
 const meta = {
-	title: "Components/Dialog",
+	title: 'Components/Dialog',
 	component: Dialog,
-	tags: ["autodocs"],
+	tags: ['autodocs'],
 } satisfies Meta<typeof Dialog>;
 
 export default meta;
@@ -54,12 +54,12 @@ export const WithForm: Story = {
 						Make changes to your profile here.
 					</DialogDescription>
 				</DialogHeader>
-				<div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-					<div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+				<div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+					<div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
 						<Label htmlFor="dialog-name">Name</Label>
 						<Input id="dialog-name" defaultValue="John Doe" />
 					</div>
-					<div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+					<div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
 						<Label htmlFor="dialog-email">Email</Label>
 						<Input id="dialog-email" type="email" defaultValue="john@example.com" />
 					</div>
@@ -90,8 +90,8 @@ export const OpenCloseInteraction: Story = {
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const trigger = canvas.getByRole("button", { name: "Open" });
+		const trigger = canvas.getByRole('button', { name: 'Open' });
 		await userEvent.click(trigger);
-		await expect(await within(document.body).findByText("Interaction Test")).toBeVisible();
+		await expect(await within(document.body).findByText('Interaction Test')).toBeVisible();
 	},
 };

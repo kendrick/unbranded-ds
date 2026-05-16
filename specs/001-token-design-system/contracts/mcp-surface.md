@@ -29,6 +29,7 @@ The `tools/list` response must include tools that enable an agent to:
 4. **Run story tests** — Execute a story's play function and report pass/fail (if supported by the addon).
 
 The exact tool names are defined by `@storybook/addon-mcp` and may include:
+
 - `get_components` or similar
 - `get_stories`
 - `get_story_args`
@@ -60,12 +61,12 @@ npx mcp-add --type http --url "https://main--<appid>.chromatic.com/mcp" --client
 
 ```json
 {
-  "mcpServers": {
-    "unbranded-ds": {
-      "type": "http",
-      "url": "https://main--<appid>.chromatic.com/mcp"
-    }
-  }
+	"mcpServers": {
+		"unbranded-ds": {
+			"type": "http",
+			"url": "https://main--<appid>.chromatic.com/mcp"
+		}
+	}
 }
 ```
 
@@ -73,12 +74,12 @@ npx mcp-add --type http --url "https://main--<appid>.chromatic.com/mcp" --client
 
 ```json
 {
-  "mcpServers": {
-    "unbranded-ds": {
-      "type": "http",
-      "url": "https://main--<appid>.chromatic.com/mcp"
-    }
-  }
+	"mcpServers": {
+		"unbranded-ds": {
+			"type": "http",
+			"url": "https://main--<appid>.chromatic.com/mcp"
+		}
+	}
 }
 ```
 

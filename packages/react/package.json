@@ -1,6 +1,55 @@
 {
+	"name": "@unbranded-ds/react",
+	"type": "module",
+	"version": "0.2.0",
+	"description": "React component primitives for the unbranded-ds design system: Base UI + shadcn-style components styled with the @unbranded-ds/tokens Tailwind v4 preset.",
 	"author": "Kendrick Arnett",
+	"license": "MIT",
+	"homepage": "https://github.com/kendrick/unbranded-ds#readme",
+	"publishConfig": {
+		"access": "public"
+	},
+	"repository": {
+		"directory": "packages/react",
+		"type": "git",
+		"url": "git+https://github.com/kendrick/unbranded-ds.git"
+	},
 	"bugs": "https://github.com/kendrick/unbranded-ds/issues",
+	"keywords": [
+		"design-system",
+		"react",
+		"components",
+		"base-ui",
+		"shadcn",
+		"tailwind",
+		"unbranded-ds"
+	],
+	"sideEffects": false,
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./preset.css": "./dist/preset.css"
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"lint": "eslint src/",
+		"test": "vitest run",
+		"test:unit": "vitest run --project unit",
+		"typecheck": "tsc --noEmit"
+	},
+	"peerDependencies": {
+		"@base-ui-components/react": "^1.0.0-rc.0",
+		"react": "^18 || ^19",
+		"react-dom": "^18 || ^19"
+	},
 	"dependencies": {
 		"@unbranded-ds/tokens": "workspace:*",
 		"class-variance-authority": "^0.7",
@@ -8,7 +57,6 @@
 		"lucide-react": "^1.8.0",
 		"tailwind-merge": "^3"
 	},
-	"description": "React component primitives for the unbranded-ds design system: Base UI + shadcn-style components styled with the @unbranded-ds/tokens Tailwind v4 preset.",
 	"devDependencies": {
 		"@base-ui-components/react": "^1.0.0-rc.0",
 		"@storybook/react-vite": "^10.3",
@@ -29,53 +77,5 @@
 		"typescript": "^5",
 		"vite": "^6",
 		"vitest": "^3"
-	},
-	"exports": {
-		".": {
-			"import": "./dist/index.js",
-			"types": "./dist/index.d.ts"
-		},
-		"./preset.css": "./dist/preset.css"
-	},
-	"files": [
-		"dist"
-	],
-	"homepage": "https://github.com/kendrick/unbranded-ds#readme",
-	"keywords": [
-		"design-system",
-		"react",
-		"components",
-		"base-ui",
-		"shadcn",
-		"tailwind",
-		"unbranded-ds"
-	],
-	"license": "MIT",
-	"main": "./dist/index.js",
-	"name": "@unbranded-ds/react",
-	"peerDependencies": {
-		"@base-ui-components/react": "^1.0.0-rc.0",
-		"react": "^18 || ^19",
-		"react-dom": "^18 || ^19"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
-	"repository": {
-		"directory": "packages/react",
-		"type": "git",
-		"url": "git+https://github.com/kendrick/unbranded-ds.git"
-	},
-	"scripts": {
-		"build": "tsup",
-		"dev": "tsup --watch",
-		"lint": "eslint src/",
-		"test": "vitest run",
-		"test:unit": "vitest run --project unit",
-		"typecheck": "tsc --noEmit"
-	},
-	"sideEffects": false,
-	"type": "module",
-	"types": "./dist/index.d.ts",
-	"version": "0.2.0"
+	}
 }

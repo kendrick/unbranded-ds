@@ -179,12 +179,12 @@ No foundational tasks needed. The four user stories share no upstream dependenci
 
 ### User story dependencies
 
-| Story | Depends on | Blocks |
-|---|---|---|
-| US1 | nothing | nothing |
-| US2 | nothing | nothing |
-| US3 | nothing | nothing (but spec 007's `useTheme` will depend on the `THEME_STORAGE_KEY` constant landing here) |
-| US4 | nothing | nothing |
+| Story | Depends on | Blocks                                                                                           |
+| ----- | ---------- | ------------------------------------------------------------------------------------------------ |
+| US1   | nothing    | nothing                                                                                          |
+| US2   | nothing    | nothing                                                                                          |
+| US3   | nothing    | nothing (but spec 007's `useTheme` will depend on the `THEME_STORAGE_KEY` constant landing here) |
+| US4   | nothing    | nothing                                                                                          |
 
 ### Within-story dependencies
 

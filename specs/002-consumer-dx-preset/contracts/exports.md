@@ -6,7 +6,7 @@ The public TypeScript API surface added by this spec.
 
 ### `@unbranded-ds/tokens/runtime` — new named exports
 
-```ts
+````ts
 /**
  * A self-executing JavaScript string that reads the saved theme from
  * localStorage (`unbranded-ds-theme`) and applies `data-theme` to the
@@ -33,7 +33,7 @@ The public TypeScript API surface added by this spec.
  * }
  * ```
  */
-export const themeBootstrapScript: string
+export const themeBootstrapScript: string;
 
 /**
  * Factory that returns a self-executing JavaScript string with a
@@ -64,25 +64,25 @@ export const themeBootstrapScript: string
  * ```
  */
 export function getThemeBootstrapScript(options?: {
-  defaultTheme?: string
-}): string
-```
+	defaultTheme?: string;
+}): string;
+````
 
 ### `@unbranded-ds/tokens` — package.json exports map (after this spec)
 
 ```json
 {
-  "exports": {
-    ".": {
-      "types": "./dist/ts/index.d.ts",
-      "import": "./dist/ts/index.js"
-    },
-    "./runtime": {
-      "types": "./dist/ts/runtime.d.ts",
-      "import": "./dist/ts/runtime.js"
-    },
-    "./preset.css": "./dist/tailwind/preset.css"
-  }
+	"exports": {
+		".": {
+			"types": "./dist/ts/index.d.ts",
+			"import": "./dist/ts/index.js"
+		},
+		"./runtime": {
+			"types": "./dist/ts/runtime.d.ts",
+			"import": "./dist/ts/runtime.js"
+		},
+		"./preset.css": "./dist/tailwind/preset.css"
+	}
 }
 ```
 
@@ -94,7 +94,7 @@ The `./themes/*` files (`light.css`, `dark.css`, `brand.css`) are referenced by 
 
 ### `@unbranded-ds/react` — new named exports
 
-```ts
+````ts
 /**
  * Renders its children in a visually-hidden but assistive-technology-accessible
  * manner. Useful for screen-reader-only labels on icon buttons, skip-link
@@ -125,27 +125,27 @@ The `./themes/*` files (`light.css`, `dark.css`, `brand.css`) are referenced by 
  * ```
  */
 export function VisuallyHidden<
-  T extends keyof JSX.IntrinsicElements = "span"
->(props: VisuallyHiddenProps<T>): React.ReactElement
+	T extends keyof JSX.IntrinsicElements = 'span'
+>(props: VisuallyHiddenProps<T>): React.ReactElement;
 
-export type VisuallyHiddenProps<T extends keyof JSX.IntrinsicElements = "span"> = {
-  as?: T
-  children?: React.ReactNode
-  className?: string
-} & Omit<React.ComponentPropsWithoutRef<T>, "as" | "children" | "className">
-```
+export type VisuallyHiddenProps<T extends keyof JSX.IntrinsicElements = 'span'> = {
+	as?: T;
+	children?: React.ReactNode;
+	className?: string;
+} & Omit<React.ComponentPropsWithoutRef<T>, 'as' | 'children' | 'className'>;
+````
 
 ### `@unbranded-ds/react` — package.json exports map (after this spec)
 
 ```json
 {
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./preset.css": "./dist/preset.css"
-  }
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./preset.css": "./dist/preset.css"
+	}
 }
 ```
 
@@ -155,9 +155,9 @@ A new `./preset.css` entry is the only addition. The `.` entry continues to expo
 
 These exports existed in 0.1.0 and are removed in 0.2.0:
 
-| Package | Removed export | Replacement |
-|---|---|---|
-| `@unbranded-ds/tokens` | `./dist/css/*` (wildcard) | None — direct `dist/` paths are no longer canonical. Theme defaults still reachable via `./themes/<name>.css` |
-| `@unbranded-ds/tokens` | `./dist/tailwind/*` (wildcard) | `./preset.css` (clean alias) |
+| Package                | Removed export                 | Replacement                                                                                                   |
+| ---------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| `@unbranded-ds/tokens` | `./dist/css/*` (wildcard)      | None — direct `dist/` paths are no longer canonical. Theme defaults still reachable via `./themes/<name>.css` |
+| `@unbranded-ds/tokens` | `./dist/tailwind/*` (wildcard) | `./preset.css` (clean alias)                                                                                  |
 
 Migration guidance lives in [contracts/migration.md](./migration.md) and is required by spec FR-017.

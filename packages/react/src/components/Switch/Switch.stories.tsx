@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within, userEvent } from "storybook/test";
-import { Switch } from "./Switch";
-import { Label } from "../Label/Label";
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
+import { Label } from '../Label/Label';
+import { Switch } from './Switch';
 
 const meta = {
-	title: "Components/Switch",
+	title: 'Components/Switch',
 	component: Switch,
-	tags: ["autodocs"],
+	tags: ['autodocs'],
 } satisfies Meta<typeof Switch>;
 
 export default meta;
@@ -24,7 +24,7 @@ export const Disabled: Story = {
 
 export const WithLabel: Story = {
 	render: () => (
-		<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+		<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 			<Switch id="airplane" />
 			<Label htmlFor="airplane">Airplane Mode</Label>
 		</div>
@@ -33,14 +33,14 @@ export const WithLabel: Story = {
 
 export const ToggleInteraction: Story = {
 	render: () => (
-		<div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+		<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 			<Switch id="toggle-test" />
 			<Label htmlFor="toggle-test">Toggle me</Label>
 		</div>
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const sw = canvas.getByRole("switch");
+		const sw = canvas.getByRole('switch');
 		await expect(sw).not.toBeChecked();
 		await userEvent.click(sw);
 		await expect(sw).toBeChecked();

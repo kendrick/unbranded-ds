@@ -1,0 +1,17 @@
+{
+	"permissions": {
+		"allow": [
+			"Bash(.specify/scripts/bash/*)",
+			"Bash(find ~/.claude *)",
+			"Read(//Users/k.arnett/.claude/**)",
+			"Bash(pnpm * typecheck)",
+			"Bash(pnpm * lint)",
+			"Bash(pnpm * test *)",
+			"Bash(pnpm * test)",
+			"Bash(pnpm * build)",
+			"Bash(pnpm up *)",
+			"Bash(pnpm lint *)",
+			"Bash(pnpm exec *)"
+		]
+	}
+}

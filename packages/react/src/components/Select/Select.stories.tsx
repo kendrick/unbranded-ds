@@ -1,18 +1,18 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
 	Select,
-	SelectTrigger,
 	SelectContent,
-	SelectItem,
-	SelectValue,
 	SelectGroup,
+	SelectItem,
 	SelectLabel,
-} from "./Select";
+	SelectTrigger,
+	SelectValue,
+} from './Select';
 
 const meta = {
-	title: "Components/Select",
+	title: 'Components/Select',
 	component: Select,
-	tags: ["autodocs"],
+	tags: ['autodocs'],
 } satisfies Meta<typeof Select>;
 
 export default meta;
@@ -21,7 +21,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	render: () => (
 		<Select>
-			<SelectTrigger style={{ width: "200px" }}>
+			<SelectTrigger style={{ width: '200px' }}>
 				<SelectValue>Select a fruit</SelectValue>
 			</SelectTrigger>
 			<SelectContent>
@@ -36,7 +36,7 @@ export const Default: Story = {
 export const WithGroups: Story = {
 	render: () => (
 		<Select>
-			<SelectTrigger style={{ width: "200px" }}>
+			<SelectTrigger style={{ width: '200px' }}>
 				<SelectValue>Select a food</SelectValue>
 			</SelectTrigger>
 			<SelectContent>
@@ -58,7 +58,7 @@ export const WithGroups: Story = {
 export const Disabled: Story = {
 	render: () => (
 		<Select disabled>
-			<SelectTrigger style={{ width: "200px" }}>
+			<SelectTrigger style={{ width: '200px' }}>
 				<SelectValue>Disabled</SelectValue>
 			</SelectTrigger>
 			<SelectContent>
@@ -71,13 +71,15 @@ export const Disabled: Story = {
 export const ManyOptions: Story = {
 	render: () => (
 		<Select>
-			<SelectTrigger style={{ width: "200px" }}>
+			<SelectTrigger style={{ width: '200px' }}>
 				<SelectValue>Pick a number</SelectValue>
 			</SelectTrigger>
 			<SelectContent>
 				{Array.from({ length: 20 }, (_, i) => (
 					<SelectItem key={i} value={String(i + 1)}>
-						Option {i + 1}
+						Option
+						{' '}
+						{i + 1}
 					</SelectItem>
 				))}
 			</SelectContent>

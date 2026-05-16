@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config";
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	test: {
@@ -6,10 +6,10 @@ export default defineConfig({
 			{
 				extends: true,
 				test: {
-					name: "unit",
-					environment: "jsdom",
-					setupFiles: ["./vitest.setup.ts"],
-					include: ["src/**/*.test.{ts,tsx}"],
+					name: 'unit',
+					environment: 'jsdom',
+					setupFiles: ['./vitest.setup.ts'],
+					include: ['src/**/*.test.{ts,tsx}'],
 				},
 			},
 		],

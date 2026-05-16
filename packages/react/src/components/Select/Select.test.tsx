@@ -1,9 +1,9 @@
-import { describe, it, expect } from "vitest";
-import { render } from "@testing-library/react";
-import { Select, SelectTrigger, SelectValue } from "./Select";
+import { render } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import { Select, SelectTrigger, SelectValue } from './Select';
 
-describe("Select", () => {
-	it("renders trigger with correct data-slot", () => {
+describe('select', () => {
+	it('renders trigger with correct data-slot', () => {
 		const { container } = render(
 			<Select>
 				<SelectTrigger>
@@ -12,10 +12,10 @@ describe("Select", () => {
 			</Select>,
 		);
 
-		expect(container.querySelector("[data-slot='select-trigger']")).toBeInTheDocument();
+		expect(container.querySelector('[data-slot=\'select-trigger\']')).toBeInTheDocument();
 	});
 
-	it("applies styling classes on trigger via cn", () => {
+	it('applies styling classes on trigger via cn', () => {
 		const { container } = render(
 			<Select>
 				<SelectTrigger>
@@ -24,8 +24,8 @@ describe("Select", () => {
 			</Select>,
 		);
 
-		const trigger = container.querySelector("[data-slot='select-trigger']")!;
-		expect(trigger.className).toContain("border");
-		expect(trigger.className).toContain("rounded");
+		const trigger = container.querySelector('[data-slot=\'select-trigger\']')!;
+		expect(trigger.className).toContain('border');
+		expect(trigger.className).toContain('rounded');
 	});
 });

@@ -1,20 +1,20 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Button } from '../Button/Button';
+import { Input } from '../Input/Input';
+import { Label } from '../Label/Label';
 import {
 	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
 	CardHeader,
 	CardTitle,
-	CardDescription,
-	CardContent,
-	CardFooter,
-} from "./Card";
-import { Button } from "../Button/Button";
-import { Input } from "../Input/Input";
-import { Label } from "../Label/Label";
+} from './Card';
 
 const meta = {
-	title: "Components/Card",
+	title: 'Components/Card',
 	component: Card,
-	tags: ["autodocs"],
+	tags: ['autodocs'],
 } satisfies Meta<typeof Card>;
 
 export default meta;
@@ -22,7 +22,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	render: () => (
-		<Card style={{ maxWidth: "400px" }}>
+		<Card style={{ maxWidth: '400px' }}>
 			<CardHeader>
 				<CardTitle>Card Title</CardTitle>
 				<CardDescription>Card description goes here.</CardDescription>
@@ -36,7 +36,7 @@ export const Default: Story = {
 
 export const WithFooter: Story = {
 	render: () => (
-		<Card style={{ maxWidth: "400px" }}>
+		<Card style={{ maxWidth: '400px' }}>
 			<CardHeader>
 				<CardTitle>Notifications</CardTitle>
 				<CardDescription>Manage your notification settings.</CardDescription>
@@ -44,7 +44,7 @@ export const WithFooter: Story = {
 			<CardContent>
 				<p>Choose which notifications you'd like to receive.</p>
 			</CardContent>
-			<CardFooter style={{ gap: "8px" }}>
+			<CardFooter style={{ gap: '8px' }}>
 				<Button variant="outline">Cancel</Button>
 				<Button>Save</Button>
 			</CardFooter>
@@ -54,25 +54,25 @@ export const WithFooter: Story = {
 
 export const FullExample: Story = {
 	render: () => (
-		<Card style={{ maxWidth: "400px" }}>
+		<Card style={{ maxWidth: '400px' }}>
 			<CardHeader>
 				<CardTitle>Create account</CardTitle>
 				<CardDescription>Enter your details below.</CardDescription>
 			</CardHeader>
 			<CardContent>
-				<div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-					<div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+				<div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+					<div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
 						<Label htmlFor="card-name">Name</Label>
 						<Input id="card-name" placeholder="John Doe" />
 					</div>
-					<div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+					<div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
 						<Label htmlFor="card-email">Email</Label>
 						<Input id="card-email" type="email" placeholder="you@example.com" />
 					</div>
 				</div>
 			</CardContent>
 			<CardFooter>
-				<Button style={{ width: "100%" }}>Create account</Button>
+				<Button style={{ width: '100%' }}>Create account</Button>
 			</CardFooter>
 		</Card>
 	),

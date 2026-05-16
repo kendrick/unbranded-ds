@@ -1,9 +1,9 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants } from "./Tabs";
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+import { Tabs, TabsContent, TabsList, tabsListVariants, TabsTrigger } from './Tabs';
 
-describe("Tabs", () => {
-	it("renders sub-components with correct data-slot attributes", () => {
+describe('tabs', () => {
+	it('renders sub-components with correct data-slot attributes', () => {
 		render(
 			<Tabs defaultValue="a">
 				<TabsList>
@@ -15,13 +15,13 @@ describe("Tabs", () => {
 			</Tabs>,
 		);
 
-		expect(screen.getByText("Tab A").closest("[data-slot='tabs-trigger']")).toBeInTheDocument();
-		expect(screen.getByText("Content A").closest("[data-slot='tabs-content']")).toBeInTheDocument();
+		expect(screen.getByText('Tab A').closest('[data-slot=\'tabs-trigger\']')).toBeInTheDocument();
+		expect(screen.getByText('Content A').closest('[data-slot=\'tabs-content\']')).toBeInTheDocument();
 	});
 
-	it("exports tabsListVariants for standalone use", () => {
-		expect(typeof tabsListVariants).toBe("function");
-		const classes = tabsListVariants({ variant: "line" });
-		expect(typeof classes).toBe("string");
+	it('exports tabsListVariants for standalone use', () => {
+		expect(typeof tabsListVariants).toBe('function');
+		const classes = tabsListVariants({ variant: 'line' });
+		expect(typeof classes).toBe('string');
 	});
 });

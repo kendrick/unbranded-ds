@@ -5,7 +5,7 @@
 **Status**: Draft  
 **Input**: User description: "Build a minimal, themable, token-driven design system as a pnpm + Turborepo monorepo with tokens, React components, and Storybook"
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Consume Components with Token-Based Theming (Priority: P1)
 
@@ -105,7 +105,7 @@ A contributor opens a pull request with changes to tokens, components, or storie
 - Q: Are all tokens in the schema required for every theme, or can some be optional? → A: All tokens are required. The validator rejects any theme missing a token from the schema.
 - Q: What categories of design tokens are in scope for v0.1? → A: Colors, spacing, typography, border radii, shadows, and opacity.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -133,7 +133,7 @@ A contributor opens a pull request with changes to tokens, components, or storie
 - **Component**: A reusable UI element (one of nine in v0.1) that renders itself using token-derived styles and accepts consumer-provided class overrides. Each component has variants, stories, and tests.
 - **Story**: An interactive, documented example of a component in a specific state or variant. Stories serve as both human documentation and machine-readable metadata for AI agents.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

@@ -1,3 +1,2 @@
-@import "tailwindcss";
-@source "../../../packages/react/src/**/*.tsx";
-@import "@unbranded-ds/tokens/dist/tailwind/preset.css";
+@import 'tailwindcss';
+@import '@unbranded-ds/react/preset.css';

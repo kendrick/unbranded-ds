@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within, userEvent } from "storybook/test";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "./Tabs";
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './Tabs';
 
 const meta = {
-	title: "Components/Tabs",
+	title: 'Components/Tabs',
 	component: Tabs,
-	tags: ["autodocs"],
+	tags: ['autodocs'],
 } satisfies Meta<typeof Tabs>;
 
 export default meta;
@@ -34,13 +34,19 @@ export const ManyTabs: Story = {
 			<TabsList>
 				{Array.from({ length: 6 }, (_, i) => (
 					<TabsTrigger key={i} value={`tab-${i + 1}`}>
-						Tab {i + 1}
+						Tab
+						{' '}
+						{i + 1}
 					</TabsTrigger>
 				))}
 			</TabsList>
 			{Array.from({ length: 6 }, (_, i) => (
 				<TabsContent key={i} value={`tab-${i + 1}`}>
-					<p>Content for tab {i + 1}.</p>
+					<p>
+						Content for tab
+						{i + 1}
+						.
+					</p>
 				</TabsContent>
 			))}
 		</Tabs>
@@ -64,9 +70,9 @@ export const TabSwitchInteraction: Story = {
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		await expect(canvas.getByText("First panel content")).toBeVisible();
-		const secondTab = canvas.getByRole("tab", { name: "Second" });
+		await expect(canvas.getByText('First panel content')).toBeVisible();
+		const secondTab = canvas.getByRole('tab', { name: 'Second' });
 		await userEvent.click(secondTab);
-		await expect(canvas.getByText("Second panel content")).toBeVisible();
+		await expect(canvas.getByText('Second panel content')).toBeVisible();
 	},
 };

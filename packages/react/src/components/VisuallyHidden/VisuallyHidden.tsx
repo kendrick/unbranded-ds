@@ -1,13 +1,13 @@
-import type { JSX } from "react"
-import * as React from "react"
+import type { JSX } from 'react';
+import * as React from 'react';
 
-import { cn } from "../../lib/cn"
+import { cn } from '../../lib/cn';
 
-type VisuallyHiddenProps<T extends keyof JSX.IntrinsicElements = "span"> = {
-	as?: T
-	children?: React.ReactNode
-	className?: string
-} & Omit<React.ComponentPropsWithoutRef<T>, "as" | "children" | "className">
+type VisuallyHiddenProps<T extends keyof JSX.IntrinsicElements = 'span'> = {
+	as?: T;
+	children?: React.ReactNode;
+	className?: string;
+} & Omit<React.ComponentPropsWithoutRef<T>, 'as' | 'children' | 'className'>;
 
 /**
  * Renders its children in a visually-hidden but assistive-technology-accessible
@@ -38,23 +38,23 @@ type VisuallyHiddenProps<T extends keyof JSX.IntrinsicElements = "span"> = {
  * </VisuallyHidden>
  * ```
  */
-function VisuallyHidden<T extends keyof JSX.IntrinsicElements = "span">({
+function VisuallyHidden<T extends keyof JSX.IntrinsicElements = 'span'>({
 	as,
 	className,
 	children,
 	...props
 }: VisuallyHiddenProps<T>) {
-	const Tag = (as ?? "span") as React.ElementType
+	const Tag = (as ?? 'span') as React.ElementType;
 	return (
 		<Tag
 			data-slot="visually-hidden"
-			className={cn("sr-only", className)}
+			className={cn('sr-only', className)}
 			{...props}
 		>
 			{children}
 		</Tag>
-	)
+	);
 }
 
-export { VisuallyHidden }
-export type { VisuallyHiddenProps }
+export { VisuallyHidden };
+export type { VisuallyHiddenProps };

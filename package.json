@@ -1,31 +1,31 @@
 {
-  "name": "unbranded-ds",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "turbo dev",
-    "build": "turbo build",
-    "test": "turbo test",
-    "test:unit": "turbo test:unit",
-    "test:storybook": "turbo test:storybook",
-    "lint": "turbo lint",
-    "typecheck": "turbo typecheck",
-    "format": "prettier --check .",
-    "format:fix": "prettier --write ."
-  },
-  "devDependencies": {
-    "@antfu/eslint-config": "^8.1.1",
-    "@eslint-react/eslint-plugin": "^4.2.3",
-    "eslint": "^9",
-    "eslint-plugin-format": "^2.0.1",
-    "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react-refresh": "^0.5.2",
-    "prettier": "^3",
-    "turbo": "^2",
-    "typescript": "^5"
-  },
-  "packageManager": "pnpm@9.15.4",
-  "engines": {
-    "node": ">=20"
-  }
+	"name": "unbranded-ds",
+	"type": "module",
+	"private": true,
+	"packageManager": "pnpm@9.15.4",
+	"engines": {
+		"node": ">=20"
+	},
+	"scripts": {
+		"dev": "turbo dev",
+		"build": "turbo build",
+		"test": "turbo test",
+		"test:unit": "turbo test:unit",
+		"test:storybook": "turbo test:storybook",
+		"lint": "turbo lint",
+		"typecheck": "turbo typecheck",
+		"format": "prettier --check .",
+		"format:fix": "prettier --write ."
+	},
+	"devDependencies": {
+		"@antfu/eslint-config": "^9.0.0",
+		"@eslint-react/eslint-plugin": "^5.7.9",
+		"eslint": "^9",
+		"eslint-plugin-format": "^2.0.1",
+		"eslint-plugin-jsx-a11y": "^6.10.2",
+		"eslint-plugin-react-refresh": "^0.5.2",
+		"prettier": "^3",
+		"turbo": "^2",
+		"typescript": "^5"
+	}
 }

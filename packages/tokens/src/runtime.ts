@@ -1,9 +1,9 @@
-import { validateTheme } from "./validate.js";
-import type { Theme } from "./schema.js";
-import { hexToOklch, parseColor, contrastRatio } from "./color.js";
-import { contrastPairs } from "./schema.js";
+import type { Theme } from './schema.js';
+import { contrastRatio, hexToOklch, parseColor } from './color.js';
+import { contrastPairs } from './schema.js';
+import { validateTheme } from './validate.js';
 
-const THEME_STORAGE_KEY = "unbranded-ds-theme";
+const THEME_STORAGE_KEY = 'unbranded-ds-theme';
 
 /**
  * Factory that returns a self-executing JavaScript string with a
@@ -21,7 +21,7 @@ const THEME_STORAGE_KEY = "unbranded-ds-theme";
 export function getThemeBootstrapScript(
 	options: { defaultTheme?: string } = {},
 ): string {
-	const defaultTheme = options.defaultTheme ?? "light";
+	const defaultTheme = options.defaultTheme ?? 'light';
 	return `(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('${THEME_STORAGE_KEY}')||'${defaultTheme}')}catch(e){document.documentElement.setAttribute('data-theme','${defaultTheme}')}})()`;
 }
 
@@ -50,7 +50,7 @@ export class ThemeValidationError extends Error {
 		}>,
 	) {
 		super(message);
-		this.name = "ThemeValidationError";
+		this.name = 'ThemeValidationError';
 	}
 }
 
@@ -65,7 +65,7 @@ export function registerTheme(themeJson: Theme): void {
 
 	if (!result.ok) {
 		throw new ThemeValidationError(
-			`Theme "${(themeJson as { name?: string }).name ?? "unknown"}" failed validation`,
+			`Theme "${(themeJson as { name?: string }).name ?? 'unknown'}" failed validation`,
 			result.issues,
 		);
 	}
@@ -81,8 +81,8 @@ export function registerTheme(themeJson: Theme): void {
 
 	for (const [category, group] of Object.entries(tokens)) {
 		for (const [key, value] of Object.entries(group)) {
-			const cssValue = category === "color" ? hexToOklch(value) : value;
-			if (category === "color") {
+			const cssValue = category === 'color' ? hexToOklch(value) : value;
+			if (category === 'color') {
 				convertedColors[`color.${key}`] = cssValue;
 			}
 			vars.push(`  --${category}-${key}: ${cssValue};`);
@@ -94,17 +94,19 @@ export function registerTheme(themeJson: Theme): void {
 	for (const pair of contrastPairs) {
 		const fgValue = convertedColors[pair.foreground];
 		const bgValue = convertedColors[pair.background];
-		if (!fgValue || !bgValue) continue;
+		if (!fgValue || !bgValue)
+			continue;
 
 		const fgLinear = parseColor(fgValue);
 		const bgLinear = parseColor(bgValue);
-		if (!fgLinear || !bgLinear) continue;
+		if (!fgLinear || !bgLinear)
+			continue;
 
 		const ratio = contrastRatio(fgLinear, bgLinear);
 		if (ratio < pair.threshold) {
 			postConversionIssues.push({
 				path: `${pair.foreground} / ${pair.background}`,
-				code: "CONTRAST_FAILURE",
+				code: 'CONTRAST_FAILURE',
 				message: `Post-conversion contrast ratio ${ratio.toFixed(2)}:1 is below ${pair.threshold}:1 threshold`,
 			});
 		}
@@ -117,7 +119,7 @@ export function registerTheme(themeJson: Theme): void {
 		);
 	}
 
-	const css = `${selector} {\n${vars.join("\n")}\n}`;
+	const css = `${selector} {\n${vars.join('\n')}\n}`;
 
 	// Remove any existing style block for this theme
 	const existingId = `ds-theme-${theme.name}`;
@@ -126,7 +128,7 @@ export function registerTheme(themeJson: Theme): void {
 		existing.remove();
 	}
 
-	const style = document.createElement("style");
+	const style = document.createElement('style');
 	style.id = existingId;
 	style.textContent = css;
 	document.head.appendChild(style);

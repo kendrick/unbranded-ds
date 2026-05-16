@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within, userEvent } from "storybook/test";
-import { Checkbox } from "./Checkbox";
-import { Label } from "../Label/Label";
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
+import { Label } from '../Label/Label';
+import { Checkbox } from './Checkbox';
 
 const meta = {
-	title: "Components/Checkbox",
+	title: 'Components/Checkbox',
 	component: Checkbox,
-	tags: ["autodocs"],
+	tags: ['autodocs'],
 } satisfies Meta<typeof Checkbox>;
 
 export default meta;
@@ -24,7 +24,8 @@ export const Disabled: Story = {
 
 export const WithLabel: Story = {
 	render: () => (
-		<label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+		// eslint-disable-next-line jsx-a11y/label-has-associated-control -- inner Checkbox is the implicit control; the linter cannot infer this from a custom component.
+		<label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 			<Checkbox />
 			<Label>Accept terms and conditions</Label>
 		</label>
@@ -33,14 +34,15 @@ export const WithLabel: Story = {
 
 export const ToggleInteraction: Story = {
 	render: () => (
-		<label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+		// eslint-disable-next-line jsx-a11y/label-has-associated-control -- inner Checkbox is the implicit control; the linter cannot infer this from a custom component.
+		<label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 			<Checkbox />
 			<Label>Toggle me</Label>
 		</label>
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const checkbox = canvas.getByRole("checkbox");
+		const checkbox = canvas.getByRole('checkbox');
 		await expect(checkbox).not.toBeChecked();
 		await userEvent.click(checkbox);
 		await expect(checkbox).toBeChecked();

@@ -10,7 +10,7 @@
 All components are named exports from the package root:
 
 ```typescript
-import { Button, Input, Label, Card, Dialog, Select, Checkbox, Switch, Tabs } from '@unbranded-ds/react';
+import { Button, Card, Checkbox, Dialog, Input, Label, Select, Switch, Tabs } from '@unbranded-ds/react';
 ```
 
 ---
@@ -31,9 +31,9 @@ Every component accepts:
 
 ```typescript
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
-  size?: 'default' | 'sm' | 'lg' | 'icon';
-  className?: string;
+	variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+	size?: 'default' | 'sm' | 'lg' | 'icon';
+	className?: string;
 }
 ```
 
@@ -44,7 +44,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 ```typescript
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  className?: string;
+	className?: string;
 }
 ```
 
@@ -55,7 +55,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 ```typescript
 interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
-  className?: string;
+	className?: string;
 }
 ```
 
@@ -66,7 +66,7 @@ interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
 
 ```typescript
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string;
+	className?: string;
 }
 // Sub-components: CardHeader, CardTitle, CardDescription, CardContent, CardFooter
 ```
@@ -78,9 +78,9 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 ```typescript
 interface DialogProps {
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
-  children: React.ReactNode;
+	open?: boolean;
+	onOpenChange?: (open: boolean) => void;
+	children: React.ReactNode;
 }
 // Sub-components: DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose
 ```
@@ -92,11 +92,11 @@ interface DialogProps {
 
 ```typescript
 interface SelectProps {
-  value?: string;
-  onValueChange?: (value: string) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  children: React.ReactNode;
+	value?: string;
+	onValueChange?: (value: string) => void;
+	placeholder?: string;
+	disabled?: boolean;
+	children: React.ReactNode;
 }
 // Sub-components: SelectTrigger, SelectContent, SelectItem, SelectValue
 ```
@@ -108,10 +108,10 @@ interface SelectProps {
 
 ```typescript
 interface CheckboxProps {
-  checked?: boolean | 'indeterminate';
-  onCheckedChange?: (checked: boolean | 'indeterminate') => void;
-  disabled?: boolean;
-  className?: string;
+	checked?: boolean | 'indeterminate';
+	onCheckedChange?: (checked: boolean | 'indeterminate') => void;
+	disabled?: boolean;
+	className?: string;
 }
 ```
 
@@ -122,10 +122,10 @@ interface CheckboxProps {
 
 ```typescript
 interface SwitchProps {
-  checked?: boolean;
-  onCheckedChange?: (checked: boolean) => void;
-  disabled?: boolean;
-  className?: string;
+	checked?: boolean;
+	onCheckedChange?: (checked: boolean) => void;
+	disabled?: boolean;
+	className?: string;
 }
 ```
 
@@ -136,10 +136,10 @@ interface SwitchProps {
 
 ```typescript
 interface TabsProps {
-  defaultValue?: string;
-  value?: string;
-  onValueChange?: (value: string) => void;
-  children: React.ReactNode;
+	defaultValue?: string;
+	value?: string;
+	onValueChange?: (value: string) => void;
+	children: React.ReactNode;
 }
 // Sub-components: TabsList, TabsTrigger, TabsContent
 ```

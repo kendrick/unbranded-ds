@@ -92,7 +92,7 @@ import myTheme from './my-theme.json';
 
 const result = validateTheme(myTheme);
 if (!result.ok) {
-  console.error(result.issues);
+	console.error(result.issues);
 }
 ```
 
@@ -110,10 +110,10 @@ pnpm add @unbranded-ds/tokens @unbranded-ds/react @base-ui-components/react
 
 ```css
 /* app.css */
-@import "tailwindcss";
-@import "@unbranded-ds/tokens/dist/tailwind/preset.css";
-@import "@unbranded-ds/tokens/dist/css/tokens-light.css";
-@import "@unbranded-ds/tokens/dist/css/tokens-dark.css";
+@import 'tailwindcss';
+@import '@unbranded-ds/tokens/dist/tailwind/preset.css';
+@import '@unbranded-ds/tokens/dist/css/tokens-light.css';
+@import '@unbranded-ds/tokens/dist/css/tokens-dark.css';
 ```
 
 ### Use Components
@@ -122,15 +122,15 @@ pnpm add @unbranded-ds/tokens @unbranded-ds/react @base-ui-components/react
 import { Button, Card } from '@unbranded-ds/react';
 
 export function App() {
-  return (
-    <div data-theme="light">
-      <Card>
-        <Button variant="default" size="default">
-          Click me
-        </Button>
-      </Card>
-    </div>
-  );
+	return (
+		<div data-theme="light">
+			<Card>
+				<Button variant="default" size="default">
+					Click me
+				</Button>
+			</Card>
+		</div>
+	);
 }
 ```
 
@@ -144,11 +144,11 @@ document.documentElement.setAttribute('data-theme', 'dark');
 
 ## Key Scripts (root package.json)
 
-| Script | Description |
-|--------|-------------|
-| `pnpm dev` | Start Storybook dev server |
-| `pnpm build` | Build all packages (Turborepo) |
-| `pnpm test` | Run all tests (Vitest workspace) |
-| `pnpm lint` | ESLint + Prettier check |
-| `pnpm typecheck` | TypeScript strict check |
-| `pnpm test:storybook` | Run interaction + a11y tests |
+| Script                | Description                      |
+| --------------------- | -------------------------------- |
+| `pnpm dev`            | Start Storybook dev server       |
+| `pnpm build`          | Build all packages (Turborepo)   |
+| `pnpm test`           | Run all tests (Vitest workspace) |
+| `pnpm lint`           | ESLint + Prettier check          |
+| `pnpm typecheck`      | TypeScript strict check          |
+| `pnpm test:storybook` | Run interaction + a11y tests     |

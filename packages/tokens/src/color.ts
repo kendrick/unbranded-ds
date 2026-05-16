@@ -17,22 +17,25 @@ type OklchColor = [number, number, number]; // L, C, H (H in degrees)
 // ---------------------------------------------------------------------------
 
 function hexToRgb(hex: string): RGB | null {
-	const clean = hex.replace(/^#/, "");
+	const clean = hex.replace(/^#/, '');
 	let r: number, g: number, b: number;
 
 	if (clean.length === 3) {
-		r = parseInt(clean[0]! + clean[0]!, 16);
-		g = parseInt(clean[1]! + clean[1]!, 16);
-		b = parseInt(clean[2]! + clean[2]!, 16);
-	} else if (clean.length === 6) {
-		r = parseInt(clean.slice(0, 2), 16);
-		g = parseInt(clean.slice(2, 4), 16);
-		b = parseInt(clean.slice(4, 6), 16);
-	} else {
+		r = Number.parseInt(clean[0]! + clean[0]!, 16);
+		g = Number.parseInt(clean[1]! + clean[1]!, 16);
+		b = Number.parseInt(clean[2]! + clean[2]!, 16);
+	}
+	else if (clean.length === 6) {
+		r = Number.parseInt(clean.slice(0, 2), 16);
+		g = Number.parseInt(clean.slice(2, 4), 16);
+		b = Number.parseInt(clean.slice(4, 6), 16);
+	}
+	else {
 		return null;
 	}
 
-	if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) return null;
+	if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b))
+		return null;
 	return [r, g, b];
 }
 
@@ -40,19 +43,22 @@ function hexToRgb(hex: string): RGB | null {
 // oklch parsing
 // ---------------------------------------------------------------------------
 
-const OKLCH_RE =
-	/^oklch\(\s*([\d.]+)(%?)\s+([\d.]+)\s+([\d.]+(?:deg)?)\s*(?:\/\s*[\d.]+%?\s*)?\)$/i;
+const OKLCH_RE
+	= /^oklch\(\s*([\d.]+)(%?)\s+([\d.]+)\s+([\d.]+(?:deg)?)\s*(?:\/\s*[\d.]+%?\s*)?\)$/i;
 
 function parseOklch(str: string): OklchColor | null {
 	const m = OKLCH_RE.exec(str.trim());
-	if (!m) return null;
+	if (!m)
+		return null;
 
-	let L = parseFloat(m[1]!);
-	if (m[2] === "%") L /= 100;
-	const C = parseFloat(m[3]!);
-	const H = parseFloat(m[4]!);
+	let L = Number.parseFloat(m[1]!);
+	if (m[2] === '%')
+		L /= 100;
+	const C = Number.parseFloat(m[3]!);
+	const H = Number.parseFloat(m[4]!);
 
-	if (Number.isNaN(L) || Number.isNaN(C) || Number.isNaN(H)) return null;
+	if (Number.isNaN(L) || Number.isNaN(C) || Number.isNaN(H))
+		return null;
 	return [L, C, H];
 }
 
@@ -62,14 +68,14 @@ function parseOklch(str: string): OklchColor | null {
 
 function srgbToLinear(c: number): number {
 	const s = c / 255;
-	return s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+	return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
 }
 
 function linearToSrgb(c: number): number {
 	const clamped = Math.max(0, Math.min(1, c));
 	return clamped <= 0.0031308
 		? Math.round(clamped * 12.92 * 255)
-		: Math.round((1.055 * Math.pow(clamped, 1 / 2.4) - 0.055) * 255);
+		: Math.round((1.055 * clamped ** (1 / 2.4) - 0.055) * 255);
 }
 
 function rgbToLinear(rgb: RGB): LinearRGB {
@@ -110,7 +116,8 @@ function oklabToOklch(lab: OklabColor): OklchColor {
 	const [L, a, b] = lab;
 	const C = Math.sqrt(a * a + b * b);
 	let H = (Math.atan2(b, a) * 180) / Math.PI;
-	if (H < 0) H += 360;
+	if (H < 0)
+		H += 360;
 	return [L, C, H];
 }
 
@@ -131,7 +138,8 @@ function oklchToOklab(lch: OklchColor): OklabColor {
 export function parseColor(value: string): LinearRGB | null {
 	// Try hex
 	const rgb = hexToRgb(value);
-	if (rgb) return rgbToLinear(rgb);
+	if (rgb)
+		return rgbToLinear(rgb);
 
 	// Try oklch
 	const oklch = parseOklch(value);
@@ -166,10 +174,12 @@ export function contrastRatio(a: LinearRGB, b: LinearRGB): number {
  * Returns the original string if it's already oklch or unparseable.
  */
 export function hexToOklch(value: string): string {
-	if (!value.startsWith("#")) return value;
+	if (!value.startsWith('#'))
+		return value;
 
 	const rgb = hexToRgb(value);
-	if (!rgb) return value;
+	if (!rgb)
+		return value;
 
 	const linear = rgbToLinear(rgb);
 	const lab = linearRgbToOklab(linear);
@@ -188,7 +198,8 @@ export function hexToOklch(value: string): string {
  */
 export function oklchToHex(value: string): string | null {
 	const oklch = parseOklch(value);
-	if (!oklch) return null;
+	if (!oklch)
+		return null;
 
 	const lab = oklchToOklab(oklch);
 	const linear = oklabToLinearRgb(lab);
@@ -196,5 +207,5 @@ export function oklchToHex(value: string): string | null {
 	const g = linearToSrgb(linear[1]);
 	const b = linearToSrgb(linear[2]);
 
-	return `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
+	return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
 }

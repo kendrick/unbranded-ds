@@ -11,14 +11,14 @@ Storybook 10.3 ships an MCP server via `@storybook/addon-mcp`. Agents can browse
 
 Six tools, exposed by the addon:
 
-| Tool | What it does |
-|---|---|
-| `list-all-documentation` | Lists every component and its metadata |
-| `get-documentation` | Full docs for a component: props, examples, stories |
-| `get-documentation-for-story` | Docs for a single story variant |
-| `preview-stories` | Preview URLs for specific stories |
-| `run-story-tests` | Runs play functions, reports pass/fail |
-| `get-storybook-story-instructions` | Guidance for writing new stories |
+| Tool                               | What it does                                        |
+| ---------------------------------- | --------------------------------------------------- |
+| `list-all-documentation`           | Lists every component and its metadata              |
+| `get-documentation`                | Full docs for a component: props, examples, stories |
+| `get-documentation-for-story`      | Docs for a single story variant                     |
+| `preview-stories`                  | Preview URLs for specific stories                   |
+| `run-story-tests`                  | Runs play functions, reports pass/fail              |
+| `get-storybook-story-instructions` | Guidance for writing new stories                    |
 
 ## Client setup
 
@@ -32,12 +32,12 @@ npx mcp-add --type http --url "https://main--<appid>.chromatic.com/mcp" --scope 
 
 ```json
 {
-  "mcpServers": {
-    "unbranded-ds": {
-      "type": "http",
-      "url": "https://main--<appid>.chromatic.com/mcp"
-    }
-  }
+	"mcpServers": {
+		"unbranded-ds": {
+			"type": "http",
+			"url": "https://main--<appid>.chromatic.com/mcp"
+		}
+	}
 }
 ```
 
@@ -45,12 +45,12 @@ npx mcp-add --type http --url "https://main--<appid>.chromatic.com/mcp" --scope 
 
 ```json
 {
-  "mcpServers": {
-    "unbranded-ds": {
-      "type": "http",
-      "url": "https://main--<appid>.chromatic.com/mcp"
-    }
-  }
+	"mcpServers": {
+		"unbranded-ds": {
+			"type": "http",
+			"url": "https://main--<appid>.chromatic.com/mcp"
+		}
+	}
 }
 ```
 

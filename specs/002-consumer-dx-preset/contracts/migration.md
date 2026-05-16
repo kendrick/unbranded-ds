@@ -60,20 +60,20 @@ Copy-paste the inline script from THEMING.md:132–145 into your layout:
 
 ```html
 <script>
-  (function () {
-    var theme = localStorage.getItem('ds-theme') || 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-  })();
+	(function () {
+		var theme = localStorage.getItem('ds-theme') || 'light';
+		document.documentElement.setAttribute('data-theme', theme);
+	})();
 </script>
 ```
 
 ### After (0.2.0)
 
 ```tsx
-import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime'
+import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime';
 
 // In your root layout
-<script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+<script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />;
 ```
 
 **localStorage key changed**: from `ds-theme` (THEMING.md's earlier draft snippet) to `unbranded-ds-theme` (the canonical key established in 002). Consumers who manually persisted to `ds-theme` will lose their saved preference on first load after upgrade — the saved preference falls back to the default theme. Document this in the CHANGELOG as a soft-data-loss note. No automatic migration is provided.
@@ -81,11 +81,13 @@ import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime'
 For consumers wanting a non-default fallback theme (dark by default, for example):
 
 ```tsx
-import { getThemeBootstrapScript } from '@unbranded-ds/tokens/runtime'
+import { getThemeBootstrapScript } from '@unbranded-ds/tokens/runtime';
 
-const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' })
+const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' });
 
-<script dangerouslySetInnerHTML={{ __html: bootstrap }} />
+export function BootstrapScript() {
+	return <script dangerouslySetInnerHTML={{ __html: bootstrap }} />;
+}
 ```
 
 ## `.sr-only` markup
@@ -93,7 +95,7 @@ const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' })
 ### Before (0.1.0)
 
 ```tsx
-<span className="sr-only">Show settings</span>
+<span className="sr-only">Show settings</span>;
 ```
 
 This continues to work in 0.2.0. Tailwind v4 ships `.sr-only` as a built-in utility; the design system never owned this class.
@@ -101,21 +103,21 @@ This continues to work in 0.2.0. Tailwind v4 ships `.sr-only` as a built-in util
 ### Newly available in 0.2.0
 
 ```tsx
-import { VisuallyHidden } from '@unbranded-ds/react'
+import { VisuallyHidden } from '@unbranded-ds/react';
 
-<VisuallyHidden>Show settings</VisuallyHidden>
+<VisuallyHidden>Show settings</VisuallyHidden>;
 ```
 
 A polymorphic React component covering the same accessibility need. Use the className form for static markup; reach for the component for prop-driven or polymorphic cases.
 
 ## Summary of consumer changes
 
-| Concern | Action required |
-|---|---|
-| Tailwind+React wiring | Replace 3 CSS lines with 2 lines; new import path is `@unbranded-ds/react/preset.css` |
-| Tokens-only Tailwind wiring | Replace `dist/tailwind/preset.css` path with `preset.css` clean alias |
-| Theme defaults | Replace `dist/css/tokens-<name>.css` paths with `themes/<name>.css` paths |
-| FOUC prevention | Replace copy-paste inline script with `themeBootstrapScript` import. Manually migrate any users with the old `ds-theme` localStorage key (or accept the soft data loss on first reload). |
-| Visually-hidden markup | No change required. The `<VisuallyHidden>` component is an optional addition. |
+| Concern                     | Action required                                                                                                                                                                          |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Tailwind+React wiring       | Replace 3 CSS lines with 2 lines; new import path is `@unbranded-ds/react/preset.css`                                                                                                    |
+| Tokens-only Tailwind wiring | Replace `dist/tailwind/preset.css` path with `preset.css` clean alias                                                                                                                    |
+| Theme defaults              | Replace `dist/css/tokens-<name>.css` paths with `themes/<name>.css` paths                                                                                                                |
+| FOUC prevention             | Replace copy-paste inline script with `themeBootstrapScript` import. Manually migrate any users with the old `ds-theme` localStorage key (or accept the soft data loss on first reload). |
+| Visually-hidden markup      | No change required. The `<VisuallyHidden>` component is an optional addition.                                                                                                            |
 
 For consumers who hit the breaking change without reading the migration guide, the build will fail with an unresolvable-module error pointing at the old path. The error message itself names the path, so consumers can grep the CHANGELOG or this migration doc by path string and find their answer.

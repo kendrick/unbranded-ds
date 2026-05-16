@@ -20,6 +20,7 @@ The CSS files exposed via `./preset.css` on both packages have strict structural
 **Why registration-only matters**: The `@theme inline` block tells Tailwind "the utility name `bg-primary` resolves to whatever the CSS variable `--color-primary` is set to." It does not set `--color-primary` to a value. Consumers can then declare `:root { --color-primary: oklch(...) }` lower in their cascade and have their value win. If this preset inlined defaults, consumers' overrides would have to fight a same-specificity ancestor declaration, breaking the "schema locked, values float" design (constitution Section III).
 
 **Verification**: a test or lint rule scans the file and asserts:
+
 - Every declaration matches the `--<x>: var(--<x>)` pattern
 - No declarations contain anything else (no hex, oklch, rem, px values)
 
@@ -59,7 +60,7 @@ This is not a file we ship, but a documented expectation of how consumers compos
 
 /* OPTIONAL: consumer's own overrides */
 :root {
-  --color-primary: oklch(0.5 0.2 240);
+	--color-primary: oklch(0.5 0.2 240);
 }
 ```
 

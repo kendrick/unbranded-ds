@@ -1,17 +1,17 @@
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it } from 'vitest';
 import {
 	Dialog,
-	DialogTrigger,
 	DialogContent,
+	DialogDescription,
 	DialogHeader,
 	DialogTitle,
-	DialogDescription,
-} from "./Dialog";
+	DialogTrigger,
+} from './Dialog';
 
-describe("Dialog", () => {
-	it("renders sub-components with correct data-slot attributes when open", () => {
+describe('dialog', () => {
+	it('renders sub-components with correct data-slot attributes when open', () => {
 		render(
 			<Dialog open>
 				<DialogContent>
@@ -23,11 +23,11 @@ describe("Dialog", () => {
 			</Dialog>,
 		);
 
-		expect(screen.getByText("Confirm").closest("[data-slot='dialog-title']")).toBeInTheDocument();
-		expect(screen.getByText("Are you sure?").closest("[data-slot='dialog-description']")).toBeInTheDocument();
+		expect(screen.getByText('Confirm').closest('[data-slot=\'dialog-title\']')).toBeInTheDocument();
+		expect(screen.getByText('Are you sure?').closest('[data-slot=\'dialog-description\']')).toBeInTheDocument();
 	});
 
-	it("opens via trigger click", async () => {
+	it('opens via trigger click', async () => {
 		const user = userEvent.setup();
 		render(
 			<Dialog>
@@ -38,8 +38,8 @@ describe("Dialog", () => {
 			</Dialog>,
 		);
 
-		expect(screen.queryByText("Title")).not.toBeInTheDocument();
-		await user.click(screen.getByText("Open"));
-		expect(screen.getByText("Title")).toBeInTheDocument();
+		expect(screen.queryByText('Title')).not.toBeInTheDocument();
+		await user.click(screen.getByText('Open'));
+		expect(screen.getByText('Title')).toBeInTheDocument();
 	});
 });

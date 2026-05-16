@@ -1,20 +1,20 @@
 {
-  "radius": {
-    "sm": {
-      "$value": "0.25rem",
-      "$type": "dimension"
-    },
-    "md": {
-      "$value": "0.375rem",
-      "$type": "dimension"
-    },
-    "lg": {
-      "$value": "0.5rem",
-      "$type": "dimension"
-    },
-    "full": {
-      "$value": "9999px",
-      "$type": "dimension"
-    }
-  }
+	"radius": {
+		"sm": {
+			"$value": "0.25rem",
+			"$type": "dimension"
+		},
+		"md": {
+			"$value": "0.375rem",
+			"$type": "dimension"
+		},
+		"lg": {
+			"$value": "0.5rem",
+			"$type": "dimension"
+		},
+		"full": {
+			"$value": "9999px",
+			"$type": "dimension"
+		}
+	}
 }

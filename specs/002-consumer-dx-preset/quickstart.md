@@ -27,10 +27,10 @@ For tokens-only consumers (Vue, Svelte, vanilla HTML — no React components):
 ## Render a component
 
 ```tsx
-import { Button } from '@unbranded-ds/react'
+import { Button } from '@unbranded-ds/react';
 
 export default function Page() {
-  return <Button>Hello unbranded</Button>
+	return <Button>Hello unbranded</Button>;
 }
 ```
 
@@ -45,8 +45,8 @@ Add a `:root` block below the preset import:
 @import '@unbranded-ds/react/preset.css';
 
 :root {
-  --color-primary: oklch(0.5 0.2 240);
-  --color-primary-foreground: oklch(0.99 0 0);
+	--color-primary: oklch(0.5 0.2 240);
+	--color-primary-foreground: oklch(0.99 0 0);
 }
 ```
 
@@ -57,17 +57,17 @@ The Button now uses your color. The override wins by cascade order, not by selec
 In your root layout (Next.js example):
 
 ```tsx
-import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime'
+import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
-      </head>
-      <body>{children}</body>
-    </html>
-  )
+	return (
+		<html>
+			<head>
+				<script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+			</head>
+			<body>{children}</body>
+		</html>
+	);
 }
 ```
 
@@ -78,19 +78,19 @@ That's it. On every page load, the saved theme (from `localStorage.getItem('unbr
 If your default is `'dark'` instead of `'light'` (museum kiosk, theater, video editor):
 
 ```tsx
-import { getThemeBootstrapScript } from '@unbranded-ds/tokens/runtime'
+import { getThemeBootstrapScript } from '@unbranded-ds/tokens/runtime';
 
-const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' })
+const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: bootstrap }} />
-      </head>
-      <body>{children}</body>
-    </html>
-  )
+	return (
+		<html>
+			<head>
+				<script dangerouslySetInnerHTML={{ __html: bootstrap }} />
+			</head>
+			<body>{children}</body>
+		</html>
+	);
 }
 ```
 
@@ -101,22 +101,22 @@ The factory output is deterministic — the same `defaultTheme` argument produce
 Attach a nonce to the script element:
 
 ```tsx
-import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime'
-import { headers } from 'next/headers'
+import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime';
+import { headers } from 'next/headers';
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const nonce = (await headers()).get('x-nonce') ?? undefined
-  return (
-    <html>
-      <head>
-        <script
-          nonce={nonce}
-          dangerouslySetInnerHTML={{ __html: themeBootstrapScript }}
-        />
-      </head>
-      <body>{children}</body>
-    </html>
-  )
+	const nonce = (await headers()).get('x-nonce') ?? undefined;
+	return (
+		<html>
+			<head>
+				<script
+					nonce={nonce}
+					dangerouslySetInnerHTML={{ __html: themeBootstrapScript }}
+				/>
+			</head>
+			<body>{children}</body>
+		</html>
+	);
 }
 ```
 
@@ -125,13 +125,13 @@ The nonce goes on the `<script>` element, not in the script content. No special 
 ## Visually-hidden accessible markup
 
 ```tsx
-import { VisuallyHidden } from '@unbranded-ds/react'
-import { EyeIcon } from 'lucide-react'
+import { VisuallyHidden } from '@unbranded-ds/react';
+import { EyeIcon } from 'lucide-react';
 
 <button>
-  <EyeIcon />
-  <VisuallyHidden>Show settings</VisuallyHidden>
-</button>
+	<EyeIcon />
+	<VisuallyHidden>Show settings</VisuallyHidden>
+</button>;
 ```
 
 A screen reader announces "Show settings" when the button is focused. The icon is the only visible content. Tested against spec User Story 4, Acceptance Scenario 1.
@@ -140,14 +140,14 @@ Polymorphic usage (block-level wrapper, for example):
 
 ```tsx
 <VisuallyHidden as="div">
-  <h2>Section heading visible only to screen readers</h2>
-</VisuallyHidden>
+	<h2>Section heading visible only to screen readers</h2>
+</VisuallyHidden>;
 ```
 
 For static markup, Tailwind's built-in `.sr-only` class is also available and behaves identically:
 
 ```tsx
-<span className="sr-only">Same effect, no component</span>
+<span className="sr-only">Same effect, no component</span>;
 ```
 
 ## Migrating from 0.1.0

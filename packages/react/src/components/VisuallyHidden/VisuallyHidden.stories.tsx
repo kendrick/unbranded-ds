@@ -1,17 +1,17 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
-import { EyeIcon } from "lucide-react";
-import { VisuallyHidden } from "./VisuallyHidden";
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { EyeIcon } from 'lucide-react';
+import { expect, within } from 'storybook/test';
+import { VisuallyHidden } from './VisuallyHidden';
 
 const meta = {
-	title: "Components/VisuallyHidden",
+	title: 'Components/VisuallyHidden',
 	component: VisuallyHidden,
-	tags: ["autodocs"],
+	tags: ['autodocs'],
 	parameters: {
 		docs: {
 			description: {
 				component:
-					"Hides content visually while keeping it available to assistive technology. Reach for it when an interactive control needs an accessible name that sighted users do not need to see, such as an icon-only button.",
+					'Hides content visually while keeping it available to assistive technology. Reach for it when an interactive control needs an accessible name that sighted users do not need to see, such as an icon-only button.',
 			},
 		},
 	},
@@ -21,12 +21,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-	args: { children: "Screen readers can hear this text." },
+	args: { children: 'Screen readers can hear this text.' },
 	parameters: {
 		docs: {
 			description: {
 				story:
-					"The default case wraps text in a span that disappears from the page but stays in the accessibility tree.",
+					'The default case wraps text in a span that disappears from the page but stays in the accessibility tree.',
 			},
 		},
 	},
@@ -43,14 +43,14 @@ export const IconButton: Story = {
 		docs: {
 			description: {
 				story:
-					"Pair the component with an icon to give the button an accessible name without adding visible text.",
+					'Pair the component with an icon to give the button an accessible name without adding visible text.',
 			},
 		},
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
 		await expect(
-			canvas.getByRole("button", { name: /show settings/i })
+			canvas.getByRole('button', { name: /show settings/i }),
 		).toBeInTheDocument();
 	},
 };
@@ -65,7 +65,7 @@ export const Polymorphic: Story = {
 		docs: {
 			description: {
 				story:
-					"Pass `as` to render any intrinsic element. Use this when a span would break the surrounding semantics or layout.",
+					'Pass `as` to render any intrinsic element. Use this when a span would break the surrounding semantics or layout.',
 			},
 		},
 	},
