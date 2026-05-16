@@ -3,6 +3,9 @@
 Auto-generated from all feature plans. Last updated: 2026-05-16
 
 ## Active Technologies
+- TypeScript 5.x, strict mode, no `any` (Constitution Section VIII) (004-primitive-set-expansion)
+- N/A (component library; no persisted data) (004-primitive-set-expansion)
+
 - TypeScript 5.x (existing); no language additions (003-versioning-workflow)
 - filesystem only. `.changeset/*.md` files under `.changeset/`; `package.json` `version` field per package; `CHANGELOG.md` per package. No database, no external state. (003-versioning-workflow)
 
@@ -27,11 +30,12 @@ npm test && npm run lint
 TypeScript 5.x, strict mode, no `any` (EVER): Follow standard conventions
 
 ## Recent Changes
+- 004-primitive-set-expansion: Added TypeScript 5.x, strict mode, no `any` (Constitution Section VIII)
+
 - 003-versioning-workflow: Added TypeScript 5.x (existing); no language additions
 
 - 002-consumer-dx-preset: Added TypeScript 5.x, strict mode, no `any` (per constitution Section VIII)
 
-- 001-token-design-system: Added TypeScript 5.x, strict mode, no `any` (EVER) + pnpm (workspaces), Turborepo, Style Dictionary v4 (DTCG), Tailwind CSS v4 (`@theme` directive), `@base-ui-components/react`, shadcn/ui (Base UI variant, `base-vega` style), `class-variance-authority`, `clsx` + `tailwind-merge`, `tsup` (ESM only), Storybook 10.3 (`@storybook/react-vite`), `@storybook/addon-mcp`, `@storybook/addon-vitest`, `@storybook/addon-a11y`, Chromatic
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
