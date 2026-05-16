@@ -1,29 +1,34 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change:  1.0.0 → 1.0.1  [PATCH — clarification to existing tooling and compliance machinery]
-Bump rationale:  Adopts `@changesets/cli` as the canonical versioning + changelog tool
-                 (Section VIII tool-list addition) and extends Section X Compliance Review
-                 with a per-PR changeset-presence rule. Both changes refine existing
-                 machinery rather than introducing new principles, so PATCH is the correct
-                 level per Section X's versioning policy.
+Version change:  1.0.1 → 1.0.2  [PATCH — codifies an existing implicit constraint]
+Bump rationale:  Adds SSR safety to Section IX Definition of Done as an explicit
+                 mergeable-blocking gate. The constraint is already true of the
+                 existing component set (the nine 0.2.0 components are SSR-safe);
+                 this amendment makes it explicit and binding for future components.
+                 Surfaced during spec 004 (primitive set expansion) clarification —
+                 no new principle, refines an existing section, so PATCH per
+                 Section X policy.
 
 Modified principles:
-  - Section VIII (Tooling baseline): added `@changesets/cli` to the locked tool list.
-  - Section X (Governance) Compliance Review: extended with a one-sentence rule requiring
-    a `.changeset/*.md` file on every PR touching packages/react/ or packages/tokens/.
+  - Section IX (Definition of done for any component): added a new bullet (#6)
+    requiring components to render server-side without accessing `window`,
+    `document`, or other browser-only globals at render time. Subsequent bullets
+    renumbered.
 
-Added sections:       N/A (both edits extend existing sections).
+Added sections:       N/A.
 Removed sections:     N/A.
 
 Templates audited:
-  ✅ .specify/templates/plan-template.md   — Constitution Check gate references Section X
-                                             compliance review; no template change needed
-                                             since the extension is within the same gate.
+  ✅ .specify/templates/plan-template.md   — Constitution Check gate already covers
+                                             Section IX wholesale; no template change
+                                             required.
   ✅ .specify/templates/spec-template.md   — No change required.
   ✅ .specify/templates/tasks-template.md  — No change required.
 
 Prior amendments:
+  - 1.0.1 (2026-05-16): Adopted `@changesets/cli` in Section VIII and extended
+    Section X Compliance Review with the per-PR changeset-presence rule. Per spec 003.
   - 1.0.0 (2026-04-10): Initial ratification from template. Section X renamed from
     "Amendment" → "Governance" and expanded with versioning policy and compliance review.
 
@@ -162,9 +167,10 @@ A component PR is mergeable only when all of the following are true:
 3. Stories cover Default plus all meaningful variants and states.
 4. At least one `play` function exists and passes.
 5. Axe reports zero `serious` or `critical` violations across all stories for the component.
-6. Autodocs render with descriptions for every prop.
-7. The component is exported from `packages/react/src/index.ts`.
-8. CI is green end to end, including the post-publish MCP smoke test.
+6. The component renders server-side without accessing `window`, `document`, or other browser-only globals at render time. Browser-API access is deferred to `useEffect` or equivalent post-mount hooks. This preserves SSR compatibility for Next.js, Remix, and other server-rendering consumers.
+7. Autodocs render with descriptions for every prop.
+8. The component is exported from `packages/react/src/index.ts`.
+9. CI is green end to end, including the post-publish MCP smoke test.
 
 ---
 
@@ -196,4 +202,4 @@ trigger a constitution amendment before merge.
 
 ---
 
-**Version**: 1.0.1 | **Ratified**: TODO(RATIFICATION_DATE): set to original adoption date | **Last Amended**: 2026-05-16
+**Version**: 1.0.2 | **Ratified**: TODO(RATIFICATION_DATE): set to original adoption date | **Last Amended**: 2026-05-16
