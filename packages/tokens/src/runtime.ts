@@ -3,6 +3,43 @@ import type { Theme } from "./schema.js";
 import { hexToOklch, parseColor, contrastRatio } from "./color.js";
 import { contrastPairs } from "./schema.js";
 
+const THEME_STORAGE_KEY = "unbranded-ds-theme";
+
+/**
+ * Factory that returns a self-executing JavaScript string with a
+ * caller-specified fallback theme. Inline as the body of a `<script>` tag
+ * in `<head>` to prevent the flash-of-wrong-theme on page reload.
+ *
+ * The output is deterministic across builds for any given `defaultTheme`
+ * argument — consumers using SHA hash-based Content Security Policies
+ * can compute the hash once and trust it across builds.
+ *
+ * @example
+ * const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' })
+ * <script dangerouslySetInnerHTML={{ __html: bootstrap }} />
+ */
+export function getThemeBootstrapScript(
+	options: { defaultTheme?: string } = {},
+): string {
+	const defaultTheme = options.defaultTheme ?? "light";
+	return `(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('${THEME_STORAGE_KEY}')||'${defaultTheme}')}catch(e){document.documentElement.setAttribute('data-theme','${defaultTheme}')}})()`;
+}
+
+/**
+ * A self-executing JavaScript string that reads the saved theme from
+ * localStorage (`unbranded-ds-theme`) and applies `data-theme` to the
+ * document root before first paint. Falls back to `'light'` on missing,
+ * blocked, or invalid storage.
+ *
+ * Inline as the body of a `<script>` tag in `<head>` to prevent the
+ * flash-of-wrong-theme on page reload. Equivalent to
+ * `getThemeBootstrapScript()` with no arguments.
+ *
+ * @example
+ * <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+ */
+export const themeBootstrapScript: string = getThemeBootstrapScript();
+
 export class ThemeValidationError extends Error {
 	constructor(
 		message: string,
