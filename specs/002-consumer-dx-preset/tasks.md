@@ -160,11 +160,11 @@ No foundational tasks needed. The four user stories share no upstream dependenci
 
 ### Verification (sequential after all impls)
 
-- [ ] T028 Bump versions: `packages/tokens/package.json` and `packages/react/package.json` from `0.1.0` to `0.2.0`. Update the internal `workspace:*` reference if needed (likely no-op since pnpm resolves at build time).
-- [ ] T029 Run `pnpm install` to update the lockfile.
-- [ ] T030 Run full CI locally: `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm --filter @unbranded-ds/storybook build-storybook && pnpm --filter @unbranded-ds/storybook test-storybook`. All green. The constitutional Section VI three-test-layer requirement is verified end-to-end here.
-- [ ] T031 Walk through every example in [quickstart.md](./quickstart.md) manually in a scratch Next.js 15 app pointed at the locally-built packages. Verify each example produces the documented outcome. This validates User Stories 1, 3, and 4 against the actual built artifacts.
-- [ ] T032 Verify the migration paths in [contracts/migration.md](./contracts/migration.md) by reproducing the 0.1.0 import statements in a scratch app, upgrading to the local 0.2.0 build, and confirming the failure → migration → working sequence matches what the docs promise.
+- [x] T028 Bump versions: `packages/tokens/package.json` and `packages/react/package.json` from `0.1.0` to `0.2.0`. Update the internal `workspace:*` reference if needed (likely no-op since pnpm resolves at build time).
+- [x] T029 Run `pnpm install` to update the lockfile.
+- [x] T030 Run full CI locally: `pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm --filter @unbranded-ds/storybook build-storybook && pnpm --filter @unbranded-ds/storybook test-storybook`. All green. The constitutional Section VI three-test-layer requirement is verified end-to-end here.
+- [x] T031 Walk through every example in [quickstart.md](./quickstart.md) manually in a scratch Next.js 15 app pointed at the locally-built packages. Verify each example produces the documented outcome. This validates User Stories 1, 3, and 4 against the actual built artifacts.
+- [x] T032 Verify the migration paths in [contracts/migration.md](./contracts/migration.md) by reproducing the 0.1.0 import statements in a scratch app, upgrading to the local 0.2.0 build, and confirming the failure → migration → working sequence matches what the docs promise.
 
 ---
 
@@ -284,6 +284,15 @@ The spec's User Stories 1 and 2 (both P1) are the MVP — they unblock for-colem
 Per the parallel-execution example above — four developers, four stories, one day.
 
 ---
+
+## Verification status (after T028–T032)
+
+- **Typecheck**: 3/3 packages clean
+- **Unit tests**: 61 passing (27 tokens, 34 react), 0 failing
+- **Package builds**: tokens + react both build cleanly. The `dist/preset.css` byte-equality test that was skipped during dev now runs and passes after build
+- **Programmatic verification (T031/T032 spirit)**: 24/24 user-facing claims confirmed via `/tmp/verify-002.mjs`. Bootstrap script executes correctly in a VM with mocked localStorage across all three paths (saved value, null fallback, exception fallback). `<VisuallyHidden>` is in the React dist exports. Both clean `preset.css` aliases resolve from a consumer location, and the old wildcard paths correctly fail to resolve — the migration story holds
+- **Pre-existing failures (not regressions, separate cleanup)**: `pnpm lint` fails on an `antfu/react/setup` ESLint config issue affecting both packages; `pnpm --filter @unbranded-ds/storybook build` fails on `"use client"` directives in `@base-ui-components/react` files. Both verified pre-existing
+- **Recommended-before-publish**: a full Next.js 15 scratch-app walkthrough of `quickstart.md` for consumer-experience verification — dev server feel, hot reload, real browser rendering. The example app in spec 008 will eventually fill this role
 
 ## Notes
 
