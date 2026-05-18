@@ -35,12 +35,16 @@ Prior amendments:
     compliance review.
 
 Deferred TODOs:
-  - The token-query MCP referenced in XI.3 is being implemented as part of
-    spec 005. The SDK foundation lands with this 1.1.1 amendment; the
-    deferred entry closes when the full MCP ships.
-  - The sidecar *.usage.md convention referenced in XI.3 is being established
-    as part of spec 005 (template + retrofit). The deferred entry closes when
-    all 14 component sidecars have shipped.
+  - Spec 005 partial — US1 (sidecar foundation: AGENTS.md + template + CI
+    validator) and US4 (token-query MCP, 4 tools, shared runtime) shipped
+    in this branch. US2 (14 per-component sidecar retrofits) deferred to
+    a follow-up spec (working name: 005a-sidecar-retrofit). US3 (autodoc
+    audit across 4 prose surfaces × 14 components) deferred to a follow-up
+    spec (005b-autodoc-audit). Both follow-ups depend on this branch's
+    sidecar template + compile validator being on main.
+  - The sidecar *.usage.md convention referenced in XI.3 has its template
+    and CI validator on this branch. Per-component retrofits land in
+    spec 005a; the deferred entry closes when all 14 sidecars have shipped.
   - TODO(RATIFICATION_DATE): still unset from 1.0.0.
 -->
 
