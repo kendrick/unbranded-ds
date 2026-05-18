@@ -69,7 +69,7 @@ The Description column explains both WHAT the prop does AND WHEN a consumer woul
 
 ### 5. Common patterns
 
-One, two, or four code blocks tagged `tsx`. Each block is preceded by a one-paragraph explanation that names the use case. Never three blocks (Section XI.1).
+A handful of the most commonly anticipated code blocks tagged `tsx`. Each block is preceded by a one-paragraph explanation that names the use case.
 
 Example:
 
