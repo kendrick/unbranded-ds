@@ -12,7 +12,8 @@
 			"Bash(pnpm up *)",
 			"Bash(pnpm lint *)",
 			"Bash(pnpm exec *)",
-			"Bash(gh run *)"
+			"Bash(gh run *)",
+			"Bash(pnpm --filter * exec eslint *)"
 		]
 	}
 }
