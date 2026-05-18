@@ -64,9 +64,9 @@
 
 ---
 
-## Phase 4: User Story 2 — Sidecar retrofit (Priority: P2) — DEFERRED to spec 005a
+## Phase 4: User Story 2 — Sidecar retrofit (Priority: P2) — DEFERRED to spec 006
 
-> Status: deferred during `/speckit.implement`. The sidecar template and CI validator shipped on this branch as part of US1, so spec 005a inherits a ready foundation. The 14 per-component tasks below remain as the canonical detail; 005a's `/speckit.tasks` run lifts them. See "Deferred work" at the end of spec.md.
+> Status: deferred during `/speckit.implement`. The sidecar template and CI validator shipped on this branch as part of US1, so spec 006 inherits a ready foundation. The 14 per-component tasks below remain as the canonical detail; 006.s `/speckit.tasks` run lifts them. See "Deferred work" at the end of spec.md.
 
 **Goal**: Ship a `<Component>.usage.md` next to every shipped component's source. 14 sidecars total, one PR per component per FR-032.
 
@@ -93,9 +93,9 @@ Each task below is one PR. Each PR adds its component's sidecar AND a `.changese
 
 ---
 
-## Phase 5: User Story 3 — Autodoc legibility audit (Priority: P3) — DEFERRED to spec 005b
+## Phase 5: User Story 3 — Autodoc legibility audit (Priority: P3) — DEFERRED to spec 007
 
-> Status: deferred during `/speckit.implement`. The 14 per-component audit tasks below remain as the canonical detail; spec 005b's `/speckit.tasks` run lifts them. FR-030 (revised during clarify) already allows the TSDoc-edit scope these tasks need. See "Deferred work" at the end of spec.md.
+> Status: deferred during `/speckit.implement`. The 14 per-component audit tasks below remain as the canonical detail; spec 007's `/speckit.tasks` run lifts them. FR-030 (revised during clarify) already allows the TSDoc-edit scope these tasks need. See "Deferred work" at the end of spec.md.
 
 
 **Goal**: Run the humanizer audit across four prose surfaces — `argTypes` descriptions, component-level descriptions, story-level descriptions, and TSDoc comments — for every shipped component. Fix issues in place; git history is the audit ledger.

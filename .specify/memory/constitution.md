@@ -38,13 +38,13 @@ Deferred TODOs:
   - Spec 005 partial — US1 (sidecar foundation: AGENTS.md + template + CI
     validator) and US4 (token-query MCP, 4 tools, shared runtime) shipped
     in this branch. US2 (14 per-component sidecar retrofits) deferred to
-    a follow-up spec (working name: 005a-sidecar-retrofit). US3 (autodoc
+    a follow-up spec (working name: 006-sidecar-retrofit). US3 (autodoc
     audit across 4 prose surfaces × 14 components) deferred to a follow-up
-    spec (005b-autodoc-audit). Both follow-ups depend on this branch's
+    spec (007-autodoc-audit). Both follow-ups depend on this branch's
     sidecar template + compile validator being on main.
   - The sidecar *.usage.md convention referenced in XI.3 has its template
     and CI validator on this branch. Per-component retrofits land in
-    spec 005a; the deferred entry closes when all 14 sidecars have shipped.
+    spec 006; the deferred entry closes when all 14 sidecars have shipped.
   - TODO(RATIFICATION_DATE): still unset from 1.0.0.
 -->
 

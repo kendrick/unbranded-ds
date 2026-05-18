@@ -2,7 +2,7 @@
 
 **Feature Branch**: `005-agent-experience-foundation`
 **Created**: 2026-05-16
-**Status**: Partially implemented — US1 (sidecar foundation) and US4 (token-query MCP) shipped on this branch; US2 (sidecar retrofit) and US3 (autodoc audit) deferred to follow-up specs 005a and 005b respectively. See the "Deferred work" section at the end of this spec for the breadcrumb.
+**Status**: Partially implemented — US1 (sidecar foundation) and US4 (token-query MCP) shipped on this branch; US2 (sidecar retrofit) and US3 (autodoc audit) deferred to follow-up specs 006 and 007 respectively. See the "Deferred work" section at the end of this spec for the breadcrumb.
 **Input**: User description: "Agent experience foundation — AGENTS.md, sidecar template + retrofit, autodoc audit, token-query MCP decision" (full brief at `tmp/spec-005-constitution-and-agent-experience.md`)
 
 ## Clarifications
@@ -164,7 +164,7 @@ Section XI.3 of the constitution references a "planned token-query MCP" that exp
 
 **Cross-cutting**
 
-- **FR-030**: This spec MUST NOT change component behavior or public API. The audit MAY edit prose surfaces — `argTypes` descriptions, component-level descriptions in stories.tsx, story-level descriptions, AND TSDoc comments in `.tsx` source files — since prose edits do not constitute behavior or API changes. Component API renames or refactors that the audit surfaces remain deferred to spec 007.
+- **FR-030**: This spec MUST NOT change component behavior or public API. The audit MAY edit prose surfaces — `argTypes` descriptions, component-level descriptions in stories.tsx, story-level descriptions, AND TSDoc comments in `.tsx` source files — since prose edits do not constitute behavior or API changes. Component API renames or refactors that the audit surfaces remain deferred to spec 010.
 - **FR-031**: This spec MUST NOT introduce a new package without explicit constitutional justification (Section I). The token-query MCP either lives as a binary entry inside `@unbranded-ds/tokens` (preferred — no new package) or, if it lives in a new package, the plan and tasks documents must name the consumer and explain why an existing package cannot serve.
 - **FR-032**: Each of the 14 sidecar files MUST land in its own PR — one PR per component. Bulk PRs are disallowed for the retrofit, since per-component review is the value the slow path buys.
 
@@ -207,7 +207,7 @@ Section XI.3 of the constitution references a "planned token-query MCP" that exp
 
 - Thicker token-query MCP capabilities beyond the four tools (color manipulation, theme diff, validator-as-a-tool, semantic-token hierarchy queries). The thin first version validates the shape; expansion lands in a later spec on consumer demand.
 - A local `@unbranded-ds/react` MCP that parallels the Storybook MCP with offline component lookups. The sidecars in this spec are the data source such an MCP would consume, but the MCP server itself is deferred to a future spec. The shared MCP infrastructure built in FR-029b makes that future spec a thin layer over existing primitives rather than a from-scratch effort.
-- Component API refactors surfaced by the autodoc audit. If the audit reveals a prop name that violates Section XI.2's shared vocabulary, the rename goes to spec 007's retrofit pass, not here.
+- Component API refactors surfaced by the autodoc audit. If the audit reveals a prop name that violates Section XI.2's shared vocabulary, the rename goes to spec 010's retrofit pass, not here.
 - Per-package `AGENTS.md` files (one for `@unbranded-ds/tokens`, one for `@unbranded-ds/react`). Deferred until there is clear demand.
 - Authentication on the published Storybook MCP. Constitution Section VII still says no.
 - Automated sidecar/MCP agreement checking. The manual review activity in FR-013 and FR-014 is the verification mechanism for this spec. A future spec could add an automated check.
@@ -217,13 +217,13 @@ Section XI.3 of the constitution references a "planned token-query MCP" that exp
 
 Two of this spec's four user stories ship on follow-up specs rather than in this branch. The decision was made during `/speckit.implement` after US1 and US4 landed and the scope of US2 + US3 became clear: 28 per-component tasks across 14 sidecars and 14 autodoc audits, each benefiting from focused per-component review attention more than from being bundled into one mega-PR.
 
-### Spec 005a — sidecar retrofit (deferred from US2)
+### Spec 006 — sidecar retrofit (deferred from US2)
 
 Lands one `<Component>.usage.md` next to every shipped component using the template at `packages/react/src/components/_template/Component.usage.md` and validated by `scripts/validate-sidecars.ts` — both of which shipped on this branch. Per FR-032, one PR per component. The 14 sidecars are: Button, Card, Checkbox, Dialog, Input, Label, SegmentedControl, Select, SkipLink, Slider, Switch, Tabs, Tooltip, VisuallyHidden.
 
 When the follow-up spec runs `/speckit.specify`, the brief is: "Apply the sidecar template at `_template/Component.usage.md` to all 14 shipped components, one PR per component. Each sidecar's prop table and described patterns agree with the component's TypeScript signatures and stories. Each sidecar's prose passes humanizer review."
 
-### Spec 005b — autodoc audit (deferred from US3)
+### Spec 007 — autodoc audit (deferred from US3)
 
 Lands a humanizer pass across four prose surfaces for every shipped component: the component-level `description` in stories.tsx meta, every prop's `argTypes.description`, every named story's `parameters.docs.description.story`, and every TSDoc block in `.tsx` source. Per FR-021a, all four surfaces must pass humanizer review. FR-030 (revised during clarify) allows TSDoc edits since prose changes don't constitute behavior or API changes.
 
