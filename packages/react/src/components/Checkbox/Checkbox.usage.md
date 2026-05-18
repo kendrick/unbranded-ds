@@ -138,3 +138,8 @@ Two internal slots are rendered but not exported for direct composition:
 
 - `data-slot="checkbox"` — the root `<span>` element.
 - `data-slot="checkbox-indicator"` — the icon container, visible only when checked or indeterminate.
+
+## Related
+
+- [Switch](../Switch/Switch.usage.md) — use Switch when the change takes effect immediately without a form submit; use Checkbox when the selection is part of a committed form or a list of choices.
+- [Label](../Label/Label.usage.md) — pair every Checkbox with a Label so the click target extends to the text and screen readers can announce the field.

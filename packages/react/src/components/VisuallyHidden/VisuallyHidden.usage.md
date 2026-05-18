@@ -114,3 +114,8 @@ When the hidden content is focusable (a skip link, for example), it becomes visi
 ## Variants and slots
 
 No CVA variant axes. No compound slots; the component is rendered as a single element.
+
+## Related
+
+- [SkipLink](../SkipLink/SkipLink.usage.md) — the companion a11y primitive; SkipLink uses the same `sr-only` technique but is specifically designed to reveal on focus and jump keyboard users to a landmark.
+- [Tooltip](../Tooltip/Tooltip.usage.md) — use Tooltip when the accessible label should appear visually on hover or focus rather than staying permanently hidden.

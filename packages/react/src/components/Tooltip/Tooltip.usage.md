@@ -167,3 +167,10 @@ Tooltip has no CVA variant axes. Its positioning comes from the `side` and `alig
 - `Tooltip.Provider` — configuration boundary; sets the hover delay, portal container, and open-change callback for the pair it wraps.
 - `Tooltip.Trigger` — the element that opens the tooltip on hover, focus, or tap.
 - `Tooltip.Content` — the floating panel; portals to `document.body` by default so it can escape clipping ancestors.
+
+## Related
+
+- [Dialog](../Dialog/Dialog.usage.md) — use Dialog when the user must act on the information rather than just read it; Tooltip is informational only.
+- [Button](../Button/Button.usage.md) — wrap an icon-only Button in a Tooltip to give screen readers and keyboard users a visible label.
+- [VisuallyHidden](../VisuallyHidden/VisuallyHidden.usage.md) — use VisuallyHidden as an alternative when a persistent accessible label is needed rather than a hover/focus disclosure.
+- [SkipLink](../SkipLink/SkipLink.usage.md) — both SkipLink and Tooltip surface content on keyboard focus; useful context when designing keyboard-first navigation affordances.

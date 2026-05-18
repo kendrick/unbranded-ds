@@ -326,3 +326,10 @@ Dialog has no CVA variant axes. Visual variation comes from the `variant` prop o
 - `DialogClose` — a button that closes the dialog when clicked.
 - `DialogPortal` — escape hatch: the portal that mounts the panel outside the DOM tree.
 - `DialogOverlay` — escape hatch: the backdrop rendered behind the panel.
+
+## Related
+
+- [Button](../Button/Button.usage.md) — the standard trigger and confirm/cancel affordances inside Dialog.
+- [Tooltip](../Tooltip/Tooltip.usage.md) — use Tooltip instead when the content is purely informational and requires no user action.
+- [Card](../Card/Card.usage.md) — use Card for non-modal grouping when focus trapping and scroll lock are not needed.
+- [Input](../Input/Input.usage.md) — Dialog is the natural host for short single-purpose forms that collect one or two Input values.

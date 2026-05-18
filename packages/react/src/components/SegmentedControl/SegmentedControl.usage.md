@@ -142,3 +142,10 @@ Two CVA helpers drive the visual treatment:
 `segmentedControlRootVariants` has `size` (`sm` | `md` | `lg`, default `md`), `orientation` (`horizontal` | `vertical`, default `horizontal`), and `disabled` (`true` | `false`, default `false`) axes.
 
 `segmentedControlItemVariants` has `size` (`sm` | `md` | `lg`, default `md`) and `orientation` (`horizontal` | `vertical`, default `horizontal`) axes. Items receive these values from Root's context rather than directly from props.
+
+## Related
+
+- [Tabs](../Tabs/Tabs.usage.md) — use Tabs instead when the selected item controls a content panel beneath it; SegmentedControl has no panel concept.
+- [Select](../Select/Select.usage.md) — use Select when the option set is long, dynamic, or needs to stay hidden until the user opens it.
+- [Switch](../Switch/Switch.usage.md) — use Switch for a single on/off binary state; SegmentedControl handles two or more named options.
+- [Slider](../Slider/Slider.usage.md) — use Slider when the options are continuous or finely stepped rather than discrete named values.

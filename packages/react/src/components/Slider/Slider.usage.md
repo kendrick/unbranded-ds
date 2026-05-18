@@ -191,3 +191,8 @@ For range sliders, give each `Slider.Thumb` an `aria-label` that describes which
 - `Slider.Track` — **required.** The bar background. Every composition needs exactly one track inside the control.
 - `Slider.Indicator` — optional. The filled segment between the origin and the thumb (or between two thumbs in range mode). Omit it if you want an unfilled track.
 - `Slider.Thumb` — **required.** The draggable handle. Render one per value: one for a single-thumb slider, two for a range slider. Each thumb carries its own ARIA attributes.
+
+## Related
+
+- [Input](../Input/Input.usage.md) — use Input when the user needs to type an exact numeric value rather than scan a continuous track.
+- [SegmentedControl](../SegmentedControl/SegmentedControl.usage.md) — use SegmentedControl when the options are discrete named values rather than a position on a scale.

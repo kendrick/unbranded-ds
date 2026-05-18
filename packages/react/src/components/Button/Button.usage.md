@@ -127,3 +127,10 @@ CVA axes:
 - `size`: `default` (default), `xs`, `sm`, `lg`, `icon`, `icon-xs`, `icon-sm`, `icon-lg`
 
 Button has no compound slots; it renders as a single element.
+
+## Related
+
+- [Dialog](../Dialog/Dialog.usage.md) — wrap a `destructive` Button inside a Dialog when the action needs a confirmation step before it fires.
+- [Tooltip](../Tooltip/Tooltip.usage.md) — supply an accessible label for icon-only Button variants where visible text doesn't fit.
+- [Switch](../Switch/Switch.usage.md) — use Switch instead of Button when the intent is toggling a persistent setting rather than triggering a one-time action.
+- [Card](../Card/Card.usage.md) — Button is the standard choice for CardFooter and CardAction affordances.

@@ -104,3 +104,10 @@ The component has no explicit `prefers-reduced-motion` handling because its tran
 Input has no CVA variant axes. Its visual states (default, focus, error, disabled, dark mode) are all handled by Tailwind utility classes baked into the component's class string, not by CVA.
 
 The component renders as a single element with `data-slot="input"`. No compound slots.
+
+## Related
+
+- [Label](../Label/Label.usage.md) — always pair an Input with a Label so assistive technology can announce the field's purpose.
+- [Select](../Select/Select.usage.md) — use Select when the valid values are a fixed list rather than free-form text.
+- [Checkbox](../Checkbox/Checkbox.usage.md) — use Checkbox or Switch when the field value is boolean rather than a string or number.
+- [Switch](../Switch/Switch.usage.md) — use Switch for immediate boolean toggles; Input handles typed values that apply on submit.

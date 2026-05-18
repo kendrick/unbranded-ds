@@ -219,3 +219,8 @@ Disabled triggers receive `aria-disabled` and are skipped during arrow-key navig
 | `variant` | `'default'` \| `'line'` | `'default'` |
 
 `'default'` renders a muted rounded pill background. `'line'` renders a transparent background; the active trigger's underline indicator is provided by the `::after` pseudo-element on `TabsTrigger` via the `group-data-[variant=line]` Tailwind selector.
+
+## Related
+
+- [SegmentedControl](../SegmentedControl/SegmentedControl.usage.md) — use SegmentedControl when you want mutually exclusive selection without an associated content panel.
+- [Dialog](../Dialog/Dialog.usage.md) — use Dialog when the content switching needs to happen in a focus-trapped overlay rather than inline on the page.

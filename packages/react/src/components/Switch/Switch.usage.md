@@ -125,3 +125,8 @@ Two internal slots are rendered but not exported for composition:
 
 - `data-slot="switch"` — the root track element.
 - `data-slot="switch-thumb"` — the sliding indicator inside the track.
+
+## Related
+
+- [Checkbox](../Checkbox/Checkbox.usage.md) — use Checkbox when the toggle is part of a submitted form or a list of selectable options rather than an immediate setting.
+- [Label](../Label/Label.usage.md) — always pair a Label with Switch so the click target extends to the text and screen readers can announce what the switch controls.

@@ -268,3 +268,10 @@ All other visual differences are driven by state-based data attributes (`data-pl
 - `SelectSeparator` — a horizontal rule for visual separation between items or groups; carries `select-separator`
 - `SelectScrollUpButton` — scroll-up affordance at the top of an overflowing list; carries `select-scroll-up-button`
 - `SelectScrollDownButton` — scroll-down affordance at the bottom of an overflowing list; carries `select-scroll-down-button`
+
+## Related
+
+- [Input](../Input/Input.usage.md) — use Input when the value is free-form text rather than a constrained list.
+- [SegmentedControl](../SegmentedControl/SegmentedControl.usage.md) — use SegmentedControl when the option set is small enough to show all choices inline at once.
+- [Checkbox](../Checkbox/Checkbox.usage.md) — use multiple Checkboxes when users may need to pick more than one option from the same list.
+- [Label](../Label/Label.usage.md) — always associate a Label with the Select trigger so assistive technology announces the field's purpose.

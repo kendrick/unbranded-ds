@@ -255,3 +255,8 @@ Card exposes one CVA variant axis:
 - `CardContent` — the primary body region; receives the card's horizontal padding.
 - `CardFooter` — flex layout region for action buttons at the card's bottom edge.
 - `CardAction` — a pinned slot that anchors to the header's top-right corner when rendered inside `CardHeader`.
+
+## Related
+
+- [Button](../Button/Button.usage.md) — the standard component for action surfaces inside CardFooter and CardAction.
+- [Dialog](../Dialog/Dialog.usage.md) — use Dialog instead of Card when the content requires a focus trap or the user must act before continuing.

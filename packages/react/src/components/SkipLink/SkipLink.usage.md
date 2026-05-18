@@ -99,3 +99,8 @@ Multiple SkipLink instances on one page are valid. The component takes no opinio
 ## Variants and slots
 
 No CVA variant axes. No compound slots; the component is rendered as a single element.
+
+## Related
+
+- [VisuallyHidden](../VisuallyHidden/VisuallyHidden.usage.md) — the companion a11y primitive for content that must be in the accessibility tree but off-screen; both components use the `sr-only` clip technique.
+- [Tooltip](../Tooltip/Tooltip.usage.md) — Tooltip provides on-focus label reveal for interactive elements in the same way SkipLink reveals on focus; useful context when building keyboard-first navigation.

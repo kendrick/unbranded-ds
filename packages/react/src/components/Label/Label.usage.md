@@ -110,3 +110,10 @@ Avoid wrapping non-form content in Label to get the click-to-focus behavior. The
 ## Variants and slots
 
 No CVA variant axes. No compound slots; the component is rendered as a single element.
+
+## Related
+
+- [Input](../Input/Input.usage.md) — the canonical pairing; associate a Label with every Input via `htmlFor`/`id` or nesting.
+- [Switch](../Switch/Switch.usage.md) — pair a Label with Switch so clicking the label text also toggles the control.
+- [Checkbox](../Checkbox/Checkbox.usage.md) — pair a Label with Checkbox to extend the click target and supply the accessible name.
+- [Select](../Select/Select.usage.md) — Label works the same way with Select as with any other labeled control.
