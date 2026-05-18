@@ -6,11 +6,6 @@
 	"author": "Kendrick Arnett",
 	"license": "MIT",
 	"homepage": "https://github.com/kendrick/unbranded-ds#readme",
-	"repository": {
-		"directory": "packages/tokens",
-		"type": "git",
-		"url": "git+https://github.com/kendrick/unbranded-ds.git"
-	},
 	"bugs": "https://github.com/kendrick/unbranded-ds/issues",
 	"keywords": [
 		"design-tokens",
@@ -37,7 +32,15 @@
 	"publishConfig": {
 		"access": "public"
 	},
+	"repository": {
+		"directory": "packages/tokens",
+		"type": "git",
+		"url": "git+https://github.com/kendrick/unbranded-ds.git"
+	},
 	"types": "./dist/ts/index.d.ts",
+	"bin": {
+		"unbranded-ds-tokens-mcp": "./dist/ts/mcp/server.js"
+	},
 	"files": [
 		"dist",
 		"themes"
@@ -53,6 +56,7 @@
 		"zod": "^3"
 	},
 	"devDependencies": {
+		"@modelcontextprotocol/sdk": "^1",
 		"style-dictionary": "^4",
 		"tsx": "^4.21.0",
 		"typescript": "^5",

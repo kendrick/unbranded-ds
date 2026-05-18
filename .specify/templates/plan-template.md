@@ -31,7 +31,9 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+[Enumerate the gates from `.specify/memory/constitution.md` that apply to this change and confirm each, with notes. The Section XI gate below is REQUIRED for every plan from constitution 1.1.0 onward.]
+
+- [ ] Section XI — does this change keep prose, API shape, docs surfaces, failure modes, and story coverage legible to both agents and humans? List any concessions.
 
 ## Project Structure
 

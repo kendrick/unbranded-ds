@@ -1,39 +1,47 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change:  1.0.1 → 1.0.2  [PATCH — codifies an existing implicit constraint]
-Bump rationale:  Adds SSR safety to Section IX Definition of Done as an explicit
-                 mergeable-blocking gate. The constraint is already true of the
-                 existing component set (the nine 0.2.0 components are SSR-safe);
-                 this amendment makes it explicit and binding for future components.
-                 Surfaced during spec 004 (primitive set expansion) clarification —
-                 no new principle, refines an existing section, so PATCH per
-                 Section X policy.
+Version change:  1.1.0 → 1.1.1  [PATCH — Section VIII tool list extended]
+Bump rationale:  Adds `@modelcontextprotocol/sdk` to Section VIII's MCP entry
+                 alongside `@storybook/addon-mcp`. The SDK is the runtime for
+                 the token-query MCP shipped in spec 005 and for any future
+                 local stdio MCP server. Extending the existing tool entry is
+                 a PATCH-level refinement per Section X versioning policy and
+                 mirrors the spec 003 precedent that added `@changesets/cli`.
 
 Modified principles:
-  - Section IX (Definition of done for any component): added a new bullet (#6)
-    requiring components to render server-side without accessing `window`,
-    `document`, or other browser-only globals at render time. Subsequent bullets
-    renumbered.
+  - Section VIII (Tooling baseline): MCP entry expanded from `@storybook/addon-mcp`
+    only to include `@modelcontextprotocol/sdk` as the runtime for local stdio
+    MCP servers built in this monorepo.
 
 Added sections:       N/A.
 Removed sections:     N/A.
 
 Templates audited:
-  ✅ .specify/templates/plan-template.md   — Constitution Check gate already covers
-                                             Section IX wholesale; no template change
-                                             required.
+  ✅ .specify/templates/plan-template.md   — No change required.
   ✅ .specify/templates/spec-template.md   — No change required.
   ✅ .specify/templates/tasks-template.md  — No change required.
 
 Prior amendments:
+  - 1.1.0 (2026-05-16): Added Section XI (Agent and human legibility are
+    co-equal). Per spec 005.
+  - 1.0.2 (2026-05-16): Added SSR safety to Section IX Definition of Done as
+    bullet 6. Per spec 004.
   - 1.0.1 (2026-05-16): Adopted `@changesets/cli` in Section VIII and extended
-    Section X Compliance Review with the per-PR changeset-presence rule. Per spec 003.
-  - 1.0.0 (2026-04-10): Initial ratification from template. Section X renamed from
-    "Amendment" → "Governance" and expanded with versioning policy and compliance review.
+    Section X Compliance Review with the per-PR changeset-presence rule. Per
+    spec 003.
+  - 1.0.0 (2026-04-10): Initial ratification from template. Section X renamed
+    from "Amendment" → "Governance" and expanded with versioning policy and
+    compliance review.
 
 Deferred TODOs:
-  - TODO(RATIFICATION_DATE): Set to the date the team formally adopted this document.
+  - The token-query MCP referenced in XI.3 is being implemented as part of
+    spec 005. The SDK foundation lands with this 1.1.1 amendment; the
+    deferred entry closes when the full MCP ships.
+  - The sidecar *.usage.md convention referenced in XI.3 is being established
+    as part of spec 005 (template + retrofit). The deferred entry closes when
+    all 14 component sidecars have shipped.
+  - TODO(RATIFICATION_DATE): still unset from 1.0.0.
 -->
 
 # Constitution
@@ -148,7 +156,7 @@ Non-negotiable toolchain choices, locked to keep specs from re-litigating them:
 - Variants: **`class-variance-authority`**.
 - Storybook: **Storybook 10.3 or higher**, builder **`@storybook/react-vite`** (Vite-only — required by `@storybook/addon-mcp`).
 - Testing: **Vitest** (unit), **Storybook Test addon** (interaction), **`@storybook/addon-a11y`** + **test-runner** (a11y).
-- MCP: **`@storybook/addon-mcp`**, published remotely via Chromatic.
+- MCP: **`@storybook/addon-mcp`** (Storybook MCP, published remotely via Chromatic) and **`@modelcontextprotocol/sdk`** (used to build local stdio MCP servers in this monorepo — first instance: the token-query MCP on `@unbranded-ds/tokens`).
 - Linting: **ESLint** (flat config) + **Prettier**. A custom rule forbids hex/rgb/hsl literals in `packages/react/src/components/**`.
 - CI: **GitHub Actions**. One workflow, one job graph: install → lint → typecheck → unit → build → storybook build → storybook test-runner (interaction + a11y) → chromatic publish → MCP smoke test.
 - Versioning + changelog: **`@changesets/cli`** (workspace dev dependency). Per-PR `.changeset/*.md` files aggregate into per-package CHANGELOG.md entries and version bumps via `pnpm changeset version`. Publish via `changesets/action` GitHub Action.
@@ -202,4 +210,54 @@ trigger a constitution amendment before merge.
 
 ---
 
-**Version**: 1.0.2 | **Ratified**: TODO(RATIFICATION_DATE): set to original adoption date | **Last Amended**: 2026-05-16
+## XI. Agent and human legibility are co-equal
+
+The design system has two consumers. Humans browse stories and docs. Agents query autodocs, MCP tool output, sidecar files, and structured error responses. Neither audience is primary. The same artifact has to work for both.
+
+This is the principle that separates unbranded-ds from a design system that happens to publish an MCP endpoint.
+
+### XI.1 Prose
+
+Every piece of written content — story descriptions, autodoc strings, README files, sidecar usage docs, error messages — is written for both audiences:
+
+- Prose passes through the `humanizer` skill before merge. The AI tells documented in that skill (em-dash overuse, "serves as" phrasing, promotional vocabulary, hedging, signposting) are removed.
+- Lists of exactly three items are restructured. Add a fourth item, drop to two, convert to a sentence, or split into nested bullets. Three-item lists are an LLM tic and read as one to a careful editor. The rule applies to both bulleted lists and inline prose ("X, Y, and Z").
+- Prose is specific over generic and active over passive.
+
+### XI.2 API shape
+
+Component APIs are predictable from analogy:
+
+- Compound components use the `<Component.Slot>` pattern consistently. A `*.Trigger` on one component means the same thing as a `*.Trigger` on any other, and the same holds for `*.Root`, `*.Content`, `*.Item`, and any future slot name.
+- Variant axes use a small shared vocabulary: `variant`, `size`, `intent`, `disabled`. No bespoke synonyms across components.
+- Polymorphic rendering, when present, uses one prop name across the codebase.
+
+An agent who has read one component should be able to guess the prop surface of the next one and be right.
+
+### XI.3 Documentation surfaces
+
+The design system publishes two complementary documentation surfaces for agent consumption:
+
+- The Storybook MCP server, published via Chromatic, is the live remote source (see Section VII).
+- A planned token-query MCP exposes theme listing, palette, contrast math, and semantic token lookup. This is a distinct contract from the Storybook MCP and is planned before 1.0.
+- Per-component sidecar usage docs live at `packages/react/src/components/<Component>/<Component>.usage.md`. They mirror the MCP's component guidance: import path, prop table, common patterns, accessibility notes, examples. An agent or human with a local clone can answer "how do I use Button" with no network connection.
+- A top-level `AGENTS.md` indexes the sidecar docs and names the MCP endpoints. It is a peer document to `README.md`, not a footnote.
+
+Local sidecar docs are not a fallback for the MCP. They are the canonical record an agent pattern-matches against offline. The MCP is the live, queryable view of the same content.
+
+### XI.4 Failure modes
+
+Validation failures produce structured output, not only prose:
+
+- `validateTheme()` returns a typed `{ ok, issues }` shape with codes and paths. This is the existing pattern (Section III) and the model for any future validator.
+- A missing token, a broken contrast pair, a failing theme validation, a malformed sidecar doc all surface with codes an agent can pattern-match.
+
+Human-readable error messages are layered on top of the structured payload, not in place of it.
+
+### XI.5 Story coverage as dual-audience contract
+
+The rule from Section V — "if a behavior is not exercised in a story, it is not considered shipped" — sharpens here. A behavior with no story is invisible to humans browsing the deployed Storybook and invisible to agents introspecting the MCP. Both failure modes count, and either alone is enough to block merge.
+
+---
+
+**Version**: 1.1.1 | **Ratified**: TODO(RATIFICATION_DATE): set to original adoption date | **Last Amended**: 2026-05-16
