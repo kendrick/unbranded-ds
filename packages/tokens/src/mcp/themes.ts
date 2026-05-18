@@ -18,7 +18,7 @@ const MCP_DIR = dirname(fileURLToPath(import.meta.url));
 // two levels up. Detect by checking which ancestor contains `themes/`.
 function findThemesDir(): string {
 	for (const ascent of [2, 3, 4]) {
-		const candidate = resolve(MCP_DIR, ...Array.from({ length: ascent }).fill('..'), 'themes');
+		const candidate = resolve(MCP_DIR, '../'.repeat(ascent), 'themes');
 		if (existsSync(candidate))
 			return candidate;
 	}
