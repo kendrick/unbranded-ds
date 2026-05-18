@@ -122,6 +122,10 @@ Thumbs.db
 *.temp
 *.cache
 
+# Sidecar validator scratch dirs (scripts/validate-sidecars.ts cleans up
+# normally; this catches dirs leaked by interrupted runs).
+.sidecar-validate-*
+
 # Lock files (keep pnpm-lock.yaml but ignore others)
 package-lock.json
 yarn.lock

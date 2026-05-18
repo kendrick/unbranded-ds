@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# Typecheck before push. CI runs the same step, so catching it locally
+# saves a round-trip if a linter auto-fix introduces a type regression.
+echo "[pre-push] Running pnpm typecheck..."
+pnpm typecheck

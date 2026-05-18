@@ -31,11 +31,16 @@ jobs:
       - name: Typecheck
         run: pnpm typecheck
 
-      - name: Unit tests
-        run: pnpm test:unit
+      - name: Validate sidecar code blocks
+        run: pnpm exec tsx scripts/validate-sidecars.ts
 
       - name: Build all packages
         run: pnpm build
+
+      - name: Unit tests
+        # Runs after `pnpm build` so the token-query MCP smoke test can spawn
+        # the built binary at `packages/tokens/dist/ts/mcp/server.js`.
+        run: pnpm test:unit
 
       - name: Build Storybook
         run: pnpm --filter @unbranded-ds/storybook build

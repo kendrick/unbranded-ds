@@ -21,6 +21,7 @@ A token-driven design system. Themes, a React component library, and a Storybook
 
 ## Docs
 
+- [AGENTS.md](./AGENTS.md) — entry point for agent consumers. Names the published MCP endpoints (Storybook + token-query), inventories the tools, indexes every shipped component, and points at the per-component sidecar files.
 - [Theming](./THEMING.md) — writing themes, validating them, applying them at runtime, avoiding FOUC
 - [MCP](./apps/storybook/README.md) — what agents can do, client setup, smoke test
 - [Changesets workflow](./.changeset/README.md) — per-PR versioning files, picking bump levels, CHANGELOG generation, and release-PR review
