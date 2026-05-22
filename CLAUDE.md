@@ -1,10 +1,12 @@
 # heliostat Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-05-18
+Auto-generated from all feature plans. Last updated: 2026-05-22
 
 ## Active Technologies
 - TypeScript 5.x in `tsx`-tagged code blocks only (validated via `tsc --noEmit` per spec 005's compile validator). Sidecar prose is plain CommonMark. + All shipped in spec 005. The template at `packages/react/src/components/_template/Component.usage.md`, the validator at `scripts/validate-sidecars.ts`, the `AGENTS.md` component index, and the CI step that wires the validator into the verify job. (006-sidecar-retrofit)
 - Filesystem only. 14 `<Component>.usage.md` files co-located with their `.tsx` source. One running inbox file: `specs/006-sidecar-retrofit/spec-007-inbox.md`. 15 `.changeset/*.md` files (14 component + 1 backfill). (006-sidecar-retrofit)
+- TypeScript 5.x, strict mode, no `any` + `@base-ui-components/react`, `class-variance-authority`, Storybook 10.3 (`@storybook/react-vite`), react-docgen (Storybook-bundled) (007-autodoc-audit)
+- N/A (prose-only edits to existing source files) (007-autodoc-audit)
 
 - TypeScript 5.x, strict mode, no `any` (Constitution Section VIII) (004-primitive-set-expansion)
 - N/A (component library; no persisted data) (004-primitive-set-expansion)
@@ -34,10 +36,10 @@ npm test && npm run lint
 TypeScript 5.x, strict mode, no `any` (EVER): Follow standard conventions
 
 ## Recent Changes
+- 007-autodoc-audit: Added TypeScript 5.x, strict mode, no `any` + `@base-ui-components/react`, `class-variance-authority`, Storybook 10.3 (`@storybook/react-vite`), react-docgen (Storybook-bundled)
 - 006-sidecar-retrofit: Added TypeScript 5.x in `tsx`-tagged code blocks only (validated via `tsc --noEmit` per spec 005's compile validator). Sidecar prose is plain CommonMark. + All shipped in spec 005. The template at `packages/react/src/components/_template/Component.usage.md`, the validator at `scripts/validate-sidecars.ts`, the `AGENTS.md` component index, and the CI step that wires the validator into the verify job.
 
 - 005-agent-experience-foundation: Added TypeScript 5.x, strict mode, no `any` (Constitution Section VIII)
-- 004-primitive-set-expansion: Added TypeScript 5.x, strict mode, no `any` (Constitution Section VIII)
 
 
 <!-- MANUAL ADDITIONS START -->

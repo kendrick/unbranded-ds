@@ -1,2 +1,8 @@
 @import '@unbranded-ds/tokens/preset.css';
-@source "../@unbranded-ds/react";
+/* Source paths are relative to this CSS file's location. From both
+ * packages/react/src/preset.css and packages/react/dist/preset.css, `..`
+ * resolves to packages/react/. In a published consumer's node_modules, only
+ * dist/ exists; in this monorepo, both src/ and dist/ exist. Listing both
+ * covers both consumption modes — missing paths fail silently. */
+@source "../src";
+@source "../dist";

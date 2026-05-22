@@ -7,31 +7,6 @@ const meta = {
 	title: 'Components/Tooltip',
 	component: Tooltip.Provider,
 	tags: ['autodocs'],
-	parameters: {
-		docs: {
-			description: {
-				component:
-					'A token-styled tooltip wrapping Base UI\'s Tooltip primitives. Opens on hover after a configurable delay, on keyboard focus immediately, and on tap on touch devices. Dismisses on Escape. Content portals to `document.body` so it can escape ancestors that clip overflow. Honors `prefers-reduced-motion: reduce` by skipping the open and close transitions.',
-			},
-		},
-	},
-	argTypes: {
-		delayDuration: {
-			control: 'number',
-			description:
-				'Hover delay before the tooltip opens, in milliseconds. Keyboard focus bypasses this delay and opens the tooltip immediately. Default 700.',
-		},
-		container: {
-			control: false,
-			description:
-				'Portal mount target for `Tooltip.Content`. Defaults to `document.body`, which lets the tooltip escape ancestors with `overflow: hidden` or `overflow: clip`. Pass an HTMLElement to mount the portal somewhere else (useful when a fixed parent owns the stacking context you want to land in).',
-		},
-		onOpenChange: {
-			action: 'openChange',
-			description:
-				'Fires when the open state changes, including hover, keyboard focus, tap, Escape, and outside press. The argument is the new open state.',
-		},
-	},
 } satisfies Meta<typeof Tooltip.Provider>;
 
 export default meta;
@@ -40,6 +15,13 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
 	args: {
 		delayDuration: 200,
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: 'A basic tooltip on a hover-target Button with the default top placement.',
+			},
+		},
 	},
 	render: (args) => (
 		<Tooltip.Provider {...args}>
@@ -53,6 +35,13 @@ export const Default: Story = {
 
 export const Sides: Story = {
 	args: { delayDuration: 200 },
+	parameters: {
+		docs: {
+			description: {
+				story: 'All four side variants — top, right, bottom, left — laid out for visual comparison.',
+			},
+		},
+	},
 	render: (args) => (
 		<div className="flex flex-wrap items-center justify-center gap-8 p-16">
 			{(['top', 'right', 'bottom', 'left'] as const).map((side) => (
@@ -73,6 +62,13 @@ export const Sides: Story = {
 
 export const Alignments: Story = {
 	args: { delayDuration: 200 },
+	parameters: {
+		docs: {
+			description: {
+				story: 'Three alignment variants — start, center, end — anchored to a bottom-side tooltip.',
+			},
+		},
+	},
 	render: (args) => (
 		<div className="flex flex-wrap items-center justify-center gap-8 p-16">
 			{(['start', 'center', 'end'] as const).map((align) => (

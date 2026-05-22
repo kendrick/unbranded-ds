@@ -21,6 +21,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story: 'A minimal card with a header and content body.',
+			},
+		},
+	},
 	render: () => (
 		<Card style={{ maxWidth: '400px' }}>
 			<CardHeader>
@@ -35,6 +42,14 @@ export const Default: Story = {
 };
 
 export const WithFooter: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'A card composing all three regions — header, content, and a footer with cancel and confirm buttons.',
+			},
+		},
+	},
 	render: () => (
 		<Card style={{ maxWidth: '400px' }}>
 			<CardHeader>
@@ -53,6 +68,14 @@ export const WithFooter: Story = {
 };
 
 export const FullExample: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'A form card pattern with labeled inputs and a single primary action in the footer.',
+			},
+		},
+	},
 	render: () => (
 		<Card style={{ maxWidth: '400px' }}>
 			<CardHeader>

@@ -12,14 +12,37 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story: 'An off-state switch in its initial uncontrolled state.',
+			},
+		},
+	},
+};
 
 export const Checked: Story = {
 	args: { defaultChecked: true },
+	parameters: {
+		docs: {
+			description: {
+				story: 'An uncontrolled switch with an initial on state.',
+			},
+		},
+	},
 };
 
 export const Disabled: Story = {
 	args: { disabled: true },
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'A non-interactive switch at reduced opacity, removed from the tab order.',
+			},
+		},
+	},
 };
 
 export const WithLabel: Story = {
@@ -29,6 +52,14 @@ export const WithLabel: Story = {
 			<Label htmlFor="airplane">Airplane Mode</Label>
 		</div>
 	),
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'A labeled switch where clicking the label text also toggles the switch.',
+			},
+		},
+	},
 };
 
 export const ToggleInteraction: Story = {
@@ -44,5 +75,13 @@ export const ToggleInteraction: Story = {
 		await expect(sw).not.toBeChecked();
 		await userEvent.click(sw);
 		await expect(sw).toBeChecked();
+	},
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'Interaction test verifying that clicking the switch toggles its state.',
+			},
+		},
 	},
 };

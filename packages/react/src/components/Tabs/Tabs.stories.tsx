@@ -12,6 +12,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'Uncontrolled tabs with the default pill-style list. `defaultValue` seeds the active tab and Base UI manages the rest.',
+			},
+		},
+	},
 	render: () => (
 		<Tabs defaultValue="account">
 			<TabsList>
@@ -29,6 +37,14 @@ export const Default: Story = {
 };
 
 export const ManyTabs: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'A six-tab list to demonstrate how the strip flexes when many triggers compete for width. Hand-test that arrow keys still move focus between every tab and that Home and End jump to the ends.',
+			},
+		},
+	},
 	render: () => (
 		<Tabs defaultValue="tab-1">
 			<TabsList>
@@ -54,6 +70,14 @@ export const ManyTabs: Story = {
 };
 
 export const TabSwitchInteraction: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'Interaction test that clicks the second trigger and asserts the matching panel becomes visible, covering the trigger-to-panel wiring end to end.',
+			},
+		},
+	},
 	render: () => (
 		<Tabs defaultValue="first">
 			<TabsList>

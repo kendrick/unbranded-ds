@@ -6,8 +6,145 @@ import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
 import * as React from 'react';
 import { cn } from '../../lib/cn';
 
-const Select = SelectPrimitive.Root;
+/**
+ * A dropdown selection control with listbox semantics for picking one option from a list.
+ *
+ * @remarks
+ * Composes Base UI's `Select` primitives into a 10-slot family. The `Select`
+ * root manages open state, the selected value, and form integration — it
+ * renders no DOM element on its own. {@link SelectTrigger} renders the button
+ * that opens the popup, {@link SelectContent} renders the floating listbox via
+ * an internal portal and positioner pipeline (so you do not need to mount
+ * `SelectPortal` or `SelectPositioner` yourself), and {@link SelectItem}
+ * elements live inside it. Type-ahead is wired by default: typing characters
+ * while the popup is open jumps focus to the first item whose label starts
+ * with that string. Pair {@link SelectGroup} with {@link SelectLabel} when the
+ * option list spans multiple categories that benefit from accessible group
+ * headings.
+ *
+ * ### Accessibility
+ *
+ * The trigger carries `role="combobox"` and `aria-haspopup="listbox"`, with
+ * `aria-expanded` reflecting the popup state. The popup itself carries
+ * `role="listbox"` and each {@link SelectItem} carries `role="option"` with
+ * `aria-selected` on the active value. Focus moves into the listbox when the
+ * popup opens and returns to the trigger on close — even if the close happened
+ * via Escape, a pointer click outside, or item selection. The {@link
+ * SelectValue} inside the trigger updates its announced text as the selection
+ * changes, so screen-reader users do not need to re-open the list to confirm
+ * their choice. Set `label` on a {@link SelectItem} that contains icons or
+ * formatted children so type-ahead has the right string to match against.
+ *
+ * ### Keyboard interactions
+ *
+ * | Key | Description |
+ * | --- | --- |
+ * | `Space` / `Enter` | When trigger focused: opens the popup. |
+ * | `Arrow Down` | Opens the popup if closed; otherwise moves focus to the next option. |
+ * | `Arrow Up` | Opens the popup if closed; otherwise moves focus to the previous option. |
+ * | `Home` | Moves focus to the first option. |
+ * | `End` | Moves focus to the last option. |
+ * | `[a-z]` | Type-ahead — moves focus to the first item whose label starts with the typed character. |
+ * | `Enter` | When item focused: selects it and closes the popup. |
+ * | `Escape` | Closes the popup and returns focus to the trigger without changing the selection. |
+ * | `Tab` | Closes the popup and moves focus to the next focusable element. |
+ *
+ * ### When to use
+ *
+ * - The option list is long (roughly five or more) and showing every choice
+ *   inline would clutter the form.
+ * - Options are dynamic or data-driven and a hidden-until-opened control keeps
+ *   the surface calm.
+ * - You need consistent token-based styling and keyboard behavior that a
+ *   native `<select>` cannot match.
+ *
+ * ### When not to use
+ *
+ * - Use {@link SegmentedControl} when the option set is small (two to five)
+ *   and you want all choices visible at once for quick comparison.
+ * - Use a checkbox group when users may pick more than one option from the
+ *   same list — `Select` is single-select.
+ * - Use {@link Dialog} when picking requires a richer modal flow with extra
+ *   context, fields, or confirmation.
+ *
+ * @example Uncontrolled select with placeholder
+ * ```tsx
+ * import {
+ *   Select,
+ *   SelectContent,
+ *   SelectItem,
+ *   SelectTrigger,
+ *   SelectValue,
+ * } from '@unbranded-ds/react';
+ *
+ * export function FruitPicker() {
+ *   return (
+ *     <Select>
+ *       <SelectTrigger style={{ width: '200px' }}>
+ *         <SelectValue>Select a fruit</SelectValue>
+ *       </SelectTrigger>
+ *       <SelectContent>
+ *         <SelectItem value="apple">Apple</SelectItem>
+ *         <SelectItem value="banana">Banana</SelectItem>
+ *         <SelectItem value="cherry">Cherry</SelectItem>
+ *       </SelectContent>
+ *     </Select>
+ *   );
+ * }
+ * ```
+ *
+ * @example Grouped options with labels
+ * ```tsx
+ * import {
+ *   Select,
+ *   SelectContent,
+ *   SelectGroup,
+ *   SelectItem,
+ *   SelectLabel,
+ *   SelectSeparator,
+ *   SelectTrigger,
+ *   SelectValue,
+ * } from '@unbranded-ds/react';
+ *
+ * export function FoodPicker() {
+ *   return (
+ *     <Select>
+ *       <SelectTrigger style={{ width: '220px' }}>
+ *         <SelectValue>Select a food</SelectValue>
+ *       </SelectTrigger>
+ *       <SelectContent>
+ *         <SelectGroup>
+ *           <SelectLabel>Fruits</SelectLabel>
+ *           <SelectItem value="apple">Apple</SelectItem>
+ *           <SelectItem value="banana">Banana</SelectItem>
+ *         </SelectGroup>
+ *         <SelectSeparator />
+ *         <SelectGroup>
+ *           <SelectLabel>Vegetables</SelectLabel>
+ *           <SelectItem value="carrot">Carrot</SelectItem>
+ *           <SelectItem value="lettuce">Lettuce</SelectItem>
+ *         </SelectGroup>
+ *       </SelectContent>
+ *     </Select>
+ *   );
+ * }
+ * ```
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/listbox/
+ * @see {@link SegmentedControl}
+ * @see {@link Dialog}
+ */
+function Select<Value, Multiple extends boolean | undefined = false>(
+	props: SelectPrimitive.Root.Props<Value, Multiple>,
+) {
+	return <SelectPrimitive.Root {...props} />;
+}
 
+/**
+ * Groups related options. Pair with {@link SelectLabel} to give the group a heading so assistive technology announces the category before its items.
+ *
+ * @see {@link Select} for full keyboard interactions and usage guidance.
+ */
 function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
 	return (
 		<SelectPrimitive.Group
@@ -18,6 +155,11 @@ function SelectGroup({ className, ...props }: SelectPrimitive.Group.Props) {
 	);
 }
 
+/**
+ * Renders the currently selected option's label inside the trigger. Falls back to its children (the placeholder) when nothing is selected. Pass a render function as children to format the live value (for example, to prepend a currency symbol or capitalize the label).
+ *
+ * @see {@link Select} for full keyboard interactions and usage guidance.
+ */
 function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
 	return (
 		<SelectPrimitive.Value
@@ -28,14 +170,35 @@ function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
 	);
 }
 
+interface SelectTriggerOwnProps {
+	/**
+	 * Visual height of the trigger. `'default'` renders at `h-9` (36px) to match
+	 * the standard form-row density that other inputs use. `'sm'` renders at
+	 * `h-8` (32px) for compact toolbars, table-cell editors, and inline filter
+	 * controls where the default would feel heavy. The value is applied via the
+	 * `data-size` attribute, so any consumer overrides written against
+	 * `data-size="sm"` selectors keep working.
+	 *
+	 * @defaultValue `'default'`
+	 */
+	size?: 'sm' | 'default';
+}
+
+type SelectTriggerProps = SelectPrimitive.Trigger.Props & SelectTriggerOwnProps;
+
+/**
+ * The button that opens the listbox. Owns the `size` axis and automatically appends a chevron icon — do not add one yourself.
+ *
+ * Accessibility: receives `role="combobox"`, `aria-haspopup="listbox"`, and a live `aria-expanded` from Base UI. Pair with a {@link Label} that points at the trigger via `htmlFor` so screen readers announce the field's purpose.
+ *
+ * @see {@link Select} for full keyboard interactions and usage guidance.
+ */
 function SelectTrigger({
 	className,
 	size = 'default',
 	children,
 	...props
-}: SelectPrimitive.Trigger.Props & {
-	size?: 'sm' | 'default';
-}) {
+}: SelectTriggerProps) {
 	return (
 		<SelectPrimitive.Trigger
 			data-slot="select-trigger"
@@ -56,6 +219,64 @@ function SelectTrigger({
 	);
 }
 
+interface SelectContentOwnProps {
+	/**
+	 * Which side of the trigger the popup opens on. The positioner may flip to
+	 * the opposite side automatically when there is not enough room in the
+	 * viewport, so this is best treated as a preferred side rather than a hard
+	 * pin.
+	 *
+	 * @defaultValue `'bottom'`
+	 */
+	side?: 'top' | 'bottom' | 'left' | 'right' | 'inline-start' | 'inline-end';
+	/**
+	 * Pixel gap between the trigger and the edge of the popup. Increase when the
+	 * trigger sits inside a dense control row where the default 4px gap reads as
+	 * "touching"; decrease toward `0` when you want the popup to feel docked.
+	 *
+	 * @defaultValue `4`
+	 */
+	sideOffset?: number;
+	/**
+	 * Alignment of the popup relative to the trigger along the cross-axis.
+	 * `'center'` keeps the popup centered under the trigger; `'start'` and
+	 * `'end'` anchor the popup's leading or trailing edge to the trigger when
+	 * the popup is much wider than the trigger and you want a clean alignment
+	 * to one side.
+	 *
+	 * @defaultValue `'center'`
+	 */
+	align?: 'start' | 'center' | 'end';
+	/**
+	 * Pixel offset applied along the alignment axis. Useful when the popup
+	 * needs to nudge a few pixels to clear a sibling icon or to line up with a
+	 * grid column.
+	 *
+	 * @defaultValue `0`
+	 */
+	alignOffset?: number;
+	/**
+	 * When `true`, the popup scrolls on open so the selected item's text sits
+	 * directly over the trigger's label — preserving the native `<select>`
+	 * sensation that the chosen option does not visually jump when the list
+	 * appears. Set to `false` for menu-like dropdowns where the popup should
+	 * always open at the top of the list regardless of selection (the standard
+	 * pattern for action menus or filter pickers). Base UI also disables this
+	 * automatically when there is insufficient room or when touch input is
+	 * detected.
+	 *
+	 * @defaultValue `true`
+	 */
+	alignItemWithTrigger?: boolean;
+}
+
+type SelectContentProps = SelectPrimitive.Popup.Props & SelectContentOwnProps;
+
+/**
+ * The dropdown panel that renders the listbox inside a portal. Owns the positioner props (`side`, `sideOffset`, `align`, `alignOffset`, `alignItemWithTrigger`) and bakes in scroll affordances at the top and bottom of long lists, so you do not need to render {@link SelectScrollUpButton} or {@link SelectScrollDownButton} yourself.
+ *
+ * @see {@link Select} for full keyboard interactions and usage guidance.
+ */
 function SelectContent({
 	className,
 	children,
@@ -65,11 +286,7 @@ function SelectContent({
 	alignOffset = 0,
 	alignItemWithTrigger = true,
 	...props
-}: SelectPrimitive.Popup.Props
-	& Pick<
-		SelectPrimitive.Positioner.Props,
-    'align' | 'alignOffset' | 'side' | 'sideOffset' | 'alignItemWithTrigger'
-	>) {
+}: SelectContentProps) {
 	return (
 		<SelectPrimitive.Portal>
 			<SelectPrimitive.Positioner
@@ -95,6 +312,11 @@ function SelectContent({
 	);
 }
 
+/**
+ * A non-selectable heading inside a {@link SelectGroup}. Renders as a small muted line above the group's items and is automatically associated with the group for assistive technology.
+ *
+ * @see {@link Select} for full keyboard interactions and usage guidance.
+ */
 function SelectLabel({
 	className,
 	...props
@@ -108,6 +330,11 @@ function SelectLabel({
 	);
 }
 
+/**
+ * An individual selectable option. Required prop `value` is what gets reported through `onValueChange`. Set `label` explicitly when the item contains icons or formatted content so type-ahead has a clean string to match against; set `disabled` to keep an option visible but skipped during keyboard navigation.
+ *
+ * @see {@link Select} for full keyboard interactions and usage guidance.
+ */
 function SelectItem({
 	className,
 	children,
@@ -136,6 +363,11 @@ function SelectItem({
 	);
 }
 
+/**
+ * A visual divider between {@link SelectItem} elements or {@link SelectGroup} blocks. Reach for this only when a {@link SelectGroup} + {@link SelectLabel} pairing does not provide enough visual separation on its own.
+ *
+ * @see {@link Select} for full keyboard interactions and usage guidance.
+ */
 function SelectSeparator({
 	className,
 	...props
@@ -149,6 +381,11 @@ function SelectSeparator({
 	);
 }
 
+/**
+ * Auto-rendered scroll affordance at the top of {@link SelectContent} when the option list overflows upward. Already included inside `SelectContent` — render directly only when overriding the default chevron icon or styles.
+ *
+ * @see {@link Select} for full keyboard interactions and usage guidance.
+ */
 function SelectScrollUpButton({
 	className,
 	...props
@@ -167,6 +404,11 @@ function SelectScrollUpButton({
 	);
 }
 
+/**
+ * Auto-rendered scroll affordance at the bottom of {@link SelectContent} when the option list overflows downward. Already included inside `SelectContent` — render directly only when overriding the default chevron icon or styles.
+ *
+ * @see {@link Select} for full keyboard interactions and usage guidance.
+ */
 function SelectScrollDownButton({
 	className,
 	...props
@@ -197,3 +439,4 @@ export {
 	SelectTrigger,
 	SelectValue,
 };
+export type { SelectContentProps, SelectTriggerProps };

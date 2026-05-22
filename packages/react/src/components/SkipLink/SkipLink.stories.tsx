@@ -6,33 +6,6 @@ const meta = {
 	title: 'Components/SkipLink',
 	component: SkipLink,
 	tags: ['autodocs'],
-	parameters: {
-		docs: {
-			description: {
-				component:
-					'A "skip to main content" link that stays visually hidden until it receives keyboard focus. Addresses WCAG 2.4.1 (Bypass Blocks) by giving keyboard and screen-reader users a way past long navigation. Renders as a native anchor whose `href` points at the matching target `id`; activation relies on browser anchor behavior, so no JavaScript runs at click time.',
-			},
-		},
-	},
-	argTypes: {
-		targetId: {
-			control: 'text',
-			description:
-				'The `id` of the element to jump to when activated. The rendered anchor receives an `href` of `#` followed by this value. Defaults to `"main"`.',
-			table: { defaultValue: { summary: '"main"' } },
-		},
-		children: {
-			control: 'text',
-			description:
-				'The visible link label. Defaults to `"Skip to main content"`. Screen readers announce this label whether or not the link is visually rendered.',
-			table: { defaultValue: { summary: '"Skip to main content"' } },
-		},
-		className: {
-			control: 'text',
-			description:
-				'Extra Tailwind utilities merged onto the rendered anchor via `cn()`. Use this to adjust the focus-revealed treatment without redeclaring the hidden baseline.',
-		},
-	},
 } satisfies Meta<typeof SkipLink>;
 
 export default meta;
@@ -143,7 +116,7 @@ export const MultipleSkipTargets: Story = {
 		docs: {
 			description: {
 				story:
-					'Three SkipLinks point at three different landmarks. Each is independently focusable and activates its own anchor target, which gives a keyboard user fine-grained control over where they land.',
+					'Three SkipLinks point at three different landmarks. Each is independently focusable and activates its own anchor target, so a keyboard user can choose where to land.',
 			},
 		},
 	},

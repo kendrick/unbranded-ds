@@ -13,6 +13,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
 	args: { children: 'Label text' },
+	parameters: { docs: { description: { story: 'A standalone label with default token-driven typography.' } } },
 };
 
 export const WithInput: Story = {
@@ -22,6 +23,7 @@ export const WithInput: Story = {
 			<Input id="name" placeholder="John Doe" />
 		</div>
 	),
+	parameters: { docs: { description: { story: 'A label associated with an Input via `htmlFor`/`id` so assistive technology reads the field name on focus.' } } },
 };
 
 export const Required: Story = {
@@ -35,4 +37,5 @@ export const Required: Story = {
 			<Input id="required" required />
 		</div>
 	),
+	parameters: { docs: { description: { story: 'Pairs the field name with an inline destructive-colored asterisk to signal a required field.' } } },
 };

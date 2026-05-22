@@ -10,3 +10,4 @@ export {
 	SelectTrigger,
 	SelectValue,
 } from './Select';
+export type { SelectContentProps, SelectTriggerProps } from './Select';

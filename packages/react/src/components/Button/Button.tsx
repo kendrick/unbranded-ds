@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components -- shadcn pattern co-locates buttonVariants with the Button component */
-import type { VariantProps } from 'class-variance-authority';
+import type * as React from 'react';
 import { Button as ButtonPrimitive } from '@base-ui-components/react/button';
 import { cva } from 'class-variance-authority';
 
@@ -42,12 +42,118 @@ const buttonVariants = cva(
 	},
 );
 
+interface ButtonOwnProps {
+	/**
+	 * The button's visual treatment. Pick by user intent: `default` for the
+	 * primary action on a surface, `destructive` for irreversible actions like
+	 * deletion or sign-out, `outline` or `ghost` for de-emphasized secondary
+	 * choices, `secondary` for lower-priority actions, `link` for inline
+	 * navigation that keeps button semantics.
+	 *
+	 * @defaultValue `'default'`
+	 */
+	variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+	/**
+	 * Height, padding, and shape of the button. Use `'sm'` or `'xs'` in dense
+	 * toolbars, `'lg'` for touch-friendly CTAs, and the `icon-*` variants when
+	 * the child is a solo icon that needs a square hit target.
+	 *
+	 * Accessibility: the `icon-*` sizes produce a square button with no visible
+	 * label, so an `aria-label` is required for screen-reader users.
+	 *
+	 * @defaultValue `'default'`
+	 */
+	size?: 'default' | 'xs' | 'sm' | 'lg' | 'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg';
+	/**
+	 * Merged on top of variant classes via `cn()`. Reach for it when a one-off
+	 * spacing or color override is needed without forking the component.
+	 */
+	className?: string;
+	/** Button label or icon content. */
+	children?: React.ReactNode;
+}
+
+// ButtonPrimitive.Props is a discriminated union, so we intersect rather than extend.
+type ButtonProps = ButtonPrimitive.Props & ButtonOwnProps;
+
+/**
+ * A button triggers an event or action — submitting a form, opening a dialog, canceling an operation.
+ *
+ * @remarks
+ * Wraps Base UI's `Button` primitive and layers two CVA axes on top: `variant`
+ * (six visual treatments mapped to user intent) and `size` (eight density and
+ * shape options including square icon targets). Extra classes passed through
+ * `className` are merged with variant styles via `cn()`, so consumers can
+ * apply one-off overrides without forking the component.
+ *
+ * ### Accessibility
+ *
+ * Renders a native `<button>` element. Receives focus on Tab, activates on
+ * Enter or Space, and announces its text content as the accessible name. When
+ * `disabled` is set, the button leaves the tab order and is announced as
+ * disabled. For icon-only buttons (`size="icon"` or any `icon-*` variant),
+ * pass `aria-label` with a description of the action — the SVG child is
+ * decorative and carries no accessible name on its own. The component applies
+ * `focus-visible:ring` and `focus-visible:border-ring` styles for
+ * keyboard-visible focus, meeting WCAG 2.4.7.
+ *
+ * ### Keyboard interactions
+ *
+ * | Key | Description |
+ * | --- | --- |
+ * | `Enter` | Activates the button. |
+ * | `Space` | Activates the button. |
+ * | `Tab` | Moves focus to the next focusable element. |
+ *
+ * ### When to use
+ *
+ * - The user needs a focusable, tappable target to fire an action (submit,
+ *   confirm, delete, open a {@link Dialog}).
+ * - You need to communicate action priority through visual weight — pair a
+ *   `default` button with `outline` or `ghost` for a clear primary/secondary
+ *   hierarchy.
+ *
+ * ### When not to use
+ *
+ * - Use {@link Switch} when the intent is toggling a persistent on/off setting
+ *   rather than triggering a one-time action.
+ * - Use a native `<a>` element for navigation that changes the URL. A `link`
+ *   variant button retains button semantics and is not a navigation anchor.
+ *
+ * @example Minimal usage
+ * ```tsx
+ * import { Button } from '@unbranded-ds/react';
+ *
+ * export function SaveAction() {
+ *   return <Button>Save changes</Button>;
+ * }
+ * ```
+ *
+ * @example Icon-only button with aria-label
+ * ```tsx
+ * import { Button } from '@unbranded-ds/react';
+ *
+ * export function CloseButton() {
+ *   return (
+ *     <Button variant="ghost" size="icon" aria-label="Close panel">
+ *       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+ *         <path d="M18 6 6 18M6 6l12 12" />
+ *       </svg>
+ *     </Button>
+ *   );
+ * }
+ * ```
+ *
+ * @see https://www.w3.org/WAI/ARIA/apg/patterns/button/
+ * @see {@link Dialog}
+ * @see {@link Switch}
+ */
 function Button({
 	className,
 	variant = 'default',
 	size = 'default',
 	...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+}: ButtonProps) {
 	return (
 		<ButtonPrimitive
 			data-slot="button"
@@ -58,3 +164,4 @@ function Button({
 }
 
 export { Button, buttonVariants };
+export type { ButtonProps };
