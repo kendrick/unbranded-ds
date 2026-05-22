@@ -24,6 +24,14 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'Baseline confirmation dialog: title, description, cancel, and confirm. The X icon top-right comes from DialogContent automatically.',
+			},
+		},
+	},
 	render: () => (
 		<Dialog>
 			<DialogTrigger render={<Button />}>Open Dialog</DialogTrigger>
@@ -44,6 +52,14 @@ export const Default: Story = {
 };
 
 export const WithForm: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'A short form hosted inside a dialog — the standard pattern when editing a couple of related fields would feel disruptive as a full page navigation.',
+			},
+		},
+	},
 	render: () => (
 		<Dialog>
 			<DialogTrigger render={<Button />}>Edit Profile</DialogTrigger>
@@ -74,6 +90,14 @@ export const WithForm: Story = {
 };
 
 export const OpenCloseInteraction: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'Interaction test that clicks the trigger and verifies the portal-rendered panel becomes visible with the title announced.',
+			},
+		},
+	},
 	render: () => (
 		<Dialog>
 			<DialogTrigger render={<Button />}>Open</DialogTrigger>

@@ -10,3 +10,4 @@ export {
 	DialogTitle,
 	DialogTrigger,
 } from './Dialog';
+export type { DialogContentProps, DialogFooterProps } from './Dialog';
