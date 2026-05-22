@@ -9,61 +9,6 @@ const meta = {
 	title: 'Components/SegmentedControl',
 	component: SegmentedControl.Root,
 	tags: ['autodocs'],
-	parameters: {
-		docs: {
-			description: {
-				component:
-					'A mutually-exclusive selection control rendered as a connected pill. Built on Base UI\'s RadioGroup, so assistive technology announces it as a radiogroup with one radio per option. Keyboard navigation follows the WAI-ARIA radiogroup pattern: a horizontal control responds to Left and Right arrows, a vertical control responds to Up and Down, and cross-axis keys are no-ops. Home and End jump to the first and last items in both orientations.',
-			},
-		},
-	},
-	argTypes: {
-		value: {
-			control: 'text',
-			description:
-				'The controlled selected value. When set, the consumer owns selection state and must update `value` from `onValueChange` for the selection to change. Pair with `onValueChange`.',
-		},
-		defaultValue: {
-			control: 'text',
-			description:
-				'The initial selected value for uncontrolled usage. Pass either `defaultValue` or `value`, not both.',
-		},
-		onValueChange: {
-			action: 'value-changed',
-			description:
-				'Fires with the newly selected string when the user picks an item via click or keyboard. The callback receives only the new value.',
-		},
-		size: {
-			control: 'inline-radio',
-			options: ['sm', 'md', 'lg'],
-			description:
-				'CVA size axis. Controls item height, horizontal padding, and font size. Defaults to `md`.',
-			table: { defaultValue: { summary: 'md' } },
-		},
-		orientation: {
-			control: 'inline-radio',
-			options: ['horizontal', 'vertical'],
-			description:
-				'CVA orientation axis. Horizontal lays items in a row; vertical lays them in a column. Determines which arrow keys move focus and selection — Left and Right for horizontal, Up and Down for vertical. Defaults to `horizontal`.',
-			table: { defaultValue: { summary: 'horizontal' } },
-		},
-		disabled: {
-			control: 'boolean',
-			description:
-				'When true, the entire control is non-interactive. The Root sets `aria-disabled="true"` and pointer events are suppressed. Defaults to `false`.',
-			table: { defaultValue: { summary: 'false' } },
-		},
-		className: {
-			control: 'text',
-			description:
-				'Extra Tailwind utilities merged onto the Root via `cn()`. Override layout details without redeclaring the CVA baseline.',
-		},
-		children: {
-			control: false,
-			description:
-				'One or more `<SegmentedControl.Item>` children. Each Item carries its own `value` and visible label.',
-		},
-	},
 } satisfies Meta<typeof SegmentedControl.Root>;
 
 export default meta;
