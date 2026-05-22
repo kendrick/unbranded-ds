@@ -8,6 +8,7 @@ export default defineMain({
 		'../../../packages/react/src/**/*.stories.@(js|jsx|ts|tsx)',
 	],
 	addons: [
+		'@storybook/addon-docs',
 		'@storybook/addon-vitest',
 		'@storybook/addon-a11y',
 		'@storybook/addon-mcp',
