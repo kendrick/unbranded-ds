@@ -1,7 +1,7 @@
 {
 	"name": "@unbranded-ds/react",
 	"type": "module",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "React component primitives for the unbranded-ds design system: Base UI + shadcn-style components styled with the @unbranded-ds/tokens Tailwind v4 preset.",
 	"author": "Kendrick Arnett",
 	"license": "MIT",
