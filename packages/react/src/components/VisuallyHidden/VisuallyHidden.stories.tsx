@@ -7,14 +7,6 @@ const meta = {
 	title: 'Components/VisuallyHidden',
 	component: VisuallyHidden,
 	tags: ['autodocs'],
-	parameters: {
-		docs: {
-			description: {
-				component:
-					'Hides content visually while keeping it available to assistive technology. Reach for it when an interactive control needs an accessible name that sighted users do not need to see, such as an icon-only button.',
-			},
-		},
-	},
 } satisfies Meta<typeof VisuallyHidden>;
 
 export default meta;
