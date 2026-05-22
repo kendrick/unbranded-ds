@@ -1,11 +1,12 @@
 #!/usr/bin/env tsx
 /**
- * Validates sidecar code examples compile.
+ * Validates sidecar and TSDoc code examples compile.
  *
  * Walks `packages/react/src/components/**\/*.usage.md`, extracts code
  * blocks tagged `tsx`, smart-wraps each so JSX is in proper context, then
- * runs `tsc --noEmit` against the lot. A failing extraction or compile
- * error exits the process non-zero.
+ * runs `tsc --noEmit` against the lot. Also extracts `@example` code
+ * blocks from TSDoc comments in component `.tsx` source files and compiles
+ * those through the same pipeline.
  *
  * Authors write blocks two ways and the validator handles both:
  *   1. Pure imports or statements ("import { X } from 'y';").
@@ -86,6 +87,146 @@ function extractTsxBlocks(content: string, file: string): CodeBlock[] {
 	return blocks;
 }
 
+/**
+ * Excluded filename patterns for TSDoc source scanning. Stories, tests, and
+ * the SSR smoke-test file aren't authored API surfaces, so their comments
+ * aren't part of the public contract we want to compile-check.
+ */
+function isExcludedTsxFile(name: string): boolean {
+	return (
+		name.endsWith('.stories.tsx') ||
+		name.endsWith('.test.tsx') ||
+		name.startsWith('__ssr__')
+	);
+}
+
+async function findTsxSourceFiles(root: string): Promise<string[]> {
+	const found: string[] = [];
+
+	async function walk(dir: string): Promise<void> {
+		const entries = await readdir(dir, { withFileTypes: true });
+		for (const entry of entries) {
+			if (entry.name.startsWith('.') || entry.name === 'node_modules' || entry.name === 'dist') {
+				continue;
+			}
+			const full = join(dir, entry.name);
+			if (entry.isDirectory()) {
+				await walk(full);
+			} else if (entry.name.endsWith('.tsx') && !isExcludedTsxFile(entry.name)) {
+				found.push(full);
+			}
+		}
+	}
+
+	try {
+		await walk(root);
+	} catch (err) {
+		if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
+			return [];
+		}
+		throw err;
+	}
+	return found;
+}
+
+/**
+ * Tags that end an `@example` section inside a TSDoc comment. When the
+ * parser hits one of these it knows the current example is finished.
+ */
+const TSDOC_SECTION_TAGS = new Set([
+	'@example',
+	'@see',
+	'@remarks',
+	'@param',
+	'@returns',
+	'@defaultValue',
+	'@deprecated',
+	'@throws',
+	'@public',
+	'@internal',
+	'@readonly',
+	'@override',
+	'@sealed',
+	'@virtual',
+	'@typeParam',
+]);
+
+function extractTsDocExamples(content: string, file: string): CodeBlock[] {
+	const blocks: CodeBlock[] = [];
+	const lines = content.split('\n');
+
+	// Walk through the file looking for TSDoc comment blocks (/** ... */)
+	let inComment = false;
+	let inExample = false;
+	let inCodeFence = false;
+	let currentBlock: string[] = [];
+	let blockStartLine = 0;
+
+	for (let i = 0; i < lines.length; i++) {
+		const raw = lines[i]!;
+		const trimmed = raw.trim();
+
+		// Detect comment open — could share a line with content after `/**`
+		if (!inComment && trimmed.startsWith('/**')) {
+			inComment = true;
+			// If the comment also closes on the same line, skip it entirely
+			if (trimmed.endsWith('*/') && trimmed !== '/**') {
+				inComment = false;
+				continue;
+			}
+			continue;
+		}
+
+		if (!inComment) continue;
+
+		// Detect comment close
+		if (trimmed === '*/' || trimmed.endsWith('*/')) {
+			// If we were inside a code fence that was never closed, discard it
+			if (inCodeFence) {
+				inCodeFence = false;
+				currentBlock = [];
+			}
+			inComment = false;
+			inExample = false;
+			continue;
+		}
+
+		// Strip the leading ` * ` (or ` *` with no trailing space) from the line
+		const stripped = raw.replace(/^\s*\*\s?/, '');
+
+		// Check for @-tags that start or end an example section
+		const tagMatch = stripped.match(/^@(\w+)/);
+		if (tagMatch && TSDOC_SECTION_TAGS.has(tagMatch[0])) {
+			// If we were inside a code fence, flush it (shouldn't happen in
+			// well-formed comments, but handle gracefully)
+			if (inCodeFence) {
+				blocks.push({ file, line: blockStartLine, code: currentBlock.join('\n') });
+				inCodeFence = false;
+				currentBlock = [];
+			}
+			inExample = tagMatch[0] === '@example';
+			continue;
+		}
+
+		if (!inExample) continue;
+
+		// Inside an @example section — look for tsx code fences
+		if (!inCodeFence && stripped.trim() === '```tsx') {
+			inCodeFence = true;
+			blockStartLine = i + 2; // 1-indexed, next line
+			currentBlock = [];
+		} else if (inCodeFence && stripped.trim() === '```') {
+			blocks.push({ file, line: blockStartLine, code: currentBlock.join('\n') });
+			inCodeFence = false;
+			currentBlock = [];
+		} else if (inCodeFence) {
+			currentBlock.push(stripped);
+		}
+	}
+
+	return blocks;
+}
+
 function wrapBlock(block: CodeBlock): string {
 	const { code, file, line } = block;
 	const header = `// Source: ${relative(REPO_ROOT, file)}:${line}\n`;
@@ -125,21 +266,28 @@ function wrapBlock(block: CodeBlock): string {
 }
 
 async function main(): Promise<void> {
-	const files = await findUsageFiles(COMPONENTS_ROOT);
-
-	if (files.length === 0) {
-		console.log('No sidecar files found yet. Nothing to validate.');
-		return;
-	}
-
-	const allBlocks: CodeBlock[] = [];
-	for (const file of files) {
+	// --- Sidecar blocks ---
+	const sidecarFiles = await findUsageFiles(COMPONENTS_ROOT);
+	const sidecarBlocks: CodeBlock[] = [];
+	for (const file of sidecarFiles) {
 		const content = await readFile(file, 'utf-8');
-		allBlocks.push(...extractTsxBlocks(content, file));
+		sidecarBlocks.push(...extractTsxBlocks(content, file));
 	}
+
+	// --- TSDoc @example blocks ---
+	const tsxSourceFiles = await findTsxSourceFiles(COMPONENTS_ROOT);
+	const tsdocBlocks: CodeBlock[] = [];
+	for (const file of tsxSourceFiles) {
+		const content = await readFile(file, 'utf-8');
+		tsdocBlocks.push(...extractTsDocExamples(content, file));
+	}
+
+	const allBlocks = [...sidecarBlocks, ...tsdocBlocks];
 
 	if (allBlocks.length === 0) {
-		console.log(`No tsx code blocks found across ${files.length} sidecar(s). Nothing to validate.`);
+		console.log(
+			`No code blocks found (${sidecarFiles.length} sidecar(s), ${tsxSourceFiles.length} source file(s)). Nothing to validate.`,
+		);
 		return;
 	}
 
@@ -186,8 +334,8 @@ async function main(): Promise<void> {
 		});
 
 		if (result.status !== 0) {
-			console.error(`\nSidecar validation failed.`);
-			console.error(`Block-to-source mapping (block file → sidecar location):`);
+			console.error(`\nCode-example validation failed.`);
+			console.error(`Block-to-source mapping (block file → origin):`);
 			for (let i = 0; i < allBlocks.length; i++) {
 				const block = allBlocks[i]!;
 				const blockFile = `block-${String(i).padStart(3, '0')}.tsx`;
@@ -198,7 +346,7 @@ async function main(): Promise<void> {
 		}
 
 		console.log(
-			`✓ Validated ${allBlocks.length} sidecar code block(s) across ${files.length} file(s).`,
+			`✓ Validated ${sidecarBlocks.length} sidecar block(s) across ${sidecarFiles.length} file(s) + ${tsdocBlocks.length} TSDoc @example block(s) across ${tsxSourceFiles.length} source file(s).`,
 		);
 	} finally {
 		await rm(tempDir, { recursive: true, force: true });
