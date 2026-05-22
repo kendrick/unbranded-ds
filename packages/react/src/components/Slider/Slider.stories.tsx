@@ -7,62 +7,19 @@ const meta = {
 	title: 'Components/Slider',
 	component: Slider.Root,
 	tags: ['autodocs'],
-	argTypes: {
-		value: {
-			description:
-				'Controlled value. Always an array of numbers. A single-value slider passes `[50]`; a range slider passes `[20, 80]`. Pair with `onValueChange` to drive the value yourself.',
-			control: 'object',
-		},
-		defaultValue: {
-			description:
-				'Uncontrolled initial value. Same array shape as `value`: `[50]` for a single thumb, `[20, 80]` for a range.',
-			control: 'object',
-		},
-		min: {
-			description: 'Lower bound of the value range, inclusive. Default 0.',
-			control: 'number',
-		},
-		max: {
-			description: 'Upper bound of the value range, inclusive. Default 100.',
-			control: 'number',
-		},
-		step: {
-			description:
-				'Increment for keyboard and drag. Default 1. Values at or below zero fall back to 1 and emit a structured warning.',
-			control: 'number',
-		},
-		onValueChange: {
-			description:
-				'Fires on every value change. Receives the new value as `number[]`, matching the shape of `value` and `defaultValue`.',
-			action: 'value-changed',
-		},
-		size: {
-			description: 'Visual size axis. Affects track height and thumb diameter.',
-			control: 'select',
-			options: ['sm', 'md', 'lg'],
-		},
-		orientation: {
-			description:
-				'Layout axis. Horizontal sliders stretch along the inline axis; vertical sliders along the block axis.',
-			control: 'select',
-			options: ['horizontal', 'vertical'],
-		},
-		disabled: {
-			description:
-				'When true, blocks drag, keyboard, and focus on the thumbs. The slider still renders with the current value.',
-			control: 'boolean',
-		},
-		className: {
-			description: 'Additional classes merged onto `Slider.Root` via `cn()`.',
-			control: 'text',
-		},
-	},
 } satisfies Meta<typeof Slider.Root>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story: 'A single-thumb slider at midpoint with the default range of 0 to 100.',
+			},
+		},
+	},
 	render: () => (
 		<div style={{ width: '320px' }}>
 			<Slider.Root defaultValue={[50]} min={0} max={100} step={1}>
@@ -78,6 +35,13 @@ export const Default: Story = {
 };
 
 export const Sizes: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story: 'All three size variants stacked — `sm`, `md`, `lg` — showing how track height and thumb diameter scale together.',
+			},
+		},
+	},
 	render: () => (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '320px' }}>
 			{(['sm', 'md', 'lg'] as const).map((size) => (
@@ -95,6 +59,13 @@ export const Sizes: Story = {
 };
 
 export const Orientations: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story: 'A horizontal slider beside a vertical slider, demonstrating axis-aware layout and how arrow-key handling flips between Left/Right and Up/Down.',
+			},
+		},
+	},
 	render: () => (
 		<div style={{ display: 'flex', gap: '48px', alignItems: 'flex-start' }}>
 			<div style={{ width: '320px' }}>
@@ -122,6 +93,13 @@ export const Orientations: Story = {
 };
 
 export const Range: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story: 'A two-thumb range slider. Render two `Slider.Thumb` children for the low and high values; Base UI routes each interaction to the nearest thumb.',
+			},
+		},
+	},
 	render: () => (
 		<div style={{ width: '320px' }}>
 			<Slider.Root defaultValue={[20, 80]}>
@@ -138,6 +116,13 @@ export const Range: Story = {
 };
 
 export const Disabled: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story: 'A non-interactive slider — drag, keyboard, and focus on the thumb are all blocked, but the current value still renders so the disabled state stays legible.',
+			},
+		},
+	},
 	render: () => (
 		<div style={{ width: '320px' }}>
 			<Slider.Root defaultValue={[50]} disabled>
@@ -175,10 +160,24 @@ function ControlledSliderExample() {
 }
 
 export const Controlled: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story: 'A controlled slider where parent state drives the value. The current value renders alongside the control so screen-reader and low-vision users can confirm the exact figure.',
+			},
+		},
+	},
 	render: () => <ControlledSliderExample />,
 };
 
 export const KeyboardIncrement: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story: 'Interaction test verifying Right Arrow advances the value by the configured `step`.',
+			},
+		},
+	},
 	render: () => (
 		<div style={{ width: '320px' }}>
 			<Slider.Root defaultValue={[50]}>
@@ -201,6 +200,13 @@ export const KeyboardIncrement: Story = {
 };
 
 export const KeyboardHomeEnd: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story: 'Interaction test verifying Home jumps the focused thumb to `min` and End jumps it to `max`.',
+			},
+		},
+	},
 	render: () => (
 		<div style={{ width: '320px' }}>
 			<Slider.Root defaultValue={[50]}>
@@ -225,6 +231,13 @@ export const KeyboardHomeEnd: Story = {
 };
 
 export const Touch: Story = {
+	parameters: {
+		docs: {
+			description: {
+				story: 'Interaction test verifying the thumb is reachable via simulated touch input and that `aria-valuenow` remains exposed afterward.',
+			},
+		},
+	},
 	render: () => (
 		<div style={{ width: '320px' }}>
 			<Slider.Root defaultValue={[50]}>
