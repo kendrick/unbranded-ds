@@ -16,17 +16,17 @@ jobs:
       id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: pnpm
           registry-url: https://registry.npmjs.org
 
@@ -41,12 +41,12 @@ jobs:
         with:
           version: pnpm changeset version
           publish: pnpm changeset publish
-          commit: "chore(release): version packages"
-          title: "chore(release): version packages"
+          commit: 'chore(release): version packages'
+          title: 'chore(release): version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Auth to npm uses OIDC trusted publishing: each package's npm settings
           # name this workflow as a trusted publisher, and the id-token: write
           # permission above lets the runner mint a short-lived OIDC token at
           # publish time. No long-lived NPM_TOKEN secret needed.
-          NPM_CONFIG_PROVENANCE: "true"
+          NPM_CONFIG_PROVENANCE: 'true'
