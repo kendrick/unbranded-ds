@@ -1,0 +1,25 @@
+# Roadmap
+
+Parked ideas and future directions for unbranded-ds. This is not the queue. Work that's actually next starts as a `tmp/` brief and becomes a numbered `specs/NNN/` spec. Entries here are principle-level sketches of where the system could go, captured so they aren't lost. Treat each as a starting point to revisit, not a design to build as written. The design system will move before any of these land, so these entries stay light on specifics.
+
+## Derived Color Tokens (Themes as Seeds, Not Value Sets)
+
+**Status:** parked. Revisit after specs 008 to 010 ship.
+
+Today a theme hand-writes every color and the validator checks contrast after the fact. This idea flips that: a theme declares a handful of seed colors plus the *relationships* between them, and the system generates the rest. `primary-foreground` derived to stay readable on `primary`, `muted` mixed from `background` and `foreground`, and so on down. Generation happens in OKLCH, the perceptual space the tokens already use, so a brand theme becomes a few seeds and a hue rather than thirty tuned values. Contrast stops being a gate the author has to clear and becomes a guarantee of construction.
+
+The reason to come back to it: an agent could author a theme from a prompt and have the validator prove it correct before it ships, which is exactly what the constitution's agent-and-human-legibility principle points at and what no other design system does today. It gets there by building on the OKLCH and contrast machinery already in the box, and it shrinks themes rather than growing them.
+
+**Decisions that hold regardless of how the DS evolves:**
+
+- It is a *resolver*, not a merge strategy. A derived theme resolves seeds-plus-rules into a final value set, and everything downstream consumes the resolved values. This is why spec 009's composition work should merge *resolved* values rather than source themes. Settle that and derived tokens slot underneath later with no rework.
+- "Schema locked, values float" becomes "relationships locked, seeds float." That reframes Constitution Section III, and it overlaps with the Section III amendment spec 009 already makes for composition. One coherent Section III rewrite beats two consecutive ones.
+- Contrast moves from check to generate. The unsolved seam: what happens to a derived pair when two color-bearing theme axes merge, whether to re-derive against the merged seed or keep each axis's own derived pair.
+
+**Open questions for spec-time (don't answer now):**
+
+- The authoring format for a computed value. DTCG handles aliases (`{color.primary}`) but not `mix()`, `mostReadable()`, or scale generation, so this needs a decided extension.
+- How few seeds a theme can get away with, and which tokens are seeds versus derived.
+- Whether the theme-extension tokens from spec 009 can themselves be derived, or stay literal.
+
+**Deliberately omitted:** file paths, function signatures, schema shapes. Those rot before this gets built. The point of this entry is the shape of the bet, not its implementation.
