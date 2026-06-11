@@ -4,9 +4,39 @@ Themes are just CSS variables scoped to a `[data-theme]` selector. Every compone
 
 Three themes come built in: light, dark, and brand.
 
+## Two things called "theme"
+
+"Theme" means two different things here, on two different pipelines. Knowing which one you are holding saves confusion.
+
+A **token-source override** is a build-time file under `packages/tokens/themes/`, authored in DTCG format (`$value` / `$type`). Style Dictionary merges it over the default token sources and bakes a static `[data-theme="<name>"]` CSS file. The built-in `light`, `dark`, and `brand` themes are this kind. You ship them in the package; consumers load the generated CSS.
+
+```jsonc
+// packages/tokens/themes/sunset.json: a token-source override (DTCG)
+{
+  "color": { "primary": { "$value": "oklch(0.65 0.2 35)", "$type": "color" } },
+  "radius": { "md": { "$value": "0.75rem", "$type": "dimension" } }
+}
+```
+
+A **runtime theme document** is a flat object passed to `registerTheme()` or `validateTheme()` at runtime. It carries `name`, `displayName`, and a `tokens` map of plain string values. The validator checks it and injects a `<style>` block on the fly. This is what a consumer builds dynamically in the browser.
+
+```jsonc
+// a runtime theme document (flat values, passed to registerTheme)
+{
+  "name": "sunset",
+  "displayName": "Sunset",
+  "tokens": {
+    "color": { "primary": "oklch(0.65 0.2 35)" },
+    "radius": { "md": "0.75rem" }
+  }
+}
+```
+
+The build consumes the first; `registerTheme` and `validateTheme` consume the second. They are not interchangeable: a DTCG source file will not pass `validateTheme`, and a runtime document is not a Style Dictionary source. Most of this doc covers the runtime document (the "Writing a custom theme" path just below). The "Extending the schema" section near the end covers the build-time token sources.
+
 ## Writing a custom theme
 
-A theme is a JSON file. Every token in the schema needs a value — skip one and validation will tell you which.
+A runtime theme is a JSON object. You can supply a full token set, or only the parts you want to change: any token you omit inherits the default value. The example below is a complete theme; a partial one (say, only `color` and `radius`) is equally valid.
 
 ```json
 {
@@ -94,7 +124,7 @@ else {
 }
 ```
 
-It checks two things: that every required token exists with the right type, and that foreground/background color pairs hit WCAG AA contrast (4.5:1).
+It resolves your theme against the defaults first, so a partial theme is checked as its complete merged result, then verifies two things: every required token has a value of the right type, and the foreground/background color pairs meet WCAG AA contrast (4.5:1). Because the check runs on the merged result, a pair where you override one side and inherit the other is still validated against the real resolved colors.
 
 ### Contrast pairs
 
@@ -192,6 +222,77 @@ Or as link tags:
 ```
 
 Switch between them by changing `data-theme`. No reload needed.
+
+## Overriding non-color tokens
+
+Themes are not limited to color. A theme of either kind can override any category: radius, spacing, typography, shadow, motion, and the rest. Anything you do not mention inherits the default.
+
+The built-in `brand` theme shows this. On top of its color palette it rounds the corners and swaps the sans-serif face, leaving everything else at the defaults:
+
+```jsonc
+// packages/tokens/themes/brand.json (excerpt)
+{
+  "color": { "...": "..." },
+  "radius": {
+    "sm": { "$value": "0.375rem", "$type": "dimension" },
+    "md": { "$value": "0.5rem", "$type": "dimension" },
+    "lg": { "$value": "0.75rem", "$type": "dimension" }
+  },
+  "typography": {
+    "font-sans": { "$value": "\"Inter\", ui-sans-serif, system-ui, sans-serif", "$type": "fontFamily" }
+  }
+}
+```
+
+It overrides three of the four radius stops and one typography token. `radius.full` and every other typography value (including `size-2xl`) go unmentioned, so they inherit. The resolved `tokens-brand.css` carries the rounded radii and the Inter stack next to the inherited defaults.
+
+A runtime theme document does the same with flat values:
+
+```jsonc
+{
+  "name": "rounded",
+  "displayName": "Rounded",
+  "tokens": { "radius": { "md": "0.75rem", "lg": "1rem" } }
+}
+```
+
+`validateTheme` resolves this against the defaults before checking, so the omitted categories are present in the validated result.
+
+## Extending the schema
+
+When a token you need does not exist in the schema, you add it to the canonical set so every consumer gets it. The pipeline below uses the `motion` category as the worked example.
+
+1. **Add a DTCG source file** under `packages/tokens/src/tokens/`. Motion lives in `motion.json`:
+
+```jsonc
+{
+  "motion": {
+    "duration": {
+      "fast": { "$value": "120ms", "$type": "duration" },
+      "base": { "$value": "240ms", "$type": "duration" }
+    },
+    "easing": {
+      "standard": { "$value": "cubic-bezier(0.4, 0, 0.2, 1)", "$type": "cubicBezier" }
+    }
+  }
+}
+```
+
+2. **Add the category to the Zod schema** in `packages/tokens/src/schema.ts` so themes can carry it and the validator knows it. Make it required when every theme must supply a value, optional when it should inherit a default if omitted.
+
+3. **Add the values to the canonical defaults** in `packages/tokens/src/defaults.ts` (the inheritance baseline), plus any theme that overrides them. A drift-guard test keeps the defaults honest against the sources.
+
+4. **Wire the build naming** in `packages/tokens/sd.config.ts` when the category needs CSS-variable names that differ from the default `--<category>-<key>` pattern. Motion is the one special case: it emits `--duration-*` and `--ease-*` so the variables match Tailwind's namespaces. `--ease-*` generates real `ease-*` utilities; `--duration-*` is consumed via an arbitrary value like `duration-[var(--duration-base)]`, since Tailwind v4 has no duration namespace.
+
+5. **Regenerate** and confirm the token lands in all four artifacts:
+
+```bash
+pnpm --filter @unbranded-ds/tokens build
+```
+
+The token appears in the Tailwind preset (`dist/tailwind/preset.css`), the per-theme CSS (`dist/css/tokens-*.css`), the TypeScript token map (`dist/ts/tokens.ts`), and the JSON map (`dist/json/tokens.json`).
+
+Adding a required token is a breaking change for existing consumer themes, since they must now supply it or inherit it from the defaults. Pre-1.0 this is communicated by a minor version bump.
 
 ## Future structural opportunities
 

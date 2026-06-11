@@ -40,5 +40,16 @@
 			"$value": "oklch(1.0000 0.0000 89.88)",
 			"$type": "color"
 		}
+	},
+	"radius": {
+		"sm": { "$value": "0.375rem", "$type": "dimension" },
+		"md": { "$value": "0.5rem", "$type": "dimension" },
+		"lg": { "$value": "0.75rem", "$type": "dimension" }
+	},
+	"typography": {
+		"font-sans": {
+			"$value": "\"Inter\", ui-sans-serif, system-ui, sans-serif",
+			"$type": "fontFamily"
+		}
 	}
 }
