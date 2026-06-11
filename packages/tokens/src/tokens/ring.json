@@ -1,0 +1,8 @@
+{
+	"ring": {
+		"width": {
+			"$value": "3px",
+			"$type": "dimension"
+		}
+	}
+}

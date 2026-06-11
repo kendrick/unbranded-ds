@@ -21,7 +21,7 @@
 			"$type": "color"
 		},
 		"muted-foreground": {
-			"$value": "oklch(0.5517 0.0138 285.94)",
+			"$value": "oklch(0.5434 0.0138 285.94)",
 			"$type": "color"
 		},
 		"border": {
@@ -33,7 +33,7 @@
 			"$type": "color"
 		},
 		"destructive": {
-			"$value": "oklch(0.6368 0.2078 25.33)",
+			"$value": "oklch(0.5803 0.2078 25.33)",
 			"$type": "color"
 		},
 		"destructive-foreground": {

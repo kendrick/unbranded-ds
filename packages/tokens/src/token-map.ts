@@ -4,7 +4,10 @@ export type TokenCategory
 		| 'typography'
 		| 'radii'
 		| 'shadows'
-		| 'opacity';
+		| 'opacity'
+		| 'motion'
+		| 'ring'
+		| 'z-index';
 
 export interface TokenDefinition {
 	name: string;
@@ -52,10 +55,13 @@ export const tokenMap: Record<string, TokenDefinition> = {
 	// Typography tokens
 	'typography.font-sans': { name: 'typography.font-sans', category: 'typography', type: 'fontFamily', cssVariable: '--typography-font-sans' },
 	'typography.font-mono': { name: 'typography.font-mono', category: 'typography', type: 'fontFamily', cssVariable: '--typography-font-mono' },
+	'typography.font-serif': { name: 'typography.font-serif', category: 'typography', type: 'fontFamily', cssVariable: '--typography-font-serif' },
 	'typography.size-sm': { name: 'typography.size-sm', category: 'typography', type: 'dimension', cssVariable: '--typography-size-sm' },
 	'typography.size-base': { name: 'typography.size-base', category: 'typography', type: 'dimension', cssVariable: '--typography-size-base' },
 	'typography.size-lg': { name: 'typography.size-lg', category: 'typography', type: 'dimension', cssVariable: '--typography-size-lg' },
 	'typography.size-xl': { name: 'typography.size-xl', category: 'typography', type: 'dimension', cssVariable: '--typography-size-xl' },
+	'typography.size-2xl': { name: 'typography.size-2xl', category: 'typography', type: 'dimension', cssVariable: '--typography-size-2xl' },
+	'typography.size-3xl': { name: 'typography.size-3xl', category: 'typography', type: 'dimension', cssVariable: '--typography-size-3xl' },
 	'typography.weight-normal': { name: 'typography.weight-normal', category: 'typography', type: 'fontWeight', cssVariable: '--typography-weight-normal' },
 	'typography.weight-medium': { name: 'typography.weight-medium', category: 'typography', type: 'fontWeight', cssVariable: '--typography-weight-medium' },
 	'typography.weight-semibold': { name: 'typography.weight-semibold', category: 'typography', type: 'fontWeight', cssVariable: '--typography-weight-semibold' },
@@ -78,4 +84,23 @@ export const tokenMap: Record<string, TokenDefinition> = {
 	// Opacity tokens
 	'opacity.disabled': { name: 'opacity.disabled', category: 'opacity', type: 'number', cssVariable: '--opacity-disabled' },
 	'opacity.hover': { name: 'opacity.hover', category: 'opacity', type: 'number', cssVariable: '--opacity-hover' },
+
+	// Motion tokens — DTCG source stays nested (motion.duration.fast), but the
+	// emitted var name flattens to the Tailwind-aligned --duration-*/--ease-* so
+	// easings drive real ease-* utilities. Keep these cssVariables in lockstep
+	// with tokenToCssVar in sd.config.ts.
+	'motion.duration.fast': { name: 'motion.duration.fast', category: 'motion', type: 'duration', cssVariable: '--duration-fast' },
+	'motion.duration.base': { name: 'motion.duration.base', category: 'motion', type: 'duration', cssVariable: '--duration-base' },
+	'motion.duration.slow': { name: 'motion.duration.slow', category: 'motion', type: 'duration', cssVariable: '--duration-slow' },
+	'motion.easing.standard': { name: 'motion.easing.standard', category: 'motion', type: 'cubicBezier', cssVariable: '--ease-standard' },
+	'motion.easing.decelerate': { name: 'motion.easing.decelerate', category: 'motion', type: 'cubicBezier', cssVariable: '--ease-decelerate' },
+	'motion.easing.accelerate': { name: 'motion.easing.accelerate', category: 'motion', type: 'cubicBezier', cssVariable: '--ease-accelerate' },
+
+	// Ring tokens (optional category)
+	'ring.width': { name: 'ring.width', category: 'ring', type: 'dimension', cssVariable: '--ring-width' },
+
+	// Z-index tokens (optional category) — ordered tooltip > popover > overlay
+	'z-index.overlay': { name: 'z-index.overlay', category: 'z-index', type: 'number', cssVariable: '--z-index-overlay' },
+	'z-index.popover': { name: 'z-index.popover', category: 'z-index', type: 'number', cssVariable: '--z-index-popover' },
+	'z-index.tooltip': { name: 'z-index.tooltip', category: 'z-index', type: 'number', cssVariable: '--z-index-tooltip' },
 } as const;

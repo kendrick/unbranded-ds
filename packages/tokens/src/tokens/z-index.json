@@ -1,0 +1,16 @@
+{
+	"z-index": {
+		"overlay": {
+			"$value": "50",
+			"$type": "number"
+		},
+		"popover": {
+			"$value": "55",
+			"$type": "number"
+		},
+		"tooltip": {
+			"$value": "60",
+			"$type": "number"
+		}
+	}
+}
