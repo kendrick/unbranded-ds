@@ -130,10 +130,10 @@ function SkipLink({
 			href={`#${targetId}`}
 			className={cn(
 				'sr-only',
-				'focus-visible:not-sr-only focus-visible:fixed focus-visible:top-2 focus-visible:left-2 focus-visible:z-50',
+				'focus-visible:not-sr-only focus-visible:fixed focus-visible:top-2 focus-visible:left-2 focus-visible:z-(--z-index-max)',
 				'focus-visible:inline-flex focus-visible:items-center focus-visible:rounded-md focus-visible:border focus-visible:border-ring focus-visible:bg-primary focus-visible:px-3 focus-visible:py-2',
 				'focus-visible:text-sm focus-visible:font-medium focus-visible:text-primary-foreground focus-visible:shadow-md',
-				'focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+				'focus-visible:outline-none focus-visible:ring-(length:--ring-width) focus-visible:ring-ring/50',
 				className,
 			)}
 		>

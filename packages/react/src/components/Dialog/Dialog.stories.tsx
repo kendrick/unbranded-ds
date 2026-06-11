@@ -3,6 +3,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import { Button } from '../Button/Button';
 import { Input } from '../Input/Input';
 import { Label } from '../Label/Label';
+import { Tooltip } from '../Tooltip/Tooltip';
 import {
 	Dialog,
 	DialogClose,
@@ -117,5 +118,53 @@ export const OpenCloseInteraction: Story = {
 		const trigger = canvas.getByRole('button', { name: 'Open' });
 		await userEvent.click(trigger);
 		await expect(await within(document.body).findByText('Interaction Test')).toBeVisible();
+	},
+};
+
+export const TooltipStacksAboveDialog: Story = {
+	name: 'Tooltip stacks above dialog',
+	parameters: {
+		docs: {
+			description: {
+				story:
+					'Regression test for the nested-overlay stacking fix (spec 010). A tooltip opened on a control inside an open dialog renders above the dialog: the tooltip reads the `z-index.tooltip` stop (60) and the dialog reads `z-index.overlay` (50), so the tooltip wins. Before the fix, both stacked at a shared `z-50` with no defined order.',
+			},
+		},
+	},
+	render: () => (
+		<Dialog>
+			<DialogTrigger render={<Button />}>Open</DialogTrigger>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>Nested overlay</DialogTitle>
+					<DialogDescription>A tooltip inside a dialog must stack above it.</DialogDescription>
+				</DialogHeader>
+				<Tooltip.Provider delayDuration={0}>
+					<Tooltip.Trigger>
+						<Button variant="outline">Hover for tooltip</Button>
+					</Tooltip.Trigger>
+					<Tooltip.Content>Above the dialog</Tooltip.Content>
+				</Tooltip.Provider>
+			</DialogContent>
+		</Dialog>
+	),
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		await userEvent.click(canvas.getByRole('button', { name: 'Open' }));
+
+		const body = within(document.body);
+		const dialogContent = (await body.findByText('Nested overlay')).closest(
+			'[data-slot="dialog-content"]',
+		) as HTMLElement;
+
+		await userEvent.hover(await body.findByRole('button', { name: 'Hover for tooltip' }));
+		const tooltipContent = (await body.findByText('Above the dialog')).closest(
+			'[data-slot="tooltip-content"]',
+		) as HTMLElement;
+
+		// The fix: the tooltip's z-index resolves above the dialog's, instead of
+		// both sharing z-50. Reads the computed (var-resolved) values.
+		const zIndexOf = (el: HTMLElement) => Number.parseInt(getComputedStyle(el).zIndex, 10);
+		await expect(zIndexOf(tooltipContent)).toBeGreaterThan(zIndexOf(dialogContent));
 	},
 };
