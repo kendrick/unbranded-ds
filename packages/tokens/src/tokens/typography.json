@@ -8,6 +8,10 @@
 			"$value": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, \"Liberation Mono\", \"Courier New\", monospace",
 			"$type": "fontFamily"
 		},
+		"font-serif": {
+			"$value": "ui-serif, Georgia, Cambria, \"Times New Roman\", Times, serif",
+			"$type": "fontFamily"
+		},
 		"size-sm": {
 			"$value": "0.875rem",
 			"$type": "dimension"
@@ -22,6 +26,14 @@
 		},
 		"size-xl": {
 			"$value": "1.25rem",
+			"$type": "dimension"
+		},
+		"size-2xl": {
+			"$value": "1.5rem",
+			"$type": "dimension"
+		},
+		"size-3xl": {
+			"$value": "1.875rem",
 			"$type": "dimension"
 		},
 		"weight-normal": {

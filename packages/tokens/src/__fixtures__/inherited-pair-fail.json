@@ -1,0 +1,9 @@
+{
+	"name": "inherited-pair-fail",
+	"displayName": "Inherited Pair Failure Theme",
+	"tokens": {
+		"color": {
+			"background": "#1a1a1a"
+		}
+	}
+}

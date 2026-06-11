@@ -4,12 +4,75 @@ import { basename, extname } from 'node:path';
 import StyleDictionary from 'style-dictionary';
 
 /**
- * Flatten a token name into a CSS variable name.
- * E.g. "color-background" → "--color-background"
+ * The single source of truth for a token's flattened name.
+ *
+ * Motion is the one special case. Its DTCG source stays nested
+ * (`motion.duration.fast`, `motion.easing.standard`) per Style Dictionary
+ * convention, but we emit Tailwind-aligned names so the easings light up real
+ * `ease-*` utilities: `motion.duration.X` → `duration-X` and
+ * `motion.easing.X` → `ease-X`. A literal `motion-duration-fast` maps to no
+ * Tailwind namespace and leaks the internal grouping into the public var
+ * surface. Every other token keeps its default kebab name.
+ *
+ * This runs as a name transform (below) so `token.name` is already the renamed
+ * value by the time any format — including Style Dictionary's built-in
+ * `css/variables`, which the per-theme CSS uses — reads it. That's the only way
+ * to keep the rename consistent across all four artifacts AND the per-theme CSS;
+ * a format-only rename would miss `css/variables`, which reads `token.name`
+ * directly.
+ */
+function flattenedName(token: TransformedToken): string {
+	if (token.path[0] === 'motion') {
+		const [, group, key] = token.path;
+		if (group === 'duration') return `duration-${key}`;
+		if (group === 'easing') return `ease-${key}`;
+	}
+	return token.name;
+}
+
+/**
+ * CSS variable name (the `--` prefixed form) for any token. Reads `token.name`,
+ * which the `name/motion-aware` transform has already rewritten, so this stays a
+ * thin wrapper and the rename lives in exactly one place.
  */
 function tokenToCssVar(token: TransformedToken): string {
 	return `--${token.name}`;
 }
+
+// ---------------------------------------------------------------------------
+// Custom name transform: rewrite motion token names to the Tailwind-aligned
+// flattened form. Layered AFTER name/kebab in the custom transform group below,
+// so it operates on the already-kebabbed name and only touches motion.
+// ---------------------------------------------------------------------------
+StyleDictionary.registerTransform({
+	name: 'name/motion-aware',
+	type: 'name',
+	transform: (token) => flattenedName(token as TransformedToken),
+});
+
+// A `css` transform group with the motion rename appended. The per-theme CSS,
+// Tailwind preset, TS map, and JSON all build on this so `token.name` carries
+// the renamed value everywhere and the artifacts can't drift.
+StyleDictionary.registerTransformGroup({
+	name: 'css-motion',
+	transforms: [
+		'attribute/cti',
+		'name/kebab',
+		'name/motion-aware',
+		'time/seconds',
+		'html/icon',
+		'size/rem',
+		'color/css',
+		'asset/url',
+		'fontFamily/css',
+		'cubicBezier/css',
+		'strokeStyle/css/shorthand',
+		'border/css/shorthand',
+		'typography/css/shorthand',
+		'transition/css/shorthand',
+		'shadow/css/shorthand',
+	],
+});
 
 // ---------------------------------------------------------------------------
 // Custom format: Tailwind v4 @theme inline block
@@ -39,6 +102,9 @@ StyleDictionary.registerFormat({
 			radius: 'radii',
 			shadow: 'shadows',
 			opacity: 'opacity',
+			motion: 'motion',
+			ring: 'ring',
+			'z-index': 'z-index',
 		};
 
 		const entries = dictionary.allTokens.map((token) => {
@@ -52,7 +118,7 @@ StyleDictionary.registerFormat({
   }`;
 		});
 
-		return `export type TokenCategory = "color" | "spacing" | "typography" | "radii" | "shadows" | "opacity";
+		return `export type TokenCategory = "color" | "spacing" | "typography" | "radii" | "shadows" | "opacity" | "motion" | "ring" | "z-index";
 
 export type TokenDefinition = {
   name: string;
@@ -108,7 +174,7 @@ async function build() {
 			log: { warnings: 'disabled' },
 			platforms: {
 				css: {
-					transformGroup: 'css',
+					transformGroup: 'css-motion',
 					buildPath: 'dist/css/',
 					files: [
 						{
@@ -127,12 +193,13 @@ async function build() {
 	}
 
 	// 2. Shared assets from base tokens (Tailwind preset, TS types, JSON)
-	//    Use "css" transformGroup for all so token names stay kebab-case.
+	//    Use the "css-motion" transformGroup for all so token names stay
+	//    kebab-case AND the motion rename applies uniformly with the per-theme CSS.
 	const sdBase = new StyleDictionary({
 		source: ['src/tokens/**/*.json'],
 		platforms: {
 			tailwind: {
-				transformGroup: 'css',
+				transformGroup: 'css-motion',
 				buildPath: 'dist/tailwind/',
 				files: [
 					{
@@ -142,7 +209,7 @@ async function build() {
 				],
 			},
 			ts: {
-				transformGroup: 'css',
+				transformGroup: 'css-motion',
 				buildPath: 'dist/ts/',
 				files: [
 					{
@@ -152,7 +219,7 @@ async function build() {
 				],
 			},
 			json: {
-				transformGroup: 'css',
+				transformGroup: 'css-motion',
 				buildPath: 'dist/json/',
 				files: [
 					{

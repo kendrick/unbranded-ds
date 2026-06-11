@@ -36,10 +36,13 @@
 		"typography": {
 			"font-sans": "system-ui, sans-serif",
 			"font-mono": "monospace",
+			"font-serif": "Georgia, serif",
 			"size-sm": "0.875rem",
 			"size-base": "1rem",
 			"size-lg": "1.125rem",
 			"size-xl": "1.25rem",
+			"size-2xl": "1.5rem",
+			"size-3xl": "1.875rem",
 			"weight-normal": "400",
 			"weight-medium": "500",
 			"weight-semibold": "600",
@@ -62,6 +65,14 @@
 		"opacity": {
 			"disabled": "0.5",
 			"hover": "0.8"
+		},
+		"motion": {
+			"duration-fast": "120ms",
+			"duration-base": "240ms",
+			"duration-slow": "480ms",
+			"easing-standard": "cubic-bezier(0.4, 0, 0.2, 1)",
+			"easing-decelerate": "cubic-bezier(0, 0, 0.2, 1)",
+			"easing-accelerate": "cubic-bezier(0.4, 0, 1, 1)"
 		}
 	}
 }
