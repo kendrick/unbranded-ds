@@ -56,7 +56,7 @@ const segmentedControlItemVariants = cva(
 	// Each item is a focusable segment. The selected segment lifts onto a
 	// solid background; unselected segments fade. Inner corners stay subtle
 	// because the outer wrapper provides the outer pill curve.
-	'relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[calc(var(--radius-md)-2px)] border border-transparent font-medium whitespace-nowrap transition-colors outline-none select-none hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-checked:bg-background data-checked:text-foreground data-checked:shadow-sm data-disabled:pointer-events-none data-disabled:opacity-50 dark:data-checked:bg-input/30 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=\'size-\'])]:size-4',
+	'relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[calc(var(--radius-md)-2px)] border border-transparent font-medium whitespace-nowrap transition-colors outline-none select-none hover:text-foreground focus-visible:border-ring focus-visible:ring-(length:--ring-width) focus-visible:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-checked:bg-background data-checked:text-foreground data-checked:shadow-sm data-disabled:pointer-events-none data-disabled:opacity-50 dark:data-checked:bg-input/30 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*=\'size-\'])]:size-4',
 	{
 		variants: {
 			size: {

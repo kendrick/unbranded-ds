@@ -49,7 +49,7 @@ const sliderIndicatorVariants = cva(
 );
 
 const sliderThumbVariants = cva(
-	'block rounded-full border border-primary/50 bg-background shadow-xs ring-ring/50 transition-[color,box-shadow] outline-none focus-visible:ring-3 disabled:pointer-events-none disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50',
+	'block rounded-full border border-primary/50 bg-background shadow-xs ring-ring/50 transition-[color,box-shadow] outline-none focus-visible:ring-(length:--ring-width) disabled:pointer-events-none disabled:opacity-50 data-disabled:pointer-events-none data-disabled:opacity-50',
 	{
 		variants: {
 			size: {

@@ -110,6 +110,9 @@ const zIndexTokens = z.object({
 	overlay: z.string(),
 	popover: z.string(),
 	tooltip: z.string(),
+	// `max` is the always-on-top layer: a focused SkipLink must beat every overlay,
+	// including a consumer's own. Consumed by SkipLink (spec 010).
+	max: z.string(),
 });
 
 // The complete tokens shape: required categories required, ring/z-index optional.
