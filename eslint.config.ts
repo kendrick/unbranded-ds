@@ -20,9 +20,14 @@ export default antfu(
 		},
 
 		rules: {
-			'camelcase': ['error', { ignoreImports: true }],
+			camelcase: ['error', { ignoreImports: true }],
 			'style/multiline-ternary': 'off',
 			'style/arrow-parens': ['error', 'always'],
+
+			// eslint-plugin-pnpm (auto-enabled by antfu in pnpm monorepos) injects
+			// `trustPolicy: no-downgrade` into pnpm-workspace.yaml on every --fix,
+			// which then makes pnpm reject the lockfile (ERR_PNPM_TRUST_DOWNGRADE).
+			'pnpm/yaml-enforce-settings': 'off',
 		},
 
 		ignores: [
