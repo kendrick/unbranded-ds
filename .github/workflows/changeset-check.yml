@@ -8,6 +8,10 @@ jobs:
   changeset-check:
     name: Verify changeset present for package changes
     runs-on: ubuntu-latest
+    # Skip the Changesets release PR. It deletes the .changeset/*.md files by design
+    # when it versions packages, so the "needs a changeset" gate below would always
+    # misfire on it. Every real contributor PR is still gated.
+    if: ${{ !startsWith(github.head_ref, 'changeset-release/') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
