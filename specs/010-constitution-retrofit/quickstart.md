@@ -60,7 +60,7 @@ Message names the three swaps and calls out the nested-overlay bug fix. No consu
 ## Watch-outs
 
 - **The duration-on-keyframe path is the risk.** A `duration-*` that only retimes transitions would silently miss Dialog/Select animations. Verify it in step 1 before trusting it across the parallel edits.
-- **SkipLink is half in, half out**: its `ring-3` swaps, its `z-50` stays.
+- **SkipLink**: its `ring-3` swaps, and its `z-50` → `z-(--z-index-max)` (the new always-on-top token).
 - **`ring-1` stays**: only `ring-3` (the focus ring) maps to `ring.width`.
 - **No sidecar or TSDoc edits**: these are internal class changes; the documented API is unchanged.
 - **SSR**: pure class-string edits, no browser globals introduced.

@@ -59,7 +59,7 @@ packages/react/src/components/
 ├── Switch/Switch.tsx              # ring-3 (2)
 ├── Slider/Slider.tsx              # ring-3 (1)
 ├── SegmentedControl/SegmentedControl.tsx  # ring-3 (1)
-├── SkipLink/SkipLink.tsx          # ring-3 (1); z-50 RETAINED (excluded)
+├── SkipLink/SkipLink.tsx          # ring-3 (1); z-50 → z-index.max
 ├── Dialog/Dialog.tsx              # z-50 → overlay (2); duration-100 → motion (enter/exit)
 ├── Select/Select.tsx              # ring-3 (2); z-50 → popover (2); duration-100 → motion
 └── Tooltip/Tooltip.tsx            # z-50 → tooltip (1); transition duration-150 → motion + easing

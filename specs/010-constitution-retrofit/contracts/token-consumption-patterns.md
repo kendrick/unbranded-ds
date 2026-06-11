@@ -24,7 +24,7 @@ z-50 (Tooltip popup)             →  z-(--z-index-tooltip)
 
 - Fallback: `z-[var(--z-index-overlay)]` etc.
 - Ordering overlay (50) < popover (55) < tooltip (60) is the nested-overlay fix.
-- SkipLink's `focus-visible:z-50` is NOT swapped.
+- SkipLink's `focus-visible:z-50` → `z-(--z-index-max)` (the new always-on-top token added by spec 010).
 
 ## Duration
 
