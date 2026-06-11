@@ -129,5 +129,8 @@ export const canonicalDefaultTokens: ResolvedTokens = {
 		overlay: '50',
 		popover: '55',
 		tooltip: '60',
+		// always-on-top layer for the focused SkipLink (spec 010). MUST match
+		// src/tokens/z-index.json.
+		max: '9999',
 	},
 };

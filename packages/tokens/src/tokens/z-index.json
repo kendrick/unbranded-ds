@@ -11,6 +11,10 @@
 		"tooltip": {
 			"$value": "60",
 			"$type": "number"
+		},
+		"max": {
+			"$value": "9999",
+			"$type": "number"
 		}
 	}
 }
