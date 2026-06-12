@@ -1,7 +1,10 @@
 import type { ZodIssue } from 'zod';
+import type { ResolvedLayer } from './resolve.js';
+import type { Axis } from './axes.js';
 import type { Theme } from './schema.js';
+import { axisOf } from './axes.js';
 import { contrastRatio, parseColor } from './color.js';
-import { resolveTheme } from './resolve.js';
+import { composeTokens, resolveTheme } from './resolve.js';
 import { contrastPairs, partialThemeSchema, themeSchema } from './schema.js';
 
 // ---------------------------------------------------------------------------
@@ -14,7 +17,10 @@ export interface ValidationIssue {
 		| 'MISSING_TOKEN'
 		| 'INVALID_TYPE'
 		| 'UNKNOWN_TOKEN'
-		| 'CONTRAST_FAILURE';
+		| 'CONTRAST_FAILURE'
+		// AXIS_CONFLICT — a theme assigned to the wrong axis slot (spec 009 FR-004),
+		// e.g. the density theme `compact` handed to the `aesthetic` slot.
+		| 'AXIS_CONFLICT';
 	message: string;
 	expected?: string;
 	actual?: string;
@@ -101,28 +107,55 @@ export function validateTheme(themeJson: unknown): ValidationResult {
 		};
 	}
 
-	// 2. Resolve the override onto the defaults — the override wins per-key.
+	// 2. Resolve the override onto the defaults — the override wins per-key — then
+	//    hand the COMPLETE token set to the shared completeness + contrast checks.
 	const resolvedTokens = resolveTheme(parsed.data.tokens);
-	const resolvedTheme: Theme = {
-		...parsed.data,
+	return validateResolved(
+		resolvedTokens,
+		parsed.data.name,
+		parsed.data.displayName,
+		// Carry any passthrough fields (parsed.data may hold more than name/tokens)
+		// so the returned theme is byte-for-byte what the old inline flow produced.
+		parsed.data,
+	);
+}
+
+// ---------------------------------------------------------------------------
+// validateResolved — completeness + WCAG-contrast on ANY complete token set,
+// whether it came from a single resolved theme or a composed multi-axis result
+// (spec 009 FR-002). The completeness check guards the DEFAULTS (a required key
+// with no inheritable default surfaces as MISSING_TOKEN); contrast runs on the
+// merged pairs, so an overridden side is checked against an inherited side.
+// ---------------------------------------------------------------------------
+
+export function validateResolved(
+	resolvedTokens: Theme['tokens'],
+	name: string,
+	displayName: string,
+	// Optional passthrough source (e.g. the parsed partial) whose extra fields are
+	// preserved on the returned theme; defaults to the bare identity pair.
+	source: Record<string, unknown> = { name, displayName },
+): ValidationResult {
+	const theme: Theme = {
+		...source,
+		name,
+		displayName,
 		tokens: resolvedTokens,
 	} as Theme;
 
-	// 3. Completeness: validate the MERGED result against the strict schema. A
-	//    required token absent from both the override AND the defaults yields a
-	//    structured MISSING_TOKEN naming the path — with complete defaults this
-	//    only fires if the defaults themselves are incomplete (SC-005).
-	const completenessIssues = checkThemeCompleteness(resolvedTheme);
+	// Completeness: validate the MERGED result against the strict schema. A
+	// required token absent from both the override AND the defaults yields a
+	// structured MISSING_TOKEN naming the path — with complete defaults this
+	// only fires if the defaults themselves are incomplete (SC-005).
+	const completenessIssues = checkThemeCompleteness(theme);
 	if (completenessIssues.length > 0) {
 		return { ok: false, issues: completenessIssues };
 	}
 
-	const theme = resolvedTheme;
-
-	// 4. Contrast: read BOTH sides of every pair from the merged theme. There is
-	//    no longer a skip-when-a-side-is-absent path — after the merge, both
-	//    sides always resolve (a theme that overrode one side is checked against
-	//    the inherited other side).
+	// Contrast: read BOTH sides of every pair from the merged theme. There is
+	// no longer a skip-when-a-side-is-absent path — after the merge, both sides
+	// always resolve (a theme that overrode one side is checked against the
+	// inherited other side).
 	const contrastIssues: ValidationIssue[] = [];
 
 	for (const pair of contrastPairs) {
@@ -152,6 +185,53 @@ export function validateTheme(themeJson: unknown): ValidationResult {
 		return { ok: false, issues: contrastIssues };
 	}
 
-	// 5. Return the MERGED theme so the caller injects the full var set.
+	// Return the MERGED theme so the caller injects the full var set.
 	return { ok: true, theme };
+}
+
+// ---------------------------------------------------------------------------
+// validateComposedTheme — completeness + contrast on a COMPOSED multi-axis
+// result (spec 009 FR-002). Compose the ordered layers (later wins per key, so
+// pass `[aesthetic, density]` to let density refine the aesthetic base), then
+// run the same checks validateTheme uses. This is what makes contrast fire on
+// the COMPOSED pairs: if a density layer drags an aesthetic's foreground/
+// background pair below AA, it fails loudly here rather than silently shipping.
+// ---------------------------------------------------------------------------
+
+export function validateComposedTheme(
+	layers: ResolvedLayer[],
+	name = 'composed',
+	displayName = 'Composed Theme',
+): ValidationResult {
+	return validateResolved(composeTokens(layers), name, displayName);
+}
+
+// ---------------------------------------------------------------------------
+// checkAxisAssignment — guard each axis slot against a wrong-axis theme (spec
+// 009 FR-004). The assignment is an object keyed by axis slot, so two themes
+// cannot structurally land on one axis; the realistic mistake is assigning a
+// theme to the wrong slot (e.g. the density theme `compact` to `aesthetic`). For
+// each (slot, themeName), if the theme is known and its declared axis differs
+// from the slot it was assigned to, emit a structured AXIS_CONFLICT. Unknown
+// theme names are left alone — completeness/composition surfaces those.
+// ---------------------------------------------------------------------------
+
+export function checkAxisAssignment(
+	themesRoot: string,
+	assignment: Partial<Record<Axis, string>>,
+): ValidationIssue[] {
+	const issues: ValidationIssue[] = [];
+	for (const [slot, themeName] of Object.entries(assignment) as Array<
+		[Axis, string]
+	>) {
+		const actualAxis = axisOf(themesRoot, themeName);
+		if (actualAxis && actualAxis !== slot) {
+			issues.push({
+				path: slot,
+				code: 'AXIS_CONFLICT',
+				message: `Theme "${themeName}" is a ${actualAxis} theme but was assigned to the ${slot} slot`,
+			});
+		}
+	}
+	return issues;
 }

@@ -1,35 +1,51 @@
+import type { Axis } from './axes.js';
 import type { PartialTheme } from './schema.js';
+import { AXIS_ATTRIBUTE } from './axes.js';
 import { contrastRatio, hexToOklch, parseColor } from './color.js';
 import { contrastPairs } from './schema.js';
 import { validateTheme } from './validate.js';
 
 const THEME_STORAGE_KEY = 'unbranded-ds-theme';
+// Density rides its own storage key (spec 009) so an aesthetic and a density
+// selection persist independently — picking one must not clobber the other.
+const DENSITY_STORAGE_KEY = 'unbranded-ds-density';
 
 /**
- * Factory that returns a self-executing JavaScript string with a
- * caller-specified fallback theme. Inline as the body of a `<script>` tag
- * in `<head>` to prevent the flash-of-wrong-theme on page reload.
+ * Factory that returns a self-executing JavaScript string with
+ * caller-specified fallbacks. Inline as the body of a `<script>` tag in
+ * `<head>` to prevent the flash-of-wrong-theme on page reload.
  *
- * The output is deterministic across builds for any given `defaultTheme`
- * argument — consumers using SHA hash-based Content Security Policies
- * can compute the hash once and trust it across builds.
+ * Sets BOTH axes before paint (spec 009): `data-theme` from the aesthetic
+ * storage key and `data-density` from the density key. They're applied
+ * together so a composed selection (e.g. a density refinement of an
+ * aesthetic base) lands in one synchronous pass — neither axis flashes
+ * while the other resolves.
+ *
+ * The output is deterministic across builds for any given options object —
+ * consumers using SHA hash-based Content Security Policies can compute the
+ * hash once and trust it across builds.
  *
  * @example
  * const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' })
  * <script dangerouslySetInnerHTML={{ __html: bootstrap }} />
  */
 export function getThemeBootstrapScript(
-	options: { defaultTheme?: string } = {},
+	options: { defaultTheme?: string; defaultDensity?: string } = {},
 ): string {
 	const defaultTheme = options.defaultTheme ?? 'light';
-	return `(function(){try{document.documentElement.setAttribute('data-theme',localStorage.getItem('${THEME_STORAGE_KEY}')||'${defaultTheme}')}catch(e){document.documentElement.setAttribute('data-theme','${defaultTheme}')}})()`;
+	const defaultDensity = options.defaultDensity ?? 'comfortable';
+	const d = 'document.documentElement';
+	// One try wraps both reads: if storage throws (blocked cookies, privacy
+	// mode), both axes fall back rather than leaving one axis unset.
+	return `(function(){try{${d}.setAttribute('data-theme',localStorage.getItem('${THEME_STORAGE_KEY}')||'${defaultTheme}');${d}.setAttribute('data-density',localStorage.getItem('${DENSITY_STORAGE_KEY}')||'${defaultDensity}')}catch(e){${d}.setAttribute('data-theme','${defaultTheme}');${d}.setAttribute('data-density','${defaultDensity}')}})()`;
 }
 
 /**
- * A self-executing JavaScript string that reads the saved theme from
- * localStorage (`unbranded-ds-theme`) and applies `data-theme` to the
- * document root before first paint. Falls back to `'light'` on missing,
- * blocked, or invalid storage.
+ * A self-executing JavaScript string that reads the saved aesthetic theme
+ * (`unbranded-ds-theme`) and density (`unbranded-ds-density`) from
+ * localStorage and applies `data-theme` / `data-density` to the document
+ * root before first paint. Falls back to `'light'` / `'comfortable'` on
+ * missing, blocked, or invalid storage.
  *
  * Inline as the body of a `<script>` tag in `<head>` to prevent the
  * flash-of-wrong-theme on page reload. Equivalent to
@@ -77,8 +93,18 @@ export class ThemeValidationError extends Error {
 }
 
 /**
- * Validates a theme and injects a `<style>` block scoped to
- * `[data-theme="<name>"]` into the document head.
+ * Validates a theme and injects a `<style>` block scoped to the given axis's
+ * attribute selector into the document head.
+ *
+ * `axis` (spec 009 FR-001) chooses the attribute the block keys on:
+ * `'aesthetic'` (the default) emits under `[data-theme="<name>"]` exactly as
+ * before — single-arg callers are untouched (FR-005) — while `'density'` emits
+ * under `[data-density="<name>"]`. The two blocks compose through the CSS
+ * cascade: registering an aesthetic and a density theme yields two independently
+ * keyed `<style>` blocks, and the build's `@layer` order lets density win a
+ * per-var collision. There is no JS-side composition here — each axis block
+ * carries its OWN resolved vars (equal to `resolveTheme(partial)`), so parity
+ * with the resolver holds per block.
  *
  * Accepts a PARTIAL theme (spec 008 US2): any subset of categories/keys. It is
  * resolved against the canonical defaults before validation and injection, so a
@@ -87,7 +113,10 @@ export class ThemeValidationError extends Error {
  *
  * Throws `ThemeValidationError` if the theme fails validation.
  */
-export function registerTheme(themeJson: PartialTheme): void {
+export function registerTheme(
+	themeJson: PartialTheme,
+	axis: Axis = 'aesthetic',
+): void {
 	const result = validateTheme(themeJson);
 
 	if (!result.ok) {
@@ -102,7 +131,7 @@ export function registerTheme(themeJson: PartialTheme): void {
 	// so a color-only theme still emits every spacing/radius/motion var rather
 	// than only the keys the consumer touched.
 	const { theme } = result;
-	const selector = `[data-theme="${theme.name}"]`;
+	const selector = `[${AXIS_ATTRIBUTE[axis]}="${theme.name}"]`;
 
 	const vars: string[] = [];
 	const tokens = theme.tokens as Record<string, Record<string, string>>;
@@ -154,8 +183,12 @@ export function registerTheme(themeJson: PartialTheme): void {
 
 	const css = `${selector} {\n${vars.join('\n')}\n}`;
 
-	// Remove any existing style block for this theme
-	const existingId = `ds-theme-${theme.name}`;
+	// Remove any existing style block for this (axis, theme). The id is keyed on
+	// the axis attribute so an aesthetic and a density theme that happen to share
+	// a name produce two distinct blocks the cascade can compose, rather than one
+	// clobbering the other. The aesthetic default keeps the historical
+	// `ds-theme-<name>` id (FR-005) — existing lookups by that id still resolve.
+	const existingId = `ds-${AXIS_ATTRIBUTE[axis].replace(/^data-/, '')}-${theme.name}`;
 	const existing = document.getElementById(existingId);
 	if (existing) {
 		existing.remove();

@@ -1,3 +1,5 @@
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import badContrast from './__fixtures__/bad-contrast.json';
 import extraTokens from './__fixtures__/extra-tokens.json';
@@ -5,7 +7,17 @@ import inheritedPairFail from './__fixtures__/inherited-pair-fail.json';
 import partialTheme from './__fixtures__/partial-theme.json';
 import validCustom from './__fixtures__/valid-custom.json';
 import { canonicalDefaultTokens } from './defaults.js';
-import { checkThemeCompleteness, validateTheme } from './validate';
+import { dtcgToResolved } from './resolve.js';
+import {
+	checkAxisAssignment,
+	checkThemeCompleteness,
+	validateComposedTheme,
+	validateTheme,
+} from './validate';
+
+// The on-disk themes/ directory: themes declare their axis by living in
+// themes/<axis>/, which is what checkAxisAssignment reads through axisOf.
+const themesRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..', 'themes');
 
 describe('validateTheme', () => {
 	it('accepts a valid theme with hex colors', () => {
@@ -175,5 +187,99 @@ describe('checkThemeCompleteness (SC-005: MISSING_TOKEN after merge)', () => {
 		const missing = issues.filter((i) => i.code === 'MISSING_TOKEN');
 		expect(missing.length).toBeGreaterThan(0);
 		expect(missing.some((i) => i.path === 'tokens.color.primary')).toBe(true);
+	});
+});
+
+// --- Composed multi-axis validation (spec 009 FR-002) ----------------------
+
+describe('validateComposedTheme', () => {
+	it('fails AA loudly when a density layer drags the composed pair below AA', () => {
+		// The aesthetic layer is contrast-safe on its own (light fg on dark bg).
+		// The density layer has no business touching color, but if it overrides
+		// foreground to a near-background value the COMPOSED pair collapses — and
+		// because density wins, the bad value survives onto the composed result.
+		// That cross-axis hazard is exactly what FR-002 makes us catch.
+		const aesthetic = dtcgToResolved({
+			color: {
+				'background': { $value: '#1a1a1a', $type: 'color' },
+				'foreground': { $value: '#f5f5f5', $type: 'color' },
+			},
+		});
+		const density = dtcgToResolved({
+			color: {
+				// near-black foreground on the inherited near-black background
+				foreground: { $value: '#202020', $type: 'color' },
+			},
+		});
+
+		const result = validateComposedTheme([aesthetic, density]);
+		expect(result.ok).toBe(false);
+		if (!result.ok) {
+			const contrastIssues = result.issues.filter(
+				(i) => i.code === 'CONTRAST_FAILURE',
+			);
+			expect(contrastIssues.length).toBeGreaterThan(0);
+			expect(
+				contrastIssues.some((i) =>
+					i.path.includes('color.foreground / color.background'),
+				),
+			).toBe(true);
+			for (const issue of contrastIssues) {
+				expect(issue.ratio).toBeDefined();
+				expect(issue.threshold).toBeDefined();
+				expect(issue.ratio!).toBeLessThan(issue.threshold!);
+			}
+		}
+	});
+
+	it('accepts a clean composition of two disjoint, contrast-safe layers', () => {
+		// An aesthetic layer touching only color (kept AA-safe) and a density layer
+		// touching only spacing — disjoint, so nothing collides and the composed
+		// result inherits the canonical defaults everywhere else.
+		const aesthetic = dtcgToResolved({
+			color: {
+				'background': { $value: '#ffffff', $type: 'color' },
+				'foreground': { $value: '#111111', $type: 'color' },
+			},
+		});
+		const density = dtcgToResolved({
+			spacing: {
+				1: { $value: '0.2rem', $type: 'dimension' },
+				2: { $value: '0.4rem', $type: 'dimension' },
+			},
+		});
+
+		const result = validateComposedTheme([aesthetic, density]);
+		expect(result.ok).toBe(true);
+		if (result.ok) {
+			// Density's spacing delta took effect...
+			expect(result.theme.tokens.spacing['1']).toBe('0.2rem');
+			// ...the aesthetic's color delta took effect...
+			expect(result.theme.tokens.color.background).toBe('#ffffff');
+			// ...and an untouched category inherited the canonical default.
+			expect(result.theme.tokens.motion).toEqual(canonicalDefaultTokens.motion);
+		}
+	});
+});
+
+// --- Axis assignment guard (spec 009 FR-004) -------------------------------
+
+describe('checkAxisAssignment', () => {
+	it('flags AXIS_CONFLICT when a density theme is assigned to the aesthetic slot', () => {
+		// `compact` lives in themes/density/, so handing it to the aesthetic slot
+		// is a wrong-axis assignment.
+		const issues = checkAxisAssignment(themesRoot, { aesthetic: 'compact' });
+		expect(issues.length).toBe(1);
+		expect(issues[0]!.code).toBe('AXIS_CONFLICT');
+		expect(issues[0]!.path).toBe('aesthetic');
+	});
+
+	it('returns no issues for a correct aesthetic+density assignment', () => {
+		// vaporwave is an aesthetic theme, compact is a density theme — both in slot.
+		const issues = checkAxisAssignment(themesRoot, {
+			aesthetic: 'vaporwave',
+			density: 'compact',
+		});
+		expect(issues).toEqual([]);
 	});
 });

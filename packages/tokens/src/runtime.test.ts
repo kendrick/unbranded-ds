@@ -2,6 +2,8 @@ import { createHash } from 'node:crypto';
 import { runInThisContext } from 'node:vm';
 // @vitest-environment jsdom
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { hexToOklch } from './color.js';
+import { resolveTheme } from './resolve.js';
 import {
 	getThemeBootstrapScript,
 	registerTheme,
@@ -57,6 +59,30 @@ describe('getThemeBootstrapScript', () => {
 
 	it('themeBootstrapScript constant equals getThemeBootstrapScript() with no args', () => {
 		expect(themeBootstrapScript).toBe(getThemeBootstrapScript());
+	});
+
+	// Spec 009 FR-001: first paint must set BOTH axes so a composed selection
+	// doesn't flash one attribute in before the other resolves.
+	it('sets both data-theme and data-density before paint', () => {
+		const script = getThemeBootstrapScript();
+		expect(script).toContain('data-theme');
+		expect(script).toContain('data-density');
+		// Each axis reads its own storage key (selections persist independently).
+		expect(script).toContain('unbranded-ds-theme');
+		expect(script).toContain('unbranded-ds-density');
+	});
+
+	it('applies data-density from a stored value, falling back independently of theme', () => {
+		document.documentElement.removeAttribute('data-theme');
+		document.documentElement.removeAttribute('data-density');
+		vi.spyOn(Storage.prototype, 'getItem').mockImplementation((key) =>
+			key === 'unbranded-ds-density' ? 'compact' : null,
+		);
+		runInThisContext(getThemeBootstrapScript());
+		expect(document.documentElement.getAttribute('data-density')).toBe('compact');
+		// Theme had no stored value, so it took the default — the two axes are
+		// resolved independently.
+		expect(document.documentElement.getAttribute('data-theme')).toBe('light');
 	});
 });
 
@@ -167,5 +193,67 @@ describe('registerTheme (resolve-then-inject, spec 008 US2)', () => {
 				tokens: { color: { background: '#1a1a1a' } },
 			}),
 		).toThrow(ThemeValidationError);
+	});
+
+	// Spec 009 FR-001: a theme registered under the density axis keys its <style>
+	// on [data-density="<name>"], not [data-theme]. The id is axis-qualified
+	// (ds-density-<name>) so it can coexist with an aesthetic block of the same name.
+	it('emits a [data-density] selector when registered under the density axis', () => {
+		registerTheme(
+			{
+				name: 'compact-runtime',
+				displayName: 'Compact Runtime',
+				tokens: { color: passingColors, spacing: { 4: '0.75rem' } },
+			},
+			'density',
+		);
+		const style = document.getElementById('ds-density-compact-runtime');
+		expect(style).not.toBeNull();
+		expect(style?.textContent).toContain('[data-density="compact-runtime"]');
+		expect(style?.textContent).not.toContain('[data-theme=');
+		expect(style?.textContent).toContain('--spacing-4: 0.75rem;');
+	});
+
+	// FR-005: the default (aesthetic) path is unchanged — still [data-theme] under
+	// the historical ds-theme-<name> id, even though id derivation now runs through
+	// the axis attribute.
+	it('keeps the [data-theme] selector and historical id for the default axis', () => {
+		registerTheme({
+			name: 'default-axis-runtime',
+			displayName: 'Default Axis Runtime',
+			tokens: { color: passingColors },
+		});
+		const style = document.getElementById('ds-theme-default-axis-runtime');
+		expect(style).not.toBeNull();
+		expect(style?.textContent).toContain('[data-theme="default-axis-runtime"]');
+	});
+
+	// The resolution-parity oracle (spec 009): each emitted block's vars must equal
+	// resolveTheme(partial). Non-color categories pass through verbatim; colors are
+	// the same value run through hexToOklch. Asserting an INHERITED var (spacing,
+	// untouched by the partial) proves the block carries the full merged set, not
+	// just the override.
+	it('injects vars equal to resolveTheme(partial) (incl. an inherited one)', () => {
+		const partial = {
+			color: passingColors,
+			radius: { md: '1rem' },
+		};
+		registerTheme({
+			name: 'parity-runtime',
+			displayName: 'Parity Runtime',
+			tokens: partial,
+		});
+		const css = injectedCss('parity-runtime');
+		// resolveTheme returns the strict tokens shape, so radius/spacing/color are
+		// required props — index them directly rather than through a Record cast
+		// (the package's noUncheckedIndexedAccess would make a cast possibly-undefined).
+		const resolved = resolveTheme(partial);
+
+		// Overridden non-color var — verbatim from the resolver.
+		expect(css).toContain(`--radius-md: ${resolved.radius.md};`);
+		// Inherited non-color var — present and equal to the resolved default.
+		expect(css).toContain(`--spacing-4: ${resolved.spacing[4]};`);
+		// Color var — the resolved value passed through hexToOklch.
+		expect(css).toContain(`--color-primary: ${hexToOklch(resolved.color.primary)};`);
 	});
 });
