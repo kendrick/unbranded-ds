@@ -4,6 +4,10 @@ import React from 'react';
 import '@unbranded-ds/tokens/themes/light.css';
 import '@unbranded-ds/tokens/themes/dark.css';
 import '@unbranded-ds/tokens/themes/brand.css';
+// Spec 009 axes: aesthetic themes (above + vaporwave) and a density theme
+// (compact). Density is imported last so its cascade layer wins a collision.
+import '@unbranded-ds/tokens/themes/vaporwave.css';
+import '@unbranded-ds/tokens/themes/compact.css';
 import './styles.css';
 
 const preview: Preview = {
