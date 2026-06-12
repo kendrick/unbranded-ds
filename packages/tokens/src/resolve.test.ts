@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { canonicalDefaultTokens } from './defaults.js';
-import { composeTokens, dtcgToResolved, resolveTheme } from './resolve.js';
+import { composeTokens, resolveTheme } from './resolve.js';
+import type { ResolvedLayer } from './resolve.js';
 
 describe('resolveTheme', () => {
 	it('returns the canonical defaults verbatim for an empty override', () => {
@@ -77,42 +78,26 @@ describe('resolveTheme', () => {
 	});
 });
 
-describe('dtcgToResolved', () => {
-	it('flattens a two-level DTCG theme to flat values', () => {
-		const layer = dtcgToResolved({
-			color: { primary: { $value: '#ff0000', $type: 'color' } },
-			shadow: { neon: { $value: '0 0 10px red', $type: 'shadow' } },
-		});
-		expect(layer).toEqual({
-			color: { primary: '#ff0000' },
-			shadow: { neon: '0 0 10px red' },
-		});
-	});
-
-	it('coerces non-string $value to a string (e.g. numeric line-heights)', () => {
-		const layer = dtcgToResolved({
-			typography: { 'leading-normal': { $value: 1.35, $type: 'number' } },
-		});
-		expect(layer).toEqual({ typography: { 'leading-normal': '1.35' } });
-	});
-});
-
 describe('composeTokens', () => {
+	// A ResolvedLayer as the build emits it: a flat override object (spec 014).
+	const asLayer = (o: Record<string, Record<string, string>>): ResolvedLayer =>
+		o as unknown as ResolvedLayer;
+
 	it('returns the canonical defaults for an empty layer list', () => {
 		expect(composeTokens([])).toEqual(canonicalDefaultTokens);
 	});
 
 	it('a single layer equals resolveTheme of the same partial', () => {
-		const layer = dtcgToResolved({ color: { primary: { $value: '#abc123' } } });
-		expect(composeTokens([layer])).toEqual(
+		expect(composeTokens([asLayer({ color: { primary: '#abc123' } })])).toEqual(
 			resolveTheme({ color: { primary: '#abc123' } }),
 		);
 	});
 
 	it('folds disjoint axes into the union (aesthetic color + density spacing)', () => {
-		const aesthetic = dtcgToResolved({ color: { primary: { $value: '#ff0000' } } });
-		const density = dtcgToResolved({ spacing: { 4: { $value: '0.5rem' } } });
-		const composed = composeTokens([aesthetic, density]);
+		const composed = composeTokens([
+			asLayer({ color: { primary: '#ff0000' } }),
+			asLayer({ spacing: { 4: '0.5rem' } }),
+		]);
 		expect(composed.color.primary).toBe('#ff0000');
 		expect(composed.spacing[4]).toBe('0.5rem');
 		// untouched tokens keep their defaults
@@ -120,17 +105,21 @@ describe('composeTokens', () => {
 	});
 
 	it('density (the later layer) wins a collision', () => {
-		const aesthetic = dtcgToResolved({ radius: { md: { $value: 'AESTHETIC' } } });
-		const density = dtcgToResolved({ radius: { md: { $value: 'DENSITY' } } });
-		expect(composeTokens([aesthetic, density]).radius.md).toBe('DENSITY');
+		expect(
+			composeTokens([
+				asLayer({ radius: { md: 'AESTHETIC' } }),
+				asLayer({ radius: { md: 'DENSITY' } }),
+			]).radius.md,
+		).toBe('DENSITY');
 	});
 
-	it('folds DELTAS, not complete sets — density does not clobber the aesthetic (D2)', () => {
+	it('folds DELTAS, not complete sets — density does not clobber the aesthetic', () => {
 		// Density carries only spacing. If compose merged COMPLETE sets, the density
-		// layer's inherited default colors would overwrite the aesthetic's red. The
-		// delta-fold must leave the aesthetic's color intact.
-		const aesthetic = dtcgToResolved({ color: { primary: { $value: '#ff0000' } } });
-		const density = dtcgToResolved({ spacing: { 4: { $value: '0.1rem' } } });
-		expect(composeTokens([aesthetic, density]).color.primary).toBe('#ff0000');
+		// layer's inherited default colors would overwrite the aesthetic's red.
+		const composed = composeTokens([
+			asLayer({ color: { primary: '#ff0000' } }),
+			asLayer({ spacing: { 4: '0.1rem' } }),
+		]);
+		expect(composed.color.primary).toBe('#ff0000');
 	});
 });

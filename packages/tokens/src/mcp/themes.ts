@@ -11,6 +11,7 @@ import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { listThemesByAxis, type Axis } from '../axes.js';
+import type { ResolvedLayer } from '../resolve.js';
 
 const MCP_DIR = dirname(fileURLToPath(import.meta.url));
 
@@ -26,6 +27,10 @@ function findThemesDir(): string {
 	throw new Error(`Could not locate themes/ directory near ${MCP_DIR}`);
 }
 const THEMES_DIR = findThemesDir();
+// Per-theme resolved-delta artifacts (spec 014), emitted by the build as
+// siblings of the CSS. The MCP reads these instead of re-resolving raw DTCG, so
+// a bundled theme is resolved by exactly one engine (Style Dictionary).
+const DELTA_DIR = join(dirname(THEMES_DIR), 'dist', 'json', 'themes');
 
 export const DEFAULT_THEME = 'light';
 
@@ -71,6 +76,31 @@ export async function loadThemes(): Promise<Map<string, CachedTheme>> {
 export async function getTheme(name: string): Promise<CachedTheme | null> {
 	const themes = await loadThemes();
 	return themes.get(name) ?? null;
+}
+
+let deltaCache: Map<string, ResolvedLayer> | null = null;
+
+/**
+ * Read a theme's resolved-delta artifact (spec 014). The artifact is already the
+ * flat resolved shape the resolver folds, so this is the single door from the
+ * build's emitted data into a `ResolvedLayer` — the replacement for the old
+ * `dtcgToResolved(getTheme())` path, and the boundary where the brand is applied.
+ * Returns null for a name with no artifact (an unrecognized theme).
+ */
+export async function getResolvedDelta(name: string): Promise<ResolvedLayer | null> {
+	deltaCache ??= new Map();
+	const cached = deltaCache.get(name);
+	if (cached)
+		return cached;
+	try {
+		const content = await readFile(join(DELTA_DIR, `${name}.json`), 'utf-8');
+		const delta = JSON.parse(content) as ResolvedLayer;
+		deltaCache.set(name, delta);
+		return delta;
+	}
+	catch {
+		return null;
+	}
 }
 
 /**

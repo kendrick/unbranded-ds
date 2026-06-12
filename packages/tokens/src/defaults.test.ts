@@ -5,17 +5,18 @@ import { describe, expect, it } from 'vitest';
 import { canonicalDefaultTokens } from './defaults';
 
 // ---------------------------------------------------------------------------
-// Drift guard for canonicalDefaultTokens.
+// Regenerate-and-diff guard for the generated defaults baseline (spec 014).
 //
-// defaults.ts holds hand-resolved string literals (it can't import the JSON
-// sources, which aren't shipped; see defaults.ts header). This test reads the
-// actual DTCG sources and asserts the literals still match, so the defaults
-// can't silently rot when a source value changes.
+// canonicalDefaultTokens is no longer hand-maintained: it is generated from
+// Style Dictionary's resolved base into defaults.generated.ts (see defaults.ts).
+// This test reads the actual DTCG sources and asserts the committed generated
+// baseline still matches them, so a stale generated file fails CI — the same
+// drift protection as before, now structural rather than hand-typed. Run
+// `pnpm --filter @unbranded-ds/tokens build` to regenerate after a source change.
 //
-// Structural categories + color have committed source files today. The motion,
-// ring, and z-index sources are authored by a parallel worker and may not exist
-// yet; those checks pin against the contract literals now and tighten to read
-// the source file the moment it lands (the existsSync branch).
+// (The color check compares against themes/aesthetic/light.json, which doubles
+// as a cross-check that the base color source still equals the light theme —
+// exactly the src/tokens-vs-light drift the spec-009 parity oracle caught.)
 // ---------------------------------------------------------------------------
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

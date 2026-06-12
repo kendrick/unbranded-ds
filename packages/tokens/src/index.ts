@@ -1,6 +1,6 @@
 export { canonicalDefaultTokens } from './defaults.js';
 
-export { composeTokens, dtcgToResolved, resolveTheme } from './resolve.js';
+export { composeTokens, resolveTheme } from './resolve.js';
 export type { ResolvedLayer } from './resolve.js';
 
 export { contrastPairs, partialThemeSchema, themeSchema } from './schema.js';

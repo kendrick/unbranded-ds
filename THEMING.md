@@ -376,7 +376,7 @@ When a token you need does not exist in the schema, you add it to the canonical 
 
 2. **Add the category to the Zod schema** in `packages/tokens/src/schema.ts` so themes can carry it and the validator knows it. Make it required when every theme must supply a value, optional when it should inherit a default if omitted.
 
-3. **Add the values to the canonical defaults** in `packages/tokens/src/defaults.ts` (the inheritance baseline), plus any theme that overrides them. A drift-guard test keeps the defaults honest against the sources.
+3. **Let the build update the inheritance baseline.** `canonicalDefaultTokens` is generated from the `src/tokens/` sources into `packages/tokens/src/defaults.generated.ts`, so the value you added in step 1 lands in the baseline when you build (step 5). Commit the regenerated file; do not hand-edit it. A regenerate-and-diff test fails CI if the committed baseline drifts from the sources. A theme that overrides the new token still declares it in its own `themes/<axis>/*.json`.
 
 4. **Wire the build naming** in `packages/tokens/sd.config.ts` when the category needs CSS-variable names that differ from the default `--<category>-<key>` pattern. Motion is the one special case: it emits `--duration-*` and `--ease-*` so the variables match Tailwind's namespaces. `--ease-*` generates real `ease-*` utilities; `--duration-*` is consumed via an arbitrary value like `duration-[var(--duration-base)]`, since Tailwind v4 has no duration namespace.
 

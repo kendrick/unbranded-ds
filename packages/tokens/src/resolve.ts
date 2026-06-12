@@ -22,12 +22,12 @@ type ResolvedTokens = Theme['tokens'];
 type PartialTokens = NonNullable<PartialTheme['tokens']>;
 type Category = Record<string, string | undefined>;
 
-// D9 — the typed resolution boundary. A `ResolvedLayer` is a flat token override
-// produced by resolving a theme. `composeTokens` accepts ONLY these, and
-// `dtcgToResolved` is the only way to make one from a DTCG theme — so no surface
-// (the MCP especially) can feed raw DTCG into composition; the compiler forbids
-// it. The brand sits on the LAYER type alone, so it adds zero friction to the
-// existing complete-token (`ResolvedTokens`) consumers (validate, runtime).
+// The typed resolution boundary. A `ResolvedLayer` is a flat token override
+// produced by resolving a theme. `composeTokens` accepts ONLY these; the only
+// producer is `getResolvedDelta`, which reads the build's emitted resolved-delta
+// artifact (spec 014) — so no surface can feed an unresolved shape into
+// composition; the compiler forbids it. The brand sits on the LAYER type alone,
+// so it adds zero friction to the complete-token (`ResolvedTokens`) consumers.
 declare const LAYER: unique symbol;
 export type ResolvedLayer = PartialTokens & { readonly [LAYER]: true };
 
@@ -96,30 +96,4 @@ export function composeTokens(layers: ResolvedLayer[]): ResolvedTokens {
 		seedFromDefaults(),
 	);
 	return merged as unknown as ResolvedTokens;
-}
-
-type DtcgLeaf = { $value: unknown; $type?: string };
-
-/**
- * Flatten a two-level DTCG theme (`{ category: { key: { $value } } }`) into a
- * branded resolved layer (`{ category: { key: string } }`). The single door from
- * DTCG to the resolver: the MCP and the validator convert each axis's on-disk
- * theme through this so everything composes through `composeTokens` rather than
- * walking raw DTCG independently — the seam that keeps the surfaces from drifting.
- */
-export function dtcgToResolved(
-	dtcg: Record<string, Record<string, DtcgLeaf>>,
-): ResolvedLayer {
-	const out: Record<string, Record<string, string>> = {};
-	for (const [category, group] of Object.entries(dtcg)) {
-		if (!group || typeof group !== 'object')
-			continue;
-		const cat: Record<string, string> = {};
-		for (const [key, leaf] of Object.entries(group)) {
-			if (leaf && typeof leaf === 'object' && '$value' in leaf)
-				cat[key] = String((leaf as DtcgLeaf).$value);
-		}
-		out[category] = cat;
-	}
-	return out as unknown as ResolvedLayer;
 }

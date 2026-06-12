@@ -4,15 +4,16 @@
  * The three resolving tools (`lookupToken`, `palette`, `contrast`) all take the
  * same axis-object input and resolve it the same way: fold each named axis
  * through `composeTokens`, density last so it wins a collision. Centralizing
- * that here keeps the tools from each growing their own merge — the resolver is
- * the one place DTCG crosses into the composed tree, via `dtcgToResolved`.
+ * that here keeps the tools from each growing their own merge. Each axis's values
+ * come from the build's emitted resolved-delta artifact (spec 014) — the MCP
+ * reads Style Dictionary's output rather than re-resolving raw DTCG.
  */
 
 import type { ResolvedLayer } from '../resolve.js';
 
 import { z } from 'zod';
-import { composeTokens, dtcgToResolved } from '../resolve.js';
-import { DEFAULT_THEME, getTheme } from './themes.js';
+import { composeTokens } from '../resolve.js';
+import { DEFAULT_THEME, getResolvedDelta } from './themes.js';
 
 // `ResolvedTokens` is the flat composed shape Theme['tokens'] resolves to:
 // { [category]: { [flatKey]: string } }. composeTokens returns it; we never
@@ -59,9 +60,9 @@ export async function composeAxes(
 	for (const name of [requested.aesthetic, requested.density]) {
 		if (!name)
 			continue;
-		const theme = await getTheme(name);
-		if (theme)
-			layers.push(dtcgToResolved(theme.data as Record<string, Record<string, { $value: unknown }>>));
+		const delta = await getResolvedDelta(name);
+		if (delta)
+			layers.push(delta);
 		else
 			unknownAxes.push(name);
 	}

@@ -13,10 +13,11 @@ import { contrastPairs } from './schema.js';
 // below threshold on any declared pair.
 
 const here = dirname(fileURLToPath(import.meta.url));
-const themesDir = join(here, '..', 'themes');
-// light/dark/brand are all aesthetic-axis themes (themes/aesthetic/*.json).
-const load = (name: string): Record<string, Record<string, { $value: string }>> =>
-	JSON.parse(readFileSync(join(themesDir, 'aesthetic', `${name}.json`), 'utf8'));
+// Read the build's emitted resolved-delta artifact (spec 014) — the single
+// source of a bundled theme's values — instead of re-reading the raw DTCG source.
+const distThemesDir = join(here, '..', 'dist', 'json', 'themes');
+const load = (name: string): Record<string, Record<string, string>> =>
+	JSON.parse(readFileSync(join(distThemesDir, `${name}.json`), 'utf8'));
 
 const themes: Record<string, ReturnType<typeof load>> = {
 	light: load('light'),
@@ -26,7 +27,7 @@ const themes: Record<string, ReturnType<typeof load>> = {
 
 function resolve(theme: ReturnType<typeof load>, dotPath: string): string | undefined {
 	const [category, key] = dotPath.split('.');
-	return theme[category ?? '']?.[key ?? '']?.$value;
+	return theme[category ?? '']?.[key ?? ''];
 }
 
 describe('built-in theme contrast (WCAG AA)', () => {

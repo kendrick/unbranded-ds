@@ -101,3 +101,13 @@ Section XI is fully ratified at this point. The example app honors:
 - Spec 004 — primitives (each one demonstrated in the example)
 - Spec 005 — AGENTS.md and sidecars (linked from the example's README)
 - Spec 011 — ThemeToggle (demonstrated in the example's header)
+
+---
+
+## Update — post-009 (2026-06-12)
+
+This brief predates spec 009 (theming system expansion). Two enrichments to fold in at `/speckit.specify`.
+
+- **Demonstrate multi-axis composition.** 009 shipped two demo themes, `vaporwave` (aesthetic) and `compact` (density), plus the per-axis attributes. The example can apply `data-theme="vaporwave" data-density="compact"` and show density-over-aesthetic composition — a richer proof of the theming system than the single-theme wiring described above. Import the axis CSS (`@unbranded-ds/tokens/themes/vaporwave.css`, `.../compact.css`) and let the bootstrap set both attributes.
+- **The bootstrap writes both axes.** `app/layout.tsx` should inline `getThemeBootstrapScript()`, which sets `data-theme` AND `data-density` before paint (keys `unbranded-ds-theme` / `unbranded-ds-density`, defaults `light` / `comfortable`).
+- Still lands last: depends on 011 (ThemeToggle) and should reflect the final component API after 013.
