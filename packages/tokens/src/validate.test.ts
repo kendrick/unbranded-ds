@@ -7,7 +7,7 @@ import inheritedPairFail from './__fixtures__/inherited-pair-fail.json';
 import partialTheme from './__fixtures__/partial-theme.json';
 import validCustom from './__fixtures__/valid-custom.json';
 import { canonicalDefaultTokens } from './defaults.js';
-import { dtcgToResolved } from './resolve.js';
+import type { ResolvedLayer } from './resolve.js';
 import {
 	checkAxisAssignment,
 	checkThemeCompleteness,
@@ -199,18 +199,14 @@ describe('validateComposedTheme', () => {
 		// foreground to a near-background value the COMPOSED pair collapses — and
 		// because density wins, the bad value survives onto the composed result.
 		// That cross-axis hazard is exactly what FR-002 makes us catch.
-		const aesthetic = dtcgToResolved({
-			color: {
-				'background': { $value: '#1a1a1a', $type: 'color' },
-				'foreground': { $value: '#f5f5f5', $type: 'color' },
-			},
-		});
-		const density = dtcgToResolved({
-			color: {
-				// near-black foreground on the inherited near-black background
-				foreground: { $value: '#202020', $type: 'color' },
-			},
-		});
+		// ResolvedLayers as the build emits them: flat override objects (spec 014).
+		const aesthetic = {
+			color: { background: '#1a1a1a', foreground: '#f5f5f5' },
+		} as unknown as ResolvedLayer;
+		// near-black foreground on the inherited near-black background
+		const density = {
+			color: { foreground: '#202020' },
+		} as unknown as ResolvedLayer;
 
 		const result = validateComposedTheme([aesthetic, density]);
 		expect(result.ok).toBe(false);
@@ -236,18 +232,12 @@ describe('validateComposedTheme', () => {
 		// An aesthetic layer touching only color (kept AA-safe) and a density layer
 		// touching only spacing — disjoint, so nothing collides and the composed
 		// result inherits the canonical defaults everywhere else.
-		const aesthetic = dtcgToResolved({
-			color: {
-				'background': { $value: '#ffffff', $type: 'color' },
-				'foreground': { $value: '#111111', $type: 'color' },
-			},
-		});
-		const density = dtcgToResolved({
-			spacing: {
-				1: { $value: '0.2rem', $type: 'dimension' },
-				2: { $value: '0.4rem', $type: 'dimension' },
-			},
-		});
+		const aesthetic = {
+			color: { background: '#ffffff', foreground: '#111111' },
+		} as unknown as ResolvedLayer;
+		const density = {
+			spacing: { 1: '0.2rem', 2: '0.4rem' },
+		} as unknown as ResolvedLayer;
 
 		const result = validateComposedTheme([aesthetic, density]);
 		expect(result.ok).toBe(true);
