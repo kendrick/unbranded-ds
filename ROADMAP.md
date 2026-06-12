@@ -23,3 +23,13 @@ The reason to come back to it: an agent could author a theme from a prompt and h
 - Whether the theme-extension tokens from spec 009 can themselves be derived, or stay literal.
 
 **Deliberately omitted:** file paths, function signatures, schema shapes. Those rot before this gets built. The point of this entry is the shape of the bet, not its implementation.
+
+## Resolution Unification (One Engine, Not Three)
+
+**Status:** briefed, near-term. Revisit after spec 009 ships. Brief at `docs/workshops/2026-06-11/spec-014-resolution-unification.md`.
+
+Spec 009 ships composition on a resolution stack that already has more than one engine: Style Dictionary resolves themes into CSS at build, the JS side re-resolves the same themes at query/runtime, and `canonicalDefaultTokens` is a hand-maintained third copy. 009 keeps them honest with a cross-surface parity oracle, which is the right call there but services the interest rather than paying the principal.
+
+The remedy is to resolve build-time themes once. Style Dictionary already computes each theme's resolved set for the CSS; have it emit that set as data too, and have the MCP, the validator, and the defaults read it instead of re-resolving. Build-time themes then resolve in exactly one engine, runtime consumer themes keep the JS resolver as the one isolated second context, and no theme is ever resolved twice. The 009 parity oracle becomes trivially true and gets deleted; the defaults drift guard retires. It is the foundation the derived-token entry above wants, since a single resolver stage is what derived tokens slot into.
+
+**Decision that holds regardless:** the boundary stays typed. Even after the engines collapse, `ResolvedTokens` stays a branded type distinct from raw DTCG, so the runtime resolver can never silently accept the wrong shape.

@@ -18,6 +18,19 @@ That registers the design-system Tailwind utilities backed by CSS variables (suc
 @import '@unbranded-ds/tokens/themes/dark.css';
 ```
 
+Themes compose across two axes. An aesthetic (palette, type, shadows) is applied through `data-theme`, and a density (spacing, line-height) through `data-density`. Import one theme per axis and apply both at once. Here vaporwave's look meets compact's tighter spacing:
+
+```css
+@import '@unbranded-ds/tokens/themes/vaporwave.css';
+@import '@unbranded-ds/tokens/themes/compact.css';
+```
+
+```html
+<html data-theme="vaporwave" data-density="compact">
+```
+
+The page resolves to the union of the two. On a shared token, density wins, since it refines the aesthetic base. See [THEMING.md](../../THEMING.md#theme-composition-axes) for the merge rules and a worked example.
+
 Or override token values directly in your own `:root`:
 
 ```css

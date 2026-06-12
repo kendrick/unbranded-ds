@@ -1,18 +1,20 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change:  1.1.0 → 1.1.1  [PATCH — Section VIII tool list extended]
-Bump rationale:  Adds `@modelcontextprotocol/sdk` to Section VIII's MCP entry
-                 alongside `@storybook/addon-mcp`. The SDK is the runtime for
-                 the token-query MCP shipped in spec 005 and for any future
-                 local stdio MCP server. Extending the existing tool entry is
-                 a PATCH-level refinement per Section X versioning policy and
-                 mirrors the spec 003 precedent that added `@changesets/cli`.
+Version change:  1.1.1 → 1.2.0  [MINOR — Section III theming contract expanded]
+Bump rationale:  Names the per-axis theme composition API (spec 009) and carves
+                 out theme-extension tokens as a documented escape hatch from the
+                 build-time schema lock. Both are new, materially expanded guidance
+                 in an existing principle, not a backward-incompatible redefinition:
+                 single-axis `data-theme` and the schema lock both still hold. New
+                 guidance in a standing section is a MINOR bump per Section X.
 
 Modified principles:
-  - Section VIII (Tooling baseline): MCP entry expanded from `@storybook/addon-mcp`
-    only to include `@modelcontextprotocol/sdk` as the runtime for local stdio
-    MCP servers built in this monorepo.
+  - Section III (Theming contract): Adds the recognized theme axes, aesthetic
+    (`data-theme`) and density (`data-density`), and the rule that density
+    overrides aesthetic on a token collision. Clarifies that the build-time
+    schema lock binds the CANONICAL token set, and names per-theme extension
+    tokens as a documented escape hatch that lives outside the locked schema.
 
 Added sections:       N/A.
 Removed sections:     N/A.
@@ -23,6 +25,9 @@ Templates audited:
   ✅ .specify/templates/tasks-template.md  — No change required.
 
 Prior amendments:
+  - 1.1.1 (2026-05-16): Extended Section VIII's MCP entry with
+    `@modelcontextprotocol/sdk` as the runtime for local stdio MCP servers.
+    Per spec 005.
   - 1.1.0 (2026-05-16): Added Section XI (Agent and human legibility are
     co-equal). Per spec 005.
   - 1.0.2 (2026-05-16): Added SSR safety to Section IX Definition of Done as
@@ -85,8 +90,8 @@ The tokens package must build and publish without any React, Storybook, or Base 
 
 Theming supports runtime JSON themes. The contract is:
 
-- **The token schema is locked at build time.** The set of token _names_ (e.g. `color.primary`, `radius.md`, `spacing.4`) is fixed by `@unbranded-ds/tokens` and known to Tailwind at compile time. Components and utilities reference these names only.
-- **Token values float at runtime.** A theme is a JSON document that supplies values for the locked schema. Themes are loaded by setting `data-theme` on a root element and injecting the corresponding CSS variables. Multiple themes may coexist on the page via nested `data-theme` scopes.
+- **The canonical token schema is locked at build time.** The set of canonical token _names_ (e.g. `color.primary`, `radius.md`, `spacing.4`) is fixed by `@unbranded-ds/tokens` and known to Tailwind at compile time. Components and utilities reference these names only. A theme may also declare a **theme-extension token** the schema does not: a per-theme primitive the canonical set has no reason to generalize, such as vaporwave's `shadow.neon`. These are a documented escape hatch outside the locked schema. They emit as CSS variables, and the bundled themes' extensions carry a typed `source: 'theme-extension'` discriminator in the token map and the token-query MCP. The lock binds the canonical set; it does not forbid extension tokens.
+- **Token values float at runtime.** A theme is a JSON document that supplies values for the locked schema. Themes are loaded by setting an axis attribute on a root element and injecting the corresponding CSS variables. Themes compose across orthogonal axes, one theme per axis: an **aesthetic** axis applied via `data-theme` (palette, type, shadows) and a **density** axis applied via `data-density` (spacing, line-height). The page resolves to the union of the active axes; on a token collision, **density overrides aesthetic**, enforced by CSS cascade layers (`@layer ds-aesthetic, ds-density;`) rather than any runtime merge. Multiple themes may still coexist on the page via nested `data-theme` scopes; per-axis composition is the orthogonal mechanism for combining axes at one scope.
 - **Themes are validated.** `@unbranded-ds/tokens` exports a Zod schema for theme files and a validation function that checks (a) schema conformance, (b) WCAG AA contrast for foreground/background pairs declared as such in the schema. Invalid themes fail loudly, never silently.
 - **First paint must not flash.** The Storybook app and any consuming app must apply the active theme before first paint via a blocking inline script that reads the theme key from storage and sets `data-theme` plus an inline `<style>` of CSS variables.
 
@@ -264,4 +269,4 @@ The rule from Section V — "if a behavior is not exercised in a story, it is no
 
 ---
 
-**Version**: 1.1.1 | **Ratified**: TODO(RATIFICATION_DATE): set to original adoption date | **Last Amended**: 2026-05-16
+**Version**: 1.2.0 | **Ratified**: TODO(RATIFICATION_DATE): set to original adoption date | **Last Amended**: 2026-06-12

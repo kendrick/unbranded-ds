@@ -1,0 +1,14 @@
+{
+	"color": {
+		"background": { "$value": "oklch(0.1800 0.0700 300.00)", "$type": "color" },
+		"foreground": { "$value": "oklch(0.9600 0.0300 330.00)", "$type": "color" },
+		"primary": { "$value": "oklch(0.7200 0.2000 330.00)", "$type": "color" },
+		"primary-foreground": { "$value": "oklch(0.1500 0.0500 300.00)", "$type": "color" }
+	},
+	"shadow": {
+		"neon": { "$value": "0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)", "$type": "shadow" }
+	},
+	"typography": {
+		"font-sans": { "$value": "\"Space Grotesk\", ui-sans-serif, system-ui, sans-serif", "$type": "fontFamily" }
+	}
+}

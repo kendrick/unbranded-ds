@@ -2,65 +2,124 @@ import type { PartialTheme, Theme } from './schema.js';
 import { canonicalDefaultTokens } from './defaults.js';
 
 // ---------------------------------------------------------------------------
-// resolveTheme — the inheritance step (spec 008 US2).
+// resolveTheme / composeTokens — the ONE merge (spec 008 US2; spec 009 US1).
 //
-// A consumer runtime theme may override any subset of categories, and any
-// subset of keys within a category. Before validation, the override is merged
-// onto the canonical defaults so completeness and WCAG AA contrast check the
-// COMPLETE merged result, never the raw fragment. Without this merge, a theme
-// overriding one side of a contrast pair (e.g. color.background but not
-// color.foreground) would slip past the old skip-when-a-side-is-absent path.
+// A consumer runtime theme may override any subset of categories and keys.
+// Before validation, the override merges onto the canonical defaults so
+// completeness and WCAG AA contrast check the COMPLETE result, never the raw
+// fragment. Spec 009 generalizes this to N ordered layers for theme composition
+// (an aesthetic axis plus a density axis): composeTokens folds resolved override
+// DELTAS onto the defaults base, later layers winning per key.
 //
-// The merge is PER-KEY within a category, not category-replace: a partial
-// `{ color: { background: X } }` yields all default colors with only
-// `background` overridden, NOT a color category collapsed to a single key.
-// Every category is uniformly two-level (`{ [key]: string }`) — motion keys are
-// flat (`duration-fast`, `easing-standard`), so no nesting logic is needed.
+// The merge is PER-KEY within a category, not category-replace, and every
+// category is uniformly two-level (`{ [key]: string }`). One `mergeLayer` backs
+// both `resolveTheme` (one partial) and `composeTokens` (N layers) so no second
+// merge can drift — the load-bearing invariant behind the resolution-parity
+// oracle.
 // ---------------------------------------------------------------------------
 
 type ResolvedTokens = Theme['tokens'];
 type PartialTokens = NonNullable<PartialTheme['tokens']>;
-
 type Category = Record<string, string | undefined>;
+
+// D9 — the typed resolution boundary. A `ResolvedLayer` is a flat token override
+// produced by resolving a theme. `composeTokens` accepts ONLY these, and
+// `dtcgToResolved` is the only way to make one from a DTCG theme — so no surface
+// (the MCP especially) can feed raw DTCG into composition; the compiler forbids
+// it. The brand sits on the LAYER type alone, so it adds zero friction to the
+// existing complete-token (`ResolvedTokens`) consumers (validate, runtime).
+declare const LAYER: unique symbol;
+export type ResolvedLayer = PartialTokens & { readonly [LAYER]: true };
+
+function seedFromDefaults(): Record<string, Category> {
+	const seed: Record<string, Category> = {};
+	for (const [category, group] of Object.entries(
+		canonicalDefaultTokens as Record<string, Category>,
+	)) {
+		seed[category] = { ...group };
+	}
+	return seed;
+}
+
+/**
+ * The single per-key merge. `override` wins per key; `undefined` keys are
+ * skipped so the inherited value survives rather than being clobbered. Mutates
+ * and returns `base` — callers always pass a fresh seed, so it stays pure w.r.t.
+ * its inputs and SSR-safe.
+ */
+function mergeLayer(
+	base: Record<string, Category>,
+	override: Record<string, Category>,
+): Record<string, Category> {
+	for (const [category, group] of Object.entries(override)) {
+		if (!group)
+			continue;
+		const cat = base[category] ?? {};
+		for (const [key, value] of Object.entries(group)) {
+			if (value === undefined)
+				continue;
+			cat[key] = value;
+		}
+		base[category] = cat;
+	}
+	return base;
+}
 
 /**
  * Deep-merge a partial token override onto the canonical defaults. The override
- * wins per-key; omitted keys and omitted whole categories inherit the default.
- *
- * Returns a complete token set suitable for strict-schema validation. Pure: it
- * reads only `canonicalDefaultTokens` and the argument, touches no globals, and
- * is therefore SSR-safe.
+ * wins per-key; omitted keys and whole categories inherit the default. Returns a
+ * complete token set suitable for strict-schema validation. Pure / SSR-safe.
  */
 export function resolveTheme(
 	partialTokens: PartialTokens | undefined,
 ): ResolvedTokens {
-	const defaults = canonicalDefaultTokens as Record<string, Category>;
-	const override = (partialTokens ?? {}) as Record<string, Category>;
-
-	const merged: Record<string, Category> = {};
-
-	// Seed from defaults so every default category is present even when the
-	// override never mentions it.
-	for (const [category, group] of Object.entries(defaults)) {
-		merged[category] = { ...group };
-	}
-
-	// Layer the override per-key. A category absent from defaults (a theme could
-	// supply `ring`/`z-index` without a default, though defaults carries them)
-	// still merges cleanly.
-	for (const [category, group] of Object.entries(override)) {
-		if (!group)
-			continue;
-		const base = merged[category] ?? {};
-		for (const [key, value] of Object.entries(group)) {
-			// deepPartial leaves omitted keys as `undefined`; skip them so the
-			// inherited default survives rather than being clobbered by undefined.
-			if (value === undefined)
-				continue;
-			base[key] = value;
-		}
-		merged[category] = base;
-	}
-
+	const merged = mergeLayer(
+		seedFromDefaults(),
+		(partialTokens ?? {}) as Record<string, Category>,
+	);
 	return merged as unknown as ResolvedTokens;
+}
+
+/**
+ * Fold ordered resolved layers onto the defaults base; later layers win per key.
+ * Callers pass `[aestheticDelta, densityDelta]` so density wins collisions.
+ *
+ * Each layer is a DELTA (the keys that axis set), NOT a complete set: folding
+ * complete sets would clobber, because a complete density set carries default
+ * colors that would overwrite the aesthetic's. This matches the build's CSS
+ * emission (aesthetic full base layer, density delta on top), so the resolver
+ * and the cascade agree by construction.
+ */
+export function composeTokens(layers: ResolvedLayer[]): ResolvedTokens {
+	const merged = layers.reduce<Record<string, Category>>(
+		(acc, layer) => mergeLayer(acc, layer as unknown as Record<string, Category>),
+		seedFromDefaults(),
+	);
+	return merged as unknown as ResolvedTokens;
+}
+
+type DtcgLeaf = { $value: unknown; $type?: string };
+
+/**
+ * Flatten a two-level DTCG theme (`{ category: { key: { $value } } }`) into a
+ * branded resolved layer (`{ category: { key: string } }`). The single door from
+ * DTCG to the resolver: the MCP and the validator convert each axis's on-disk
+ * theme through this so everything composes through `composeTokens` rather than
+ * walking raw DTCG independently — the seam that keeps the surfaces from drifting.
+ */
+export function dtcgToResolved(
+	dtcg: Record<string, Record<string, DtcgLeaf>>,
+): ResolvedLayer {
+	const out: Record<string, Record<string, string>> = {};
+	for (const [category, group] of Object.entries(dtcg)) {
+		if (!group || typeof group !== 'object')
+			continue;
+		const cat: Record<string, string> = {};
+		for (const [key, leaf] of Object.entries(group)) {
+			if (leaf && typeof leaf === 'object' && '$value' in leaf)
+				cat[key] = String((leaf as DtcgLeaf).$value);
+		}
+		out[category] = cat;
+	}
+	return out as unknown as ResolvedLayer;
 }

@@ -223,6 +223,56 @@ Or as link tags:
 
 Switch between them by changing `data-theme`. No reload needed.
 
+## Theme composition (axes)
+
+"Vaporwave, but compact" is two decisions, not one: a palette-and-type aesthetic, and a spacing density. A consumer holds them as two separate knobs. Composition lets you turn each knob on its own axis instead of pre-baking every combination into its own theme file.
+
+There are two axes, a fixed set for now:
+
+- **aesthetic**, applied through `data-theme`. This is the base look: palette, typography, shadows. The built-in `light`, `dark`, `brand`, and `vaporwave` themes all live on this axis.
+- **density**, applied through `data-density`. This refines spacing and line-height for tighter or roomier layouts. The built-in `compact` theme lives here.
+
+A theme's axis is declared by the directory it ships in (`themes/aesthetic/vaporwave.json`, `themes/density/compact.json`). The build, the validator, and the token-query MCP all read that directory, so they can never disagree about where a theme belongs.
+
+You apply one theme per axis at once, each on its own attribute:
+
+```html
+<html data-theme="vaporwave" data-density="compact">
+```
+
+The page resolves to the union of the two themes. Where they touch different tokens, each axis contributes its own: vaporwave brings the saturated palette and the Space Grotesk type, compact brings the tightened `spacing.*` and the smaller line-heights. Where they collide on the same token, **density wins**, because it refines an aesthetic base and its value is the more specific one. No JavaScript does this merge. Each axis emits its CSS variables inside its own cascade layer (aesthetic in `ds-aesthetic`, density in `ds-density`), and the build declares the order `@layer ds-aesthetic, ds-density;`. Later layers beat earlier ones in the CSS cascade, so density always overrides aesthetic on a shared variable, whatever order the consumer imported the stylesheets in.
+
+Worked example. With `vaporwave` on the aesthetic axis and `compact` on the density axis both active, the page resolves to this:
+
+- `--color-primary` is `oklch(0.7200 0.2000 330.00)`, vaporwave's magenta. Compact declares no colors, so the aesthetic value stands.
+- `--shadow-neon` is `0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)`, vaporwave's glow. Compact never mentions it, and the base schema does not declare it either (see the next section).
+- `--spacing-4` is `0.8rem`, not the base `1rem`. Both axes leave most tokens alone, but compact overrides the spacing scale, so its tighter step wins.
+- `--typography-leading-normal` is `1.35`, compact's tighter line-height. Another density override.
+
+To apply both, import the two theme CSS files alongside the preset:
+
+```css
+@import 'tailwindcss';
+@import '@unbranded-ds/tokens/preset.css';
+@import '@unbranded-ds/tokens/themes/vaporwave.css';
+@import '@unbranded-ds/tokens/themes/compact.css';
+```
+
+The published CSS is keyed flat, by theme name (`themes/vaporwave.css`, `themes/compact.css`), even though the source files sit under their axis directories. Each shipped file carries its own `@layer` wrapper, so the density-over-aesthetic precedence holds however you order the imports.
+
+To compose at runtime instead, `registerTheme` takes the axis as a second argument:
+
+```typescript
+import { registerTheme } from '@unbranded-ds/tokens/runtime';
+import vaporwave from '@unbranded-ds/tokens/themes/aesthetic/vaporwave.json';
+import compact from '@unbranded-ds/tokens/themes/density/compact.json';
+
+registerTheme(vaporwave); // aesthetic is the default axis
+registerTheme(compact, 'density');
+```
+
+Each call injects a `<style>` block keyed to its axis attribute, and the same layer order does the deciding. Then set both attributes on the root.
+
 ## Overriding non-color tokens
 
 Themes are not limited to color. A theme of either kind can override any category: radius, spacing, typography, shadow, motion, and the rest. Anything you do not mention inherits the default.
@@ -257,6 +307,52 @@ A runtime theme document does the same with flat values:
 ```
 
 `validateTheme` resolves this against the defaults before checking, so the omitted categories are present in the validated result.
+
+## Theme-extension tokens
+
+Sometimes a theme needs a token the canonical schema never declares. Vaporwave wants a neon glow, `shadow.neon`, that no other theme would carry and that the base schema has no reason to generalize. These extension tokens are first-class: typed in the token map and visible through the MCP, each tagged with a `source` discriminator so you can always tell a theme-extension token apart from a canonical one. A token a theme declares past the schema does not need to be registered anywhere else. The build finds it by walking the bundled theme files.
+
+Declare it like any other token, in the theme JSON, under whatever category fits:
+
+```jsonc
+// themes/aesthetic/vaporwave.json (excerpt)
+{
+  "shadow": {
+    "neon": { "$value": "0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)", "$type": "shadow" }
+  }
+}
+```
+
+The build handles it in two places. The per-theme CSS gets a real variable, `--shadow-neon`, scoped under `[data-theme="vaporwave"]`. The token map gains an entry built from the union of the schema tokens and every token found across the bundled theme files, so `shadow.neon` shows up next to the schema tokens, tagged with its source:
+
+```typescript
+import tokenMap from '@unbranded-ds/tokens';
+
+tokenMap['color.primary'];
+// → { name: 'color.primary', category: 'color', type: 'color',
+//     cssVariable: '--color-primary', source: 'schema' }
+
+tokenMap['shadow.neon'];
+// → { name: 'shadow.neon', category: 'shadow', type: 'shadow',
+//     cssVariable: '--shadow-neon', source: 'theme-extension' }
+```
+
+And the token-query MCP reports the same `source`. Ask `lookupToken` for `shadow.neon` with the vaporwave aesthetic active and it comes back present, with its variable and value and a `theme-extension` label:
+
+```jsonc
+// lookupToken({ token: 'shadow.neon', theme: { aesthetic: 'vaporwave' } })
+{
+  "token": "shadow.neon",
+  "source": "theme-extension",
+  "present": true,
+  "cssVariable": "--shadow-neon",
+  "value": "0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)"
+}
+```
+
+Ask for it with a theme that does not declare it, say the default light aesthetic, and the answer is a soft `present: false` rather than an error, because the token is real and just not carried by the active axes. `palette` does the parallel thing: a request for the `shadow` category lists `shadow.sm`, `shadow.md`, `shadow.lg`, and `shadow.neon` together, each entry stamped `schema` or `theme-extension` so an agent knows which ones travel to other themes and which are scoped to this one.
+
+One limit is worth stating plainly. Build-time typing covers the **bundled** themes only. The package build walks its own theme files, so `shadow.neon` lands in the published TypeScript types. A theme you author in your own repo is a different story. Its extension tokens still emit as working CSS variables, and the MCP still sees them at runtime when you point it at your themes, but the package build cannot reach across into your files, so they will not appear in `@unbranded-ds/tokens`'s build-time types. For your own extension tokens, the CSS variable and the runtime MCP view are the contract; the static types are not.
 
 ## Extending the schema
 

@@ -1,21 +1,22 @@
 /**
  * `contrast` — compute WCAG contrast ratio + AA/AAA pass for two colors.
  *
- * Input: { foreground: ColorOrToken; background: ColorOrToken; theme?: string }
- *   ColorOrToken is hex/rgb/hsl/oklch string OR named token reference (e.g.
- *   'color.primary'). Token references resolve against `theme`.
+ * Input: { foreground: ColorOrToken; background: ColorOrToken;
+ *          theme?: { aesthetic?: string; density?: string } }
+ *   ColorOrToken is a hex/rgb/hsl/oklch string OR a named token reference (e.g.
+ *   'color.primary'). Token references resolve against the COMPOSED axis tree.
  * Output: { ratio, aa: { normal, large }, aaa: { normal, large },
  *           foreground: { resolved }, background: { resolved } }
  *
- * Errors: unparseable-color, unknown-token, unknown-theme.
+ * Errors: unparseable-color, unknown-token.
  */
 
 import type { McpTool } from '../runtime/stdio.js';
 
 import { z } from 'zod';
 import { contrastRatio, parseColor } from '../../color.js';
+import { composeAxes, flatValueOf, themeAxesSchema } from '../compose.js';
 import { mcpError, mcpResult } from '../runtime/errors.js';
-import { DEFAULT_THEME, getTheme, walkToken } from '../themes.js';
 
 const inputSchema = {
 	foreground: z
@@ -24,7 +25,7 @@ const inputSchema = {
 	background: z
 		.string()
 		.describe('Background color. Same format options as foreground.'),
-	theme: z.string().optional().describe('Theme to resolve token references against. Defaults to the package default.'),
+	theme: themeAxesSchema,
 };
 
 // WCAG 2.x contrast thresholds.
@@ -37,40 +38,33 @@ function looksLikeTokenReference(value: string): boolean {
 	return /^[a-z][a-z0-9-]*(?:\.[a-z0-9-]+)+$/i.test(value);
 }
 
-async function resolveToColorValue(
+type Resolved = Awaited<ReturnType<typeof composeAxes>>['composed'];
+
+/**
+ * Turn one foreground/background arg into a literal color value. A token-shaped
+ * string resolves against the already-composed tree (compose once, resolve both
+ * sides); anything else is treated as a literal color and passed through.
+ */
+function resolveToColorValue(
 	input: string,
-	themeName: string,
-): Promise<{ kind: 'color'; value: string } | { kind: 'error'; error: ReturnType<typeof mcpError> }> {
-	if (!looksLikeTokenReference(input)) {
+	composed: Resolved,
+): { kind: 'color'; value: string } | { kind: 'error'; error: ReturnType<typeof mcpError> } {
+	if (!looksLikeTokenReference(input))
 		return { kind: 'color', value: input };
-	}
 
-	const themeRecord = await getTheme(themeName);
-	if (!themeRecord) {
-		return {
-			kind: 'error',
-			error: mcpError({
-				component: 'tokens-mcp',
-				issue: 'unknown-theme',
-				got: themeName,
-			}),
-		};
-	}
-
-	const token = walkToken(themeRecord.data, input);
-	if (!token) {
+	const value = flatValueOf(composed, input);
+	if (value === undefined) {
 		return {
 			kind: 'error',
 			error: mcpError({
 				component: 'tokens-mcp',
 				issue: 'unknown-token',
 				token: input,
-				theme: themeName,
 			}),
 		};
 	}
 
-	return { kind: 'color', value: token.$value };
+	return { kind: 'color', value };
 }
 
 export const contrast: McpTool = {
@@ -79,13 +73,19 @@ export const contrast: McpTool = {
 		'Compute the WCAG contrast ratio between two colors plus pass/fail for AA/AAA, normal/large. Accepts hex, rgb, hsl, or oklch strings AND named token references like `color.primary`. Useful when validating a color pair before committing it to a theme.',
 	inputSchema,
 	handler: async (input) => {
-		const args = input as { foreground: string; background: string; theme?: string };
-		const themeName = args.theme ?? DEFAULT_THEME;
+		const args = input as {
+			foreground: string;
+			background: string;
+			theme?: { aesthetic?: string; density?: string };
+		};
 
-		const fg = await resolveToColorValue(args.foreground, themeName);
+		// Compose once; both sides resolve against the same tree.
+		const { composed } = await composeAxes(args.theme);
+
+		const fg = resolveToColorValue(args.foreground, composed);
 		if (fg.kind === 'error')
 			return fg.error;
-		const bg = await resolveToColorValue(args.background, themeName);
+		const bg = resolveToColorValue(args.background, composed);
 		if (bg.kind === 'error')
 			return bg.error;
 

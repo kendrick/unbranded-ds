@@ -10,6 +10,8 @@ Auto-generated from all feature plans. Last updated: 2026-06-11
 - TypeScript 5.x, strict mode, no `any` + Style Dictionary v4 (DTCG build), Zod (theme schema + validation), Tailwind CSS v4 (`@theme` preset consumption) (008-token-schema-growth)
 - Filesystem only. DTCG source files under `packages/tokens/src/tokens/`, built-in theme files under `packages/tokens/themes/`, generated artifacts under `packages/tokens/dist/`. (008-token-schema-growth)
 - TypeScript 5.x, strict mode, no `any` + Tailwind CSS v4 (`@theme` preset consumption), `@base-ui-components/react`, `class-variance-authority`, Storybook 10.3 (interaction + a11y test runner) (010-constitution-retrofit)
+- TypeScript 5.x, strict mode, no `any` + Style Dictionary v4 (DTCG build), Zod (theme schema + validation), Tailwind CSS v4 (`@theme` preset + cascade `@layer`), `@modelcontextprotocol/sdk` (token-query MCP) (009-theming-system-expansion)
+- Filesystem only. DTCG theme sources under `packages/tokens/themes/<axis>/`; built artifacts under `packages/tokens/dist/`. (009-theming-system-expansion)
 
 - TypeScript 5.x, strict mode, no `any` (Constitution Section VIII) (004-primitive-set-expansion)
 - N/A (component library; no persisted data) (004-primitive-set-expansion)
@@ -39,9 +41,9 @@ npm test && npm run lint
 TypeScript 5.x, strict mode, no `any` (EVER): Follow standard conventions
 
 ## Recent Changes
+- 009-theming-system-expansion: Added TypeScript 5.x, strict mode, no `any` + Style Dictionary v4 (DTCG build), Zod (theme schema + validation), Tailwind CSS v4 (`@theme` preset + cascade `@layer`), `@modelcontextprotocol/sdk` (token-query MCP)
 - 010-constitution-retrofit: Added TypeScript 5.x, strict mode, no `any` + Tailwind CSS v4 (`@theme` preset consumption), `@base-ui-components/react`, `class-variance-authority`, Storybook 10.3 (interaction + a11y test runner)
 - 008-token-schema-growth: Added TypeScript 5.x, strict mode, no `any` + Style Dictionary v4 (DTCG build), Zod (theme schema + validation), Tailwind CSS v4 (`@theme` preset consumption)
-- 007-autodoc-audit: Added TypeScript 5.x, strict mode, no `any` + `@base-ui-components/react`, `class-variance-authority`, Storybook 10.3 (`@storybook/react-vite`), react-docgen (Storybook-bundled)
 
 
 
