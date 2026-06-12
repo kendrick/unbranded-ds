@@ -97,3 +97,14 @@ Section XI is ratified at this point (spec 005). All of it applies:
 - [packages/react/src/components/SegmentedControl/](packages/react/src/components/SegmentedControl/) — the underlying primitive (lands in spec 004)
 - `packages/tokens/src/runtime.ts` — exports `themeBootstrapScript` after spec 002, uses the same `unbranded-ds-theme` localStorage key
 - Constitution Section XI (ratified in spec 005)
+
+---
+
+## Update — post-009 (2026-06-12)
+
+This brief predates spec 009 (theming system expansion), which moved the ground under it. Read this before `/speckit.specify`.
+
+- **Theming is now two-axis.** 009 added a density axis (`data-density`) alongside the aesthetic axis (`data-theme`). The first-paint bootstrap in `@unbranded-ds/tokens/runtime` now writes BOTH attributes from two storage keys: `unbranded-ds-theme` (aesthetic, default `light`) and `unbranded-ds-density` (density, default `comfortable`). The constants are `THEME_STORAGE_KEY` / `DENSITY_STORAGE_KEY` in `packages/tokens/src/runtime.ts`.
+- **`useTheme` must match those keys.** The Scope section above names only `unbranded-ds-theme`; the hook now also has to honor `unbranded-ds-density` to stay flash-free against the shipped bootstrap. See the `project-ds-theme-localstorage-key` memory.
+- **Open clarify question:** does `useTheme` (and `<ThemeToggle>`) own only the aesthetic / color-scheme axis (light/auto/dark via `data-theme`), or generalize to per-axis (also density)? Lean: keep `<ThemeToggle>` the canonical color-scheme toggle (aesthetic), and either scope `useTheme` to the aesthetic axis with density as a separate control, or make `useTheme` axis-aware (`useTheme('aesthetic')` / `useTheme('density')`) so one primitive drives both. The bootstrap already persists both keys, so a density control has a no-flash path too.
+- **Sequencing:** spec 013 (API and vocabulary harmonization) should land before this, so `<ThemeToggle>` is born XI.2-compliant rather than getting renamed right after.
