@@ -14,8 +14,9 @@ import { contrastPairs } from './schema.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const themesDir = join(here, '..', 'themes');
+// light/dark/brand are all aesthetic-axis themes (themes/aesthetic/*.json).
 const load = (name: string): Record<string, Record<string, { $value: string }>> =>
-	JSON.parse(readFileSync(join(themesDir, `${name}.json`), 'utf8'));
+	JSON.parse(readFileSync(join(themesDir, 'aesthetic', `${name}.json`), 'utf8'));
 
 const themes: Record<string, ReturnType<typeof load>> = {
 	light: load('light'),

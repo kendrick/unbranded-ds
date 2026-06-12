@@ -116,9 +116,9 @@ describe('canonicalDefaultTokens drift guard', () => {
 		);
 	});
 
-	it('sources color defaults from themes/light.json (the default theme)', () => {
+	it('sources color defaults from themes/aesthetic/light.json (the default theme)', () => {
 		expect(canonicalDefaultTokens.color).toEqual(
-			flattenSource(resolve(themesDir, 'light.json'), 'color'),
+			flattenSource(resolve(themesDir, 'aesthetic', 'light.json'), 'color'),
 		);
 	});
 

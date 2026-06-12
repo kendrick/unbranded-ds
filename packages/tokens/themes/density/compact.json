@@ -1,0 +1,15 @@
+{
+	"spacing": {
+		"1": { "$value": "0.2rem", "$type": "dimension" },
+		"2": { "$value": "0.4rem", "$type": "dimension" },
+		"3": { "$value": "0.6rem", "$type": "dimension" },
+		"4": { "$value": "0.8rem", "$type": "dimension" },
+		"5": { "$value": "1rem", "$type": "dimension" },
+		"6": { "$value": "1.2rem", "$type": "dimension" }
+	},
+	"typography": {
+		"leading-normal": { "$value": "1.35", "$type": "number" },
+		"leading-tight": { "$value": "1.15", "$type": "number" },
+		"leading-relaxed": { "$value": "1.45", "$type": "number" }
+	}
+}
