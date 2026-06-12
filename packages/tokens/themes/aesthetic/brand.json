@@ -1,0 +1,55 @@
+{
+	"color": {
+		"background": {
+			"$value": "oklch(0.9768 0.0142 308.30)",
+			"$type": "color"
+		},
+		"foreground": {
+			"$value": "oklch(0.2352 0.0362 290.58)",
+			"$type": "color"
+		},
+		"primary": {
+			"$value": "oklch(0.5413 0.2466 293.01)",
+			"$type": "color"
+		},
+		"primary-foreground": {
+			"$value": "oklch(1.0000 0.0000 89.88)",
+			"$type": "color"
+		},
+		"muted": {
+			"$value": "oklch(0.9464 0.0327 307.17)",
+			"$type": "color"
+		},
+		"muted-foreground": {
+			"$value": "oklch(0.5115 0.0914 295.69)",
+			"$type": "color"
+		},
+		"border": {
+			"$value": "oklch(0.8943 0.0549 293.28)",
+			"$type": "color"
+		},
+		"ring": {
+			"$value": "oklch(0.5413 0.2466 293.01)",
+			"$type": "color"
+		},
+		"destructive": {
+			"$value": "oklch(0.5858 0.2220 17.58)",
+			"$type": "color"
+		},
+		"destructive-foreground": {
+			"$value": "oklch(1.0000 0.0000 89.88)",
+			"$type": "color"
+		}
+	},
+	"radius": {
+		"sm": { "$value": "0.375rem", "$type": "dimension" },
+		"md": { "$value": "0.5rem", "$type": "dimension" },
+		"lg": { "$value": "0.75rem", "$type": "dimension" }
+	},
+	"typography": {
+		"font-sans": {
+			"$value": "\"Inter\", ui-sans-serif, system-ui, sans-serif",
+			"$type": "fontFamily"
+		}
+	}
+}
