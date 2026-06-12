@@ -19,10 +19,11 @@ describe('contrast', () => {
 		expect(payload.aa.normal).toBe(false);
 	});
 
-	it('resolves token references against the active theme', async () => {
+	it('resolves token references against the composed axes', async () => {
 		const result = await callToolDirectly(contrast, {
 			foreground: 'color.foreground',
 			background: 'color.background',
+			theme: { aesthetic: 'dark' },
 		});
 		expect(result.isError).toBeUndefined();
 		const payload = result.structuredContent as { ratio: number; foreground: { resolved: string } };

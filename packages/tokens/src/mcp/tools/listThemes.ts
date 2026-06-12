@@ -14,6 +14,10 @@ const THEME_DESCRIPTIONS: Record<string, string> = {
 	light: 'Default light theme with neutral foregrounds on bright surfaces.',
 	dark: 'Dark theme with light foregrounds on dark surfaces.',
 	brand: 'Brand-accented theme — overrides primary, ring, and accent surfaces.',
+	vaporwave:
+		'Aesthetic axis (data-theme): saturated palette, a neon glow shadow, and display typography.',
+	compact:
+		'Density axis (data-density): tightened spacing and line-heights for dense layouts.',
 };
 
 export const listThemes: McpTool = {
@@ -24,9 +28,12 @@ export const listThemes: McpTool = {
 	handler: async () => {
 		const themes = await loadThemes();
 		const result = {
-			themes: Array.from(themes.keys()).map((key) => ({
-				key,
-				description: THEME_DESCRIPTIONS[key] ?? '(no description available)',
+			// Report each theme's axis so a caller knows which slot it fills —
+			// `aesthetic` vs `density` — when handing it back as a theme axis input.
+			themes: Array.from(themes.values()).map((theme) => ({
+				key: theme.key,
+				axis: theme.axis,
+				description: THEME_DESCRIPTIONS[theme.key] ?? '(no description available)',
 			})),
 		};
 		return mcpResult(result);

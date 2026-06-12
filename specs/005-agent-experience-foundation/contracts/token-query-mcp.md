@@ -46,6 +46,20 @@ Or, if the package is installed locally:
 }
 ```
 
+## Theme axes (spec 009)
+
+Three of the four tools resolve token values, and all three take the same `theme` input: an axis object, not a bare theme name.
+
+```ts
+theme?: { aesthetic?: string; density?: string }   // omit a key to skip that axis
+```
+
+A theme belongs to exactly one axis. `aesthetic` (applied through `data-theme`) carries the palette and type; `density` (applied through `data-density`) refines spacing and line-heights. Each tool folds the named axes through `composeTokens`, density last, so a density theme wins any key the two axes both set. No tool merges on its own. They all call `composeAxes(theme)`, the one resolver, which keeps every surface composing the same way.
+
+Single-axis callers keep working through two conveniences. An omitted or empty `theme` falls back to `{ aesthetic: 'light' }`, the pre-009 default. And an axis that names a theme we don't ship contributes nothing rather than failing: the other axes still resolve, and the unknown name is reported, not thrown.
+
+`source` rides along on the token outputs. A token in the locked schema reads `source: 'schema'`; a token a bundled theme adds past the schema reads `source: 'theme-extension'`. The classification comes from `tokenMap` membership at query time, so a caller can tell a canonical token from a theme-scoped one without consulting the build.
+
 ## Tools
 
 Four tools, each declared with a Zod-derived input schema:
@@ -57,78 +71,102 @@ input: {} (no arguments)
 
 output: {
   themes: Array<{
-    key: string;          // 'light', 'dark', 'brand'
+    key: string;          // 'light', 'dark', 'brand', 'vaporwave', 'compact'
+    axis: 'aesthetic' | 'density';  // which slot this theme fills
     description: string;  // one-line description from the theme metadata
   }>
 }
 ```
 
-No error states.
+No error states. The `axis` field tells a caller which slot a theme goes in (`aesthetic` vs `density`) before handing it back as a `theme` input.
 
 ### `palette`
 
 ```ts
 input: {
   category: string;   // 'color' or 'color.foreground' — flat or dotted path
-  theme?: string;     // defaults to package default
+  theme?: { aesthetic?: string; density?: string };  // axes; see above
 }
 
 output: {
   category: string;
-  theme: string;
+  theme: { aesthetic?: string; density?: string };
   tokens: Array<{
     name: string;     // 'color.primary' (fully qualified)
-    value: string;    // resolved value for the active theme
+    value: string;    // resolved value under the composed axes
+    source: 'schema' | 'theme-extension';
   }>
 }
 
 errors:
   - { component: 'tokens-mcp', issue: 'unknown-category', got: <category> }
-  - { component: 'tokens-mcp', issue: 'unknown-theme', got: <theme> }
 ```
+
+The token set comes from `tokenMap` (schema plus bundled extensions), so the list is stable across axes; each entry's `value` is read from the composed tree and `source` tags where the token comes from. A category nothing matches returns the `unknown-category` error.
 
 ### `contrast`
 
 ```ts
 input: {
-  foreground: string;  // hex/rgb/hsl color OR token reference (e.g. 'color.primary')
+  foreground: string;  // hex/rgb/hsl/oklch color OR token reference (e.g. 'color.primary')
   background: string;  // same
-  theme?: string;
+  theme?: { aesthetic?: string; density?: string };  // axes; see above
 }
 
 output: {
   ratio: number;       // WCAG contrast ratio, 1.0 to 21.0
   aa: { normal: boolean; large: boolean };
   aaa: { normal: boolean; large: boolean };
-  foreground: { resolved: string };  // hex form of the resolved color
+  foreground: { resolved: string };  // the resolved color value
   background: { resolved: string };
 }
 
 errors:
-  - { component: 'tokens-mcp', issue: 'unparseable-color', input: <string> }
-  - { component: 'tokens-mcp', issue: 'unknown-token', token: <string>, theme: <theme> }
-  - { component: 'tokens-mcp', issue: 'unknown-theme', got: <string> }
+  - { component: 'tokens-mcp', issue: 'unparseable-color', prop: <string>, input: <string>, resolved: <string> }
+  - { component: 'tokens-mcp', issue: 'unknown-token', token: <string> }
 ```
+
+The axes compose once; both sides resolve against that one tree. A side that looks like a token but doesn't resolve there is an `unknown-token` error; anything else is treated as a literal color string.
 
 ### `lookupToken`
 
 ```ts
 input: {
   token: string;       // dotted token name, e.g. 'color.primary'
-  theme?: string;
+  theme?: { aesthetic?: string; density?: string };  // axes; see above
 }
 
+// resolved — the token is in the map and the active axes declare it
 output: {
   token: string;
-  theme: string;
-  cssVariable: string; // e.g. '--ds-color-primary'
-  value: string;       // resolved value
+  theme: { aesthetic?: string; density?: string };
+  source: 'schema' | 'theme-extension';
+  present: true;
+  cssVariable: string; // e.g. '--color-primary'
+  value: string;       // resolved value under the composed axes
+}
+
+// soft absent — a real extension token that the active axes don't carry
+output: {
+  token: string;
+  theme: { aesthetic?: string; density?: string };
+  source: 'theme-extension';
+  present: false;
+  note: string;        // 'theme-extension token; the active theme(s) do not declare it'
 }
 
 errors:
   - { component: 'tokens-mcp', issue: 'unknown-token', got: <string> }
-  - { component: 'tokens-mcp', issue: 'unknown-theme', got: <string> }
 ```
+
+The token resolves against the composed axes, so a value can come from either one. Four outcomes:
+
+- In the map and present in the composition → resolved, `source` from the map (`schema` or `theme-extension`).
+- A theme-extension token the active axes don't declare → soft `present: false` with a `note`, NOT an error, so the caller learns it's theme-scoped to some other theme.
+- Present in the composition but absent from the map → a resolved theme-extension answer with `cssVariable` synthesized from the dot-path (`shadow.neon` → `--shadow-neon`).
+- In no theme at all → the `unknown-token` error.
+
+A non-schema token that some theme declares resolves on its own merits; only a token no theme defines is rejected. (Before 009 any token outside the locked schema was a hard reject.)
 
 ## Error contract
 
@@ -181,4 +219,4 @@ Runtime tests (`packages/tokens/src/mcp/runtime/*.test.ts`):
 
 ## Versioning
 
-The MCP versions with `@unbranded-ds/tokens`. The first published version (this spec) is `@unbranded-ds/tokens@0.3.0` (or whatever minor lands after spec 004's `0.3.0`). Future MCP changes that add tools or alter responses bump the package minor; bug fixes bump patch.
+The MCP versions with `@unbranded-ds/tokens`. Spec 005 first shipped it at `0.3.0`; spec 009's multi-axis input and `source` fields land at `SERVER_VERSION` `0.5.0`. Future MCP changes that add tools or alter responses bump the package minor; bug fixes bump patch.

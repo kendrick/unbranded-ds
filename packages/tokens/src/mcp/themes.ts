@@ -7,9 +7,10 @@
  */
 
 import { existsSync } from 'node:fs';
-import { readdir, readFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { listThemesByAxis, type Axis } from '../axes.js';
 
 const MCP_DIR = dirname(fileURLToPath(import.meta.url));
 
@@ -39,6 +40,7 @@ export type ThemeData = Record<string, unknown>;
 interface CachedTheme {
 	key: string;
 	data: ThemeData;
+	axis: Axis;
 }
 
 let themesCache: Map<string, CachedTheme> | null = null;
@@ -47,15 +49,20 @@ export async function loadThemes(): Promise<Map<string, CachedTheme>> {
 	if (themesCache)
 		return themesCache;
 
+	// Themes live under themes/<axis>/<name>.json; the directory is the theme's
+	// axis (see src/axes.ts). Keyed by name; the axis rides along for the
+	// multi-axis MCP input.
 	const cache = new Map<string, CachedTheme>();
-	const entries = await readdir(THEMES_DIR);
-	for (const entry of entries) {
-		if (!entry.endsWith('.json'))
-			continue;
-		const key = entry.replace(/\.json$/, '');
-		const content = await readFile(join(THEMES_DIR, entry), 'utf-8');
-		const data = JSON.parse(content) as ThemeData;
-		cache.set(key, { key, data });
+	const byAxis = listThemesByAxis(THEMES_DIR);
+	for (const axis of Object.keys(byAxis) as Axis[]) {
+		for (const name of byAxis[axis]) {
+			const content = await readFile(
+				join(THEMES_DIR, axis, `${name}.json`),
+				'utf-8',
+			);
+			const data = JSON.parse(content) as ThemeData;
+			cache.set(name, { key: name, data, axis });
+		}
 	}
 	themesCache = cache;
 	return cache;

@@ -4,30 +4,74 @@ import { callToolDirectly } from '../runtime/testing.js';
 import { lookupToken } from './lookupToken.js';
 
 describe('lookupToken', () => {
-	it('resolves a known token in the default theme', async () => {
+	it('resolves a known token under the default (light) aesthetic', async () => {
 		const result = await callToolDirectly(lookupToken, { token: 'color.primary' });
 		expect(result.isError).toBeUndefined();
-		const payload = result.structuredContent as { token: string; theme: string; cssVariable: string; value: string };
+		const payload = result.structuredContent as { token: string; source: string; present: boolean; cssVariable: string; value: string };
 		expect(payload.token).toBe('color.primary');
-		expect(payload.theme).toBe('light');
+		expect(payload.source).toBe('schema');
+		expect(payload.present).toBe(true);
 		expect(payload.cssVariable).toBe('--color-primary');
 		expect(payload.value.length).toBeGreaterThan(0);
 	});
 
-	it('resolves a known token in a non-default theme', async () => {
-		const result = await callToolDirectly(lookupToken, { token: 'color.primary', theme: 'dark' });
-		const payload = result.structuredContent as { theme: string };
-		expect(payload.theme).toBe('dark');
+	it('resolves a known token under a non-default aesthetic', async () => {
+		const light = await callToolDirectly(lookupToken, { token: 'color.primary' });
+		const dark = await callToolDirectly(lookupToken, { token: 'color.primary', theme: { aesthetic: 'dark' } });
+		const lightValue = (light.structuredContent as { value: string }).value;
+		const darkValue = (dark.structuredContent as { value: string }).value;
+		// The dark aesthetic overrides color.primary, so the resolved value differs.
+		expect(darkValue).not.toBe(lightValue);
 	});
 
-	it('returns unknown-theme for a missing theme', async () => {
-		const result = await callToolDirectly(lookupToken, { token: 'color.primary', theme: 'nope' });
-		expect(result.isError).toBe(true);
-		const payload = result.structuredContent as { component: string; issue: string; got: string };
-		expect(payload).toEqual({ component: 'tokens-mcp', issue: 'unknown-theme', got: 'nope' });
+	it('resolves a density override (compact) and lets density win the collision', async () => {
+		const result = await callToolDirectly(lookupToken, {
+			token: 'spacing.4',
+			theme: { aesthetic: 'light', density: 'compact' },
+		});
+		const payload = result.structuredContent as { value: string };
+		// compact sets spacing.4 to 0.8rem (vs the 1rem default); density wins.
+		expect(payload.value).toBe('0.8rem');
 	});
 
-	it('returns unknown-token for a token not in the schema', async () => {
+	it('returns a theme-extension token (shadow.neon) when vaporwave is active', async () => {
+		const result = await callToolDirectly(lookupToken, {
+			token: 'shadow.neon',
+			theme: { aesthetic: 'vaporwave' },
+		});
+		expect(result.isError).toBeUndefined();
+		const payload = result.structuredContent as { source: string; present: boolean; value: string };
+		expect(payload.source).toBe('theme-extension');
+		expect(payload.present).toBe(true);
+		expect(payload.value.length).toBeGreaterThan(0);
+	});
+
+	it('softly reports a theme-extension token absent from the active aesthetic', async () => {
+		// shadow.neon is a real extension (vaporwave declares it) but light does not,
+		// so the answer is a soft present:false, NOT an unknown-token error.
+		const result = await callToolDirectly(lookupToken, {
+			token: 'shadow.neon',
+			theme: { aesthetic: 'light' },
+		});
+		expect(result.isError).toBeUndefined();
+		const payload = result.structuredContent as { source: string; present: boolean; note: string };
+		expect(payload.source).toBe('theme-extension');
+		expect(payload.present).toBe(false);
+		expect(payload.note.length).toBeGreaterThan(0);
+	});
+
+	it('ignores an unrecognized axis while the other axis still resolves', async () => {
+		const result = await callToolDirectly(lookupToken, {
+			token: 'color.primary',
+			theme: { aesthetic: 'dark', density: 'nope' },
+		});
+		expect(result.isError).toBeUndefined();
+		const payload = result.structuredContent as { present: boolean; value: string };
+		expect(payload.present).toBe(true);
+		expect(payload.value.length).toBeGreaterThan(0);
+	});
+
+	it('returns unknown-token for a token in no theme at all', async () => {
 		const result = await callToolDirectly(lookupToken, { token: 'color.nope' });
 		expect(result.isError).toBe(true);
 		const payload = result.structuredContent as { component: string; issue: string; got: string };

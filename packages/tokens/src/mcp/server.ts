@@ -17,7 +17,7 @@ import { lookupToken } from './tools/lookupToken.js';
 import { palette } from './tools/palette.js';
 
 const SERVER_NAME = 'unbranded-ds-tokens-mcp';
-const SERVER_VERSION = '0.3.0';
+const SERVER_VERSION = '0.5.0';
 
 async function main(): Promise<void> {
 	const server = createServer({
