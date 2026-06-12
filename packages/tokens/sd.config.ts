@@ -1,7 +1,6 @@
 import type { TransformedToken } from 'style-dictionary/types';
-import { readdir } from 'node:fs/promises';
-import { basename, extname } from 'node:path';
 import StyleDictionary from 'style-dictionary';
+import { AXIS_ATTRIBUTE, themeAxisEntries } from './src/axes.js';
 
 /**
  * The single source of truth for a token's flattened name.
@@ -72,6 +71,47 @@ StyleDictionary.registerTransformGroup({
 		'transition/css/shorthand',
 		'shadow/css/shorthand',
 	],
+});
+
+// ---------------------------------------------------------------------------
+// Custom format: css/variables wrapped in a cascade @layer.
+//
+// `css/variables` has no @layer option, so we delegate to the built-in to
+// produce the `[selector] { --var: … }` body, then nest it inside
+// `@layer <name> { … }`. The two axes go in distinct layers — aesthetic in
+// `ds-aesthetic`, density in `ds-density` — and the bundle declares the order
+// `@layer ds-aesthetic, ds-density;` (see layer-order.css) so a density var
+// always wins a collision with an aesthetic var, independent of import order.
+// Layer membership, not selector specificity, decides the winner.
+// ---------------------------------------------------------------------------
+StyleDictionary.registerFormat({
+	name: 'css/variables-layered',
+	format: async (args) => {
+		const layer = (args.options as { layer?: string }).layer ?? 'ds';
+		const builtin = StyleDictionary.hooks.formats['css/variables'];
+		if (!builtin)
+			throw new Error('built-in css/variables format not found');
+		const body = await builtin(args);
+		// Indent the built-in body one level so it reads as nested in the layer,
+		// and keep the auto-generated header comment outside the layer block.
+		const headerEnd = body.indexOf('*/');
+		const header = headerEnd === -1 ? '' : `${body.slice(0, headerEnd + 2)}\n\n`;
+		const rules = (headerEnd === -1 ? body : body.slice(headerEnd + 2)).trim();
+		const indented = rules
+			.split('\n')
+			.map((line) => (line.length > 0 ? `  ${line}` : line))
+			.join('\n');
+		return `${header}@layer ${layer} {\n${indented}\n}\n`;
+	},
+});
+
+// ---------------------------------------------------------------------------
+// Custom format: the cascade layer-order declaration. A standalone artifact so
+// consumers can import it once up front; the order is what makes density win.
+// ---------------------------------------------------------------------------
+StyleDictionary.registerFormat({
+	name: 'css/layer-order',
+	format: () => `@layer ds-aesthetic, ds-density;\n`,
 });
 
 // ---------------------------------------------------------------------------
@@ -160,17 +200,29 @@ StyleDictionary.registerFormat({
 // Build
 // ---------------------------------------------------------------------------
 async function build() {
-	// Discover theme files
-	const themeDir = 'themes';
-	const themeFiles = await readdir(themeDir);
-	const themes = themeFiles
-		.filter((f) => extname(f) === '.json')
-		.map((f) => basename(f, '.json'));
+	// Discover theme files by axis: themes/<axis>/<name>.json. The directory is
+	// the single source of truth for a theme's axis (see src/axes.ts).
+	const entries = themeAxisEntries('themes');
 
-	// 1. Per-theme CSS builds
-	for (const theme of themes) {
+	// 1. Per-theme CSS builds. Each theme is scoped under its axis attribute
+	//    (aesthetic → [data-theme], density → [data-density]) and wrapped in its
+	//    axis cascade layer (aesthetic → ds-aesthetic, density → ds-density) so
+	//    the two axes compose deterministically: density wins a collision via the
+	//    layer order declared in layer-order.css, regardless of import order.
+	//
+	//    Sourcing differs by axis on purpose. AESTHETIC themes source the base
+	//    `src/tokens/**` so each emits a complete resolved set (the base layer a
+	//    page always wants present). DENSITY themes source ONLY their own file —
+	//    the delta — so a density override doesn't redeclare every color var and
+	//    clobber the aesthetic layer. A density theme is a refinement, not a full
+	//    theme; it must touch only the vars it actually changes.
+	for (const { name, axis } of entries) {
+		const source
+			= axis === 'density'
+				? [`themes/${axis}/${name}.json`]
+				: ['src/tokens/**/*.json', `themes/${axis}/${name}.json`];
 		const sd = new StyleDictionary({
-			source: ['src/tokens/**/*.json', `themes/${theme}.json`],
+			source,
 			log: { warnings: 'disabled' },
 			platforms: {
 				css: {
@@ -178,10 +230,11 @@ async function build() {
 					buildPath: 'dist/css/',
 					files: [
 						{
-							destination: `tokens-${theme}.css`,
-							format: 'css/variables',
+							destination: `tokens-${name}.css`,
+							format: 'css/variables-layered',
 							options: {
-								selector: `[data-theme="${theme}"]`,
+								selector: `[${AXIS_ATTRIBUTE[axis]}="${name}"]`,
+								layer: `ds-${axis}`,
 								outputReferences: false,
 							},
 						},
@@ -191,6 +244,24 @@ async function build() {
 		});
 		await sd.buildAllPlatforms();
 	}
+
+	// The layer-order declaration. Emitted once as its own artifact so a consumer
+	// can `@import` it before any theme css; the order is what gives density the
+	// win. (No tokens needed — the format is constant — so source the base set.)
+	const sdLayerOrder = new StyleDictionary({
+		source: ['src/tokens/**/*.json'],
+		log: { warnings: 'disabled' },
+		platforms: {
+			css: {
+				transformGroup: 'css-motion',
+				buildPath: 'dist/css/',
+				files: [
+					{ destination: 'layer-order.css', format: 'css/layer-order' },
+				],
+			},
+		},
+	});
+	await sdLayerOrder.buildAllPlatforms();
 
 	// 2. Shared assets from base tokens (Tailwind preset, TS types, JSON)
 	//    Use the "css-motion" transformGroup for all so token names stay
@@ -233,7 +304,7 @@ async function build() {
 	await sdBase.buildAllPlatforms();
 
 	console.log(
-		`✓ Built ${themes.length} theme CSS files + Tailwind preset + TypeScript types + JSON`,
+		`✓ Built ${entries.length} theme CSS files + layer-order + Tailwind preset + TypeScript types + JSON`,
 	);
 }
 
