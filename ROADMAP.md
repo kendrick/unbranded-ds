@@ -26,10 +26,10 @@ The reason to come back to it: an agent could author a theme from a prompt and h
 
 ## Resolution Unification (One Engine, Not Three)
 
-**Status:** briefed, near-term. Revisit after spec 009 ships. Brief at `docs/workshops/2026-06-11/spec-014-resolution-unification.md`.
+**Status:** shipped in spec 014 (2026-06-12). Kept here as the record of the bet and its link to the derived-token entry above. Brief at `docs/workshops/2026-06-11/spec-014-resolution-unification.md`.
 
-Spec 009 ships composition on a resolution stack that already has more than one engine: Style Dictionary resolves themes into CSS at build, the JS side re-resolves the same themes at query/runtime, and `canonicalDefaultTokens` is a hand-maintained third copy. 009 keeps them honest with a cross-surface parity oracle, which is the right call there but services the interest rather than paying the principal.
+Spec 009 shipped composition on a resolution stack that already had more than one engine: Style Dictionary resolved themes into CSS at build, the JS side re-resolved the same themes at query/runtime, and `canonicalDefaultTokens` was a hand-maintained third copy. 009 kept them honest with a cross-surface parity oracle, which was the right call there but serviced the interest rather than paying the principal.
 
-The remedy is to resolve build-time themes once. Style Dictionary already computes each theme's resolved set for the CSS; have it emit that set as data too, and have the MCP, the validator, and the defaults read it instead of re-resolving. Build-time themes then resolve in exactly one engine, runtime consumer themes keep the JS resolver as the one isolated second context, and no theme is ever resolved twice. The 009 parity oracle becomes trivially true and gets deleted; the defaults drift guard retires. It is the foundation the derived-token entry above wants, since a single resolver stage is what derived tokens slot into.
+Spec 014 paid it. Style Dictionary already computed each theme's resolved set for the CSS, so it now emits that set as data too, and the MCP, the validator, and the defaults read it instead of re-resolving. Build-time themes resolve in exactly one engine; runtime consumer themes keep the JS resolver as the one isolated second context. The 009 parity oracle retired to a thin wiring canary, and the defaults drift guard became a regenerate-and-diff check. This is the foundation the derived-token entry above wants, since a single resolver stage is what derived tokens slot into.
 
 **Decision that holds regardless:** the boundary stays typed. Even after the engines collapse, `ResolvedTokens` stays a branded type distinct from raw DTCG, so the runtime resolver can never silently accept the wrong shape.
