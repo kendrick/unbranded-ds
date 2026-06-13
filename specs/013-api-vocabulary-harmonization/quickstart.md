@@ -12,7 +12,7 @@ How to implement and verify spec 013. Discovery-gated: the audit runs first, and
 
 ### 1. The audit (the gate — do this first, no renames yet)
 
-Produce `packages/react/AUDIT-xi2.md` per `contracts/audit-format.md`: every component, each flagged drift with its canonical (upstream-default) name, blast radius, codemod feasibility, and disposition. Mark compliant components compliant. **Get it reviewed and approved before touching a component.** Grounding says expect broad compliance and a short tail (the polymorphic `as`, plus anything the audit surfaces). Run the audit prose through the humanizer.
+Produce `specs/013-api-vocabulary-harmonization/audit.md` per `contracts/audit-format.md`: every component, each flagged drift with its canonical (upstream-default) name, blast radius, codemod feasibility, and disposition. Mark compliant components compliant. **Get it reviewed and approved before touching a component.** Grounding says expect broad compliance and a short tail (the polymorphic `as`, plus anything the audit surfaces). Run the audit prose through the humanizer.
 
 ### 2. The renames (parallel, per-component, only after approval)
 

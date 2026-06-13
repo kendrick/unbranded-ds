@@ -35,9 +35,9 @@
 
 **Goal**: The bounded list of every drift, reviewed and approved, before any rename.
 
-**Independent Test**: `AUDIT-xi2.md` covers every component (compliant or flagged); each flagged entry has a canonical (upstream-default) name, blast radius, codemod feasibility, and disposition. Approval is recorded before any rename lands.
+**Independent Test**: `audit.md` covers every component (compliant or flagged); each flagged entry has a canonical (upstream-default) name, blast radius, codemod feasibility, and disposition. Approval is recorded before any rename lands.
 
-- [X] T004 [US1] Produce the discovery audit at `packages/react/AUDIT-xi2.md` per `contracts/audit-format.md`: audit EVERY component for prop-vocabulary, slot, polymorphic, and prose-only-failure drift from the shared/upstream (shadcn/Base UI) vocabulary. Canonical names default to the upstream name; public slots already on shadcn (`Content`/`Trigger`/`Item`) are compliant; Base UI's internal `Popup`/`Positioner` are out of scope. Record compliant components as compliant. Run the audit prose through the `humanizer`. (Can fan out per-component, then converge.)
+- [X] T004 [US1] Produce the discovery audit at `specs/013-api-vocabulary-harmonization/audit.md` per `contracts/audit-format.md`: audit EVERY component for prop-vocabulary, slot, polymorphic, and prose-only-failure drift from the shared/upstream (shadcn/Base UI) vocabulary. Canonical names default to the upstream name; public slots already on shadcn (`Content`/`Trigger`/`Item`) are compliant; Base UI's internal `Popup`/`Positioner` are out of scope. Record compliant components as compliant. Run the audit prose through the `humanizer`. (Can fan out per-component, then converge.)
 - [X] T005 [US1] Review and approve the audit; record approval. Resolve any conflict where one role is proposed different canonical names (FR-003). **This gate blocks every rename below** — Phase 4+ draws only from approved `flagged` entries.
 
 **Checkpoint**: the rename scope is known and approved.

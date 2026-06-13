@@ -4,14 +4,14 @@ The first deliverable, and the gate every rename traces to. No rename starts bef
 
 ## Output
 
-One reviewed document (e.g. `packages/react/AUDIT-xi2.md`), a table of audit entries covering EVERY component, so the audit is provably complete.
+One reviewed document (e.g. `specs/013-api-vocabulary-harmonization/audit.md`), a table of audit entries covering EVERY component, so the audit is provably complete.
 
 ```
 | component | kind        | current         | canonical (upstream-default) | blast radius                  | codemod    | disposition | status    |
 |-----------|-------------|-----------------|------------------------------|-------------------------------|------------|-------------|-----------|
 | Tooltip   | polymorphic | as              | render                       | Tooltip.tsx, .usage.md, story | mechanical | deprecate   | flagged   |
-| Button    | prop        | (variant)       | (variant)                    | —                             | —          | —           | compliant |
-| Dialog    | slot        | (Content)       | (Content)                    | —                             | —          | —           | compliant |
+| Button    | prop        | (variant)       | (variant)                    | n/a                             | n/a          | n/a           | compliant |
+| Dialog    | slot        | (Content)       | (Content)                    | n/a                             | n/a          | n/a           | compliant |
 | ...       | ...         | ...             | ...                          | ...                           | ...        | ...         | ...       |
 ```
 

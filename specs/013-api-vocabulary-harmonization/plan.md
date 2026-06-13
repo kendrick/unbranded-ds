@@ -50,6 +50,7 @@ No violations. One governed amendment (Section XI.2), versioned and shipped in-P
 ```text
 specs/013-api-vocabulary-harmonization/
 ├── plan.md              # This file
+├── audit.md             # US1 deliverable: the discovery audit (the gate). A spec record, not a package doc.
 ├── research.md          # Phase 0: deprecation-window pattern, codemod tooling, the audit method, the XI.2 wording
 ├── data-model.md        # Phase 1: the audit-entry schema, the rename + deprecation + codemod entities
 ├── contracts/
@@ -63,7 +64,6 @@ specs/013-api-vocabulary-harmonization/
 
 ```text
 packages/react/
-├── AUDIT-xi2.md (or specs/013/.../audit.md)   # the discovery audit deliverable (US1 gate)
 ├── src/components/<Component>/                 # the audit-determined short tail of renames:
 │   ├── <Component>.tsx                         #   the prop/slot rename + the deprecation alias
 │   ├── <Component>.usage.md                    #   sidecar, in lockstep (XI.3)
