@@ -1,20 +1,23 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change:  1.1.1 → 1.2.0  [MINOR — Section III theming contract expanded]
-Bump rationale:  Names the per-axis theme composition API (spec 009) and carves
-                 out theme-extension tokens as a documented escape hatch from the
-                 build-time schema lock. Both are new, materially expanded guidance
-                 in an existing principle, not a backward-incompatible redefinition:
-                 single-axis `data-theme` and the schema lock both still hold. New
-                 guidance in a standing section is a MINOR bump per Section X.
+Version change:  1.2.0 → 1.3.0  [MINOR — Section XI.2 made compat-first]
+Bump rationale:  Reframes the API-shape vocabulary as compatibility-first (spec
+                 013): where a component wraps shadcn/ui or Base UI, its public
+                 prop and slot names follow the upstream convention, and the
+                 shared vocabulary governs only props/slots the design system
+                 introduces. Encodes the polymorphic-by-lineage rule (asChild for
+                 shadcn Slot triggers, render for Base UI, as for leaf primitives)
+                 and drops the separate `intent` prop (folded into `variant`,
+                 shadcn-style). New and corrected guidance in a standing section,
+                 not a backward-incompatible redefinition, so a MINOR bump.
 
 Modified principles:
-  - Section III (Theming contract): Adds the recognized theme axes, aesthetic
-    (`data-theme`) and density (`data-density`), and the rule that density
-    overrides aesthetic on a token collision. Clarifies that the build-time
-    schema lock binds the CANONICAL token set, and names per-theme extension
-    tokens as a documented escape hatch that lives outside the locked schema.
+  - Section XI.2 (API shape): Compatibility with shadcn/ui and Base UI is the
+    higher rule; the shared vocabulary applies to introduced props/slots only.
+    Variant axes use shadcn's `variant`/`size` (no separate `intent`); compound
+    slots follow the upstream public-API names; polymorphic rendering follows
+    lineage (asChild / render / as) rather than one unified prop.
 
 Added sections:       N/A.
 Removed sections:     N/A.
@@ -25,6 +28,8 @@ Templates audited:
   ✅ .specify/templates/tasks-template.md  — No change required.
 
 Prior amendments:
+  - 1.2.0 (2026-06-12): Expanded Section III with the per-axis theme composition
+    API and theme-extension tokens. Per spec 009.
   - 1.1.1 (2026-05-16): Extended Section VIII's MCP entry with
     `@modelcontextprotocol/sdk` as the runtime for local stdio MCP servers.
     Per spec 005.
@@ -235,13 +240,13 @@ Every piece of written content — story descriptions, autodoc strings, README f
 
 ### XI.2 API shape
 
-Component APIs are predictable from analogy:
+Component APIs are predictable from analogy, and they stay compatible with the upstream libraries they wrap (shadcn/ui and Base UI). Compatibility is the higher rule: where a component wraps an upstream library, its public prop and slot names follow that library's convention, so a consumer or agent who knows shadcn/Base UI predicts ours. The shared vocabulary below governs props and slots the design system introduces, not ones inherited from upstream.
 
-- Compound components use the `<Component.Slot>` pattern consistently. A `*.Trigger` on one component means the same thing as a `*.Trigger` on any other, and the same holds for `*.Root`, `*.Content`, `*.Item`, and any future slot name.
-- Variant axes use a small shared vocabulary: `variant`, `size`, `intent`, `disabled`. No bespoke synonyms across components.
-- Polymorphic rendering, when present, uses one prop name across the codebase.
+- Compound slots follow the upstream convention the public API uses. Our shadcn-style compounds expose shadcn's public slot names (`Content`, `Trigger`, `Item`, and so on), built on Base UI's internal anatomy (`Popup`, `Positioner`), which stays internal. A compound that follows neither upstream uses the generic `*.Root` / `*.Trigger` / `*.Content` / `*.Item` pattern consistently.
+- Variant axes use shadcn's vocabulary: `variant` (with shadcn's flat value set, where a semantic treatment like `destructive` is a variant value) and `size`. There is no separate `intent` prop, and no bespoke synonyms (`tone`, `appearance`, `kind`).
+- Polymorphic rendering follows lineage, because the upstream idioms differ and solve different problems. A shadcn-style Slot trigger uses `asChild`; a Base-UI-backed component uses `render`; a leaf element-swap primitive the design system owns uses `as`. These are distinct mechanisms, not synonyms, so they are documented rather than collapsed into one prop.
 
-An agent who has read one component should be able to guess the prop surface of the next one and be right.
+An agent who has read one component, and knows shadcn/Base UI, should be able to guess the prop surface of the next one and be right.
 
 ### XI.3 Documentation surfaces
 
@@ -269,4 +274,4 @@ The rule from Section V — "if a behavior is not exercised in a story, it is no
 
 ---
 
-**Version**: 1.2.0 | **Ratified**: TODO(RATIFICATION_DATE): set to original adoption date | **Last Amended**: 2026-06-12
+**Version**: 1.3.0 | **Ratified**: TODO(RATIFICATION_DATE): set to original adoption date | **Last Amended**: 2026-06-12
