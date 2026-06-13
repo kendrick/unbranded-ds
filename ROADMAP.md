@@ -33,3 +33,15 @@ Spec 009 shipped composition on a resolution stack that already had more than on
 Spec 014 paid it. Style Dictionary already computed each theme's resolved set for the CSS, so it now emits that set as data too, and the MCP, the validator, and the defaults read it instead of re-resolving. Build-time themes resolve in exactly one engine; runtime consumer themes keep the JS resolver as the one isolated second context. The 009 parity oracle retired to a thin wiring canary, and the defaults drift guard became a regenerate-and-diff check. This is the foundation the derived-token entry above wants, since a single resolver stage is what derived tokens slot into.
 
 **Decision that holds regardless:** the boundary stays typed. Even after the engines collapse, `ResolvedTokens` stays a branded type distinct from raw DTCG, so the runtime resolver can never silently accept the wrong shape.
+
+## Richer Variant Model (Orthogonal variant and intent)
+
+**Status:** parked. Surfaced during spec 013's clarify on 2026-06-12.
+
+Today the components use shadcn's flat variant set (default, secondary, destructive, outline, ghost, link), one axis that conflates visual treatment with semantic intent. shadcn does this on purpose, and spec 013 keeps it for upstream compatibility. The cost is that you cannot express the off-diagonal cells: an outlined destructive button, a ghost success action. A consumer who wants "outline plus destructive" composes it by hand with className.
+
+A richer model would split the axis back into two orthogonal props, a treatment (solid/outline/ghost) and an intent (default/destructive/success/warning), so the full grid becomes first-class API. The cost is divergence from shadcn's flat convention, so it needs a deliberate call on how a `variant`-only shadcn consumer migrates and whether the flat values stay as shorthand.
+
+This is add-expressiveness work (new API surface), which is why spec 013 (harmonization moves names, not semantics) left it out. It belongs in its own spec if the flat set ever feels too limiting in practice.
+
+**Decision that holds regardless:** if it lands, the flat shadcn values stay valid, as shorthand or aliases, so the upstream-compat constraint spec 013 established is never broken.
