@@ -84,20 +84,20 @@ interface SegmentedControlRootProps {
 	 * from `onValueChange` for the selection to visually change. Pair with
 	 * `onValueChange`; omit `defaultValue` when using `value`.
 	 */
-	value?: string;
+	'value'?: string;
 	/**
 	 * Seeds the selected value for uncontrolled usage. Reach for it when no
 	 * external code needs to react to or drive the selection — the component
 	 * then manages state internally. Ignored once `value` is set.
 	 */
-	defaultValue?: string;
+	'defaultValue'?: string;
 	/**
 	 * Fires with the newly selected value when the user picks an item by click
 	 * or keyboard. The callback receives only the new value as a string. In
 	 * controlled mode this is where you commit the change to whatever owns the
 	 * state.
 	 */
-	onValueChange?: (value: string) => void;
+	'onValueChange'?: (value: string) => void;
 	/**
 	 * Visual size of each segment. Drives item height, horizontal padding, and
 	 * label font scale across the whole group. Use `'sm'` in dense toolbars
@@ -107,7 +107,7 @@ interface SegmentedControlRootProps {
 	 *
 	 * @defaultValue `'md'`
 	 */
-	size?: 'sm' | 'md' | 'lg';
+	'size'?: 'sm' | 'md' | 'lg';
 	/**
 	 * Layout axis of the segment strip. `'horizontal'` lays items in a row —
 	 * the right fit for toolbars and view switchers; `'vertical'` lays them in
@@ -122,7 +122,7 @@ interface SegmentedControlRootProps {
 	 *
 	 * @defaultValue `'horizontal'`
 	 */
-	orientation?: 'horizontal' | 'vertical';
+	'orientation'?: 'horizontal' | 'vertical';
 	/**
 	 * When `true`, the entire control is non-interactive. The Root sets
 	 * `aria-disabled="true"` and pointer events are suppressed. Use this when
@@ -132,18 +132,28 @@ interface SegmentedControlRootProps {
 	 *
 	 * @defaultValue `false`
 	 */
-	disabled?: boolean;
+	'disabled'?: boolean;
 	/**
 	 * One or more `<SegmentedControl.Item>` children. A dev-mode warning fires
 	 * if the Root has no children — empty groups are usually a bug.
 	 */
-	children: React.ReactNode;
+	'children': React.ReactNode;
 	/**
 	 * Merged with the Root's CVA classes via `cn()`. Reach for it when a
 	 * one-off spacing or layout override is needed without forking the
 	 * component.
 	 */
-	className?: string;
+	'className'?: string;
+	/**
+	 * Accessible name for the radiogroup, forwarded to the underlying element.
+	 * Provide it when the group has no visible label, as an icon-driven control
+	 * usually does.
+	 */
+	'aria-label'?: string;
+	/** Id of an element labeling the group, as an alternative to `aria-label`. */
+	'aria-labelledby'?: string;
+	/** Forwarded to the radiogroup root element. */
+	'id'?: string;
 }
 
 interface SegmentedControlItemProps {

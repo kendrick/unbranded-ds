@@ -1,14 +1,15 @@
-import type { Axis } from './axes.js';
+import type { Axis } from './axis-constants.js';
 import type { PartialTheme } from './schema.js';
-import { AXIS_ATTRIBUTE } from './axes.js';
+import { AXIS_ATTRIBUTE } from './axis-constants.js';
+import { DENSITY_STORAGE_KEY, THEME_PREFERENCE_STORAGE_KEY, THEME_STORAGE_KEY } from './client.js';
 import { contrastRatio, hexToOklch, parseColor } from './color.js';
+import { registerThemeName } from './registry.js';
 import { contrastPairs } from './schema.js';
 import { validateTheme } from './validate.js';
 
-const THEME_STORAGE_KEY = 'unbranded-ds-theme';
-// Density rides its own storage key (spec 009) so an aesthetic and a density
-// selection persist independently — picking one must not clobber the other.
-const DENSITY_STORAGE_KEY = 'unbranded-ds-density';
+// The storage keys live in the browser-safe client entry; re-exported here so
+// the bootstrap below and any existing `/runtime` consumers keep working.
+export { DENSITY_STORAGE_KEY, THEME_PREFERENCE_STORAGE_KEY, THEME_STORAGE_KEY };
 
 /**
  * Factory that returns a self-executing JavaScript string with
@@ -198,4 +199,8 @@ export function registerTheme(
 	style.id = existingId;
 	style.textContent = css;
 	document.head.appendChild(style);
+
+	// Record the name so themesForAxis() (spec 011) reflects this runtime theme,
+	// keeping the data-driven toggles in sync with what is actually registered.
+	registerThemeName(axis, theme.name);
 }

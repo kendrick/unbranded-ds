@@ -6,10 +6,10 @@ import extraTokens from './__fixtures__/extra-tokens.json';
 import inheritedPairFail from './__fixtures__/inherited-pair-fail.json';
 import partialTheme from './__fixtures__/partial-theme.json';
 import validCustom from './__fixtures__/valid-custom.json';
+import { checkAxisAssignment } from './axes';
 import { canonicalDefaultTokens } from './defaults.js';
 import type { ResolvedLayer } from './resolve.js';
 import {
-	checkAxisAssignment,
 	checkThemeCompleteness,
 	validateComposedTheme,
 	validateTheme,

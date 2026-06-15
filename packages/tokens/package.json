@@ -22,6 +22,10 @@
 		},
 		"./dist/json/*": "./dist/json/*",
 		"./preset.css": "./dist/tailwind/preset.css",
+		"./client": {
+			"types": "./dist/ts/client.d.ts",
+			"import": "./dist/ts/client.js"
+		},
 		"./runtime": {
 			"types": "./dist/ts/runtime.d.ts",
 			"import": "./dist/ts/runtime.js"
