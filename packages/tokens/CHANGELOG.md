@@ -1,5 +1,26 @@
 # @unbranded-ds/tokens changelog
 
+## 0.5.0
+
+### Minor Changes
+
+- a012325: Add theme controls: a `ThemeProvider`, the axis-aware `useTheme()` hook, and the `<ThemeToggle>` and `<DensityToggle>` sibling controls. The tokens package gains a browser-safe `themesForAxis()` registry export and now also exports the `Axis` type, `AXIS_ATTRIBUTE`, and the storage-key constants (including a new `THEME_PREFERENCE_STORAGE_KEY`) that the hook reads for its per-axis value lists and flash-free `system` persistence.
+- ac9f6ef: Multi-axis theme composition and first-class theme-extension tokens.
+
+  A consumer can apply an aesthetic theme (`data-theme`) and a density theme (`data-density`) at once; the page resolves to the union of the two, with density winning a collision via the cascade `@layer` order. Themes now live under `themes/<axis>/`, and two demo themes ship: `vaporwave` (aesthetic) and `compact` (density). A theme may declare tokens the schema does not (vaporwave's `shadow.neon` glow); those are now typed in the token map and visible through the token-query MCP, each carrying a `source: 'theme-extension'` discriminator.
+
+  The MCP tools take a multi-axis `theme` input and resolve through one shared `composeTokens` resolver, the same one the validator and runtime use, guarded by a cross-surface parity test so the resolver, the emitted CSS, and the MCP cannot drift. That test immediately caught a latent base-token regression: `color.muted-foreground` and `color.destructive` in the base sources were never brought to AA alongside the light theme in spec 008, so any theme inheriting them shipped failing-contrast CSS. Both are now corrected.
+
+  Amends Constitution Section III (1.1.1 to 1.2.0) to name the axes and the precedence. Additive and non-breaking: single-axis `data-theme` keeps working, and the typed token map's new `source` field is optional.
+
+### Patch Changes
+
+- bfd2c9b: Collapse the two resolution engines behind theme composition into one.
+
+  Style Dictionary now emits each bundled theme's resolved delta and the resolved base as data, alongside the CSS it already produced. The token-query MCP and the bundled-theme validation read those artifacts instead of re-resolving the raw source, and `canonicalDefaultTokens` is generated from the resolved base rather than hand-maintained. A bundled theme is now resolved by exactly one engine, so the value the MCP reports matches the rendered CSS by construction.
+
+  That makes the spec-009 parity scaffolding structurally unnecessary: the cross-surface matrix retires to a thin wiring canary, the hand-maintained defaults drift guard becomes a regenerate-and-diff check, and the `dtcgToResolved` bridge is removed. The net result is fewer tests and fewer code paths for the same behavior. Internal only: no consumer-facing theming change, and the existing composition, MCP, validation, and contrast tests pass unchanged.
+
 ## 0.4.0
 
 ### Minor Changes
