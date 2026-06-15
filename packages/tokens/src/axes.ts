@@ -1,4 +1,5 @@
 import type { Axis } from './axis-constants.js';
+import type { ValidationIssue } from './validate.js';
 import { readdirSync } from 'node:fs';
 
 import { join } from 'node:path';
@@ -50,4 +51,37 @@ export function themeAxisEntries(
 /** The axis a theme name belongs to, or `undefined` if it is not a known theme. */
 export function axisOf(themesRoot: string, themeName: string): Axis | undefined {
 	return themeAxisEntries(themesRoot).find((e) => e.name === themeName)?.axis;
+}
+
+// ---------------------------------------------------------------------------
+// checkAxisAssignment — guard each axis slot against a wrong-axis theme (spec
+// 009 FR-004). The realistic mistake is handing a theme to the wrong slot (e.g.
+// the density theme `compact` to the `aesthetic` slot); for each known theme
+// whose declared axis differs from its slot, emit a structured AXIS_CONFLICT.
+// Unknown names are left to completeness/composition.
+//
+// It lives here beside `axisOf`, not in validate.ts, on purpose: it reads themes
+// off disk, and keeping the only `node:fs` caller out of validate.ts is what lets
+// validate.ts (and the `/runtime` entry that re-exports `registerTheme`) bundle
+// for the browser. See browser-safety.test.ts.
+// ---------------------------------------------------------------------------
+
+export function checkAxisAssignment(
+	themesRoot: string,
+	assignment: Partial<Record<Axis, string>>,
+): ValidationIssue[] {
+	const issues: ValidationIssue[] = [];
+	for (const [slot, themeName] of Object.entries(assignment) as Array<
+		[Axis, string]
+	>) {
+		const actualAxis = axisOf(themesRoot, themeName);
+		if (actualAxis && actualAxis !== slot) {
+			issues.push({
+				path: slot,
+				code: 'AXIS_CONFLICT',
+				message: `Theme "${themeName}" is a ${actualAxis} theme but was assigned to the ${slot} slot`,
+			});
+		}
+	}
+	return issues;
 }

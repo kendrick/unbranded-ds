@@ -1,8 +1,6 @@
 import type { ZodIssue } from 'zod';
 import type { ResolvedLayer } from './resolve.js';
-import type { Axis } from './axes.js';
 import type { Theme } from './schema.js';
-import { axisOf } from './axes.js';
 import { contrastRatio, parseColor } from './color.js';
 import { composeTokens, resolveTheme } from './resolve.js';
 import { contrastPairs, partialThemeSchema, themeSchema } from './schema.js';
@@ -204,34 +202,4 @@ export function validateComposedTheme(
 	displayName = 'Composed Theme',
 ): ValidationResult {
 	return validateResolved(composeTokens(layers), name, displayName);
-}
-
-// ---------------------------------------------------------------------------
-// checkAxisAssignment — guard each axis slot against a wrong-axis theme (spec
-// 009 FR-004). The assignment is an object keyed by axis slot, so two themes
-// cannot structurally land on one axis; the realistic mistake is assigning a
-// theme to the wrong slot (e.g. the density theme `compact` to `aesthetic`). For
-// each (slot, themeName), if the theme is known and its declared axis differs
-// from the slot it was assigned to, emit a structured AXIS_CONFLICT. Unknown
-// theme names are left alone — completeness/composition surfaces those.
-// ---------------------------------------------------------------------------
-
-export function checkAxisAssignment(
-	themesRoot: string,
-	assignment: Partial<Record<Axis, string>>,
-): ValidationIssue[] {
-	const issues: ValidationIssue[] = [];
-	for (const [slot, themeName] of Object.entries(assignment) as Array<
-		[Axis, string]
-	>) {
-		const actualAxis = axisOf(themesRoot, themeName);
-		if (actualAxis && actualAxis !== slot) {
-			issues.push({
-				path: slot,
-				code: 'AXIS_CONFLICT',
-				message: `Theme "${themeName}" is a ${actualAxis} theme but was assigned to the ${slot} slot`,
-			});
-		}
-	}
-	return issues;
 }
