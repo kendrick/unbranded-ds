@@ -33,6 +33,7 @@ const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(SCRIPT_DIR, '..');
 const REACT_PKG_ROOT = resolve(REPO_ROOT, 'packages/react');
 const COMPONENTS_ROOT = resolve(REACT_PKG_ROOT, 'src/components');
+const HOOKS_ROOT = resolve(REACT_PKG_ROOT, 'src/hooks');
 
 async function findUsageFiles(root: string): Promise<string[]> {
 	const found: string[] = [];
@@ -267,7 +268,10 @@ function wrapBlock(block: CodeBlock): string {
 
 async function main(): Promise<void> {
 	// --- Sidecar blocks ---
-	const sidecarFiles = await findUsageFiles(COMPONENTS_ROOT);
+	const sidecarFiles = [
+		...(await findUsageFiles(COMPONENTS_ROOT)),
+		...(await findUsageFiles(HOOKS_ROOT)),
+	];
 	const sidecarBlocks: CodeBlock[] = [];
 	for (const file of sidecarFiles) {
 		const content = await readFile(file, 'utf-8');
@@ -275,7 +279,10 @@ async function main(): Promise<void> {
 	}
 
 	// --- TSDoc @example blocks ---
-	const tsxSourceFiles = await findTsxSourceFiles(COMPONENTS_ROOT);
+	const tsxSourceFiles = [
+		...(await findTsxSourceFiles(COMPONENTS_ROOT)),
+		...(await findTsxSourceFiles(HOOKS_ROOT)),
+	];
 	const tsdocBlocks: CodeBlock[] = [];
 	for (const file of tsxSourceFiles) {
 		const content = await readFile(file, 'utf-8');
@@ -320,6 +327,7 @@ async function main(): Promise<void> {
 					'@unbranded-ds/react': ['packages/react/src/index.ts'],
 					'@unbranded-ds/react/*': ['packages/react/src/*'],
 					'@unbranded-ds/tokens': ['packages/tokens/src/index.ts'],
+					'@unbranded-ds/tokens/client': ['packages/tokens/src/client.ts'],
 					'@unbranded-ds/tokens/runtime': ['packages/tokens/src/runtime.ts'],
 				},
 				types: [],
