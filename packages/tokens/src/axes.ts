@@ -1,5 +1,8 @@
+import type { Axis } from './axis-constants.js';
 import { readdirSync } from 'node:fs';
+
 import { join } from 'node:path';
+import { AXES, AXIS_ATTRIBUTE } from './axis-constants.js';
 
 // ---------------------------------------------------------------------------
 // Theme axes (spec 009). The fixed set for this spec: an AESTHETIC axis applied
@@ -12,15 +15,8 @@ import { join } from 'node:path';
 // validator all read, so they can never disagree about a theme's axis.
 // ---------------------------------------------------------------------------
 
-export type Axis = 'aesthetic' | 'density';
-
-export const AXES: readonly Axis[] = ['aesthetic', 'density'];
-
-/** The DOM attribute each axis is applied through. */
-export const AXIS_ATTRIBUTE: Record<Axis, string> = {
-	aesthetic: 'data-theme',
-	density: 'data-density',
-};
+export type { Axis };
+export { AXES, AXIS_ATTRIBUTE };
 
 /**
  * The themes available on each axis, read from `themes/<axis>/*.json`.

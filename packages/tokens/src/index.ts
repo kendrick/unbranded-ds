@@ -1,4 +1,9 @@
+export { AXES, AXIS_ATTRIBUTE } from './axis-constants.js';
+export type { Axis } from './axis-constants.js';
+
 export { canonicalDefaultTokens } from './defaults.js';
+
+export { themesForAxis } from './registry.js';
 
 export { composeTokens, resolveTheme } from './resolve.js';
 export type { ResolvedLayer } from './resolve.js';
