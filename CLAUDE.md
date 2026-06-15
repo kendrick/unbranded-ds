@@ -1,8 +1,9 @@
 # heliostat Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-06-12
+Auto-generated from all feature plans. Last updated: 2026-06-15
 
 ## Active Technologies
+
 - TypeScript 5.x in `tsx`-tagged code blocks only (validated via `tsc --noEmit` per spec 005's compile validator). Sidecar prose is plain CommonMark. + All shipped in spec 005. The template at `packages/react/src/components/_template/Component.usage.md`, the validator at `scripts/validate-sidecars.ts`, the `AGENTS.md` component index, and the CI step that wires the validator into the verify job. (006-sidecar-retrofit)
 - Filesystem only. 14 `<Component>.usage.md` files co-located with their `.tsx` source. One running inbox file: `specs/006-sidecar-retrofit/spec-007-inbox.md`. 15 `.changeset/*.md` files (14 component + 1 backfill). (006-sidecar-retrofit)
 - TypeScript 5.x, strict mode, no `any` + `@base-ui-components/react`, `class-variance-authority`, Storybook 10.3 (`@storybook/react-vite`), react-docgen (Storybook-bundled) (007-autodoc-audit)
@@ -16,6 +17,8 @@ Auto-generated from all feature plans. Last updated: 2026-06-12
 - Filesystem only. New per-theme resolved-delta artifacts and the generated defaults baseline under `packages/tokens/dist/` and `packages/tokens/src/` respectively. (014-resolution-unification)
 - TypeScript 5.x, strict mode, no `any` + `@base-ui-components/react`, `class-variance-authority`, Storybook 10.3 (interaction + a11y), the `warn()` helper (`lib/warn.ts`), jscodeshift (NEW, for the rename codemods) (013-api-vocabulary-harmonization)
 - N/A (component library) (013-api-vocabulary-harmonization)
+- TypeScript 5.x, strict mode, no `any` + React (peer; uses `useSyncExternalStore`), `@base-ui-components/react` (peer, reached via SegmentedControl), `lucide-react` ^1.8.0 (Sun/SunMoon/Moon icons, existing dep), `class-variance-authority` + `cn()` (existing), the `SegmentedControl` primitive (spec 004), `@unbranded-ds/tokens` runtime (storage-key constants, the `Axis` union, and a NEW "themes per axis" registry export). No `next-themes` runtime dependency (vocabulary alignment only). (011-theme-toggle)
+- `localStorage`. Existing keys `unbranded-ds-theme` (now always holds a concrete theme) and `unbranded-ds-density`, plus one NEW companion key for the color-scheme `system` intent (working name `unbranded-ds-theme-preference`). Sidecars are markdown files on disk. (011-theme-toggle)
 
 - TypeScript 5.x, strict mode, no `any` (Constitution Section VIII) (004-primitive-set-expansion)
 - N/A (component library; no persisted data) (004-primitive-set-expansion)
@@ -45,11 +48,12 @@ npm test && npm run lint
 TypeScript 5.x, strict mode, no `any` (EVER): Follow standard conventions
 
 ## Recent Changes
+
+- 011-theme-toggle: Added TypeScript 5.x, strict mode, no `any` + React (peer; uses `useSyncExternalStore`), `@base-ui-components/react` (peer, reached via SegmentedControl), `lucide-react` ^1.8.0 (Sun/SunMoon/Moon icons, existing dep), `class-variance-authority` + `cn()` (existing), the `SegmentedControl` primitive (spec 004), `@unbranded-ds/tokens` runtime (storage-key constants, the `Axis` union, and a NEW "themes per axis" registry export). No `next-themes` runtime dependency (vocabulary alignment only).
 - 013-api-vocabulary-harmonization: Added TypeScript 5.x, strict mode, no `any` + `@base-ui-components/react`, `class-variance-authority`, Storybook 10.3 (interaction + a11y), the `warn()` helper (`lib/warn.ts`), jscodeshift (NEW, for the rename codemods)
 - 014-resolution-unification: Added TypeScript 5.x, strict mode, no `any` + Style Dictionary v4 (made the single resolver for bundled themes), Zod (schema/validation, unchanged), `@modelcontextprotocol/sdk` (the MCP, repointed)
-- 009-theming-system-expansion: Added TypeScript 5.x, strict mode, no `any` + Style Dictionary v4 (DTCG build), Zod (theme schema + validation), Tailwind CSS v4 (`@theme` preset + cascade `@layer`), `@modelcontextprotocol/sdk` (token-query MCP)
-
-
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
+
+`
