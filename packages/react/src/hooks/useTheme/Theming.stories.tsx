@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { ColorSchemeToggle } from '../../components/ColorSchemeToggle';
 import { DensityToggle } from '../../components/DensityToggle';
 import { ThemeToggle } from '../../components/ThemeToggle';
 import { ThemeProvider } from './ThemeProvider';
@@ -22,19 +23,19 @@ function PlaygroundDemo() {
 			<div>
 				resolved:
 				{' '}
-				<code>{`${resolved.aesthetic} / ${resolved.density}`}</code>
+				<code>{`${resolved.colorScheme} / ${resolved.theme} / ${resolved.density}`}</code>
 			</div>
 			<div>
 				preference:
 				{' '}
-				<code>{`${preference.aesthetic} / ${preference.density}`}</code>
+				<code>{`${preference.colorScheme} / ${preference.theme} / ${preference.density}`}</code>
 			</div>
 			<div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-				<button type="button" onClick={() => set({ aesthetic: 'light' })}>light</button>
-				<button type="button" onClick={() => set({ aesthetic: 'dark' })}>dark</button>
-				<button type="button" onClick={() => set({ aesthetic: 'system' })}>system</button>
-				<button type="button" onClick={() => set({ aesthetic: 'vaporwave' })}>vaporwave</button>
-				<button type="button" onClick={() => set({ density: 'comfortable' })}>comfortable</button>
+				<button type="button" onClick={() => set({ colorScheme: 'light' })}>light</button>
+				<button type="button" onClick={() => set({ colorScheme: 'dark' })}>dark</button>
+				<button type="button" onClick={() => set({ colorScheme: 'system' })}>system</button>
+				<button type="button" onClick={() => set({ theme: 'brand' })}>brand</button>
+				<button type="button" onClick={() => set({ theme: 'vaporwave' })}>vaporwave</button>
 				<button type="button" onClick={() => set({ density: 'compact' })}>compact</button>
 			</div>
 		</div>
@@ -51,7 +52,7 @@ export const Playground: Story = {
 		docs: {
 			description: {
 				story:
-					'`useTheme()` read and set, in one object. The buttons each call `set({ axis: value })`; `resolved` and `preference` update live.',
+					'`useTheme()` read and set, in one object. The buttons each call `set({ axis: value })` across the three axes; `resolved` and `preference` update live. Color scheme and identity are independent — setting one leaves the other alone.',
 			},
 		},
 	},
@@ -61,14 +62,15 @@ function CompositionDemo() {
 	const { resolved } = useTheme();
 	return (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', alignItems: 'flex-start' }}>
-			<div style={{ display: 'flex', gap: '1rem' }}>
+			<div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+				<ColorSchemeToggle />
 				<ThemeToggle />
 				<DensityToggle />
 			</div>
 			<div style={{ fontSize: '0.875rem' }}>
 				Applied:
 				{' '}
-				<code>{`${resolved.aesthetic} + ${resolved.density}`}</code>
+				<code>{`${resolved.colorScheme} + ${resolved.theme} + ${resolved.density}`}</code>
 			</div>
 		</div>
 	);
@@ -84,7 +86,7 @@ export const Composition: Story = {
 		docs: {
 			description: {
 				story:
-					'A color-scheme toggle beside a density toggle, over one provider. The two axes are independent, so a combination like vaporwave + compact is just the product of the two controls, not a composite variant.',
+					'A color-scheme toggle, an identity toggle, and a density toggle over one provider. The three axes are independent, so a combination like a brand identity in dark at compact density is just the product of three controls, not a composite variant.',
 			},
 		},
 	},
@@ -93,10 +95,10 @@ export const Composition: Story = {
 export const ProviderConfig: Story = {
 	render: () => (
 		<div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', fontSize: '0.875rem' }}>
-			<ThemeProvider defaults={{ aesthetic: 'dark' }}>
+			<ThemeProvider defaults={{ colorScheme: 'dark' }}>
 				<div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
 					<span>defaults dark:</span>
-					<ThemeToggle />
+					<ColorSchemeToggle />
 				</div>
 			</ThemeProvider>
 			<ThemeProvider forced={{ density: 'compact' }}>

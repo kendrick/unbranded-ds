@@ -1,41 +1,45 @@
 /**
- * `listThemes` — enumerate available themes.
+ * `listThemes` — enumerate the selectable value of every theme axis.
  *
- * Returns the keys exposed by `@unbranded-ds/tokens` plus a one-line
- * description per theme. No error states; the token map is bundled with
- * the package.
+ * Returns each axis value exposed by `@unbranded-ds/tokens` (spec 016: the
+ * color-scheme, theme/identity, and density axes) with its axis and a one-line
+ * description. The value set comes from the registry, so it includes the
+ * file-less defaults (`light`, `default`, `comfortable`). No error states; the
+ * registry is bundled with the package.
  */
 
 import type { McpTool } from '../runtime/stdio.js';
+import { AXES } from '../../axis-constants.js';
+import { themesForAxis } from '../../registry.js';
 import { mcpResult } from '../runtime/errors.js';
-import { loadThemes } from '../themes.js';
 
 const THEME_DESCRIPTIONS: Record<string, string> = {
-	light: 'Default light theme with neutral foregrounds on bright surfaces.',
-	dark: 'Dark theme with light foregrounds on dark surfaces.',
-	brand: 'Brand-accented theme — overrides primary, ring, and accent surfaces.',
+	// colorScheme (data-color-scheme)
+	light: 'Color-scheme axis: neutral foregrounds on bright surfaces. The base.',
+	dark: 'Color-scheme axis: light foregrounds on dark surfaces.',
+	// theme / identity (data-theme)
+	default: 'Theme axis: the unbranded identity — the color-scheme base shows through.',
+	brand: 'Theme axis: a violet brand identity, authored light and dark.',
 	vaporwave:
-		'Aesthetic axis (data-theme): saturated palette, a neon glow shadow, and display typography.',
-	compact:
-		'Density axis (data-density): tightened spacing and line-heights for dense layouts.',
+		'Theme axis: a saturated identity with a neon glow shadow and display type, authored light and dark.',
+	// density (data-density)
+	comfortable: 'Density axis: the default spacing and line-heights.',
+	compact: 'Density axis: tightened spacing and line-heights for dense layouts.',
 };
 
 export const listThemes: McpTool = {
 	name: 'listThemes',
 	description:
-		'List available themes with their keys and one-line descriptions. Useful when you want to enumerate brand, light, and dark themes before picking one for a downstream operation.',
+		'List the selectable value of every theme axis (colorScheme, theme, density) with its axis and a one-line description. Useful when you want to enumerate the light/dark schemes or the brand and vaporwave identities before picking one for a downstream operation.',
 	inputSchema: {},
 	handler: async () => {
-		const themes = await loadThemes();
-		const result = {
-			// Report each theme's axis so a caller knows which slot it fills —
-			// `aesthetic` vs `density` — when handing it back as a theme axis input.
-			themes: Array.from(themes.values()).map((theme) => ({
-				key: theme.key,
-				axis: theme.axis,
-				description: THEME_DESCRIPTIONS[theme.key] ?? '(no description available)',
+		const themes = AXES.flatMap((axis) =>
+			themesForAxis(axis).map((key) => ({
+				key,
+				axis,
+				description: THEME_DESCRIPTIONS[key] ?? '(no description available)',
 			})),
-		};
-		return mcpResult(result);
+		);
+		return mcpResult({ themes });
 	},
 };

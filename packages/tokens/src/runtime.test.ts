@@ -11,24 +11,34 @@ import {
 	ThemeValidationError,
 } from './runtime.js';
 
+const AXIS_ATTRS = ['data-color-scheme', 'data-theme', 'data-density'];
+
 describe('getThemeBootstrapScript', () => {
-	it('returns a string containing the canonical storage key and the default \'light\' fallback', () => {
+	it('contains all three storage keys and the light/default/comfortable fallbacks', () => {
 		const script = getThemeBootstrapScript();
 		expect(typeof script).toBe('string');
+		expect(script).toContain('unbranded-ds-color-scheme');
 		expect(script).toContain('unbranded-ds-theme');
-		expect(script).toContain('\'light\'');
+		expect(script).toContain('unbranded-ds-density');
+		expect(script).toContain('\'light\''); // color-scheme default
+		expect(script).toContain('\'default\''); // theme/identity default
+		expect(script).toContain('\'comfortable\''); // density default
 	});
 
-	it('uses a caller-supplied defaultTheme as the fallback and omits \'light\'', () => {
-		const script = getThemeBootstrapScript({ defaultTheme: 'dark' });
-		expect(typeof script).toBe('string');
+	it('uses caller-supplied per-axis defaults as the fallbacks', () => {
+		const script = getThemeBootstrapScript({
+			defaultColorScheme: 'dark',
+			defaultTheme: 'brand',
+			defaultDensity: 'compact',
+		});
 		expect(script).toContain('||\'dark\'');
-		expect(script).not.toContain('\'light\'');
+		expect(script).toContain('||\'brand\'');
+		expect(script).toContain('||\'compact\'');
 	});
 
 	it('returns byte-identical strings (and matching SHA-256 hashes) across consecutive calls', () => {
-		const a = getThemeBootstrapScript({ defaultTheme: 'dark' });
-		const b = getThemeBootstrapScript({ defaultTheme: 'dark' });
+		const a = getThemeBootstrapScript({ defaultColorScheme: 'dark' });
+		const b = getThemeBootstrapScript({ defaultColorScheme: 'dark' });
 		expect(a).toBe(b);
 
 		const hashA = createHash('sha256').update(a).digest('hex');
@@ -38,22 +48,33 @@ describe('getThemeBootstrapScript', () => {
 
 	describe('when executed in jsdom', () => {
 		beforeEach(() => {
-			document.documentElement.removeAttribute('data-theme');
+			for (const a of AXIS_ATTRS)
+				document.documentElement.removeAttribute(a);
 			vi.restoreAllMocks();
 		});
 
-		it('sets data-theme from a stored localStorage value', () => {
-			vi.spyOn(Storage.prototype, 'getItem').mockReturnValue('dark');
-			const script = getThemeBootstrapScript();
-			runInThisContext(script);
-			expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+		it('sets all three attributes from stored localStorage values', () => {
+			vi.spyOn(Storage.prototype, 'getItem').mockImplementation((key) => {
+				if (key === 'unbranded-ds-color-scheme')
+					return 'dark';
+				if (key === 'unbranded-ds-theme')
+					return 'brand';
+				if (key === 'unbranded-ds-density')
+					return 'compact';
+				return null;
+			});
+			runInThisContext(getThemeBootstrapScript());
+			expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark');
+			expect(document.documentElement.getAttribute('data-theme')).toBe('brand');
+			expect(document.documentElement.getAttribute('data-density')).toBe('compact');
 		});
 
-		it('falls back to the default theme when localStorage returns null', () => {
+		it('falls back to the per-axis defaults when localStorage returns null', () => {
 			vi.spyOn(Storage.prototype, 'getItem').mockReturnValue(null);
-			const script = getThemeBootstrapScript();
-			runInThisContext(script);
-			expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+			runInThisContext(getThemeBootstrapScript());
+			expect(document.documentElement.getAttribute('data-color-scheme')).toBe('light');
+			expect(document.documentElement.getAttribute('data-theme')).toBe('default');
+			expect(document.documentElement.getAttribute('data-density')).toBe('comfortable');
 		});
 	});
 
@@ -61,28 +82,32 @@ describe('getThemeBootstrapScript', () => {
 		expect(themeBootstrapScript).toBe(getThemeBootstrapScript());
 	});
 
-	// Spec 009 FR-001: first paint must set BOTH axes so a composed selection
-	// doesn't flash one attribute in before the other resolves.
-	it('sets both data-theme and data-density before paint', () => {
+	// Spec 016 FR-006: first paint must set ALL THREE axes so a composed selection
+	// doesn't flash one attribute in before the others resolve. The color-scheme key
+	// holds a concrete value (never `system`), so the bootstrap never touches
+	// matchMedia — the flash-free invariant.
+	it('sets all three attributes and never reads matchMedia', () => {
 		const script = getThemeBootstrapScript();
-		expect(script).toContain('data-theme');
-		expect(script).toContain('data-density');
-		// Each axis reads its own storage key (selections persist independently).
+		for (const a of AXIS_ATTRS)
+			expect(script).toContain(a);
+		expect(script).toContain('unbranded-ds-color-scheme');
 		expect(script).toContain('unbranded-ds-theme');
 		expect(script).toContain('unbranded-ds-density');
+		expect(script).not.toContain('matchMedia');
 	});
 
-	it('applies data-density from a stored value, falling back independently of theme', () => {
-		document.documentElement.removeAttribute('data-theme');
-		document.documentElement.removeAttribute('data-density');
+	it('resolves each axis independently from its own key', () => {
+		for (const a of AXIS_ATTRS)
+			document.documentElement.removeAttribute(a);
 		vi.spyOn(Storage.prototype, 'getItem').mockImplementation((key) =>
 			key === 'unbranded-ds-density' ? 'compact' : null,
 		);
 		runInThisContext(getThemeBootstrapScript());
 		expect(document.documentElement.getAttribute('data-density')).toBe('compact');
-		// Theme had no stored value, so it took the default — the two axes are
-		// resolved independently.
-		expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+		// the other two had no stored value, so they took their defaults — the axes
+		// are resolved independently.
+		expect(document.documentElement.getAttribute('data-color-scheme')).toBe('light');
+		expect(document.documentElement.getAttribute('data-theme')).toBe('default');
 	});
 });
 
@@ -98,11 +123,11 @@ describe('registerTheme (resolve-then-inject, spec 008 US2)', () => {
 	}
 
 	// A self-consistent AA-passing color block. The canonical DEFAULT colors
-	// (from themes/light.json) sit a hair under 4.5:1 on the muted and
-	// destructive pairs, so a partial theme that INHERITS them would now fail the
-	// (correctly un-skipped) contrast gate. These tests are about merge/injection
-	// mechanics, not the defaults' contrast, so they supply a passing color set
-	// and let the NON-color categories demonstrate inheritance.
+	// (the light base) sit a hair under 4.5:1 on the muted and destructive pairs,
+	// so a partial theme that INHERITS them would now fail the (correctly
+	// un-skipped) contrast gate. These tests are about merge/injection mechanics,
+	// not the defaults' contrast, so they supply a passing color set and let the
+	// NON-color categories demonstrate inheritance.
 	const passingColors = {
 		'background': '#f8f9fa',
 		'foreground': '#212529',
@@ -197,7 +222,7 @@ describe('registerTheme (resolve-then-inject, spec 008 US2)', () => {
 
 	// Spec 009 FR-001: a theme registered under the density axis keys its <style>
 	// on [data-density="<name>"], not [data-theme]. The id is axis-qualified
-	// (ds-density-<name>) so it can coexist with an aesthetic block of the same name.
+	// (ds-density-<name>) so it can coexist with a theme block of the same name.
 	it('emits a [data-density] selector when registered under the density axis', () => {
 		registerTheme(
 			{
@@ -214,9 +239,9 @@ describe('registerTheme (resolve-then-inject, spec 008 US2)', () => {
 		expect(style?.textContent).toContain('--spacing-4: 0.75rem;');
 	});
 
-	// FR-005: the default (aesthetic) path is unchanged — still [data-theme] under
-	// the historical ds-theme-<name> id, even though id derivation now runs through
-	// the axis attribute.
+	// FR-005: the default (theme/identity) path is unchanged — still [data-theme]
+	// under the historical ds-theme-<name> id, even though id derivation now runs
+	// through the axis attribute.
 	it('keeps the [data-theme] selector and historical id for the default axis', () => {
 		registerTheme({
 			name: 'default-axis-runtime',

@@ -1,6 +1,17 @@
 <script>
+	// Flash-free first paint: apply all three axes before render from the same
+	// keys the store writes (spec 016). Mirrors getThemeBootstrapScript(); the
+	// color-scheme key always holds a concrete value, never `system`.
 	(function () {
-		var theme = localStorage.getItem('ds-theme') || 'light';
-		document.documentElement.setAttribute('data-theme', theme);
+		var d = document.documentElement;
+		try {
+			d.setAttribute('data-color-scheme', localStorage.getItem('unbranded-ds-color-scheme') || 'light');
+			d.setAttribute('data-theme', localStorage.getItem('unbranded-ds-theme') || 'default');
+			d.setAttribute('data-density', localStorage.getItem('unbranded-ds-density') || 'comfortable');
+		} catch (e) {
+			d.setAttribute('data-color-scheme', 'light');
+			d.setAttribute('data-theme', 'default');
+			d.setAttribute('data-density', 'comfortable');
+		}
 	})();
 </script>

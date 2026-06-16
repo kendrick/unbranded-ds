@@ -6,7 +6,7 @@ import { useTheme } from './useTheme';
 
 function Probe() {
 	const { resolved } = useTheme();
-	return <span>{`${resolved.aesthetic}/${resolved.density}`}</span>;
+	return <span>{`${resolved.colorScheme}/${resolved.density}`}</span>;
 }
 
 describe('useTheme SSR safety (Constitution §IX bullet 6)', () => {

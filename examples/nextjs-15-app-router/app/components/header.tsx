@@ -1,6 +1,6 @@
 'use client';
 
-import { DensityToggle, ThemeToggle } from '@unbranded-ds/react';
+import { ColorSchemeToggle, DensityToggle, ThemeToggle } from '@unbranded-ds/react';
 import Link from 'next/link';
 
 // Client component: the toggles read the ThemeProvider via useTheme.
@@ -12,6 +12,7 @@ export function Header() {
 				<Link href="/showcase" className="text-muted-foreground hover:text-foreground">Showcase</Link>
 			</nav>
 			<div className="flex items-center gap-3">
+				<ColorSchemeToggle />
 				<ThemeToggle />
 				<DensityToggle />
 			</div>

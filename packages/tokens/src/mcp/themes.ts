@@ -6,11 +6,11 @@
  * scope so subsequent calls are free.
  */
 
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { listThemesByAxis, type Axis } from '../axes.js';
+import { AXES, AXIS_ATTRIBUTE, type Axis } from '../axes.js';
 import type { ResolvedLayer } from '../resolve.js';
 
 const MCP_DIR = dirname(fileURLToPath(import.meta.url));
@@ -32,8 +32,6 @@ const THEMES_DIR = findThemesDir();
 // a bundled theme is resolved by exactly one engine (Style Dictionary).
 const DELTA_DIR = join(dirname(THEMES_DIR), 'dist', 'json', 'themes');
 
-export const DEFAULT_THEME = 'light';
-
 export interface DtcgToken {
 	$value: string;
 	$type: string;
@@ -50,23 +48,53 @@ interface CachedTheme {
 
 let themesCache: Map<string, CachedTheme> | null = null;
 
+function jsonNames(dir: string): string[] {
+	try {
+		return readdirSync(dir)
+			.filter((f) => f.endsWith('.json'))
+			.map((f) => f.replace(/\.json$/, ''));
+	}
+	catch {
+		return [];
+	}
+}
+
 export async function loadThemes(): Promise<Map<string, CachedTheme>> {
 	if (themesCache)
 		return themesCache;
 
-	// Themes live under themes/<axis>/<name>.json; the directory is the theme's
-	// axis (see src/axes.ts). Keyed by name; the axis rides along for the
-	// multi-axis MCP input.
+	// Themes live under themes/<dir>/…, where <dir> is the axis attribute minus
+	// `data-` (color-scheme, theme, density). Color-scheme and density are flat
+	// (<dir>/<name>.json); the theme axis nests by identity then scheme
+	// (theme/<identity>/<scheme>.json) and is keyed by the `<identity>-<scheme>`
+	// combination so each authored cell has a unique key (spec 016). The axis rides
+	// along for the multi-axis MCP input.
 	const cache = new Map<string, CachedTheme>();
-	const byAxis = listThemesByAxis(THEMES_DIR);
-	for (const axis of Object.keys(byAxis) as Axis[]) {
-		for (const name of byAxis[axis]) {
-			const content = await readFile(
-				join(THEMES_DIR, axis, `${name}.json`),
-				'utf-8',
-			);
-			const data = JSON.parse(content) as ThemeData;
-			cache.set(name, { key: name, data, axis });
+	for (const axis of AXES) {
+		const axisDir = join(THEMES_DIR, AXIS_ATTRIBUTE[axis].replace(/^data-/, ''));
+		if (axis === 'theme') {
+			let identities: string[] = [];
+			try {
+				identities = readdirSync(axisDir, { withFileTypes: true })
+					.filter((e) => e.isDirectory())
+					.map((e) => e.name);
+			}
+			catch {
+				identities = [];
+			}
+			for (const identity of identities) {
+				for (const scheme of jsonNames(join(axisDir, identity))) {
+					const content = await readFile(join(axisDir, identity, `${scheme}.json`), 'utf-8');
+					const key = `${identity}-${scheme}`;
+					cache.set(key, { key, data: JSON.parse(content) as ThemeData, axis });
+				}
+			}
+		}
+		else {
+			for (const name of jsonNames(axisDir)) {
+				const content = await readFile(join(axisDir, `${name}.json`), 'utf-8');
+				cache.set(name, { key: name, data: JSON.parse(content) as ThemeData, axis });
+			}
 		}
 	}
 	themesCache = cache;

@@ -6,9 +6,9 @@ export default function ShowcasePage() {
 			<section className="flex flex-col gap-2">
 				<h1 className="text-2xl font-bold">Multi-axis composition</h1>
 				<p className="text-muted-foreground">
-					You navigated here and your theme and density stayed put: the provider in the root
-					layout is the single source of truth across routes. The panel below pins the vaporwave
-					aesthetic composed with the compact density through ThemeProvider&apos;s
+					You navigated here and your color scheme, theme, and density stayed put: the provider in
+					the root layout is the single source of truth across routes. The panel below pins the
+					vaporwave aesthetic, in dark, composed with the compact density through ThemeProvider&apos;s
 					{' '}
 					<code>forced</code>
 					{' '}

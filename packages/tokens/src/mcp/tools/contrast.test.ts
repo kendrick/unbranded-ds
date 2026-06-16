@@ -23,7 +23,7 @@ describe('contrast', () => {
 		const result = await callToolDirectly(contrast, {
 			foreground: 'color.foreground',
 			background: 'color.background',
-			theme: { aesthetic: 'dark' },
+			theme: { colorScheme: 'dark' },
 		});
 		expect(result.isError).toBeUndefined();
 		const payload = result.structuredContent as { ratio: number; foreground: { resolved: string } };

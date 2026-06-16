@@ -189,11 +189,12 @@ export function validateResolved(
 
 // ---------------------------------------------------------------------------
 // validateComposedTheme — completeness + contrast on a COMPOSED multi-axis
-// result (spec 009 FR-002). Compose the ordered layers (later wins per key, so
-// pass `[aesthetic, density]` to let density refine the aesthetic base), then
-// run the same checks validateTheme uses. This is what makes contrast fire on
-// the COMPOSED pairs: if a density layer drags an aesthetic's foreground/
-// background pair below AA, it fails loudly here rather than silently shipping.
+// result (spec 009 FR-002; reordered spec 016). Compose the ordered layers (later
+// wins per key, so pass `[colorScheme, theme, density]` to let an identity refine
+// the color-scheme base and density refine both), then run the same checks
+// validateTheme uses. This is what makes contrast fire on the COMPOSED pairs: if a
+// layer drags a foreground/background pair below AA, it fails loudly here rather
+// than silently shipping.
 // ---------------------------------------------------------------------------
 
 export function validateComposedTheme(

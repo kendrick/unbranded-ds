@@ -14,14 +14,13 @@ import { canonicalDefaultTokens } from './defaults';
 // drift protection as before, now structural rather than hand-typed. Run
 // `pnpm --filter @unbranded-ds/tokens build` to regenerate after a source change.
 //
-// (The color check compares against themes/aesthetic/light.json, which doubles
-// as a cross-check that the base color source still equals the light theme —
-// exactly the src/tokens-vs-light drift the spec-009 parity oracle caught.)
+// (The color check compares against src/tokens/color.json, the base color
+// source — light is the file-less base now, so the base IS the light
+// scheme; spec 016.)
 // ---------------------------------------------------------------------------
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const tokensDir = resolve(__dirname, 'tokens');
-const themesDir = resolve(__dirname, '..', 'themes');
 
 interface DtcgLeaf {
 	$value?: string;
@@ -117,9 +116,9 @@ describe('canonicalDefaultTokens drift guard', () => {
 		);
 	});
 
-	it('sources color defaults from themes/aesthetic/light.json (the default theme)', () => {
+	it('sources color defaults from src/tokens/color.json (the light base)', () => {
 		expect(canonicalDefaultTokens.color).toEqual(
-			flattenSource(resolve(themesDir, 'aesthetic', 'light.json'), 'color'),
+			flattenSource(resolve(tokensDir, 'color.json'), 'color'),
 		);
 	});
 

@@ -18,18 +18,18 @@ That registers the design-system Tailwind utilities backed by CSS variables (suc
 @import '@unbranded-ds/tokens/themes/dark.css';
 ```
 
-Themes compose across two axes. An aesthetic (palette, type, shadows) is applied through `data-theme`, and a density (spacing, line-height) through `data-density`. Import one theme per axis and apply both at once. Here vaporwave's look meets compact's tighter spacing:
+Themes compose across three axes. A color scheme (light/dark) is applied through `data-color-scheme`, an aesthetic identity (palette, type, shadows) through `data-theme`, and a density (spacing, line-height) through `data-density`. Import the cells you reach and apply the attributes together. Here the vaporwave identity in dark meets compact's tighter spacing:
 
 ```css
-@import '@unbranded-ds/tokens/themes/vaporwave.css';
+@import '@unbranded-ds/tokens/themes/vaporwave-dark.css';
 @import '@unbranded-ds/tokens/themes/compact.css';
 ```
 
 ```html
-<html data-theme="vaporwave" data-density="compact">
+<html data-color-scheme="dark" data-theme="vaporwave" data-density="compact"></html>
 ```
 
-The page resolves to the union of the two. On a shared token, density wins, since it refines the aesthetic base. See [THEMING.md](../../THEMING.md#theme-composition-axes) for the merge rules and a worked example.
+The page resolves to the union of the three. Later cascade layers win a collision — an identity over the color-scheme base, density over both. Each identity ships a cell per scheme (`brand-light`, `brand-dark`, `vaporwave-light`, `vaporwave-dark`), so a palette only lands when its color scheme is also set. See [THEMING.md](../../THEMING.md#theme-composition-axes) for the merge rules and a worked example.
 
 Or override token values directly in your own `:root`:
 
@@ -44,7 +44,7 @@ Consumer overrides win by cascade order, not by selector specificity. No specifi
 ## What's in the package
 
 - Tailwind v4 preset (`./preset.css`) that registers token-backed utilities
-- Built-in themes — light, dark, and brand (`./themes/<name>.css`)
+- Built-in themes — the color schemes light and dark, the identities brand and vaporwave (a cell per scheme), and the compact density (`./themes/<name>.css`)
 - Runtime helpers (`./runtime`): `registerTheme`, `validateTheme`, `themeBootstrapScript`, `getThemeBootstrapScript`
 - Typed TypeScript token map (default export)
 - Raw JSON token output (`./dist/json/*` for cross-platform consumers)
@@ -68,30 +68,30 @@ export default function RootLayout({ children }) {
 }
 ```
 
-It reads `localStorage.getItem('unbranded-ds-theme')` and applies `data-theme` to the document root before first paint, falling back to `'light'` when localStorage is empty or blocked.
+It reads the per-axis keys from storage — `unbranded-ds-color-scheme`, `unbranded-ds-theme`, and `unbranded-ds-density` — and applies `data-color-scheme`, `data-theme`, and `data-density` to the document root before first paint, falling back to `light` / `default` / `comfortable` when storage is empty or blocked. The color-scheme key always holds a concrete value, never `system`, so the bootstrap never has to touch `matchMedia`.
 
-### Non-default fallback theme
+### Non-default fallbacks
 
-When your default is something other than light (museum kiosks, theater apps, video editors, sleep apps), reach for the factory:
+When your default color scheme is dark (museum kiosks, theater apps, video editors, sleep apps), or you want a non-default starting identity or density, reach for the factory:
 
 ```tsx
 import { getThemeBootstrapScript } from '@unbranded-ds/tokens/runtime';
 
-const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' });
+const bootstrap = getThemeBootstrapScript({ defaultColorScheme: 'dark' });
 
 export function BootstrapScript() {
 	return <script dangerouslySetInnerHTML={{ __html: bootstrap }} />;
 }
 ```
 
-The factory's output is deterministic across builds for any given `defaultTheme` argument — consumers using SHA hash-based Content Security Policies can compute the hash once and trust it.
+The factory's output is deterministic across builds for any given options object (`defaultColorScheme`, `defaultTheme`, `defaultDensity`) — consumers using SHA hash-based Content Security Policies can compute the hash once and trust it.
 
 ### When to reach for which
 
-- Use `themeBootstrapScript` (the constant) when your default theme is `light`. One import, one inline tag.
-- Use `getThemeBootstrapScript({ defaultTheme })` (the factory) when your default is anything else.
+- Use `themeBootstrapScript` (the constant) when the defaults are light / default / comfortable. One import, one inline tag.
+- Use `getThemeBootstrapScript({ ... })` (the factory) when any axis starts somewhere else.
 
-Both share the same canonical `unbranded-ds-theme` localStorage key. Neither validates the saved theme value — if localStorage holds a value with no matching theme CSS, the page renders without those CSS variables until JS loads and a valid theme is registered. Validation belongs at runtime in `useTheme()` (coming in a future spec), not in the bootstrap script.
+Both read the same per-axis localStorage keys. Neither validates the saved values — if storage holds a value with no matching theme CSS, the page renders without those CSS variables until JS loads and a valid theme is registered. Validation belongs at runtime in `useTheme()`, not in the bootstrap script.
 
 ## Content Security Policy
 

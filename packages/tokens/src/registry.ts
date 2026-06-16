@@ -7,13 +7,16 @@ import type { Axis } from './axis-constants.js';
 // names are maintained here as plain data and runtime registrations are tracked
 // in memory. No `node:fs`, no `document`.
 //
-// A built-in axis includes its file-less default: density's `comfortable` is
-// the base token set with no override JSON, but it is a first-class selectable
-// value, so it appears here and leads the list (spec 011 FR-004, clarify Q4).
+// A built-in axis includes its file-less default, the base token set with no
+// override JSON but still a first-class selectable value, listed first: the
+// color-scheme `light`, the theme `default`, and density's `comfortable` (spec
+// 011 FR-004; spec 016). `system` is not a registry value; it is a color-scheme
+// intent special-cased in the store and resolved against the OS.
 // ---------------------------------------------------------------------------
 
 const BUILT_IN_THEMES: Record<Axis, readonly string[]> = {
-	aesthetic: ['light', 'dark', 'brand', 'vaporwave'],
+	colorScheme: ['light', 'dark'],
+	theme: ['default', 'brand', 'vaporwave'],
 	density: ['comfortable', 'compact'],
 };
 
@@ -21,7 +24,8 @@ const BUILT_IN_THEMES: Record<Axis, readonly string[]> = {
 // `registerThemeName` so a consumer's custom theme shows up in `themesForAxis`
 // (and therefore the toggles) without any extra wiring (clarify Q3).
 const runtimeThemes: Record<Axis, Set<string>> = {
-	aesthetic: new Set(),
+	colorScheme: new Set(),
+	theme: new Set(),
 	density: new Set(),
 };
 

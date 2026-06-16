@@ -1,20 +1,20 @@
 # Theming
 
-Themes are just CSS variables scoped to a `[data-theme]` selector. Every component reads its colors, spacing, radii, etc. from these variables through Tailwind utilities. Swap the attribute, swap the look. No component code changes.
+Themes are just CSS variables scoped to the axis attributes (`data-color-scheme`, `data-theme`, `data-density`). Every component reads its colors, spacing, radii, and the rest from these variables through Tailwind utilities. Swap an attribute, swap the look. No component code changes.
 
-Three themes come built in: light, dark, and brand.
+The built-ins span three axes (spec 016): the color schemes `light` and `dark`, the aesthetic identities `default`, `brand`, and `vaporwave` (each authored per scheme), and the `compact` density.
 
 ## Two things called "theme"
 
 "Theme" means two different things here, on two different pipelines. Knowing which one you are holding saves confusion.
 
-A **token-source override** is a build-time file under `packages/tokens/themes/`, authored in DTCG format (`$value` / `$type`). Style Dictionary merges it over the default token sources and bakes a static `[data-theme="<name>"]` CSS file. The built-in `light`, `dark`, and `brand` themes are this kind. You ship them in the package; consumers load the generated CSS.
+A **token-source override** is a build-time file under `packages/tokens/themes/`, authored in DTCG format (`$value` / `$type`). Style Dictionary merges it over the default token sources and bakes a static CSS file scoped to its axis attribute. The built-in color schemes, the brand and vaporwave identities, and the compact density are all this kind. You ship them in the package; consumers load the generated CSS.
 
 ```jsonc
 // packages/tokens/themes/sunset.json: a token-source override (DTCG)
 {
-  "color": { "primary": { "$value": "oklch(0.65 0.2 35)", "$type": "color" } },
-  "radius": { "md": { "$value": "0.75rem", "$type": "dimension" } }
+	"color": { "primary": { "$value": "oklch(0.65 0.2 35)", "$type": "color" } },
+	"radius": { "md": { "$value": "0.75rem", "$type": "dimension" } },
 }
 ```
 
@@ -23,12 +23,12 @@ A **runtime theme document** is a flat object passed to `registerTheme()` or `va
 ```jsonc
 // a runtime theme document (flat values, passed to registerTheme)
 {
-  "name": "sunset",
-  "displayName": "Sunset",
-  "tokens": {
-    "color": { "primary": "oklch(0.65 0.2 35)" },
-    "radius": { "md": "0.75rem" }
-  }
+	"name": "sunset",
+	"displayName": "Sunset",
+	"tokens": {
+		"color": { "primary": "oklch(0.65 0.2 35)" },
+		"radius": { "md": "0.75rem" },
+	},
 }
 ```
 
@@ -116,8 +116,7 @@ const result = validateTheme(myTheme);
 
 if (result.ok) {
 	console.log('Theme is valid!');
-}
-else {
+} else {
 	for (const issue of result.issues) {
 		console.error(`${issue.code}: ${issue.message} (at ${issue.path})`);
 	}
@@ -205,73 +204,79 @@ CSS-only: respond to the OS-level color scheme via `@media (prefers-color-scheme
 
 ## Using the built-in themes
 
-Import the CSS for whichever themes you need:
+Import the CSS for whichever cells you need. The clean aliases map to the built artifacts:
 
-```typescript
-import '@unbranded-ds/tokens/dist/css/tokens-light.css';
-import '@unbranded-ds/tokens/dist/css/tokens-dark.css';
-import '@unbranded-ds/tokens/dist/css/tokens-brand.css';
+```css
+@import '@unbranded-ds/tokens/themes/light.css'; /* color scheme */
+@import '@unbranded-ds/tokens/themes/dark.css';
+@import '@unbranded-ds/tokens/themes/brand-light.css'; /* identity, a cell per scheme */
+@import '@unbranded-ds/tokens/themes/brand-dark.css';
+@import '@unbranded-ds/tokens/themes/vaporwave-light.css';
+@import '@unbranded-ds/tokens/themes/vaporwave-dark.css';
+@import '@unbranded-ds/tokens/themes/compact.css'; /* density */
 ```
 
-Or as link tags:
-
-```html
-<link rel="stylesheet" href="@unbranded-ds/tokens/dist/css/tokens-light.css" />
-<link rel="stylesheet" href="@unbranded-ds/tokens/dist/css/tokens-dark.css" />
-<link rel="stylesheet" href="@unbranded-ds/tokens/dist/css/tokens-brand.css" />
-```
-
-Switch between them by changing `data-theme`. No reload needed.
+Switch between them by changing the axis attributes — `data-color-scheme`, `data-theme`, `data-density`. No reload needed.
 
 ## Theme composition (axes)
 
-"Vaporwave, but compact" is two decisions, not one: a palette-and-type aesthetic, and a spacing density. A consumer holds them as two separate knobs. Composition lets you turn each knob on its own axis instead of pre-baking every combination into its own theme file.
+"Vaporwave, in dark, but compact" is three decisions, not one: a color scheme, a palette-and-type identity, and a spacing density. A consumer holds them as three separate knobs. Composition lets you turn each on its own axis instead of pre-baking every combination into one theme file.
 
-There are two axes, a fixed set for now:
+There are three axes (spec 016):
 
-- **aesthetic**, applied through `data-theme`. This is the base look: palette, typography, shadows. The built-in `light`, `dark`, `brand`, and `vaporwave` themes all live on this axis.
-- **density**, applied through `data-density`. This refines spacing and line-height for tighter or roomier layouts. The built-in `compact` theme lives here.
+- **color scheme**, applied through `data-color-scheme`: `light` or `dark`, plus the OS-following `system` intent the React store resolves to one of them. It is the base the others refine.
+- **theme** (the aesthetic identity), applied through `data-theme`: `default`, `brand`, `vaporwave`. Palette, typography, shadows.
+- **density**, applied through `data-density`: `comfortable`, `compact`. Spacing and line-height.
 
-A theme's axis is declared by the directory it ships in (`themes/aesthetic/vaporwave.json`, `themes/density/compact.json`). The build, the validator, and the token-query MCP all read that directory, so they can never disagree about where a theme belongs.
+A cell's axis is declared by the directory it ships in: `themes/color-scheme/dark.json`, `themes/theme/vaporwave/dark.json`, `themes/density/compact.json`. The build, the validator, and the token-query MCP all read that layout, so they can never disagree about where a cell belongs.
 
-You apply one theme per axis at once, each on its own attribute:
+Each identity is authored as a complete palette per color scheme — `themes/theme/<identity>/light.json` and `.../dark.json` — rather than one delta layered over both schemes. A single delta cannot stay AA-correct on both a light and a dark background, so every cell of the matrix is its own authored, validated palette.
+
+You apply the attributes together:
 
 ```html
-<html data-theme="vaporwave" data-density="compact">
+<html data-color-scheme="dark" data-theme="vaporwave" data-density="compact"></html>
 ```
 
-The page resolves to the union of the two themes. Where they touch different tokens, each axis contributes its own: vaporwave brings the saturated palette and the Space Grotesk type, compact brings the tightened `spacing.*` and the smaller line-heights. Where they collide on the same token, **density wins**, because it refines an aesthetic base and its value is the more specific one. No JavaScript does this merge. Each axis emits its CSS variables inside its own cascade layer (aesthetic in `ds-aesthetic`, density in `ds-density`), and the build declares the order `@layer ds-aesthetic, ds-density;`. Later layers beat earlier ones in the CSS cascade, so density always overrides aesthetic on a shared variable, whatever order the consumer imported the stylesheets in.
+The page resolves to the union. Where the axes touch different tokens, each contributes its own. Where they collide, the later cascade layer wins: the build declares `@layer ds-color-scheme, ds-theme, ds-density;`, so an identity overrides the color-scheme base and density overrides both — whatever order the consumer imported the stylesheets in. No JavaScript does this merge.
 
-Worked example. With `vaporwave` on the aesthetic axis and `compact` on the density axis both active, the page resolves to this:
+Worked example. With the `dark` color scheme, the `vaporwave` identity, and `compact` density all active, the page resolves to this:
 
-- `--color-primary` is `oklch(0.7200 0.2000 330.00)`, vaporwave's magenta. Compact declares no colors, so the aesthetic value stands.
-- `--shadow-neon` is `0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)`, vaporwave's glow. Compact never mentions it, and the base schema does not declare it either (see the next section).
-- `--spacing-4` is `0.8rem`, not the base `1rem`. Both axes leave most tokens alone, but compact overrides the spacing scale, so its tighter step wins.
-- `--typography-leading-normal` is `1.35`, compact's tighter line-height. Another density override.
+- `--color-background` is vaporwave-dark's deep purple. The identity's dark cell (the compound `[data-theme="vaporwave"][data-color-scheme="dark"]` selector) wins over the bare `[data-color-scheme="dark"]` base, because `ds-theme` is the later layer.
+- `--shadow-neon` is `0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)`, vaporwave's glow — a theme-extension token the base schema does not declare (see the next section).
+- `--spacing-4` is `0.8rem`, not the base `1rem`. Compact overrides the spacing scale, and density is the last layer, so it wins.
 
-To apply both, import the two theme CSS files alongside the preset:
+An identity palette only lands when its color scheme is set too, since each cell is a compound selector. Import the cells you reach alongside the preset:
 
 ```css
 @import 'tailwindcss';
 @import '@unbranded-ds/tokens/preset.css';
-@import '@unbranded-ds/tokens/themes/vaporwave.css';
+@import '@unbranded-ds/tokens/themes/vaporwave-dark.css';
 @import '@unbranded-ds/tokens/themes/compact.css';
 ```
-
-The published CSS is keyed flat, by theme name (`themes/vaporwave.css`, `themes/compact.css`), even though the source files sit under their axis directories. Each shipped file carries its own `@layer` wrapper, so the density-over-aesthetic precedence holds however you order the imports.
 
 To compose at runtime instead, `registerTheme` takes the axis as a second argument:
 
 ```typescript
 import { registerTheme } from '@unbranded-ds/tokens/runtime';
-import vaporwave from '@unbranded-ds/tokens/themes/aesthetic/vaporwave.json';
-import compact from '@unbranded-ds/tokens/themes/density/compact.json';
 
-registerTheme(vaporwave); // aesthetic is the default axis
-registerTheme(compact, 'density');
+registerTheme(myIdentity, 'theme'); // 'theme' is the default axis
+registerTheme(myDensity, 'density');
 ```
 
-Each call injects a `<style>` block keyed to its axis attribute, and the same layer order does the deciding. Then set both attributes on the root.
+Each call injects a `<style>` block keyed to its axis attribute, and the same layer order decides collisions. A runtime theme is a single palette under one attribute; the per-combination compound cells are a build-time concern. Then set the attributes on the root.
+
+### Extending the axis model
+
+The axis set is open by construction: a new axis is purely additive, with no edit to the existing axes or their resolution. The color-scheme axis itself is the proof — adding it (spec 016) took only these steps, none of which touched the `theme` or `density` axes:
+
+1. A value set and a DOM attribute. `colorScheme` → `data-color-scheme`, added to the `Axis` union, the `AXES` cascade order, and the `AXIS_ATTRIBUTE` map in `axis-constants.ts`, plus its built-in values in the registry.
+2. Theme files under a directory the build discovers by convention: `themes/color-scheme/*.json`. A file-less default is allowed (light is the base token set, with no override file).
+3. A slot in the declared cascade order, `@layer ds-color-scheme, ds-theme, ds-density;`. Earlier means "more base," later means "wins a collision."
+4. An optional control. A toggle that drives the axis through `useTheme().set({ <axis>: value })` — data-driven from `themesForAxis('<axis>')` like `DensityToggle`, or a fixed segment set like `ColorSchemeToggle` when the values are a closed set.
+5. A storage key, if the selection should persist, with an entry in the store's `STORAGE_KEY` map (and `SYSTEM_MEDIA` if the axis follows an OS signal).
+
+The store loops `AXES`, the build derives emission from the directory layout, and the validator checks whatever cells exist. So a fourth axis — high contrast, reduced motion, a spacing scale — drops in exactly the same way.
 
 ## Overriding non-color tokens
 
@@ -282,15 +287,18 @@ The built-in `brand` theme shows this. On top of its color palette it rounds the
 ```jsonc
 // packages/tokens/themes/brand.json (excerpt)
 {
-  "color": { "...": "..." },
-  "radius": {
-    "sm": { "$value": "0.375rem", "$type": "dimension" },
-    "md": { "$value": "0.5rem", "$type": "dimension" },
-    "lg": { "$value": "0.75rem", "$type": "dimension" }
-  },
-  "typography": {
-    "font-sans": { "$value": "\"Inter\", ui-sans-serif, system-ui, sans-serif", "$type": "fontFamily" }
-  }
+	"color": { "...": "..." },
+	"radius": {
+		"sm": { "$value": "0.375rem", "$type": "dimension" },
+		"md": { "$value": "0.5rem", "$type": "dimension" },
+		"lg": { "$value": "0.75rem", "$type": "dimension" },
+	},
+	"typography": {
+		"font-sans": {
+			"$value": "\"Inter\", ui-sans-serif, system-ui, sans-serif",
+			"$type": "fontFamily",
+		},
+	},
 }
 ```
 
@@ -300,9 +308,9 @@ A runtime theme document does the same with flat values:
 
 ```jsonc
 {
-  "name": "rounded",
-  "displayName": "Rounded",
-  "tokens": { "radius": { "md": "0.75rem", "lg": "1rem" } }
+	"name": "rounded",
+	"displayName": "Rounded",
+	"tokens": { "radius": { "md": "0.75rem", "lg": "1rem" } },
 }
 ```
 
@@ -315,15 +323,15 @@ Sometimes a theme needs a token the canonical schema never declares. Vaporwave w
 Declare it like any other token, in the theme JSON, under whatever category fits:
 
 ```jsonc
-// themes/aesthetic/vaporwave.json (excerpt)
+// themes/theme/vaporwave/dark.json (excerpt)
 {
-  "shadow": {
-    "neon": { "$value": "0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)", "$type": "shadow" }
-  }
+	"shadow": {
+		"neon": { "$value": "0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)", "$type": "shadow" },
+	},
 }
 ```
 
-The build handles it in two places. The per-theme CSS gets a real variable, `--shadow-neon`, scoped under `[data-theme="vaporwave"]`. The token map gains an entry built from the union of the schema tokens and every token found across the bundled theme files, so `shadow.neon` shows up next to the schema tokens, tagged with its source:
+The build handles it in two places. The per-cell CSS gets a real variable, `--shadow-neon`, scoped under the compound `[data-theme="vaporwave"][data-color-scheme="dark"]` selector. The token map gains an entry built from the union of the schema tokens and every token found across the bundled theme files, so `shadow.neon` shows up next to the schema tokens, tagged with its source:
 
 ```typescript
 import tokenMap from '@unbranded-ds/tokens';
@@ -342,11 +350,11 @@ And the token-query MCP reports the same `source`. Ask `lookupToken` for `shadow
 ```jsonc
 // lookupToken({ token: 'shadow.neon', theme: { aesthetic: 'vaporwave' } })
 {
-  "token": "shadow.neon",
-  "source": "theme-extension",
-  "present": true,
-  "cssVariable": "--shadow-neon",
-  "value": "0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)"
+	"token": "shadow.neon",
+	"source": "theme-extension",
+	"present": true,
+	"cssVariable": "--shadow-neon",
+	"value": "0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)",
 }
 ```
 
@@ -362,15 +370,15 @@ When a token you need does not exist in the schema, you add it to the canonical 
 
 ```jsonc
 {
-  "motion": {
-    "duration": {
-      "fast": { "$value": "120ms", "$type": "duration" },
-      "base": { "$value": "240ms", "$type": "duration" }
-    },
-    "easing": {
-      "standard": { "$value": "cubic-bezier(0.4, 0, 0.2, 1)", "$type": "cubicBezier" }
-    }
-  }
+	"motion": {
+		"duration": {
+			"fast": { "$value": "120ms", "$type": "duration" },
+			"base": { "$value": "240ms", "$type": "duration" },
+		},
+		"easing": {
+			"standard": { "$value": "cubic-bezier(0.4, 0, 0.2, 1)", "$type": "cubicBezier" },
+		},
+	},
 }
 ```
 

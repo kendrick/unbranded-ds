@@ -14,12 +14,13 @@ import { ThemeStoreContext } from './ThemeProvider';
  * analog of `next-themes`' `useTheme`. Must run inside a {@link ThemeProvider}.
  *
  * @remarks
- * If you know next-themes, the mapping is `theme` to `preference`,
- * `resolvedTheme` to `resolved`, `systemTheme` to `system`, `forcedTheme` to
- * `forced`, `themes` to `available`, and `setTheme(value)` to `set(partial)`.
- * Ours are per-axis maps keyed over the `Axis` union, and `set` takes one object
- * for any subset of axes. The full table and the rationale live in
- * `useTheme.usage.md`.
+ * If you know next-themes, the mapping is `theme` (the identity) to the `theme`
+ * axis, `resolvedTheme` to `colorScheme.resolved`, `systemTheme` to
+ * `colorScheme.system`, `forcedTheme` to `forced`, `themes` to `available`, and
+ * `setTheme(value)` to `set(partial)` or the `colorScheme.set` shorthand. Ours are
+ * per-axis maps keyed over the `Axis` union, plus a top-level `colorScheme`
+ * convenience for the common light/dark/system case. The full table and the
+ * rationale live in `useTheme.usage.md`.
  *
  * @throws {@link ThemeProviderError} (code `THEME_NO_PROVIDER`) when called with
  * no `<ThemeProvider>` ancestor.
@@ -48,6 +49,13 @@ export function useTheme(): UseThemeReturn {
 		return out;
 	}, []);
 
+	// The color-scheme convenience setter is a thin shorthand over `set`; `store`
+	// is stable, so it is too.
+	const setColorScheme = React.useCallback(
+		(value: string) => store.set({ colorScheme: value }),
+		[store],
+	);
+
 	return {
 		preference: snapshot.preference,
 		resolved: snapshot.resolved,
@@ -55,5 +63,11 @@ export function useTheme(): UseThemeReturn {
 		forced: store.forced,
 		available,
 		set: store.set,
+		colorScheme: {
+			resolved: snapshot.resolved.colorScheme,
+			preference: snapshot.preference.colorScheme,
+			system: snapshot.system.colorScheme,
+			set: setColorScheme,
+		},
 	};
 }

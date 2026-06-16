@@ -82,13 +82,15 @@ export function resolveTheme(
 
 /**
  * Fold ordered resolved layers onto the defaults base; later layers win per key.
- * Callers pass `[aestheticDelta, densityDelta]` so density wins collisions.
+ * Callers pass `[colorSchemeDelta, themeDelta, densityDelta]` (spec 016) so an
+ * identity refines the color-scheme base and density wins both — the same order
+ * as the cascade `@layer ds-color-scheme, ds-theme, ds-density;`.
  *
- * Each layer is a DELTA (the keys that axis set), NOT a complete set: folding
- * complete sets would clobber, because a complete density set carries default
- * colors that would overwrite the aesthetic's. This matches the build's CSS
- * emission (aesthetic full base layer, density delta on top), so the resolver
- * and the cascade agree by construction.
+ * Each layer is a DELTA (the keys that axis set), NOT necessarily a complete set:
+ * folding a complete density set would clobber, because it carries default colors
+ * that would overwrite the identity's. A theme cell IS a complete authored palette
+ * and folds cleanly (its keys simply win). This mirrors the build's CSS emission,
+ * so the resolver and the cascade agree by construction.
  */
 export function composeTokens(layers: ResolvedLayer[]): ResolvedTokens {
 	const merged = layers.reduce<Record<string, Category>>(

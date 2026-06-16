@@ -2,18 +2,16 @@
 
 import type { ReactNode } from 'react';
 
-import { Moon, Sun, SunMoon } from 'lucide-react';
+import { themesForAxis } from '@unbranded-ds/tokens/client';
 import * as React from 'react';
 
 import { AxisToggle } from '../_internal/AxisToggle';
 
-type ColorScheme = 'light' | 'system' | 'dark';
-
 export interface ThemeToggleProps {
-	/** Per-segment label overrides; English defaults otherwise. */
-	'labels'?: Partial<Record<ColorScheme, string>>;
-	/** Per-segment icon overrides; lucide Sun / SunMoon / Moon otherwise. */
-	'icons'?: Partial<Record<ColorScheme, ReactNode>>;
+	/** Per-value label overrides, keyed by identity value; English defaults otherwise. */
+	'labels'?: Record<string, string>;
+	/** Per-value icons, keyed by identity value; none by default. */
+	'icons'?: Record<string, ReactNode>;
 	'size'?: 'sm' | 'md' | 'lg';
 	'orientation'?: 'horizontal' | 'vertical';
 	'aria-label'?: string;
@@ -21,24 +19,22 @@ export interface ThemeToggleProps {
 	'id'?: string;
 }
 
-const DEFAULT_LABELS: Record<ColorScheme, string> = {
-	light: 'Light',
-	system: 'System',
-	dark: 'Dark',
+// English defaults for the built-in identities. A value with no entry (a custom
+// runtime theme) falls back to its raw name in AxisToggle.
+const DEFAULT_LABELS: Record<string, string> = {
+	default: 'Default',
+	brand: 'Brand',
+	vaporwave: 'Vaporwave',
 };
 
 /**
- * The drop-in color-scheme control: a fixed light / system / dark
- * {@link SegmentedControl} wired to the aesthetic axis of `useTheme()`. Persisted,
- * system-aware, keyboard-navigable, and accessible. Must run inside a `<ThemeProvider>`.
- *
- * @remarks
- * The three segments are fixed, not derived from the registry. Color-scheme is
- * not yet its own axis, so when the aesthetic value is `brand` or `vaporwave`
- * (neither light nor dark) no segment is selected and the control stays enabled;
- * choosing a segment overwrites the aesthetic value (spec 011 FR-010). For an
- * explicit two-state light/dark control with no `system`, compose on `useTheme()`
- * directly; see the sidecar recipe.
+ * The aesthetic-identity control: a segmented control over the `theme` axis of
+ * `useTheme()` (default / brand / vaporwave). Like `<DensityToggle>` and unlike
+ * `<ColorSchemeToggle>`, its segments are data-driven from the tokens registry
+ * (`themesForAxis('theme')`), so a newly registered identity appears with no
+ * change here. There is no `system` segment — identity has no OS signal; that
+ * belongs to `<ColorSchemeToggle>` (spec 016 split the two apart). Must run inside
+ * a `<ThemeProvider>`.
  *
  * @example
  * ```tsx
@@ -56,19 +52,13 @@ export function ThemeToggle({
 	icons,
 	...rest
 }: ThemeToggleProps): React.JSX.Element {
-	const mergedIcons: Record<string, ReactNode> = {
-		light: icons?.light ?? <Sun aria-hidden />,
-		system: icons?.system ?? <SunMoon aria-hidden />,
-		dark: icons?.dark ?? <Moon aria-hidden />,
-	};
-
 	return (
 		<AxisToggle
-			axis="aesthetic"
-			values={['light', 'system', 'dark']}
-			groupLabel="Color scheme"
+			axis="theme"
+			values={themesForAxis('theme')}
+			groupLabel="Theme"
 			labels={{ ...DEFAULT_LABELS, ...labels }}
-			icons={mergedIcons}
+			icons={icons}
 			{...rest}
 		/>
 	);

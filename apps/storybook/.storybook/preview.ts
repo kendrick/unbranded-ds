@@ -1,46 +1,68 @@
 import type { Preview } from '@storybook/react-vite';
 import React from 'react';
 
+// Three axes (spec 016): the color scheme (light/dark) and the aesthetic identity
+// (default/brand/vaporwave) ride separate attributes, so each identity ships a
+// cell per scheme. The compact density is imported last so its cascade layer wins
+// a collision.
 import '@unbranded-ds/tokens/themes/light.css';
 import '@unbranded-ds/tokens/themes/dark.css';
-import '@unbranded-ds/tokens/themes/brand.css';
-// Spec 009 axes: aesthetic themes (above + vaporwave) and a density theme
-// (compact). Density is imported last so its cascade layer wins a collision.
-import '@unbranded-ds/tokens/themes/vaporwave.css';
+import '@unbranded-ds/tokens/themes/brand-light.css';
+import '@unbranded-ds/tokens/themes/brand-dark.css';
+import '@unbranded-ds/tokens/themes/vaporwave-light.css';
+import '@unbranded-ds/tokens/themes/vaporwave-dark.css';
 import '@unbranded-ds/tokens/themes/compact.css';
 import './styles.css';
 
 const preview: Preview = {
 	globalTypes: {
+		colorScheme: {
+			description: 'Color scheme (light/dark)',
+			toolbar: {
+				title: 'Color scheme',
+				icon: 'sun',
+				items: [
+					{ value: 'light', title: 'Light' },
+					{ value: 'dark', title: 'Dark' },
+				],
+				dynamicTitle: true,
+			},
+		},
 		theme: {
-			description: 'Theme for components',
+			description: 'Aesthetic identity',
 			toolbar: {
 				title: 'Theme',
 				icon: 'paintbrush',
 				items: [
-					{ value: 'light', title: 'Light' },
-					{ value: 'dark', title: 'Dark' },
+					{ value: 'default', title: 'Default' },
 					{ value: 'brand', title: 'Brand' },
+					{ value: 'vaporwave', title: 'Vaporwave' },
 				],
 				dynamicTitle: true,
 			},
 		},
 	},
 	initialGlobals: {
-		theme: 'light',
+		colorScheme: 'light',
+		theme: 'default',
 	},
 	decorators: [
 		(Story, context) => {
-			const theme = context.globals.theme || 'light';
+			const colorScheme = context.globals.colorScheme || 'light';
+			const theme = context.globals.theme || 'default';
 
 			React.useEffect(() => {
-				document.documentElement.setAttribute('data-theme', theme);
+				const d = document.documentElement;
+				d.setAttribute('data-color-scheme', colorScheme);
+				d.setAttribute('data-theme', theme);
+				localStorage.setItem('unbranded-ds-color-scheme', colorScheme);
 				localStorage.setItem('unbranded-ds-theme', theme);
-			}, [theme]);
+			}, [colorScheme, theme]);
 
 			return React.createElement(
 				'div',
 				{
+					'data-color-scheme': colorScheme,
 					'data-theme': theme,
 					'style': {
 						backgroundColor: 'var(--color-background)',

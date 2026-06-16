@@ -1,7 +1,7 @@
 /**
  * `palette` — list every token under a category prefix.
  *
- * Input: { category: string; theme?: { aesthetic?: string; density?: string } }
+ * Input: { category: string; theme?: { colorScheme?: string; theme?: string; density?: string } }
  *   category may be flat (`'color'`) or hierarchical (`'color.foreground'`).
  * Output: { category, theme, tokens: Array<{ name, value, source }> }
  *
@@ -33,7 +33,7 @@ export const palette: McpTool = {
 	handler: async (input) => {
 		const args = input as {
 			category: string;
-			theme?: { aesthetic?: string; density?: string };
+			theme?: { colorScheme?: string; theme?: string; density?: string };
 		};
 
 		const { composed } = await composeAxes(args.theme);

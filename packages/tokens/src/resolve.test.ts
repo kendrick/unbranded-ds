@@ -122,4 +122,20 @@ describe('composeTokens', () => {
 		]);
 		expect(composed.color.primary).toBe('#ff0000');
 	});
+
+	it('folds three axes [colorScheme, theme, density] in order, later winning per key (spec 016)', () => {
+		// Mirror the cascade @layer ds-color-scheme, ds-theme, ds-density: the
+		// color-scheme base, the identity refining it, density refining both.
+		const composed = composeTokens([
+			asLayer({ color: { primary: 'SCHEME', background: 'SCHEME-BG' } }), // colorScheme
+			asLayer({ color: { primary: 'THEME' } }), // theme/identity
+			asLayer({ spacing: { 4: 'DENSITY' } }), // density
+		]);
+		// the identity wins `primary` over the color-scheme base...
+		expect(composed.color.primary).toBe('THEME');
+		// ...the color-scheme base shows through where the identity is silent...
+		expect(composed.color.background).toBe('SCHEME-BG');
+		// ...and density refines spacing on top of both.
+		expect(composed.spacing[4]).toBe('DENSITY');
+	});
 });

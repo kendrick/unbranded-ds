@@ -73,8 +73,8 @@ describe('themeSchema', () => {
 });
 
 describe('contrastPairs', () => {
-	it('declares 4 foreground/background pairs', () => {
-		expect(contrastPairs).toHaveLength(4);
+	it('declares 5 foreground/background pairs', () => {
+		expect(contrastPairs).toHaveLength(5);
 	});
 
 	it('all pairs have 4.5:1 threshold', () => {

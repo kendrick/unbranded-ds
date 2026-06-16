@@ -1,6 +1,8 @@
 import type { TransformedToken } from 'style-dictionary/types';
+import { readdirSync, rmSync } from 'node:fs';
+import { join } from 'node:path';
 import StyleDictionary from 'style-dictionary';
-import { AXIS_ATTRIBUTE, themeAxisEntries } from './src/axes.js';
+import { AXIS_ATTRIBUTE } from './src/axes.js';
 
 /**
  * The single source of truth for a token's flattened name.
@@ -78,11 +80,12 @@ StyleDictionary.registerTransformGroup({
 //
 // `css/variables` has no @layer option, so we delegate to the built-in to
 // produce the `[selector] { --var: … }` body, then nest it inside
-// `@layer <name> { … }`. The two axes go in distinct layers — aesthetic in
-// `ds-aesthetic`, density in `ds-density` — and the bundle declares the order
-// `@layer ds-aesthetic, ds-density;` (see layer-order.css) so a density var
-// always wins a collision with an aesthetic var, independent of import order.
-// Layer membership, not selector specificity, decides the winner.
+// `@layer <name> { … }`. The three axes go in distinct layers — color scheme in
+// `ds-color-scheme`, theme/identity in `ds-theme`, density in `ds-density` — and
+// the bundle declares the order `@layer ds-color-scheme, ds-theme, ds-density;`
+// (see layer-order.css) so an identity var wins a collision with the color-scheme
+// base, and a density var wins both, independent of import order. Layer
+// membership, not selector specificity, decides the winner.
 // ---------------------------------------------------------------------------
 StyleDictionary.registerFormat({
 	name: 'css/variables-layered',
@@ -111,7 +114,7 @@ StyleDictionary.registerFormat({
 // ---------------------------------------------------------------------------
 StyleDictionary.registerFormat({
 	name: 'css/layer-order',
-	format: () => `@layer ds-aesthetic, ds-density;\n`,
+	format: () => `@layer ds-color-scheme, ds-theme, ds-density;\n`,
 });
 
 // ---------------------------------------------------------------------------
@@ -235,30 +238,134 @@ StyleDictionary.registerFormat({
 // ---------------------------------------------------------------------------
 // Build
 // ---------------------------------------------------------------------------
-async function build() {
-	// Discover theme files by axis: themes/<axis>/<name>.json. The directory is
-	// the single source of truth for a theme's axis (see src/axes.ts).
-	const entries = themeAxisEntries('themes');
+// One CSS file + (optionally) one resolved-delta JSON to emit. `cssSource` is the
+// Style Dictionary source for the COMPLETE scoped rule; `deltaSource` is the
+// theme-alone source for the resolved delta the runtime resolver folds — `null`
+// when the cell is the file-less base (the `light` color scheme), which has no
+// delta because `composeTokens` already starts from the light defaults.
+interface Emission {
+	artifact: string;
+	selector: string;
+	layer: string;
+	cssSource: string[];
+	deltaSource: string[] | null;
+}
 
-	// 1. Per-theme CSS builds. Each theme is scoped under its axis attribute
-	//    (aesthetic → [data-theme], density → [data-density]) and wrapped in its
-	//    axis cascade layer (aesthetic → ds-aesthetic, density → ds-density) so
-	//    the two axes compose deterministically: density wins a collision via the
-	//    layer order declared in layer-order.css, regardless of import order.
-	//
-	//    Sourcing differs by axis on purpose. AESTHETIC themes source the base
-	//    `src/tokens/**` so each emits a complete resolved set (the base layer a
-	//    page always wants present). DENSITY themes source ONLY their own file —
-	//    the delta — so a density override doesn't redeclare every color var and
-	//    clobber the aesthetic layer. A density theme is a refinement, not a full
-	//    theme; it must touch only the vars it actually changes.
-	for (const { name, axis } of entries) {
-		const source
-			= axis === 'density'
-				? [`themes/${axis}/${name}.json`]
-				: ['src/tokens/**/*.json', `themes/${axis}/${name}.json`];
+function jsonNames(dir: string): string[] {
+	try {
+		return readdirSync(dir)
+			.filter((f) => f.endsWith('.json'))
+			.map((f) => f.replace(/\.json$/, ''))
+			.sort();
+	}
+	catch {
+		return [];
+	}
+}
+
+// Enumerate every cell of the axis matrix (spec 016). The directory layout is the
+// source of truth: themes/color-scheme/<scheme>.json, themes/theme/<identity>/
+// <scheme>.json, themes/density/<name>.json.
+//
+// Sourcing differs by axis on purpose:
+//   - COLOR-SCHEME and THEME cells source the base `src/tokens/**` plus their own
+//     override, so each emits a COMPLETE resolved set. A theme cell is a complete
+//     authored palette (the spec rejected layering one identity over both schemes,
+//     which can't stay AA on both backgrounds), so the compound selector fully
+//     defines its cell and the validator can check each of the six directly.
+//   - DENSITY cells source ONLY their own file — the delta — so a density override
+//     touches just the spacing vars it changes rather than clobbering colors.
+//
+// `light` is the file-less base: it emits the complete base set under
+// [data-color-scheme="light"] but carries no delta (composeTokens folds onto the
+// light defaults already).
+function listEmissions(): Emission[] {
+	const base = ['src/tokens/**/*.json'];
+	const emissions: Emission[] = [];
+
+	// Color-scheme axis → @layer ds-color-scheme, [data-color-scheme="<scheme>"].
+	const colorSchemeDir = 'themes/color-scheme';
+	const schemes = ['light', ...jsonNames(colorSchemeDir).filter((s) => s !== 'light')];
+	for (const scheme of schemes) {
+		const override = scheme === 'light' ? null : [`${colorSchemeDir}/${scheme}.json`];
+		emissions.push({
+			artifact: scheme,
+			selector: `[${AXIS_ATTRIBUTE.colorScheme}="${scheme}"]`,
+			layer: 'ds-color-scheme',
+			cssSource: override ? [...base, ...override] : base,
+			deltaSource: override,
+		});
+	}
+
+	// Theme (identity) axis → @layer ds-theme, compound
+	// [data-theme="<identity>"][data-color-scheme="<scheme>"]. Each identity nests
+	// one scheme file per cell; the delta is the cell file alone.
+	const themeDir = 'themes/theme';
+	const identities = readdirSync(themeDir, { withFileTypes: true })
+		.filter((e) => e.isDirectory())
+		.map((e) => e.name)
+		.sort();
+	for (const identity of identities) {
+		for (const scheme of jsonNames(join(themeDir, identity))) {
+			const file = `${themeDir}/${identity}/${scheme}.json`;
+			emissions.push({
+				artifact: `${identity}-${scheme}`,
+				selector: `[${AXIS_ATTRIBUTE.theme}="${identity}"][${AXIS_ATTRIBUTE.colorScheme}="${scheme}"]`,
+				layer: 'ds-theme',
+				cssSource: [...base, file],
+				deltaSource: [file],
+			});
+		}
+	}
+
+	// Density axis → @layer ds-density, [data-density="<name>"] — the delta path.
+	const densityDir = 'themes/density';
+	for (const name of jsonNames(densityDir)) {
+		const file = `${densityDir}/${name}.json`;
+		emissions.push({
+			artifact: name,
+			selector: `[${AXIS_ATTRIBUTE.density}="${name}"]`,
+			layer: 'ds-density',
+			cssSource: [file],
+			deltaSource: [file],
+		});
+	}
+
+	return emissions;
+}
+
+// Remove the per-cell artifacts before regenerating so a renamed or removed cell
+// (spec 016 renamed every aesthetic theme) leaves no stale CSS or delta behind for
+// a consumer or a test to pick up. Shared assets are overwritten in place.
+function cleanPerCellArtifacts() {
+	for (const [dir, pattern] of [
+		['dist/css', /^tokens-.*\.css$/],
+		['dist/json/themes', /\.json$/],
+	] as const) {
+		for (const f of (() => {
+			try {
+				return readdirSync(dir);
+			}
+			catch {
+				return [];
+			}
+		})()) {
+			if (pattern.test(f))
+				rmSync(join(dir, f));
+		}
+	}
+}
+
+async function build() {
+	cleanPerCellArtifacts();
+	const emissions = listEmissions();
+
+	// 1. Per-cell CSS + resolved-delta JSON. The CSS scopes a complete (or delta)
+	//    var set under the cell's selector and cascade layer; the JSON is the
+	//    resolved delta composeTokens folds (skipped for the file-less light base).
+	for (const e of emissions) {
 		const sd = new StyleDictionary({
-			source,
+			source: e.cssSource,
 			log: { warnings: 'disabled' },
 			platforms: {
 				css: {
@@ -266,11 +373,11 @@ async function build() {
 					buildPath: 'dist/css/',
 					files: [
 						{
-							destination: `tokens-${name}.css`,
+							destination: `tokens-${e.artifact}.css`,
 							format: 'css/variables-layered',
 							options: {
-								selector: `[${AXIS_ATTRIBUTE[axis]}="${name}"]`,
-								layer: `ds-${axis}`,
+								selector: e.selector,
+								layer: e.layer,
 								outputReferences: false,
 							},
 						},
@@ -280,19 +387,17 @@ async function build() {
 		});
 		await sd.buildAllPlatforms();
 
-		// 1b. Per-theme resolved-delta JSON (spec 014): theme-alone source so the
-		//     artifact is the theme's resolved overrides — the deltas composeTokens
-		//     folds. The MCP and the bundled-theme validation read these instead of
-		//     re-resolving raw source, so a bundled theme is resolved by one engine.
+		if (!e.deltaSource)
+			continue;
 		const sdDelta = new StyleDictionary({
-			source: [`themes/${axis}/${name}.json`],
+			source: e.deltaSource,
 			log: { warnings: 'disabled' },
 			platforms: {
 				json: {
 					transformGroup: 'css-motion',
 					buildPath: 'dist/json/themes/',
 					files: [
-						{ destination: `${name}.json`, format: 'json/resolved-layer' },
+						{ destination: `${e.artifact}.json`, format: 'json/resolved-layer' },
 					],
 				},
 			},
@@ -373,7 +478,7 @@ async function build() {
 	await sdBase.buildAllPlatforms();
 
 	console.log(
-		`✓ Built ${entries.length} theme CSS files + layer-order + Tailwind preset + TypeScript types + JSON`,
+		`✓ Built ${emissions.length} theme CSS files + layer-order + Tailwind preset + TypeScript types + JSON`,
 	);
 }
 

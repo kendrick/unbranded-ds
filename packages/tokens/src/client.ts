@@ -11,12 +11,15 @@ export type { Axis } from './axis-constants.js';
 export { AXES, AXIS_ATTRIBUTE } from './axis-constants.js';
 export { themesForAxis } from './registry.js';
 
+// The concrete color scheme (light/dark): the flash-free bootstrap key for that
+// axis, always concrete, never `system` (spec 016 split color scheme out).
+export const COLOR_SCHEME_STORAGE_KEY = 'unbranded-ds-color-scheme';
+// Companion key: the stated color-scheme intent, including `system`. The key
+// above always holds a concrete value so the bootstrap never sees `system`; this
+// lets the hook re-enter system-following on mount (FR-006).
+export const COLOR_SCHEME_PREFERENCE_STORAGE_KEY = 'unbranded-ds-color-scheme-preference';
+// The aesthetic identity (default/brand/vaporwave); no longer holds light/dark (spec 016).
 export const THEME_STORAGE_KEY = 'unbranded-ds-theme';
-// Density rides its own storage key (spec 009) so an aesthetic and a density
-// selection persist independently; picking one must not clobber the other.
+// Each axis rides its own storage key (spec 009) so selections persist
+// independently; picking one must not clobber the others.
 export const DENSITY_STORAGE_KEY = 'unbranded-ds-density';
-// Companion key (spec 011): the stated color-scheme intent, including `system`.
-// The bootstrap key above always holds a concrete light/dark value so the
-// flash-free bootstrap never sees `system`; this key lets the hook re-enter
-// system-following on mount (FR-006).
-export const THEME_PREFERENCE_STORAGE_KEY = 'unbranded-ds-theme-preference';
