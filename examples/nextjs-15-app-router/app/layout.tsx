@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { SkipLink, ThemeProvider } from '@unbranded-ds/react';
 import { getThemeBootstrapScript } from '@unbranded-ds/tokens/runtime';
 import localFont from 'next/font/local';
-import { AppShell } from './components/app-shell';
+import { Header } from './components/header';
 import './globals.css';
 
 // Self-hosted font (FR-013). next/font/local must run in a server module, so it
@@ -31,7 +32,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 				<script dangerouslySetInnerHTML={{ __html: getThemeBootstrapScript() }} />
 			</head>
 			<body className="bg-background text-foreground">
-				<AppShell>{children}</AppShell>
+				{/* This layout is a server component. Since @unbranded-ds/react ships
+				    'use client' (spec 017), it imports the provider, skip link, and
+				    header directly, with no client wrapper of its own. {children} are
+				    server pages passed through ThemeProvider's client boundary as props. */}
+				<ThemeProvider>
+					<SkipLink />
+					<Header />
+					<main id="main" tabIndex={-1} className="mx-auto max-w-5xl p-4 sm:p-6">
+						{children}
+					</main>
+				</ThemeProvider>
 			</body>
 		</html>
 	);
