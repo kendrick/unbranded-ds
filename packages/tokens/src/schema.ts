@@ -204,4 +204,14 @@ export const contrastPairs: ContrastPair[] = [
 		background: 'color.destructive',
 		threshold: 4.5,
 	},
+	// Muted text rendered on the base background (e.g. a card colored `background`
+	// with `muted-foreground` body text). axe flagged this in spec 015 but the
+	// validator never checked it — `muted-foreground`/`muted` covers the muted
+	// surface, not the base one. Spec 016 closes the gap; every shipped cell is
+	// validated against it.
+	{
+		foreground: 'color.muted-foreground',
+		background: 'color.background',
+		threshold: 4.5,
+	},
 ];

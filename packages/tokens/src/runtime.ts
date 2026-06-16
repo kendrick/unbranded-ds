@@ -1,7 +1,12 @@
 import type { Axis } from './axis-constants.js';
 import type { PartialTheme } from './schema.js';
 import { AXIS_ATTRIBUTE } from './axis-constants.js';
-import { DENSITY_STORAGE_KEY, THEME_PREFERENCE_STORAGE_KEY, THEME_STORAGE_KEY } from './client.js';
+import {
+	COLOR_SCHEME_PREFERENCE_STORAGE_KEY,
+	COLOR_SCHEME_STORAGE_KEY,
+	DENSITY_STORAGE_KEY,
+	THEME_STORAGE_KEY,
+} from './client.js';
 import { contrastRatio, hexToOklch, parseColor } from './color.js';
 import { registerThemeName } from './registry.js';
 import { contrastPairs } from './schema.js';
@@ -9,44 +14,57 @@ import { validateTheme } from './validate.js';
 
 // The storage keys live in the browser-safe client entry; re-exported here so
 // the bootstrap below and any existing `/runtime` consumers keep working.
-export { DENSITY_STORAGE_KEY, THEME_PREFERENCE_STORAGE_KEY, THEME_STORAGE_KEY };
+export {
+	COLOR_SCHEME_PREFERENCE_STORAGE_KEY,
+	COLOR_SCHEME_STORAGE_KEY,
+	DENSITY_STORAGE_KEY,
+	THEME_STORAGE_KEY,
+};
 
 /**
  * Factory that returns a self-executing JavaScript string with
  * caller-specified fallbacks. Inline as the body of a `<script>` tag in
  * `<head>` to prevent the flash-of-wrong-theme on page reload.
  *
- * Sets BOTH axes before paint (spec 009): `data-theme` from the aesthetic
- * storage key and `data-density` from the density key. They're applied
- * together so a composed selection (e.g. a density refinement of an
- * aesthetic base) lands in one synchronous pass — neither axis flashes
- * while the other resolves.
+ * Sets all THREE axes before paint (spec 016): `data-color-scheme` from the
+ * color-scheme key (light/dark), `data-theme` (the aesthetic identity) from the
+ * theme key, and `data-density` from the density key. They're applied together so
+ * a composed selection lands in one synchronous pass — no axis flashes while
+ * another resolves. The color-scheme key always holds a CONCRETE value, never
+ * `system`: the store resolves `system` against the OS and writes the concrete
+ * result there, so the bootstrap never has to touch `matchMedia`.
  *
  * The output is deterministic across builds for any given options object —
  * consumers using SHA hash-based Content Security Policies can compute the
  * hash once and trust it across builds.
  *
  * @example
- * const bootstrap = getThemeBootstrapScript({ defaultTheme: 'dark' })
+ * const bootstrap = getThemeBootstrapScript({ defaultColorScheme: 'dark' })
  * <script dangerouslySetInnerHTML={{ __html: bootstrap }} />
  */
 export function getThemeBootstrapScript(
-	options: { defaultTheme?: string; defaultDensity?: string } = {},
+	options: {
+		defaultColorScheme?: string;
+		defaultTheme?: string;
+		defaultDensity?: string;
+	} = {},
 ): string {
-	const defaultTheme = options.defaultTheme ?? 'light';
+	const defaultColorScheme = options.defaultColorScheme ?? 'light';
+	const defaultTheme = options.defaultTheme ?? 'default';
 	const defaultDensity = options.defaultDensity ?? 'comfortable';
 	const d = 'document.documentElement';
-	// One try wraps both reads: if storage throws (blocked cookies, privacy
-	// mode), both axes fall back rather than leaving one axis unset.
-	return `(function(){try{${d}.setAttribute('data-theme',localStorage.getItem('${THEME_STORAGE_KEY}')||'${defaultTheme}');${d}.setAttribute('data-density',localStorage.getItem('${DENSITY_STORAGE_KEY}')||'${defaultDensity}')}catch(e){${d}.setAttribute('data-theme','${defaultTheme}');${d}.setAttribute('data-density','${defaultDensity}')}})()`;
+	// One try wraps all three reads: if storage throws (blocked cookies, privacy
+	// mode), every axis falls back rather than leaving one unset.
+	return `(function(){try{${d}.setAttribute('data-color-scheme',localStorage.getItem('${COLOR_SCHEME_STORAGE_KEY}')||'${defaultColorScheme}');${d}.setAttribute('data-theme',localStorage.getItem('${THEME_STORAGE_KEY}')||'${defaultTheme}');${d}.setAttribute('data-density',localStorage.getItem('${DENSITY_STORAGE_KEY}')||'${defaultDensity}')}catch(e){${d}.setAttribute('data-color-scheme','${defaultColorScheme}');${d}.setAttribute('data-theme','${defaultTheme}');${d}.setAttribute('data-density','${defaultDensity}')}})()`;
 }
 
 /**
- * A self-executing JavaScript string that reads the saved aesthetic theme
- * (`unbranded-ds-theme`) and density (`unbranded-ds-density`) from
- * localStorage and applies `data-theme` / `data-density` to the document
- * root before first paint. Falls back to `'light'` / `'comfortable'` on
- * missing, blocked, or invalid storage.
+ * A self-executing JavaScript string that reads the saved color scheme
+ * (`unbranded-ds-color-scheme`), aesthetic identity (`unbranded-ds-theme`), and
+ * density (`unbranded-ds-density`) from localStorage and applies
+ * `data-color-scheme` / `data-theme` / `data-density` to the document root before
+ * first paint. Falls back to `'light'` / `'default'` / `'comfortable'` on missing,
+ * blocked, or invalid storage.
  *
  * Inline as the body of a `<script>` tag in `<head>` to prevent the
  * flash-of-wrong-theme on page reload. Equivalent to
@@ -97,15 +115,16 @@ export class ThemeValidationError extends Error {
  * Validates a theme and injects a `<style>` block scoped to the given axis's
  * attribute selector into the document head.
  *
- * `axis` (spec 009 FR-001) chooses the attribute the block keys on:
- * `'aesthetic'` (the default) emits under `[data-theme="<name>"]` exactly as
- * before — single-arg callers are untouched (FR-005) — while `'density'` emits
- * under `[data-density="<name>"]`. The two blocks compose through the CSS
- * cascade: registering an aesthetic and a density theme yields two independently
- * keyed `<style>` blocks, and the build's `@layer` order lets density win a
- * per-var collision. There is no JS-side composition here — each axis block
- * carries its OWN resolved vars (equal to `resolveTheme(partial)`), so parity
- * with the resolver holds per block.
+ * `axis` (spec 009 FR-001, retargeted in spec 016) chooses the attribute the
+ * block keys on: `'theme'` (the default, the aesthetic identity) emits under
+ * `[data-theme="<name>"]`, `'colorScheme'` under `[data-color-scheme="<name>"]`,
+ * and `'density'` under `[data-density="<name>"]`. The blocks compose through the
+ * CSS cascade: registering a theme and a density theme yields two independently
+ * keyed `<style>` blocks, and the build's `@layer` order resolves a per-var
+ * collision. There is no JS-side composition here — each axis block carries its
+ * OWN resolved vars (equal to `resolveTheme(partial)`), so parity with the
+ * resolver holds per block. A runtime theme is a single palette under one
+ * attribute; the per-combination compound selectors are a build-time concern.
  *
  * Accepts a PARTIAL theme (spec 008 US2): any subset of categories/keys. It is
  * resolved against the canonical defaults before validation and injection, so a
@@ -116,7 +135,7 @@ export class ThemeValidationError extends Error {
  */
 export function registerTheme(
 	themeJson: PartialTheme,
-	axis: Axis = 'aesthetic',
+	axis: Axis = 'theme',
 ): void {
 	const result = validateTheme(themeJson);
 
@@ -185,9 +204,9 @@ export function registerTheme(
 	const css = `${selector} {\n${vars.join('\n')}\n}`;
 
 	// Remove any existing style block for this (axis, theme). The id is keyed on
-	// the axis attribute so an aesthetic and a density theme that happen to share
+	// the axis attribute so a theme and a density theme that happen to share
 	// a name produce two distinct blocks the cascade can compose, rather than one
-	// clobbering the other. The aesthetic default keeps the historical
+	// clobbering the other. The default `theme` axis keeps the historical
 	// `ds-theme-<name>` id (FR-005) — existing lookups by that id still resolve.
 	const existingId = `ds-${AXIS_ATTRIBUTE[axis].replace(/^data-/, '')}-${theme.name}`;
 	const existing = document.getElementById(existingId);

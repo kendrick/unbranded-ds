@@ -255,19 +255,19 @@ describe('validateComposedTheme', () => {
 // --- Axis assignment guard (spec 009 FR-004) -------------------------------
 
 describe('checkAxisAssignment', () => {
-	it('flags AXIS_CONFLICT when a density theme is assigned to the aesthetic slot', () => {
-		// `compact` lives in themes/density/, so handing it to the aesthetic slot
+	it('flags AXIS_CONFLICT when a density theme is assigned to the theme slot', () => {
+		// `compact` lives in themes/density/, so handing it to the theme slot
 		// is a wrong-axis assignment.
-		const issues = checkAxisAssignment(themesRoot, { aesthetic: 'compact' });
+		const issues = checkAxisAssignment(themesRoot, { theme: 'compact' });
 		expect(issues.length).toBe(1);
 		expect(issues[0]!.code).toBe('AXIS_CONFLICT');
-		expect(issues[0]!.path).toBe('aesthetic');
+		expect(issues[0]!.path).toBe('theme');
 	});
 
-	it('returns no issues for a correct aesthetic+density assignment', () => {
-		// vaporwave is an aesthetic theme, compact is a density theme — both in slot.
+	it('returns no issues for a correct theme+density assignment', () => {
+		// vaporwave is a theme (identity), compact is a density theme — both in slot.
 		const issues = checkAxisAssignment(themesRoot, {
-			aesthetic: 'vaporwave',
+			theme: 'vaporwave',
 			density: 'compact',
 		});
 		expect(issues).toEqual([]);
