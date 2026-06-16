@@ -1,23 +1,31 @@
 <!--
 SYNC IMPACT REPORT
 ==================
-Version change:  1.2.0 → 1.3.0  [MINOR — Section XI.2 made compat-first]
-Bump rationale:  Reframes the API-shape vocabulary as compatibility-first (spec
-                 013): where a component wraps shadcn/ui or Base UI, its public
-                 prop and slot names follow the upstream convention, and the
-                 shared vocabulary governs only props/slots the design system
-                 introduces. Encodes the polymorphic-by-lineage rule (asChild for
-                 shadcn Slot triggers, render for Base UI, as for leaf primitives)
-                 and drops the separate `intent` prop (folded into `variant`,
-                 shadcn-style). New and corrected guidance in a standing section,
-                 not a backward-incompatible redefinition, so a MINOR bump.
+Version change:  1.3.0 → 1.4.0  [MINOR — Section III three-axis split; Section IV component-set refresh]
+Bump rationale:  Spec 016 splits the conflated aesthetic axis into two composable
+                 axes: a color-scheme axis (`data-color-scheme`, light/dark, plus a
+                 `system` intent resolved from the OS) and a theme/identity axis
+                 (`data-theme`, the former `aesthetic` axis renamed), joining the
+                 existing density axis under the layer order `@layer ds-color-scheme,
+                 ds-theme, ds-density;`. The axis rename is an internal vocabulary
+                 change with no external consumers (clean break); Section III's
+                 theming principle is expanded and re-grounded, not removed or
+                 redefined incompatibly, so the bump is MINOR rather than MAJOR.
+                 Section IV's frozen "v0.1 nine" list was stale (it predated specs
+                 004 and 011) and is refreshed to the shipped set, now naming
+                 ColorSchemeToggle and the identity ThemeToggle.
 
 Modified principles:
-  - Section XI.2 (API shape): Compatibility with shadcn/ui and Base UI is the
-    higher rule; the shared vocabulary applies to introduced props/slots only.
-    Variant axes use shadcn's `variant`/`size` (no separate `intent`); compound
-    slots follow the upstream public-API names; polymorphic rendering follows
-    lineage (asChild / render / as) rather than one unified prop.
+  - Section III (Theming contract): three orthogonal axes instead of two. Adds the
+    color-scheme axis (`data-color-scheme`, light/dark + a `system` intent), renames
+    the `aesthetic` axis to `theme` (`data-theme`, identity only), and sets the layer
+    order `@layer ds-color-scheme, ds-theme, ds-density;` — later layer wins, so an
+    identity overrides the color-scheme base and density overrides both. The flash-free
+    bootstrap now reads per-axis keys and sets all three attributes. "Light and dark are
+    themes like any other" is replaced: they are the color-scheme axis, composed with the
+    identity rather than conflated into it.
+  - Section IV (component set): the frozen v0.1 nine is refreshed to the 17 shipped
+    components, and the "tenth component requires a spec" clause is generalized.
 
 Added sections:       N/A.
 Removed sections:     N/A.
@@ -28,6 +36,11 @@ Templates audited:
   ✅ .specify/templates/tasks-template.md  — No change required.
 
 Prior amendments:
+  - 1.3.0 (2026-06-12): Reframed Section XI.2's API-shape vocabulary as
+    compatibility-first: where a component wraps shadcn/ui or Base UI, its public
+    prop and slot names follow the upstream convention, and the shared vocabulary
+    governs only introduced props/slots. Encoded the polymorphic-by-lineage rule
+    (asChild / render / as) and folded `intent` into `variant`. Per spec 013.
   - 1.2.0 (2026-06-12): Expanded Section III with the per-axis theme composition
     API and theme-extension tokens. Per spec 009.
   - 1.1.1 (2026-05-16): Extended Section VIII's MCP entry with
@@ -96,11 +109,11 @@ The tokens package must build and publish without any React, Storybook, or Base 
 Theming supports runtime JSON themes. The contract is:
 
 - **The canonical token schema is locked at build time.** The set of canonical token _names_ (e.g. `color.primary`, `radius.md`, `spacing.4`) is fixed by `@unbranded-ds/tokens` and known to Tailwind at compile time. Components and utilities reference these names only. A theme may also declare a **theme-extension token** the schema does not: a per-theme primitive the canonical set has no reason to generalize, such as vaporwave's `shadow.neon`. These are a documented escape hatch outside the locked schema. They emit as CSS variables, and the bundled themes' extensions carry a typed `source: 'theme-extension'` discriminator in the token map and the token-query MCP. The lock binds the canonical set; it does not forbid extension tokens.
-- **Token values float at runtime.** A theme is a JSON document that supplies values for the locked schema. Themes are loaded by setting an axis attribute on a root element and injecting the corresponding CSS variables. Themes compose across orthogonal axes, one theme per axis: an **aesthetic** axis applied via `data-theme` (palette, type, shadows) and a **density** axis applied via `data-density` (spacing, line-height). The page resolves to the union of the active axes; on a token collision, **density overrides aesthetic**, enforced by CSS cascade layers (`@layer ds-aesthetic, ds-density;`) rather than any runtime merge. Multiple themes may still coexist on the page via nested `data-theme` scopes; per-axis composition is the orthogonal mechanism for combining axes at one scope.
+- **Token values float at runtime.** A theme is a JSON document that supplies values for the locked schema. Themes are loaded by setting an axis attribute on a root element and injecting the corresponding CSS variables. Themes compose across three orthogonal axes, one theme per axis: a **color-scheme** axis applied via `data-color-scheme` (light or dark, the base the others refine), a **theme** axis applied via `data-theme` (the aesthetic identity — palette, type, shadows; this was the `aesthetic` axis before spec 016), and a **density** axis applied via `data-density` (spacing, line-height). The page resolves to the union of the active axes; on a token collision the later cascade layer wins, enforced by `@layer ds-color-scheme, ds-theme, ds-density;` rather than any runtime merge — an identity overrides the color-scheme base, and density overrides both. `system` is a color-scheme intent, not a stored concrete value: it resolves to light or dark from the OS before paint. Multiple themes may still coexist on the page via nested scopes; per-axis composition is the orthogonal mechanism for combining axes at one scope.
 - **Themes are validated.** `@unbranded-ds/tokens` exports a Zod schema for theme files and a validation function that checks (a) schema conformance, (b) WCAG AA contrast for foreground/background pairs declared as such in the schema. Invalid themes fail loudly, never silently.
-- **First paint must not flash.** The Storybook app and any consuming app must apply the active theme before first paint via a blocking inline script that reads the theme key from storage and sets `data-theme` plus an inline `<style>` of CSS variables.
+- **First paint must not flash.** The Storybook app and any consuming app must apply the active axes before first paint via a blocking inline script that reads the per-axis keys from storage (resolving the color-scheme `system` intent against the OS) and sets `data-color-scheme`, `data-theme`, and `data-density`, plus an inline `<style>` of CSS variables.
 
-Light and dark are themes like any other. Multi-brand and multi-tenant are the same mechanism applied more times. There is no second theming system.
+Light and dark are the color-scheme axis, composed with the aesthetic identity rather than conflated into it. Multi-brand and multi-tenant are the identity axis applied more times. There is no second theming system.
 
 ---
 
@@ -112,7 +125,7 @@ Components are sourced from the Base UI flavor of shadcn/ui (the port that uses 
 - Components must style themselves exclusively through Tailwind utilities that resolve to tokens. No hardcoded colors, radii, spacing, font sizes, or shadows. A lint rule enforces this.
 - Components accept a `className` prop merged via `cn()` and must not break when consumers override styles.
 - Components do not import from `@unbranded-ds/tokens` directly at runtime. They consume tokens through the Tailwind preset and CSS variables.
-- The v0.1 component set is fixed: Button, Input, Label, Card, Dialog, Select, Checkbox, Switch, Tabs. Adding a tenth component requires a spec.
+- The component set grows only by spec. As of spec 016 it is Button, Card, Checkbox, ColorSchemeToggle, DensityToggle, Dialog, Input, Label, SegmentedControl, Select, SkipLink, Slider, Switch, Tabs, ThemeToggle, Tooltip, and VisuallyHidden — the original v0.1 nine, the primitives added by spec 004, and the theming controls from specs 011 and 016 (which split the old color/identity toggle into `ColorSchemeToggle` for light/dark/system and `ThemeToggle` for the aesthetic identity). Adding another component still requires a spec.
 
 ---
 
@@ -274,4 +287,4 @@ The rule from Section V — "if a behavior is not exercised in a story, it is no
 
 ---
 
-**Version**: 1.3.0 | **Ratified**: TODO(RATIFICATION_DATE): set to original adoption date | **Last Amended**: 2026-06-12
+**Version**: 1.4.0 | **Ratified**: TODO(RATIFICATION_DATE): set to original adoption date | **Last Amended**: 2026-06-16
