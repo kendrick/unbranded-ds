@@ -5,19 +5,27 @@
 @import 'tailwindcss';
 @import '@unbranded-ds/react/preset.css';
 
-/* Themes this app uses. Additive: import only what you need. */
+/*
+ * Themes this app uses (spec 016: color scheme and identity are separate axes).
+ * Additive — import only the cells you reach. `light` is the file-less base: it
+ * shows through with no import, so the app pulls in the dark scheme, the brand
+ * and vaporwave identities in both schemes, and the compact density.
+ */
 @import '@unbranded-ds/tokens/themes/dark.css';
-@import '@unbranded-ds/tokens/themes/vaporwave.css';
+@import '@unbranded-ds/tokens/themes/brand-light.css';
+@import '@unbranded-ds/tokens/themes/brand-dark.css';
+@import '@unbranded-ds/tokens/themes/vaporwave-light.css';
+@import '@unbranded-ds/tokens/themes/vaporwave-dark.css';
 @import '@unbranded-ds/tokens/themes/compact.css';
 
 /*
  * Consumer overrides. Delete this block to revert to design-system defaults.
- * The design system scopes its tokens under [data-theme="..."], so an override
- * has to match that specificity to win. We target the light and dark schemes the
- * toggle drives and leave the vaporwave aesthetic as its own look.
+ * The design system scopes its tokens under data-* axis attributes; an unlayered
+ * override here beats the layered DS vars regardless of specificity. We retune the
+ * light and dark color schemes (their own axis since spec 016, data-color-scheme)
+ * and exclude the brand and vaporwave identities, leaving each as its own look.
  */
-[data-theme='light'],
-[data-theme='dark'] {
+[data-color-scheme]:not([data-theme='vaporwave']):not([data-theme='brand']) {
 	--typography-font-sans: var(--font-local-sans), system-ui, sans-serif;
 	/*
 	 * A dark, rich brand purple. Kept dark on purpose: the design system's primary

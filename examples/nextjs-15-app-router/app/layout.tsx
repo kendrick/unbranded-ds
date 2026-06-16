@@ -22,11 +22,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
 	return (
-		// suppressHydrationWarning: the bootstrap script sets data-theme/data-density
-		// on <html> before React hydrates, which is an intended attribute mismatch.
+		// suppressHydrationWarning: the bootstrap script sets data-color-scheme,
+		// data-theme, and data-density on <html> before React hydrates, which is an
+		// intended attribute mismatch.
 		<html lang="en" className={localSans.variable} suppressHydrationWarning>
 			<head>
-				{/* Flash-free: apply both axes before first paint (spec 002/009). */}
+				{/* Flash-free: apply all three axes before first paint (spec 002/009/016). */}
 				<script dangerouslySetInnerHTML={{ __html: getThemeBootstrapScript() }} />
 			</head>
 			<body className="bg-background text-foreground">
