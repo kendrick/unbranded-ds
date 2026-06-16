@@ -2,7 +2,7 @@
  * `contrast` — compute WCAG contrast ratio + AA/AAA pass for two colors.
  *
  * Input: { foreground: ColorOrToken; background: ColorOrToken;
- *          theme?: { aesthetic?: string; density?: string } }
+ *          theme?: { colorScheme?: string; theme?: string; density?: string } }
  *   ColorOrToken is a hex/rgb/hsl/oklch string OR a named token reference (e.g.
  *   'color.primary'). Token references resolve against the COMPOSED axis tree.
  * Output: { ratio, aa: { normal, large }, aaa: { normal, large },
@@ -76,7 +76,7 @@ export const contrast: McpTool = {
 		const args = input as {
 			foreground: string;
 			background: string;
-			theme?: { aesthetic?: string; density?: string };
+			theme?: { colorScheme?: string; theme?: string; density?: string };
 		};
 
 		// Compose once; both sides resolve against the same tree.

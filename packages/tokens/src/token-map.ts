@@ -1,9 +1,9 @@
 import type { Axis } from './axes.js';
 import type { ThemeData } from './mcp/themes.js';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { AXES, listThemesByAxis } from './axes.js';
+import { AXES, AXIS_ATTRIBUTE } from './axes.js';
 import { walkSubtree } from './mcp/themes.js';
 
 export type TokenCategory
@@ -182,9 +182,36 @@ function cssVariableForPath(dotPath: string): string {
 	return `--${kebab}`;
 }
 
-function readTheme(themesDir: string, axis: Axis, name: string): ThemeData {
-	const raw = readFileSync(join(themesDir, axis, `${name}.json`), 'utf8');
-	return JSON.parse(raw) as ThemeData;
+// Every theme file under an axis. Color-scheme and density nest one level
+// (themes/<dir>/<name>.json); the theme axis nests by identity then scheme
+// (themes/theme/<identity>/<scheme>.json), so its files live one level deeper
+// (spec 016). The directory is the axis attribute without the `data-` prefix.
+function themeFiles(themesDir: string, axis: Axis): string[] {
+	const axisDir = join(themesDir, AXIS_ATTRIBUTE[axis].replace(/^data-/, ''));
+	const jsonIn = (dir: string): string[] => {
+		try {
+			return readdirSync(dir)
+				.filter((f) => f.endsWith('.json'))
+				.map((f) => join(dir, f));
+		}
+		catch {
+			return [];
+		}
+	};
+	if (axis !== 'theme')
+		return jsonIn(axisDir);
+	try {
+		return readdirSync(axisDir, { withFileTypes: true })
+			.filter((e) => e.isDirectory())
+			.flatMap((e) => jsonIn(join(axisDir, e.name)));
+	}
+	catch {
+		return [];
+	}
+}
+
+function readTheme(path: string): ThemeData {
+	return JSON.parse(readFileSync(path, 'utf8')) as ThemeData;
 }
 
 /**
@@ -196,10 +223,9 @@ function buildTokenMap(): Record<string, TokenDefinition> {
 	const map: Record<string, TokenDefinition> = { ...schemaTokenMap };
 
 	const themesDir = findThemesDir();
-	const byAxis = listThemesByAxis(themesDir);
 	for (const axis of AXES) {
-		for (const name of byAxis[axis]) {
-			const data = readTheme(themesDir, axis, name);
+		for (const path of themeFiles(themesDir, axis)) {
+			const data = readTheme(path);
 			for (const { name: dotPath, token } of walkSubtree(data, '')) {
 				// Schema tokens already typed; theme overrides of schema tokens stay
 				// schema. Only genuinely new dot-paths become extensions.

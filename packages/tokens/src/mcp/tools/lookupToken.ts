@@ -1,7 +1,7 @@
 /**
  * `lookupToken` — return the resolved CSS variable and value for a token.
  *
- * Input: { token: string; theme?: { aesthetic?: string; density?: string } }
+ * Input: { token: string; theme?: { colorScheme?: string; theme?: string; density?: string } }
  * Output: { token, theme, source, present, cssVariable?, value?, note? }
  *
  * The token is resolved against the COMPOSED axis tree, not a single theme, so a
@@ -26,12 +26,12 @@ const inputSchema = {
 export const lookupToken: McpTool = {
 	name: 'lookupToken',
 	description:
-		'Return the resolved CSS variable name and current value for a named token under the given theme axes. Useful when you need to know what `color.primary` actually resolves to with the dark aesthetic active right now.',
+		'Return the resolved CSS variable name and current value for a named token under the given theme axes. Useful when you need to know what `color.primary` actually resolves to with the dark color scheme active right now.',
 	inputSchema,
 	handler: async (input) => {
 		const args = input as {
 			token: string;
-			theme?: { aesthetic?: string; density?: string };
+			theme?: { colorScheme?: string; theme?: string; density?: string };
 		};
 
 		const { composed } = await composeAxes(args.theme);

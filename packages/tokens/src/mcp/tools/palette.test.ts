@@ -26,7 +26,7 @@ describe('palette', () => {
 	it('surfaces a theme-extension token under its category when the theme is active', async () => {
 		const result = await callToolDirectly(palette, {
 			category: 'shadow',
-			theme: { aesthetic: 'vaporwave' },
+			theme: { theme: 'vaporwave' },
 		});
 		const payload = result.structuredContent as { tokens: Array<{ name: string; source: string }> };
 		const neon = payload.tokens.find((t) => t.name === 'shadow.neon');

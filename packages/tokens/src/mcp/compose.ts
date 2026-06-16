@@ -13,7 +13,7 @@ import type { ResolvedLayer } from '../resolve.js';
 
 import { z } from 'zod';
 import { composeTokens } from '../resolve.js';
-import { DEFAULT_THEME, getResolvedDelta } from './themes.js';
+import { getResolvedDelta } from './themes.js';
 
 // `ResolvedTokens` is the flat composed shape Theme['tokens'] resolves to:
 // { [category]: { [flatKey]: string } }. composeTokens returns it; we never
@@ -21,51 +21,63 @@ import { DEFAULT_THEME, getResolvedDelta } from './themes.js';
 type ResolvedTokens = ReturnType<typeof composeTokens>;
 
 /**
- * The axis-object input shared by every resolving tool. Either slot is optional;
- * omit one to skip that axis. Both omitted falls back to the package default
- * aesthetic (see `composeAxes`), so single-axis callers keep working unchanged.
+ * The axis-object input shared by every resolving tool (spec 016, three axes).
+ * Every slot is optional; omit one to skip that axis, omit the object for the
+ * base (light, default identity, comfortable). `colorScheme` sets the light/dark
+ * base, `theme` the aesthetic identity that refines it, `density` refines both.
  */
 export const themeAxesSchema = z
 	.object({
-		aesthetic: z.string().optional(),
+		colorScheme: z.string().optional(),
+		theme: z.string().optional(),
 		density: z.string().optional(),
 	})
 	.optional()
 	.describe(
-		'Theme axes to resolve against. `aesthetic` (data-theme) sets the base palette/type; `density` (data-density) refines spacing and wins collisions. Omit a key to skip that axis; omit the object for the default light aesthetic.',
+		'Theme axes to resolve against. `colorScheme` (data-color-scheme) is the light/dark base; `theme` (data-theme) is the aesthetic identity that refines it; `density` (data-density) refines spacing and wins collisions. Omit a key to skip that axis; omit the object for the base light/default palette.',
 	);
 
 export type ThemeAxes = z.infer<typeof themeAxesSchema>;
 
 /**
- * Resolve an axis object into a single composed token tree. Empty input defaults
- * to the package aesthetic so a bare call still resolves a real theme. Layers are
- * pushed aesthetic-then-density so density wins (it refines an aesthetic base);
- * an axis naming a theme we don't have is reported in `unknownAxes` rather than
- * thrown, so the remaining axes still resolve.
+ * Resolve an axis object into a single composed token tree. Empty input is the
+ * base (light scheme, default identity, comfortable density) — `composeTokens([])`
+ * over the canonical defaults. Layers fold in cascade order [colorScheme, theme,
+ * density] so an identity refines the color-scheme base and density wins both.
+ *
+ * The file-less defaults (`light`, `default`, `comfortable`) contribute no delta —
+ * the base already carries them — so they are skipped, not reported unknown. The
+ * theme delta is the per-combination artifact `<identity>-<scheme>` (the scheme
+ * defaults to `light` when only an identity is named). An axis whose delta is
+ * missing is reported in `unknownAxes` rather than thrown.
  */
 export async function composeAxes(
 	axes: ThemeAxes,
 ): Promise<{ composed: ResolvedTokens; unknownAxes: string[] }> {
-	const requested
-		= axes && (axes.aesthetic || axes.density)
-			? axes
-			: { aesthetic: DEFAULT_THEME };
+	const colorScheme = axes?.colorScheme;
+	const theme = axes?.theme;
+	const density = axes?.density;
 
 	const layers: ResolvedLayer[] = [];
 	const unknownAxes: string[] = [];
 
-	// Order is load-bearing: density LAST so a density theme's keys win over the
-	// aesthetic's, matching the CSS cascade (aesthetic base, density delta on top).
-	for (const name of [requested.aesthetic, requested.density]) {
-		if (!name)
-			continue;
-		const delta = await getResolvedDelta(name);
+	const push = async (deltaName: string, reportAs: string): Promise<void> => {
+		const delta = await getResolvedDelta(deltaName);
 		if (delta)
 			layers.push(delta);
 		else
-			unknownAxes.push(name);
-	}
+			unknownAxes.push(reportAs);
+	};
+
+	// Color scheme first (the base). `light` is the file-less base — no delta.
+	if (colorScheme && colorScheme !== 'light')
+		await push(colorScheme, colorScheme);
+	// Then the identity, as the per-combination cell. `default` has no file.
+	if (theme && theme !== 'default')
+		await push(`${theme}-${colorScheme ?? 'light'}`, theme);
+	// Density last so it wins a collision. `comfortable` is the file-less base.
+	if (density && density !== 'comfortable')
+		await push(density, density);
 
 	return { composed: composeTokens(layers), unknownAxes };
 }

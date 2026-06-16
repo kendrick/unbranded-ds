@@ -54,8 +54,8 @@ beforeAll(async () => {
 
 describe('resolution parity canary (MCP == emitted CSS)', () => {
 	it('vaporwave + compact: the MCP value matches the emitted CSS for a sample', async () => {
-		const { composed } = await composeAxes({ aesthetic: 'vaporwave', density: 'compact' });
-		const aestheticVars = parseCssVars('vaporwave');
+		const { composed } = await composeAxes({ theme: 'vaporwave', colorScheme: 'dark', density: 'compact' });
+		const aestheticVars = parseCssVars('vaporwave-dark');
 		const densityVars = parseCssVars('compact');
 
 		// a sample across the surfaces: an aesthetic color, the density-won spacing,
@@ -74,7 +74,7 @@ describe('resolution parity canary (MCP == emitted CSS)', () => {
 	});
 
 	it('density wins the spacing.4 collision', async () => {
-		const { composed } = await composeAxes({ aesthetic: 'vaporwave', density: 'compact' });
+		const { composed } = await composeAxes({ theme: 'vaporwave', colorScheme: 'dark', density: 'compact' });
 		expect(flatValueOf(composed, 'spacing.4')).toBe('0.8rem'); // compact, not the 1rem base
 	});
 });
@@ -82,7 +82,7 @@ describe('resolution parity canary (MCP == emitted CSS)', () => {
 describe('demo themes are valid and AA (FR-013/SC-005)', () => {
 	it('vaporwave + compact compose and stay AA', async () => {
 		const layers = [
-			await getResolvedDelta('vaporwave'),
+			await getResolvedDelta('vaporwave-dark'),
 			await getResolvedDelta('compact'),
 		].filter((l): l is ResolvedLayer => l !== null);
 		const result = validateComposedTheme(layers);
