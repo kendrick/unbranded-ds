@@ -18,6 +18,7 @@ This spec lands last for two reasons. The example demonstrates the canonical wir
 ## For-coleman context (E.1)
 
 > A minimal, copy-paste-able starter showing `@unbranded-ds/tokens` + `@unbranded-ds/react` wired up in a Next.js 15 App Router project with:
+>
 > - Tailwind v4 preset import
 > - Theme bootstrap script in `app/layout.tsx`
 > - A `ThemeToggle` (once A.2 lands)
@@ -87,7 +88,6 @@ The `examples/nextjs-15-app-router/README.md` covers:
 Section XI is fully ratified at this point. The example app honors:
 
 - Humanizer pass on the README and any inline doc strings
-- No three-item lists in the README
 - Predictable wiring (the example is itself an artifact agents will read to learn how to scaffold a new consumer app)
 - The README at `examples/nextjs-15-app-router/README.md` is itself a candidate for agent consumption — write it for both audiences
 
