@@ -18,7 +18,13 @@ export const Default: Story = {
 
 export const Destructive: Story = {
 	args: { children: 'Delete', variant: 'destructive' },
-	parameters: { docs: { description: { story: 'Signals an irreversible action like deletion or account removal.' } } },
+	parameters: { docs: { description: { story: 'Signals an irreversible action like deletion or account removal. The subtle treatment is AA-legible in every theme (spec 018).' } } },
+	play: async ({ canvasElement }) => {
+		const canvas = within(canvasElement);
+		const button = canvas.getByRole('button', { name: 'Delete' });
+		await userEvent.click(button);
+		await expect(button).toBeEnabled();
+	},
 };
 
 export const Outline: Story = {

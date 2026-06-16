@@ -10,10 +10,15 @@ describe('button', () => {
 		expect(btn.className).toContain('h-9');
 	});
 
-	it('applies destructive variant classes', () => {
-		const { container } = render(<Button variant="destructive">Delete</Button>);
-		const btn = container.firstElementChild!;
-		expect(btn.className).toContain('destructive');
+	it('applies the destructive variant as the token-backed subtle treatment', () => {
+		// spec 018: a subtle destructive surface + a darker destructive text token,
+		// not the old translucent tint, and no per-mode color override (the per-cell
+		// tokens carry light/dark).
+		const classes = buttonVariants({ variant: 'destructive' });
+		expect(classes).toContain('bg-destructive-subtle');
+		expect(classes).toContain('text-destructive-subtle-foreground');
+		expect(classes).not.toContain('bg-destructive/10');
+		expect(classes).not.toContain('dark:bg-destructive');
 	});
 
 	it('applies size=lg classes', () => {
