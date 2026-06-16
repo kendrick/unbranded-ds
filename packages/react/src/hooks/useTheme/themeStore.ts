@@ -7,8 +7,9 @@ import {
 	AXES,
 
 	AXIS_ATTRIBUTE,
+	COLOR_SCHEME_PREFERENCE_STORAGE_KEY,
+	COLOR_SCHEME_STORAGE_KEY,
 	DENSITY_STORAGE_KEY,
-	THEME_PREFERENCE_STORAGE_KEY,
 	THEME_STORAGE_KEY,
 	themesForAxis,
 } from '@unbranded-ds/tokens/client';
@@ -17,24 +18,27 @@ import { warn } from '../../lib/warn';
 import { THEME_AXIS_FORCED, THEME_INVALID_VALUE, THEME_NO_SYSTEM_SOURCE } from './errors';
 import { resolvePreference } from './resolve';
 
-// The OS media query each axis follows when its preference is `system`. Only
-// the aesthetic axis has a signal today (`prefers-color-scheme`); density has
-// none. A future axis with an OS source adds an entry here, and the rest of the
-// store treats `system` as valid for it automatically.
+// The OS media query each axis follows when its preference is `system`. Only the
+// color-scheme axis has a signal (`prefers-color-scheme`); the theme/identity and
+// density axes have none (spec 016 split `system` onto color scheme). A future
+// axis with an OS source adds an entry here, and the rest of the store treats
+// `system` as valid for it automatically.
 const SYSTEM_MEDIA: Partial<Record<Axis, string>> = {
-	aesthetic: '(prefers-color-scheme: dark)',
+	colorScheme: '(prefers-color-scheme: dark)',
 };
 
-// System fallbacks, matching the spec-002 bootstrap's literal defaults.
+// System fallbacks, matching the bootstrap's literal defaults (spec 016).
 const SYSTEM_DEFAULTS: AxisRecord = {
-	aesthetic: 'light',
+	colorScheme: 'light',
+	theme: 'default',
 	density: 'comfortable',
 };
 
-// The concrete-value storage key per axis. The aesthetic key is the one the
-// spec-002 bootstrap reads, so it must always hold a concrete value.
+// The concrete-value storage key per axis. The color-scheme key is the one the
+// bootstrap reads, so it must always hold a concrete value (never `system`).
 const STORAGE_KEY: Record<Axis, string> = {
-	aesthetic: THEME_STORAGE_KEY,
+	colorScheme: COLOR_SCHEME_STORAGE_KEY,
+	theme: THEME_STORAGE_KEY,
 	density: DENSITY_STORAGE_KEY,
 };
 
@@ -169,7 +173,7 @@ export function createThemeStore(config: ThemeStoreConfig): ThemeStore {
 				// The companion key holds the stated intent (including `system`);
 				// fall back to the concrete key, then the default.
 				preference[axis]
-					= readStorage(THEME_PREFERENCE_STORAGE_KEY)
+					= readStorage(COLOR_SCHEME_PREFERENCE_STORAGE_KEY)
 						?? readStorage(STORAGE_KEY[axis])
 						?? config.defaults[axis]
 						?? SYSTEM_DEFAULTS[axis];
@@ -193,7 +197,7 @@ export function createThemeStore(config: ThemeStoreConfig): ThemeStore {
 
 	let mql: MediaQueryList | undefined;
 	function attachMedia(): void {
-		const query = SYSTEM_MEDIA.aesthetic;
+		const query = SYSTEM_MEDIA.colorScheme;
 		if (mql == null && query != null && typeof window !== 'undefined' && window.matchMedia) {
 			mql = window.matchMedia(query);
 			mql.addEventListener('change', onMediaChange);
@@ -276,7 +280,7 @@ export function createThemeStore(config: ThemeStoreConfig): ThemeStore {
 				// Persist the concrete resolved value to the bootstrap key (never
 				// `system`) and the stated intent to the companion key.
 				writeStorage(STORAGE_KEY[axis], resolvePreference(value, system[axis]));
-				writeStorage(THEME_PREFERENCE_STORAGE_KEY, value);
+				writeStorage(COLOR_SCHEME_PREFERENCE_STORAGE_KEY, value);
 			}
 			else {
 				writeStorage(STORAGE_KEY[axis], value);

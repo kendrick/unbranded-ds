@@ -13,6 +13,7 @@ function wrapper({ children }: { children: ReactNode }) {
 describe('useTheme', () => {
 	beforeEach(() => {
 		localStorage.clear();
+		document.documentElement.removeAttribute('data-color-scheme');
 		document.documentElement.removeAttribute('data-theme');
 		document.documentElement.removeAttribute('data-density');
 		// jsdom has no matchMedia; provide a benign light stub.
@@ -36,8 +37,8 @@ describe('useTheme', () => {
 
 	it('returns per-axis resolved/preference/available and a set()', () => {
 		const { result } = renderHook(() => useTheme(), { wrapper });
-		expect(result.current.resolved).toEqual({ aesthetic: 'light', density: 'comfortable' });
-		expect(result.current.available.aesthetic).toContain('vaporwave');
+		expect(result.current.resolved).toEqual({ colorScheme: 'light', theme: 'default', density: 'comfortable' });
+		expect(result.current.available.theme).toContain('vaporwave');
 		expect(result.current.available.density).toEqual(['comfortable', 'compact']);
 		expect(typeof result.current.set).toBe('function');
 	});
@@ -48,7 +49,19 @@ describe('useTheme', () => {
 			result.current.set({ density: 'compact' });
 		});
 		expect(result.current.resolved.density).toBe('compact');
-		expect(result.current.resolved.aesthetic).toBe('light');
+		expect(result.current.resolved.colorScheme).toBe('light');
+	});
+
+	it('exposes a colorScheme convenience: resolved value plus a one-arg setter (spec 016)', () => {
+		const { result } = renderHook(() => useTheme(), { wrapper });
+		expect(result.current.colorScheme.resolved).toBe('light');
+		expect(result.current.colorScheme.preference).toBe('light');
+		act(() => {
+			result.current.colorScheme.set('dark');
+		});
+		expect(result.current.colorScheme.resolved).toBe('dark');
+		// the convenience is just a view over the axis map — both agree.
+		expect(result.current.resolved.colorScheme).toBe('dark');
 	});
 
 	it('applies a forced value and refuses to change it', () => {
