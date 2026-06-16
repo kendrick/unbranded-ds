@@ -7,10 +7,12 @@
 
 /*
  * Themes this app uses (spec 016: color scheme and identity are separate axes).
- * Additive — import only the cells you reach. `light` is the file-less base: it
- * shows through with no import, so the app pulls in the dark scheme, the brand
- * and vaporwave identities in both schemes, and the compact density.
+ * Additive — import only the cells you reach: both color schemes, the brand and
+ * vaporwave identities in both schemes, and the compact density. The light scheme
+ * is imported explicitly (spec 018 made its destructive Button AA-legible, so the
+ * default-light view is fully design-system-styled).
  */
+@import '@unbranded-ds/tokens/themes/light.css';
 @import '@unbranded-ds/tokens/themes/dark.css';
 @import '@unbranded-ds/tokens/themes/brand-light.css';
 @import '@unbranded-ds/tokens/themes/brand-dark.css';

@@ -126,6 +126,32 @@ describe('validateTheme', () => {
 		}
 	});
 
+	it('rejects a sub-AA destructive-subtle pair and names it (spec 018)', () => {
+		// A pale foreground on the pale subtle surface, far under 4.5:1. Proves the
+		// build catches a destructive-subtle regression and names the exact pair, so
+		// the soft destructive treatment cannot silently drift below AA.
+		const result = validateTheme({
+			name: 'bad-destructive-subtle',
+			displayName: 'Bad Destructive Subtle',
+			tokens: {
+				color: {
+					'destructive-subtle': 'oklch(0.9300 0.0500 25.00)',
+					'destructive-subtle-foreground': 'oklch(0.8500 0.0600 25.00)',
+				},
+			},
+		});
+		expect(result.ok).toBe(false);
+		if (!result.ok) {
+			expect(
+				result.issues.some(
+					(i) =>
+						i.code === 'CONTRAST_FAILURE'
+						&& i.path.includes('color.destructive-subtle-foreground / color.destructive-subtle'),
+				),
+			).toBe(true);
+		}
+	});
+
 	it('accepts theme with extra tokens (forward-compatible)', () => {
 		const result = validateTheme(extraTokens);
 		expect(result.ok).toBe(true);

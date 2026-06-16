@@ -39,6 +39,14 @@
 		"destructive-foreground": {
 			"$value": "oklch(0.9851 0.0000 89.88)",
 			"$type": "color"
+		},
+		"destructive-subtle": {
+			"$value": "oklch(0.2700 0.0800 27.33)",
+			"$type": "color"
+		},
+		"destructive-subtle-foreground": {
+			"$value": "oklch(0.8600 0.0900 27.33)",
+			"$type": "color"
 		}
 	}
 }

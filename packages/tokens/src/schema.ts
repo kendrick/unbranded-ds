@@ -19,6 +19,12 @@ const colorTokens = z.object({
 	'ring': z.string(),
 	'destructive': z.string(),
 	'destructive-foreground': z.string(),
+	// The soft destructive treatment (spec 018): an opaque subtle destructive
+	// surface and a darker destructive text/icon color that clears AA on it. The
+	// Button's `destructive` variant paints these; any component needing
+	// destructive content on a quiet surface reuses them, like muted/muted-foreground.
+	'destructive-subtle': z.string(),
+	'destructive-subtle-foreground': z.string(),
 });
 
 const spacingTokens = z.object({
@@ -212,6 +218,14 @@ export const contrastPairs: ContrastPair[] = [
 	{
 		foreground: 'color.muted-foreground',
 		background: 'color.background',
+		threshold: 4.5,
+	},
+	// The destructive Button's soft treatment (spec 018): its text on the subtle
+	// destructive surface. The old check guarded the solid destructive-foreground/
+	// destructive pair the button never used; this guards what it actually renders.
+	{
+		foreground: 'color.destructive-subtle-foreground',
+		background: 'color.destructive-subtle',
 		threshold: 4.5,
 	},
 ];

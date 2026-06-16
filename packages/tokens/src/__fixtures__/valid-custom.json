@@ -12,7 +12,9 @@
 			"border": "#dee2e6",
 			"ring": "#0d6efd",
 			"destructive": "#dc3545",
-			"destructive-foreground": "#ffffff"
+			"destructive-foreground": "#ffffff",
+			"destructive-subtle": "#f8d7da",
+			"destructive-subtle-foreground": "#842029"
 		},
 		"spacing": {
 			"px": "1px",

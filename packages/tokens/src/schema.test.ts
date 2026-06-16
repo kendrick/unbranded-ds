@@ -73,8 +73,17 @@ describe('themeSchema', () => {
 });
 
 describe('contrastPairs', () => {
-	it('declares 5 foreground/background pairs', () => {
-		expect(contrastPairs).toHaveLength(5);
+	it('declares 6 foreground/background pairs', () => {
+		// 6 since spec 018 added destructive-subtle-foreground/destructive-subtle.
+		expect(contrastPairs).toHaveLength(6);
+	});
+
+	it('includes the destructive-subtle pair (spec 018)', () => {
+		expect(contrastPairs).toContainEqual({
+			foreground: 'color.destructive-subtle-foreground',
+			background: 'color.destructive-subtle',
+			threshold: 4.5,
+		});
 	});
 
 	it('all pairs have 4.5:1 threshold', () => {
