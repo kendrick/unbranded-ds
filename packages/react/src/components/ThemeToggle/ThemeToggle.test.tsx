@@ -1,17 +1,17 @@
 import { cleanup, fireEvent, render } from '@testing-library/react';
-import { THEME_STORAGE_KEY } from '@unbranded-ds/tokens/runtime';
+import { themesForAxis } from '@unbranded-ds/tokens/client';
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ThemeProvider, useTheme } from '../../hooks/useTheme';
 import { ThemeToggle } from './ThemeToggle';
 
-function SchemeProbe() {
+function IdentityProbe() {
 	const { resolved } = useTheme();
-	return <span data-testid="scheme">{resolved.aesthetic}</span>;
+	return <span data-testid="identity">{resolved.theme}</span>;
 }
 
-describe('themeToggle', () => {
+describe('themeToggle (identity)', () => {
 	beforeEach(() => {
 		localStorage.clear();
 		document.documentElement.removeAttribute('data-theme');
@@ -28,56 +28,53 @@ describe('themeToggle', () => {
 		vi.restoreAllMocks();
 	});
 
-	it('renders three color-scheme segments with an accessible group name', () => {
-		const { getByRole, getAllByRole } = render(
+	it('renders one segment per available identity, data-driven from the registry', () => {
+		const { getAllByRole, getByText } = render(
 			<ThemeProvider>
 				<ThemeToggle />
 			</ThemeProvider>,
 		);
-		expect(getByRole('radiogroup', { name: 'Color scheme' })).toBeInTheDocument();
-		expect(getAllByRole('radio')).toHaveLength(3);
+		expect(getAllByRole('radio')).toHaveLength(themesForAxis('theme').length);
+		expect(getByText('Default')).toBeInTheDocument();
+		expect(getByText('Brand')).toBeInTheDocument();
+		expect(getByText('Vaporwave')).toBeInTheDocument();
 	});
 
-	it('routes a selection to set() and updates the applied scheme', () => {
+	it('has no system segment (identity has no OS signal)', () => {
+		const { queryByText } = render(
+			<ThemeProvider>
+				<ThemeToggle />
+			</ThemeProvider>,
+		);
+		expect(queryByText('System')).toBeNull();
+	});
+
+	it('routes a selection to set() and updates the applied identity', () => {
 		const { getByText, getByTestId } = render(
 			<ThemeProvider>
 				<ThemeToggle />
-				<SchemeProbe />
+				<IdentityProbe />
 			</ThemeProvider>,
 		);
-		fireEvent.click(getByText('Dark'));
-		expect(getByTestId('scheme')).toHaveTextContent('dark');
+		fireEvent.click(getByText('Brand'));
+		expect(getByTestId('identity')).toHaveTextContent('brand');
 	});
 
-	it('shows no selection but stays enabled when the aesthetic value is brand/vaporwave', () => {
-		localStorage.setItem(THEME_STORAGE_KEY, 'vaporwave');
-		const { getByRole, getAllByRole } = render(
-			<ThemeProvider>
-				<ThemeToggle />
-			</ThemeProvider>,
-		);
-		const checked = getAllByRole('radio').filter(
-			(radio) => radio.getAttribute('aria-checked') === 'true',
-		);
-		expect(checked).toHaveLength(0);
-		expect(getByRole('radiogroup').getAttribute('aria-disabled')).not.toBe('true');
-	});
-
-	it('renders disabled when the aesthetic axis is forced', () => {
+	it('renders disabled when the theme axis is forced', () => {
 		const { getByRole } = render(
-			<ThemeProvider forced={{ aesthetic: 'dark' }}>
+			<ThemeProvider forced={{ theme: 'brand' }}>
 				<ThemeToggle />
 			</ThemeProvider>,
 		);
 		expect(getByRole('radiogroup').getAttribute('aria-disabled')).toBe('true');
 	});
 
-	it('accepts custom labels', () => {
-		const { getByText } = render(
+	it('exposes an accessible group name', () => {
+		const { getByRole } = render(
 			<ThemeProvider>
-				<ThemeToggle labels={{ light: 'Día' }} />
+				<ThemeToggle />
 			</ThemeProvider>,
 		);
-		expect(getByText('Día')).toBeInTheDocument();
+		expect(getByRole('radiogroup', { name: 'Theme' })).toBeInTheDocument();
 	});
 });

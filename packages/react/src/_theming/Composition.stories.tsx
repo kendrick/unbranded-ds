@@ -2,19 +2,24 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
 import { Button } from '../components/Button/Button';
 
-// Spec 009: multi-axis theme composition. An aesthetic theme (data-theme) and a
-// density theme (data-density) apply at once; density wins a collision via the
-// cascade @layer order. This story renders under both attributes and asserts the
-// resolved custom properties — the real-browser confirmation of the parity oracle.
+// Spec 016: three-axis theme composition. A color scheme (data-color-scheme), an
+// aesthetic identity (data-theme), and a density (data-density) apply at once;
+// later cascade layers win a collision (identity over the color-scheme base,
+// density over both). This story renders under all three attributes and asserts
+// the resolved custom properties — the real-browser confirmation of the parity
+// oracle. An identity palette only lands when its color scheme is also set, since
+// each cell is a compound `[data-theme][data-color-scheme]` selector.
 
 interface DemoProps {
+	colorScheme?: string;
 	theme?: string;
 	density?: string;
 }
 
-function CompositionDemo({ theme, density }: DemoProps) {
+function CompositionDemo({ colorScheme, theme, density }: DemoProps) {
 	return (
 		<div
+			data-color-scheme={colorScheme}
 			data-theme={theme}
 			data-density={density}
 			data-testid="composition-root"
@@ -29,8 +34,7 @@ function CompositionDemo({ theme, density }: DemoProps) {
 			}}
 		>
 			<strong>
-				{theme ?? 'base'}
-				{density ? ` + ${density}` : ''}
+				{[colorScheme, theme, density].filter(Boolean).join(' + ') || 'base'}
 			</strong>
 			<div
 				style={{
@@ -54,13 +58,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const VaporwaveCompact: Story = {
-	name: 'Vaporwave + Compact',
-	args: { theme: 'vaporwave', density: 'compact' },
+	name: 'Vaporwave dark + Compact',
+	args: { colorScheme: 'dark', theme: 'vaporwave', density: 'compact' },
 	parameters: {
 		docs: {
 			description: {
 				story:
-					'The aesthetic axis (vaporwave) and the density axis (compact) applied together. The panel takes vaporwave color and its neon-glow extension token, while compact tightens the spacing — and where the two axes touch the same token, density wins.',
+					'The vaporwave identity in dark (a compound cell) and the compact density applied together. The panel takes vaporwave color and its neon-glow extension token, while compact tightens the spacing — and where the axes touch the same token, density wins.',
 			},
 		},
 	},
@@ -71,7 +75,7 @@ export const VaporwaveCompact: Story = {
 		const cs = getComputedStyle(root);
 		// density wins the spacing collision: compact's 0.8rem, not the 1rem base
 		expect(cs.getPropertyValue('--spacing-4').trim()).toBe('0.8rem');
-		// the aesthetic axis contributes its palette and its extension token
+		// the identity contributes its palette and its extension token
 		expect(cs.getPropertyValue('--shadow-neon').trim().length).toBeGreaterThan(0);
 		expect(cs.getPropertyValue('--color-primary').trim().length).toBeGreaterThan(0);
 	},

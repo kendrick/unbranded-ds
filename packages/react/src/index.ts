@@ -2,6 +2,7 @@
 export * from './components/Button';
 export * from './components/Card';
 export * from './components/Checkbox';
+export * from './components/ColorSchemeToggle';
 export * from './components/DensityToggle';
 export * from './components/Dialog';
 export * from './components/Input';

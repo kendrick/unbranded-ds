@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { registerTheme } from '@unbranded-ds/tokens/runtime';
 import { expect, userEvent, within } from 'storybook/test';
 
 import { ThemeProvider } from '../../hooks/useTheme';
@@ -33,30 +34,14 @@ export const Default: Story = {
 		docs: {
 			description: {
 				story:
-					'Three fixed segments (light, system, dark) wired to the aesthetic axis. Selecting one persists it and applies `data-theme` to the document root.',
+					'Segments are data-driven from the tokens registry (`themesForAxis(\'theme\')`), so default, brand, and vaporwave appear automatically. No `system` segment — that belongs to `<ColorSchemeToggle>`. Selecting one applies `data-theme` to the document root.',
 			},
 		},
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		await userEvent.click(canvas.getByText('Dark'));
-		expect(checkedLabel(canvasElement)).toBe('Dark');
-	},
-};
-
-export const SystemFollowing: Story = {
-	parameters: {
-		docs: {
-			description: {
-				story:
-					'Selecting **System** follows the OS via `prefers-color-scheme`. The live OS-change path (the resolved value flipping when the OS theme changes) is exercised deterministically in the unit suite, `themeStore.test.ts`.',
-			},
-		},
-	},
-	play: async ({ canvasElement }) => {
-		const canvas = within(canvasElement);
-		await userEvent.click(canvas.getByText('System'));
-		expect(checkedLabel(canvasElement)).toBe('System');
+		await userEvent.click(canvas.getByText('Brand'));
+		expect(checkedLabel(canvasElement)).toBe('Brand');
 	},
 };
 
@@ -68,9 +53,6 @@ export const Sizes: Story = {
 			<ThemeToggle size="lg" />
 		</div>
 	),
-	parameters: {
-		docs: { description: { story: 'The three sizes, forwarded to the underlying SegmentedControl.' } },
-	},
 };
 
 export const Orientations: Story = {
@@ -80,51 +62,62 @@ export const Orientations: Story = {
 			<ThemeToggle orientation="vertical" />
 		</div>
 	),
-	parameters: {
-		docs: { description: { story: 'Horizontal and vertical layouts.' } },
-	},
 };
 
 export const Forced: Story = {
 	decorators: [
 		(Story) => (
-			<ThemeProvider forced={{ aesthetic: 'dark' }}>
+			<ThemeProvider forced={{ theme: 'brand' }}>
 				<Story />
 			</ThemeProvider>
 		),
 	],
 	parameters: {
-		docs: {
-			description: {
-				story: 'A pinned aesthetic axis (`forced={{ aesthetic: \'dark\' }}`) renders the toggle disabled.',
-			},
-		},
-	},
-};
-
-export const AestheticIsBrand: Story = {
-	decorators: [
-		(Story) => (
-			<ThemeProvider defaults={{ aesthetic: 'brand' }}>
-				<Story />
-			</ThemeProvider>
-		),
-	],
-	parameters: {
-		docs: {
-			description: {
-				story:
-					'When the aesthetic value is `brand` or `vaporwave` (neither light nor dark), no segment is selected and the control stays enabled. Color-scheme is not yet its own axis.',
-			},
-		},
+		docs: { description: { story: 'A pinned theme axis (`forced={{ theme: \'brand\' }}`) renders the toggle disabled.' } },
 	},
 };
 
 export const CustomLabelsAndIcons: Story = {
 	args: {
-		labels: { light: 'Día', system: 'Auto', dark: 'Noche' },
+		labels: { default: 'Plain', brand: 'Brand', vaporwave: 'Retro' },
+	},
+};
+
+// A self-consistent AA-passing color block. A partial theme inherits the
+// canonical default colors, which sit just under 4.5:1 on a couple of pairs and
+// would fail the contrast gate, so a runtime theme supplies its own passing set.
+/* eslint-disable custom-rules/no-hardcoded-colors -- demo theme data for a runtime registerTheme example, not component styling; the values must be concrete hex to clear the contrast gate */
+const PASSING_COLORS = {
+	'background': '#f8f9fa',
+	'foreground': '#212529',
+	'primary': '#0d6efd',
+	'primary-foreground': '#ffffff',
+	'muted': '#e9ecef',
+	'muted-foreground': '#495057',
+	'border': '#dee2e6',
+	'ring': '#0d6efd',
+	'destructive': '#dc3545',
+	'destructive-foreground': '#ffffff',
+};
+/* eslint-enable custom-rules/no-hardcoded-colors */
+
+export const DataDrivenValues: Story = {
+	beforeEach: () => {
+		registerTheme(
+			{
+				name: 'sunset',
+				displayName: 'Sunset',
+				tokens: { color: PASSING_COLORS },
+			},
+			'theme',
+		);
 	},
 	parameters: {
-		docs: { description: { story: 'Per-segment `labels` (and `icons`) overrides.' } },
+		docs: {
+			description: {
+				story:
+					'Registering an identity at runtime (`registerTheme(theme, \'theme\')`) adds a "sunset" segment with no change to the component; the toggle is data-driven from the registry.',
+			},
+		},
 	},
 };
