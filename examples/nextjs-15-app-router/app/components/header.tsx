@@ -1,9 +1,11 @@
-'use client';
-
 import { ColorSchemeToggle, DensityToggle, ThemeToggle } from '@unbranded-ds/react';
 import Link from 'next/link';
 
-// Client component: the toggles read the ThemeProvider via useTheme.
+// A server component: it only composes nav links and the client toggles. The
+// toggles are client components (they read ThemeProvider via useTheme), and a
+// server component can render client components, so Header needs no 'use client'
+// of its own. A boundary here would only stand in for a missing package
+// directive, and @unbranded-ds/react ships one (spec 017).
 export function Header() {
 	return (
 		<header className="flex flex-col gap-3 border-b p-4 sm:flex-row sm:items-center sm:justify-between sm:p-6">

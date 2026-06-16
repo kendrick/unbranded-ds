@@ -1,7 +1,9 @@
-'use client';
-
 import { Card, CardContent, CardHeader, CardTitle } from '@unbranded-ds/react';
 
+// A server component: it renders only presentational DS cards with no state of
+// its own, so it imports @unbranded-ds/react directly (spec 017) with no
+// 'use client' boundary.
+//
 // Container queries (FR-015): the SAME card renders in two different-width
 // containers. Each reflows by its own container width via Tailwind v4's
 // `@container` + `@sm:` variants, not the viewport, so a copied component stays
