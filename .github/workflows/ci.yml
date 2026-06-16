@@ -69,7 +69,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build packages
-        run: pnpm --filter '@unbranded-ds/*' build
+        run: pnpm --filter '@unbranded-ds/*' --filter '!@unbranded-ds/example-nextjs' build
 
       - name: Publish to Chromatic
         id: chromatic
@@ -82,3 +82,41 @@ jobs:
 
       - name: MCP smoke test
         run: pnpm dlx tsx scripts/mcp-smoke-test.ts ${{ steps.chromatic.outputs.storybookUrl }}/mcp
+
+  example-e2e:
+    name: Example app (lint, typecheck, Playwright)
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # The example imports the packages' built dist, so build them first.
+      - name: Build packages
+        run: pnpm --filter @unbranded-ds/tokens --filter @unbranded-ds/react build
+
+      - name: Lint + typecheck the example
+        run: |
+          pnpm --filter @unbranded-ds/example-nextjs lint
+          pnpm --filter @unbranded-ds/example-nextjs typecheck
+
+      - name: Install Playwright browser
+        run: pnpm --filter @unbranded-ds/example-nextjs exec playwright install --with-deps chromium
+
+      # The Playwright webServer runs `next build` then `next start` itself.
+      - name: Playwright e2e (production build)
+        run: pnpm --filter @unbranded-ds/example-nextjs e2e
