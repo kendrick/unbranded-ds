@@ -1,0 +1,44 @@
+/*
+ * The canonical wiring (spec 002). These two lines are all you need to get
+ * design-system styling. Everything below them is additive.
+ */
+@import 'tailwindcss';
+@import '@unbranded-ds/react/preset.css';
+
+/* Themes this app uses. Additive: import only what you need. */
+@import '@unbranded-ds/tokens/themes/dark.css';
+@import '@unbranded-ds/tokens/themes/vaporwave.css';
+@import '@unbranded-ds/tokens/themes/compact.css';
+
+/*
+ * Consumer overrides. Delete this block to revert to design-system defaults.
+ * The design system scopes its tokens under [data-theme="..."], so an override
+ * has to match that specificity to win. We target the light and dark schemes the
+ * toggle drives and leave the vaporwave aesthetic as its own look.
+ */
+[data-theme='light'],
+[data-theme='dark'] {
+	--typography-font-sans: var(--font-local-sans), system-ui, sans-serif;
+	/*
+	 * A dark, rich brand purple. Kept dark on purpose: the design system's primary
+	 * is a dark color with a near-white foreground, so an override has to preserve
+	 * that contrast relationship to stay AA-legible. A light override would fail
+	 * contrast against the white foreground.
+	 */
+	--color-primary: oklch(0.32 0.13 295);
+	--color-primary-foreground: oklch(0.985 0 0);
+}
+
+/*
+ * A token-driven transition (FR-014): the duration and easing come from the
+ * motion tokens, not hardcoded numbers.
+ */
+.ds-motion-card {
+	transition:
+		box-shadow var(--duration-base) var(--ease-standard),
+		transform var(--duration-base) var(--ease-standard);
+}
+.ds-motion-card:hover {
+	box-shadow: var(--shadow-lg, 0 8px 24px rgb(0 0 0 / 0.12));
+	transform: translateY(-2px);
+}
