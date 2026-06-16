@@ -129,12 +129,14 @@ It resolves your theme against the defaults first, so a partial theme is checked
 
 These get checked automatically:
 
-| Foreground                     | Background          | Threshold |
-| ------------------------------ | ------------------- | --------- |
-| `color.foreground`             | `color.background`  | 4.5:1     |
-| `color.primary-foreground`     | `color.primary`     | 4.5:1     |
-| `color.muted-foreground`       | `color.muted`       | 4.5:1     |
-| `color.destructive-foreground` | `color.destructive` | 4.5:1     |
+| Foreground                            | Background                 | Threshold |
+| ------------------------------------- | -------------------------- | --------- |
+| `color.foreground`                    | `color.background`         | 4.5:1     |
+| `color.primary-foreground`            | `color.primary`            | 4.5:1     |
+| `color.muted-foreground`              | `color.muted`              | 4.5:1     |
+| `color.muted-foreground`              | `color.background`         | 4.5:1     |
+| `color.destructive-foreground`        | `color.destructive`        | 4.5:1     |
+| `color.destructive-subtle-foreground` | `color.destructive-subtle` | 4.5:1     |
 
 ## Applying at runtime
 

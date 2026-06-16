@@ -1,12 +1,14 @@
 # heliostat Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-06-15
+Auto-generated from all feature plans. Last updated: 2026-06-16
 
 ## Active Technologies
 - TypeScript 5.x, strict, no `any` (Constitution VIII). React 19, Next.js 15 (App Router). + `next` ^15, `react`/`react-dom` 19, `@unbranded-ds/tokens` and `@unbranded-ds/react` at `workspace:*`, Tailwind CSS v4 (consumed through `@unbranded-ds/react/preset.css`), `next/font/local` (self-hosted font), `@playwright/test`, `@axe-core/playwright`. (015-nextjs-example-app)
 - `localStorage` only, through the design system's existing keys (`unbranded-ds-theme`, `unbranded-ds-density`, `unbranded-ds-theme-preference`). No new storage. (015-nextjs-example-app)
 - TypeScript 5.x, strict, no `any` (Constitution VIII). + Style Dictionary v4 (the token build, `sd.config.ts`), Zod (theme schema and validation), Tailwind CSS v4 (`@theme` preset, `@layer` cascade), `@base-ui-components/react` (SegmentedControl, reached through the toggles), React 19 (`useSyncExternalStore`), `@modelcontextprotocol/sdk` (the token-query MCP, re-pointed to three axes). (016-color-scheme-axis-split)
 - `localStorage`, new per-axis keys. Color scheme gets `unbranded-ds-color-scheme` (concrete, the bootstrap key) plus `unbranded-ds-color-scheme-preference` (the stated intent, including `system`); `unbranded-ds-theme` is repurposed to hold the identity; `unbranded-ds-density` is unchanged. No migration of stored values (no consumers). (016-color-scheme-axis-split)
+- TypeScript 5.x, strict, no `any` (Constitution VIII). + Style Dictionary v4 (token build + per-cell CSS emission), Zod (`schema.ts` token schema + `contrastPairs`), the `color.ts` WCAG contrast math, Tailwind CSS v4 (`@theme` preset auto-maps tokens to utilities), `class-variance-authority` + `cn()` (the Button `destructive` variant), React 19, Storybook 10.3 (Button stories + addon-a11y), `@playwright/test` + `@axe-core/playwright` (example e2e a11y). (018-button-destructive-contrast)
+- N/A. Tokens are build-time JSON compiled to CSS variables; no persisted runtime state. (018-button-destructive-contrast)
 
 - TypeScript 5.x in `tsx`-tagged code blocks only (validated via `tsc --noEmit` per spec 005's compile validator). Sidecar prose is plain CommonMark. + All shipped in spec 005. The template at `packages/react/src/components/_template/Component.usage.md`, the validator at `scripts/validate-sidecars.ts`, the `AGENTS.md` component index, and the CI step that wires the validator into the verify job. (006-sidecar-retrofit)
 - Filesystem only. 14 `<Component>.usage.md` files co-located with their `.tsx` source. One running inbox file: `specs/006-sidecar-retrofit/spec-007-inbox.md`. 15 `.changeset/*.md` files (14 component + 1 backfill). (006-sidecar-retrofit)
@@ -52,10 +54,10 @@ npm test && npm run lint
 TypeScript 5.x, strict mode, no `any` (EVER): Follow standard conventions
 
 ## Recent Changes
+- 018-button-destructive-contrast: Added TypeScript 5.x, strict, no `any` (Constitution VIII). + Style Dictionary v4 (token build + per-cell CSS emission), Zod (`schema.ts` token schema + `contrastPairs`), the `color.ts` WCAG contrast math, Tailwind CSS v4 (`@theme` preset auto-maps tokens to utilities), `class-variance-authority` + `cn()` (the Button `destructive` variant), React 19, Storybook 10.3 (Button stories + addon-a11y), `@playwright/test` + `@axe-core/playwright` (example e2e a11y).
 - 016-color-scheme-axis-split: Added TypeScript 5.x, strict, no `any` (Constitution VIII). + Style Dictionary v4 (the token build, `sd.config.ts`), Zod (theme schema and validation), Tailwind CSS v4 (`@theme` preset, `@layer` cascade), `@base-ui-components/react` (SegmentedControl, reached through the toggles), React 19 (`useSyncExternalStore`), `@modelcontextprotocol/sdk` (the token-query MCP, re-pointed to three axes).
 - 015-nextjs-example-app: Added TypeScript 5.x, strict, no `any` (Constitution VIII). React 19, Next.js 15 (App Router). + `next` ^15, `react`/`react-dom` 19, `@unbranded-ds/tokens` and `@unbranded-ds/react` at `workspace:*`, Tailwind CSS v4 (consumed through `@unbranded-ds/react/preset.css`), `next/font/local` (self-hosted font), `@playwright/test`, `@axe-core/playwright`.
 
-- 011-theme-toggle: Added TypeScript 5.x, strict mode, no `any` + React (peer; uses `useSyncExternalStore`), `@base-ui-components/react` (peer, reached via SegmentedControl), `lucide-react` ^1.8.0 (Sun/SunMoon/Moon icons, existing dep), `class-variance-authority` + `cn()` (existing), the `SegmentedControl` primitive (spec 004), `@unbranded-ds/tokens` runtime (storage-key constants, the `Axis` union, and a NEW "themes per axis" registry export). No `next-themes` runtime dependency (vocabulary alignment only).
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
