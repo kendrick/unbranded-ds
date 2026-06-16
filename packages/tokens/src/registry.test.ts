@@ -3,18 +3,17 @@ import { describe, expect, it } from 'vitest';
 import { registerThemeName, themesForAxis } from './registry.js';
 
 describe('themesForAxis', () => {
-	it('lists the built-in aesthetic themes, default first', () => {
-		expect(themesForAxis('aesthetic')).toEqual([
-			'light',
-			'dark',
-			'brand',
-			'vaporwave',
-		]);
+	it('lists the built-in color schemes, the base (light) first', () => {
+		expect(themesForAxis('colorScheme')).toEqual(['light', 'dark']);
+	});
+
+	it('lists the built-in theme identities, the file-less `default` first', () => {
+		// `default` has no override JSON (the color-scheme base shows through) but is
+		// a first-class selectable identity, so it must appear and lead the list.
+		expect(themesForAxis('theme')).toEqual(['default', 'brand', 'vaporwave']);
 	});
 
 	it('includes density\'s file-less `comfortable` default and leads with it', () => {
-		// `comfortable` has no override JSON (it is the base token set) but is a
-		// first-class selectable value, so it must appear and lead the list.
 		expect(themesForAxis('density')).toEqual(['comfortable', 'compact']);
 	});
 
@@ -27,8 +26,8 @@ describe('themesForAxis', () => {
 	});
 
 	it('de-duplicates when a registered name repeats a built-in', () => {
-		registerThemeName('aesthetic', 'dark');
-		const darks = themesForAxis('aesthetic').filter((n) => n === 'dark');
-		expect(darks).toHaveLength(1);
+		registerThemeName('theme', 'brand');
+		const brands = themesForAxis('theme').filter((n) => n === 'brand');
+		expect(brands).toHaveLength(1);
 	});
 });
