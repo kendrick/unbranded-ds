@@ -9,7 +9,9 @@
 		"border": { "$value": "oklch(0.8800 0.0400 330.00)", "$type": "color" },
 		"ring": { "$value": "oklch(0.6500 0.2200 330.00)", "$type": "color" },
 		"destructive": { "$value": "oklch(0.5800 0.2200 20.00)", "$type": "color" },
-		"destructive-foreground": { "$value": "oklch(1.0000 0.0000 89.88)", "$type": "color" }
+		"destructive-foreground": { "$value": "oklch(1.0000 0.0000 89.88)", "$type": "color" },
+		"destructive-subtle": { "$value": "oklch(0.9300 0.0500 20.00)", "$type": "color" },
+		"destructive-subtle-foreground": { "$value": "oklch(0.4400 0.1600 20.00)", "$type": "color" }
 	},
 	"shadow": {
 		"neon": { "$value": "0 0 12px 2px oklch(0.6500 0.2200 330.00 / 0.6)", "$type": "shadow" }

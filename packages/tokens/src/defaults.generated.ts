@@ -12,7 +12,9 @@ export const canonicalDefaultTokens = {
 		"border": "oklch(0.9197 0.0040 286.32)",
 		"ring": "oklch(0.2103 0.0059 285.89)",
 		"destructive": "oklch(0.5803 0.2078 25.33)",
-		"destructive-foreground": "oklch(0.9851 0.0000 89.88)"
+		"destructive-foreground": "oklch(0.9851 0.0000 89.88)",
+		"destructive-subtle": "oklch(0.9300 0.0500 25.33)",
+		"destructive-subtle-foreground": "oklch(0.4400 0.1600 25.33)"
 	},
 	"motion": {
 		"duration-fast": "120ms",

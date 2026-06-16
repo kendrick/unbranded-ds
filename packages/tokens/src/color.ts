@@ -170,6 +170,27 @@ export function contrastRatio(a: LinearRGB, b: LinearRGB): number {
 }
 
 /**
+ * Mix two oklch color strings in OKLab space — matching the CSS
+ * `color-mix(in oklab, a, b <t>%)` the Button's destructive hover uses — and
+ * return linear RGB for contrast math. `t` is the weight of `b` (0..1). Returns
+ * null if either string is unparseable. (spec 018: verifying the hover surface.)
+ */
+export function mixOklchToLinear(a: string, b: string, t: number): LinearRGB | null {
+	const ao = parseOklch(a);
+	const bo = parseOklch(b);
+	if (!ao || !bo)
+		return null;
+	const al = oklchToOklab(ao);
+	const bl = oklchToOklab(bo);
+	const mixed: OklabColor = [
+		al[0] + (bl[0] - al[0]) * t,
+		al[1] + (bl[1] - al[1]) * t,
+		al[2] + (bl[2] - al[2]) * t,
+	];
+	return oklabToLinearRgb(mixed);
+}
+
+/**
  * Convert a hex color string to oklch() CSS function.
  * Returns the original string if it's already oklch or unparseable.
  */
