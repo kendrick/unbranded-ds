@@ -94,12 +94,6 @@ export const OpenCloseInteraction: Story = {
 					'Interaction test that clicks the trigger and verifies the portal-rendered panel becomes visible with the title announced.',
 			},
 		},
-		// Quarantine the color-contrast axe rule here. Spec 020 made the runner apply real
-		// token styling for the first time, which surfaced a genuine pre-existing failure:
-		// DialogDescription's `text-muted-foreground` (#6f6f78) lands at 3.98:1, below AA.
-		// Tracked as a real DS bug rather than loosened silently:
-		// docs/workshops/2026-06-16/spec-022-popover-tokens-and-dialog-contrast.md
-		a11y: { config: { rules: [{ id: 'color-contrast', enabled: false }] } },
 	},
 	render: () => (
 		<Dialog>
@@ -132,11 +126,6 @@ export const TooltipStacksAboveDialog: Story = {
 					'Regression test for the nested-overlay stacking fix (spec 010). A tooltip opened on a control inside an open dialog renders above the dialog: the tooltip reads the `z-index.tooltip` stop (60) and the dialog reads `z-index.overlay` (50), so the tooltip wins. Before the fix, both stacked at a shared `z-50` with no defined order.',
 			},
 		},
-		// Same color-contrast quarantine as OpenCloseInteraction: the open dialog shows
-		// DialogDescription's muted-foreground text, which fails AA at 3.98:1. The z-index
-		// interaction assertion below still runs; only the contrast rule is suppressed.
-		// docs/workshops/2026-06-16/spec-022-popover-tokens-and-dialog-contrast.md
-		a11y: { config: { rules: [{ id: 'color-contrast', enabled: false }] } },
 	},
 	render: () => (
 		<Dialog>
