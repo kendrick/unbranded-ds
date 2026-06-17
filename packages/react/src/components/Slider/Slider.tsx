@@ -8,6 +8,7 @@ import { cva } from 'class-variance-authority';
 
 import { useEffect, useMemo } from 'react';
 import { cn } from '../../lib/cn';
+import { useAccessibleNameWarning } from '../../lib/use-accessible-name-warning';
 import { warn } from '../../lib/warn';
 
 const sliderRootVariants = cva(
@@ -423,6 +424,10 @@ function SliderIndicator({ className, ...props }: SliderIndicatorProps) {
  * @see {@link Slider} for full keyboard interactions and usage guidance.
  */
 function SliderThumb({ className, ...props }: SliderThumbProps) {
+	// The thumb is the role="slider" element, so the accessible-name check lives
+	// here, not on the Root — this covers single and range thumbs uniformly.
+	useAccessibleNameWarning('Slider', props);
+
 	return (
 		<SliderPrimitive.Thumb
 			data-slot="slider-thumb"
@@ -501,7 +506,7 @@ function SliderThumb({ className, ...props }: SliderThumbProps) {
  *           <Slider.Track>
  *             <Slider.Indicator />
  *           </Slider.Track>
- *           <Slider.Thumb />
+ *           <Slider.Thumb aria-label="Value" />
  *         </Slider.Control>
  *       </Slider.Root>
  *     </div>
@@ -544,7 +549,7 @@ function SliderThumb({ className, ...props }: SliderThumbProps) {
  *           <Slider.Track>
  *             <Slider.Indicator />
  *           </Slider.Track>
- *           <Slider.Thumb />
+ *           <Slider.Thumb aria-label="Value" />
  *         </Slider.Control>
  *       </Slider.Root>
  *       <output>{`Value: ${value[0]}`}</output>

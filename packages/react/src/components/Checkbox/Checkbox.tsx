@@ -1,8 +1,11 @@
+'use client';
+
 import type * as React from 'react';
 import { Checkbox as CheckboxPrimitive } from '@base-ui-components/react/checkbox';
 
 import { CheckIcon } from 'lucide-react';
 import { cn } from '../../lib/cn';
+import { useAccessibleNameWarning } from '../../lib/use-accessible-name-warning';
 
 interface CheckboxOwnProps {
 	/**
@@ -143,8 +146,8 @@ type CheckboxProps = CheckboxPrimitive.Root.Props & CheckboxOwnProps;
  *   return (
  *     // eslint-disable-next-line jsx-a11y/label-has-associated-control
  *     <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
- *       <Checkbox name="terms" />
- *       <Label>Accept terms and conditions</Label>
+ *       <Checkbox name="terms" aria-labelledby="terms-label" />
+ *       <Label id="terms-label">Accept terms and conditions</Label>
  *     </label>
  *   );
  * }
@@ -165,8 +168,9 @@ type CheckboxProps = CheckboxPrimitive.Root.Props & CheckboxOwnProps;
  *         checked={subscribed}
  *         onCheckedChange={(checked) => setSubscribed(checked)}
  *         name="subscribe"
+ *         aria-labelledby="subscribe-label"
  *       />
- *       <Label>Subscribe to updates</Label>
+ *       <Label id="subscribe-label">Subscribe to updates</Label>
  *     </label>
  *   );
  * }
@@ -177,6 +181,8 @@ type CheckboxProps = CheckboxPrimitive.Root.Props & CheckboxOwnProps;
  * @see {@link Label}
  */
 function Checkbox({ className, ...props }: CheckboxProps) {
+	useAccessibleNameWarning('Checkbox', props);
+
 	return (
 		<CheckboxPrimitive.Root
 			data-slot="checkbox"

@@ -78,7 +78,7 @@ export function BasicSlider() {
 					<Slider.Track>
 						<Slider.Indicator />
 					</Slider.Track>
-					<Slider.Thumb />
+					<Slider.Thumb aria-label="Value" />
 				</Slider.Control>
 			</Slider.Root>
 		</div>
@@ -103,7 +103,7 @@ export function ControlledSlider() {
 					<Slider.Track>
 						<Slider.Indicator />
 					</Slider.Track>
-					<Slider.Thumb />
+					<Slider.Thumb aria-label="Value" />
 				</Slider.Control>
 			</Slider.Root>
 			<output>{`Value: ${value[0]}`}</output>
@@ -114,7 +114,7 @@ export function ControlledSlider() {
 
 ### Range slider (two thumbs)
 
-Pass two values in `defaultValue` and render two `Slider.Thumb` elements. Base UI manages which thumb responds to a given interaction based on proximity.
+Pass two values in `defaultValue` and render two `Slider.Thumb` elements. Base UI routes each interaction to the nearest thumb. Give each thumb its own `aria-label` for the bound it controls, so a screen-reader user knows which handle they are moving.
 
 ```tsx
 import { Slider } from '@unbranded-ds/react';
@@ -127,8 +127,8 @@ export function RangeSlider() {
 					<Slider.Track>
 						<Slider.Indicator />
 					</Slider.Track>
-					<Slider.Thumb />
-					<Slider.Thumb />
+					<Slider.Thumb aria-label="Minimum" />
+					<Slider.Thumb aria-label="Maximum" />
 				</Slider.Control>
 			</Slider.Root>
 		</div>
@@ -151,7 +151,7 @@ export function VerticalSlider() {
 					<Slider.Track>
 						<Slider.Indicator />
 					</Slider.Track>
-					<Slider.Thumb />
+					<Slider.Thumb aria-label="Value" />
 				</Slider.Control>
 			</Slider.Root>
 		</div>
@@ -161,7 +161,7 @@ export function VerticalSlider() {
 
 ## Accessibility
 
-Each `Slider.Thumb` renders with `role="slider"` and exposes `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` to assistive technology. Screen readers announce the current value as the thumb moves.
+Each `Slider.Thumb` renders with `role="slider"` and exposes `aria-valuenow`, `aria-valuemin`, and `aria-valuemax` to assistive technology. Screen readers announce the current value as the thumb moves. Because the thumb is the `role="slider"` element rather than a native input, give every thumb its own `aria-label` (or `aria-labelledby`) — a single-thumb slider needs one name just as a range slider needs one per thumb.
 
 Keyboard interaction on a focused thumb:
 
