@@ -2,6 +2,9 @@ import { fireEvent, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Slider } from './Slider';
 
+// Thumbs are named here so the unrelated validation tests below (which assert
+// on the warn spy) aren't polluted by the accessible-name warning. The naming
+// warning gets its own block, with deliberately unnamed thumbs.
 function renderSingle(props: Parameters<typeof Slider.Root>[0] = { children: null }) {
 	return render(
 		<Slider.Root {...props}>
@@ -9,7 +12,7 @@ function renderSingle(props: Parameters<typeof Slider.Root>[0] = { children: nul
 				<Slider.Track>
 					<Slider.Indicator />
 				</Slider.Track>
-				<Slider.Thumb />
+				<Slider.Thumb aria-label="Value" />
 			</Slider.Control>
 		</Slider.Root>,
 	);
@@ -24,8 +27,8 @@ function renderRange(
 				<Slider.Track>
 					<Slider.Indicator />
 				</Slider.Track>
-				<Slider.Thumb />
-				<Slider.Thumb />
+				<Slider.Thumb aria-label="Minimum" />
+				<Slider.Thumb aria-label="Maximum" />
 			</Slider.Control>
 		</Slider.Root>,
 	);
@@ -119,7 +122,7 @@ describe('slider', () => {
 						<Slider.Track>
 							<Slider.Indicator />
 						</Slider.Track>
-						<Slider.Thumb className="my-thumb" />
+						<Slider.Thumb className="my-thumb" aria-label="Value" />
 					</Slider.Control>
 				</Slider.Root>,
 			);
@@ -250,7 +253,7 @@ describe('slider', () => {
 						<Slider.Track>
 							<Slider.Indicator />
 						</Slider.Track>
-						<Slider.Thumb />
+						<Slider.Thumb aria-label="Value" />
 					</Slider.Control>
 				</Slider.Root>,
 			);
@@ -266,6 +269,76 @@ describe('slider', () => {
 			const firstCallArg = onValueChange.mock.calls[0]?.[0];
 			expect(Array.isArray(firstCallArg)).toBe(true);
 			expect(firstCallArg).toEqual([60]);
+		});
+	});
+
+	// The accessible-name check lives on each thumb (the role="slider" element),
+	// so a range slider warns once per unnamed thumb. Renders without StrictMode
+	// (RTL's default), so the per-mount count stays deterministic.
+	describe('validation: missing-accessible-name', () => {
+		function nameWarnings() {
+			return warnSpy.mock.calls.filter(
+				([, payload]) => (payload as { issue?: string })?.issue === 'missing-accessible-name',
+			);
+		}
+
+		it('warns once when a single thumb has no accessible name', async () => {
+			render(
+				<Slider.Root defaultValue={[50]}>
+					<Slider.Control>
+						<Slider.Track>
+							<Slider.Indicator />
+						</Slider.Track>
+						<Slider.Thumb />
+					</Slider.Control>
+				</Slider.Root>,
+			);
+			await Promise.resolve();
+			expect(nameWarnings()).toHaveLength(1);
+			expect(warnSpy).toHaveBeenCalledWith(
+				'[unbranded-ds]',
+				expect.objectContaining({ component: 'Slider', issue: 'missing-accessible-name' }),
+			);
+		});
+
+		it('stays silent when the thumb has an aria-label', async () => {
+			renderSingle({ defaultValue: [50], children: null });
+			await Promise.resolve();
+			expect(nameWarnings()).toHaveLength(0);
+		});
+
+		it('stays silent when the thumb has an aria-labelledby', async () => {
+			render(
+				<>
+					<span id="thumb-label">Volume</span>
+					<Slider.Root defaultValue={[50]}>
+						<Slider.Control>
+							<Slider.Track>
+								<Slider.Indicator />
+							</Slider.Track>
+							<Slider.Thumb aria-labelledby="thumb-label" />
+						</Slider.Control>
+					</Slider.Root>
+				</>,
+			);
+			await Promise.resolve();
+			expect(nameWarnings()).toHaveLength(0);
+		});
+
+		it('warns once per unnamed thumb in range mode', async () => {
+			render(
+				<Slider.Root defaultValue={[20, 80]}>
+					<Slider.Control>
+						<Slider.Track>
+							<Slider.Indicator />
+						</Slider.Track>
+						<Slider.Thumb />
+						<Slider.Thumb />
+					</Slider.Control>
+				</Slider.Root>,
+			);
+			await Promise.resolve();
+			expect(nameWarnings()).toHaveLength(2);
 		});
 	});
 });

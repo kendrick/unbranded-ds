@@ -107,8 +107,8 @@ export const Range: Story = {
 					<Slider.Track>
 						<Slider.Indicator />
 					</Slider.Track>
-					<Slider.Thumb aria-label="Value" />
-					<Slider.Thumb aria-label="Value" />
+					<Slider.Thumb aria-label="Minimum" />
+					<Slider.Thumb aria-label="Maximum" />
 				</Slider.Control>
 			</Slider.Root>
 		</div>
