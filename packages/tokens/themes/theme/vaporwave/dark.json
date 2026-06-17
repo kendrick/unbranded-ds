@@ -11,7 +11,9 @@
 		"destructive": { "$value": "oklch(0.5771 0.2152 20.00)", "$type": "color" },
 		"destructive-foreground": { "$value": "oklch(0.9851 0.0000 89.88)", "$type": "color" },
 		"destructive-subtle": { "$value": "oklch(0.2700 0.0800 20.00)", "$type": "color" },
-		"destructive-subtle-foreground": { "$value": "oklch(0.8600 0.0900 20.00)", "$type": "color" }
+		"destructive-subtle-foreground": { "$value": "oklch(0.8600 0.0900 20.00)", "$type": "color" },
+		"popover": { "$value": "oklch(0.1800 0.0700 300.00)", "$type": "color" },
+		"popover-foreground": { "$value": "oklch(0.9600 0.0300 330.00)", "$type": "color" }
 	},
 	"shadow": {
 		"neon": { "$value": "0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)", "$type": "shadow" }
