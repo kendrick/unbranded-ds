@@ -24,6 +24,12 @@ export default defineConfig({
 				plugins: [storybookTest({ configDir: join(dir, '.storybook') })],
 				test: {
 					name: 'storybook',
+					// Retry interaction plays that lose the render race in CI's slower
+					// headless Chromium: a play can run before a Base UI component's
+					// deferred render commits, hitting an empty canvas so getByRole finds
+					// nothing. The affected plays also switched to findBy* (which waits);
+					// this nets any other interaction that races on a future run.
+					retry: 2,
 					setupFiles: [join(dir, '.storybook/vitest.setup.ts')],
 					browser: {
 						enabled: true,

@@ -192,7 +192,7 @@ export const KeyboardIncrement: Story = {
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const thumb = canvas.getByRole('slider');
+		const thumb = await canvas.findByRole('slider');
 		thumb.focus();
 		await userEvent.keyboard('{ArrowRight}');
 		await expect(thumb).toHaveAttribute('aria-valuenow', '51');
@@ -221,7 +221,7 @@ export const KeyboardHomeEnd: Story = {
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const thumb = canvas.getByRole('slider');
+		const thumb = await canvas.findByRole('slider');
 		thumb.focus();
 		await userEvent.keyboard('{Home}');
 		await expect(thumb).toHaveAttribute('aria-valuenow', '0');
@@ -252,7 +252,7 @@ export const Touch: Story = {
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const thumb = canvas.getByRole('slider');
+		const thumb = await canvas.findByRole('slider');
 		// FR-019: touch input resolves to the same onValueChange pathway as
 		// pointer and keyboard. This play asserts the thumb is reachable via a
 		// simulated touch pointer and keeps aria-valuenow exposed afterwards.

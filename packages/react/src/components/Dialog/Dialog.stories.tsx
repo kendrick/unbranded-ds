@@ -115,7 +115,7 @@ export const OpenCloseInteraction: Story = {
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const trigger = canvas.getByRole('button', { name: 'Open' });
+		const trigger = await canvas.findByRole('button', { name: 'Open' });
 		await userEvent.click(trigger);
 		await expect(await within(document.body).findByText('Interaction Test')).toBeVisible();
 	},
