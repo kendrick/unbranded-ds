@@ -115,7 +115,6 @@ export const OpenCloseInteraction: Story = {
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		console.log('[CI-DIAG]', JSON.stringify({ where: 'dialog', connected: canvasElement.isConnected, innerLen: canvasElement.innerHTML.length, vw: window.innerWidth, vh: window.innerHeight, bodyKids: document.body.childElementCount, buttons: document.querySelectorAll('button').length, allEls: document.querySelectorAll('*').length }), '|canvas:', canvasElement.outerHTML.slice(0, 400));
 		const trigger = await canvas.findByRole('button', { name: 'Open' });
 		await userEvent.click(trigger);
 		await expect(await within(document.body).findByText('Interaction Test')).toBeVisible();

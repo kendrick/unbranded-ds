@@ -17,9 +17,6 @@ beforeAll(() => {
 	Element.prototype.setPointerCapture = () => {};
 	Element.prototype.releasePointerCapture = () => {};
 	Element.prototype.hasPointerCapture = () => false;
-	// [CI-DIAG spec019] surface any swallowed render error/rejection in the CI log. Remove after root cause.
-	window.addEventListener('error', e => console.log('[CI-DIAG error]', e.message, '@', `${e.filename}:${e.lineno}`));
-	window.addEventListener('unhandledrejection', e => console.log('[CI-DIAG rejection]', String(e.reason)));
 });
 
 beforeAll(project.beforeAll);

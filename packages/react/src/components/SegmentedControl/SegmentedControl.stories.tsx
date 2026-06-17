@@ -35,7 +35,6 @@ export const Default: Story = {
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		console.log('[CI-DIAG]', JSON.stringify({ where: 'segmented', connected: canvasElement.isConnected, innerLen: canvasElement.innerHTML.length, vw: window.innerWidth, vh: window.innerHeight, bodyKids: document.body.childElementCount, radios: document.querySelectorAll('[role="radio"]').length, allEls: document.querySelectorAll('*').length }), '|canvas:', canvasElement.outerHTML.slice(0, 400));
 		const radios = await canvas.findAllByRole('radio');
 
 		// Middle item starts checked because `defaultValue="medium"`.
@@ -224,7 +223,6 @@ export const HorizontalKeyboard: Story = {
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		console.log('[CI-DIAG]', JSON.stringify({ where: 'segmented', connected: canvasElement.isConnected, innerLen: canvasElement.innerHTML.length, vw: window.innerWidth, vh: window.innerHeight, bodyKids: document.body.childElementCount, radios: document.querySelectorAll('[role="radio"]').length, allEls: document.querySelectorAll('*').length }), '|canvas:', canvasElement.outerHTML.slice(0, 400));
 		const radios = await canvas.findAllByRole('radio');
 
 		// Focus the first item so subsequent keyboard events have a target.
@@ -266,7 +264,6 @@ export const VerticalKeyboard: Story = {
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		console.log('[CI-DIAG]', JSON.stringify({ where: 'segmented', connected: canvasElement.isConnected, innerLen: canvasElement.innerHTML.length, vw: window.innerWidth, vh: window.innerHeight, bodyKids: document.body.childElementCount, radios: document.querySelectorAll('[role="radio"]').length, allEls: document.querySelectorAll('*').length }), '|canvas:', canvasElement.outerHTML.slice(0, 400));
 		const radios = await canvas.findAllByRole('radio');
 
 		radios[0]!.focus();

@@ -192,7 +192,6 @@ export const KeyboardIncrement: Story = {
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		console.log('[CI-DIAG]', JSON.stringify({ where: 'slider', connected: canvasElement.isConnected, innerLen: canvasElement.innerHTML.length, vw: window.innerWidth, vh: window.innerHeight, bodyKids: document.body.childElementCount, sliders: document.querySelectorAll('[role="slider"]').length, ranges: document.querySelectorAll('input[type="range"]').length, allEls: document.querySelectorAll('*').length }), '|canvas:', canvasElement.outerHTML.slice(0, 400));
 		const thumb = await canvas.findByRole('slider');
 		thumb.focus();
 		await userEvent.keyboard('{ArrowRight}');
@@ -222,7 +221,6 @@ export const KeyboardHomeEnd: Story = {
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		console.log('[CI-DIAG]', JSON.stringify({ where: 'slider', connected: canvasElement.isConnected, innerLen: canvasElement.innerHTML.length, vw: window.innerWidth, vh: window.innerHeight, bodyKids: document.body.childElementCount, sliders: document.querySelectorAll('[role="slider"]').length, ranges: document.querySelectorAll('input[type="range"]').length, allEls: document.querySelectorAll('*').length }), '|canvas:', canvasElement.outerHTML.slice(0, 400));
 		const thumb = await canvas.findByRole('slider');
 		thumb.focus();
 		await userEvent.keyboard('{Home}');
@@ -254,7 +252,6 @@ export const Touch: Story = {
 	),
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		console.log('[CI-DIAG]', JSON.stringify({ where: 'slider', connected: canvasElement.isConnected, innerLen: canvasElement.innerHTML.length, vw: window.innerWidth, vh: window.innerHeight, bodyKids: document.body.childElementCount, sliders: document.querySelectorAll('[role="slider"]').length, ranges: document.querySelectorAll('input[type="range"]').length, allEls: document.querySelectorAll('*').length }), '|canvas:', canvasElement.outerHTML.slice(0, 400));
 		const thumb = await canvas.findByRole('slider');
 		// FR-019: touch input resolves to the same onValueChange pathway as
 		// pointer and keyboard. This play asserts the thumb is reachable via a
