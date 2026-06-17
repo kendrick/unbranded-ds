@@ -1,3 +1,7 @@
+/* eslint-disable perfectionist/sort-imports -- the side-effect CSS import below must load
+ * before preview.ts's token CSS so the design system's cascade layers win over Tailwind's
+ * `theme` layer in the runner. Import order here is load-bearing, not stylistic. spec 020. */
+import './_test-layer-order.css';
 import * as a11yAddonAnnotations from '@storybook/addon-a11y/preview';
 import { setProjectAnnotations } from '@storybook/react-vite';
 import { beforeAll } from 'vitest';

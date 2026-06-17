@@ -1,0 +1,14 @@
+/*
+ * Test-only cascade layer order. spec 020.
+ *
+ * The Vitest browser runner injects each imported stylesheet as its own <style> in
+ * import order, and preview.ts imports the token CSS before Tailwind. That makes the
+ * design system's `ds-color-scheme`/`ds-theme`/`ds-density` layers the *earliest*
+ * (lowest-priority) layers, so Tailwind's later `theme` layer wins — and that layer
+ * carries the preset's `@theme inline` self-references (`--token: var(--token)`),
+ * which resolve to empty and shadow every real token value, z-index included.
+ * Declaring the full order before any layer is first used puts the ds-* layers
+ * last (highest priority) so the real token values win, matching the full Storybook
+ * build. Loaded first via vitest.setup.ts; not shipped, not used by dev or prod.
+ */
+@layer theme, base, components, utilities, ds-color-scheme, ds-theme, ds-density;
