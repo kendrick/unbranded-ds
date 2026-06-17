@@ -59,6 +59,8 @@ const schemaTokenMap: Record<string, TokenDefinition> = {
 	'color.destructive-foreground': { name: 'color.destructive-foreground', category: 'color', type: 'color', cssVariable: '--color-destructive-foreground', source: 'schema' },
 	'color.destructive-subtle': { name: 'color.destructive-subtle', category: 'color', type: 'color', cssVariable: '--color-destructive-subtle', source: 'schema' },
 	'color.destructive-subtle-foreground': { name: 'color.destructive-subtle-foreground', category: 'color', type: 'color', cssVariable: '--color-destructive-subtle-foreground', source: 'schema' },
+	'color.popover': { name: 'color.popover', category: 'color', type: 'color', cssVariable: '--color-popover', source: 'schema' },
+	'color.popover-foreground': { name: 'color.popover-foreground', category: 'color', type: 'color', cssVariable: '--color-popover-foreground', source: 'schema' },
 
 	// Spacing tokens
 	'spacing.px': { name: 'spacing.px', category: 'spacing', type: 'dimension', cssVariable: '--spacing-px', source: 'schema' },
