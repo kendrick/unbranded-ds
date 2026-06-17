@@ -32,7 +32,7 @@ import { Checkbox } from '@unbranded-ds/react';
 
 ### Standalone uncontrolled
 
-The simplest case: an uncontrolled checkbox with a visible label. Wrap both in a `<label>` so clicking the text toggles the checkbox without extra wiring.
+The simplest case: an uncontrolled checkbox with a visible label. The wrapping `<label>` makes clicking the text toggle the box, but a native `<label>` does not name a `role="checkbox"` element — so point `aria-labelledby` at the `<Label>` to give the checkbox its accessible name.
 
 ```tsx
 import { Checkbox, Label } from '@unbranded-ds/react';
@@ -40,8 +40,8 @@ import { Checkbox, Label } from '@unbranded-ds/react';
 export function AcceptTerms() {
 	return (
 		<label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-			<Checkbox defaultChecked={false} name="terms" />
-			<Label>Accept terms and conditions</Label>
+			<Checkbox defaultChecked={false} name="terms" aria-labelledby="terms-label" />
+			<Label id="terms-label">Accept terms and conditions</Label>
 		</label>
 	);
 }
@@ -64,8 +64,9 @@ export function SubscribeToggle() {
 				checked={subscribed}
 				onCheckedChange={(checked) => setSubscribed(checked)}
 				name="subscribe"
+				aria-labelledby="subscribe-label"
 			/>
-			<Label>Subscribe to updates</Label>
+			<Label id="subscribe-label">Subscribe to updates</Label>
 		</label>
 	);
 }
@@ -91,8 +92,9 @@ export function SelectAll() {
 					checked={allChecked}
 					indeterminate={someChecked && !allChecked}
 					onCheckedChange={(checked) => setItems(items.map(() => checked))}
+					aria-labelledby="select-all-label"
 				/>
-				<Label>Select all</Label>
+				<Label id="select-all-label">Select all</Label>
 			</label>
 		</div>
 	);
@@ -109,8 +111,8 @@ import { Checkbox, Label } from '@unbranded-ds/react';
 export function DisabledOption() {
 	return (
 		<label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-			<Checkbox disabled defaultChecked />
-			<Label>Notifications (unavailable on this plan)</Label>
+			<Checkbox disabled defaultChecked aria-labelledby="notifications-label" />
+			<Label id="notifications-label">Notifications (unavailable on this plan)</Label>
 		</label>
 	);
 }
@@ -124,7 +126,7 @@ The component is focusable with Tab. Space toggles the checked state. The focus 
 
 `aria-invalid` styling activates when the underlying input is marked invalid, turning the border and ring destructive red. This integrates with field-level validation patterns without additional ARIA attributes on the consumer side.
 
-Pair every standalone checkbox with a `<label>` (or `aria-label`/`aria-labelledby`) so screen readers can announce what the checkbox controls. The component itself does not inject a label.
+Give every checkbox an accessible name with `aria-label` or `aria-labelledby`. A native `<label>` wrap is worth keeping for the click-to-toggle target, but on its own it names nothing here: the checkbox is a `role="checkbox"` element, not a native `<input>`, so the label has no control to attach to. For a labeled checkbox, keep the wrapping `<label>` and point `aria-labelledby` at the visible `<Label>`. The component injects no label of its own.
 
 ## Variants and slots
 
