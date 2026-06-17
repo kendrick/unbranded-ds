@@ -6,6 +6,7 @@ import { Checkbox } from './Checkbox';
 const meta = {
 	title: 'Components/Checkbox',
 	component: Checkbox,
+	args: { 'aria-label': 'Accept terms and conditions' },
 	tags: ['autodocs'],
 } satisfies Meta<typeof Checkbox>;
 
@@ -31,8 +32,8 @@ export const WithLabel: Story = {
 	render: () => (
 		// eslint-disable-next-line jsx-a11y/label-has-associated-control -- inner Checkbox is the implicit control; the linter cannot infer this from a custom component.
 		<label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-			<Checkbox />
-			<Label>Accept terms and conditions</Label>
+			<Checkbox aria-labelledby="cb-with-label" />
+			<Label id="cb-with-label">Accept terms and conditions</Label>
 		</label>
 	),
 };
@@ -42,8 +43,8 @@ export const ToggleInteraction: Story = {
 	render: () => (
 		// eslint-disable-next-line jsx-a11y/label-has-associated-control -- inner Checkbox is the implicit control; the linter cannot infer this from a custom component.
 		<label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-			<Checkbox />
-			<Label>Toggle me</Label>
+			<Checkbox aria-labelledby="cb-toggle" />
+			<Label id="cb-toggle">Toggle me</Label>
 		</label>
 	),
 	play: async ({ canvasElement }) => {

@@ -6,6 +6,7 @@ import { Switch } from './Switch';
 const meta = {
 	title: 'Components/Switch',
 	component: Switch,
+	args: { 'aria-label': 'Airplane mode' },
 	tags: ['autodocs'],
 } satisfies Meta<typeof Switch>;
 
@@ -48,8 +49,8 @@ export const Disabled: Story = {
 export const WithLabel: Story = {
 	render: () => (
 		<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-			<Switch id="airplane" />
-			<Label htmlFor="airplane">Airplane Mode</Label>
+			<Switch id="airplane" aria-labelledby="sw-airplane" />
+			<Label id="sw-airplane" htmlFor="airplane">Airplane Mode</Label>
 		</div>
 	),
 	parameters: {
@@ -65,8 +66,8 @@ export const WithLabel: Story = {
 export const ToggleInteraction: Story = {
 	render: () => (
 		<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-			<Switch id="toggle-test" />
-			<Label htmlFor="toggle-test">Toggle me</Label>
+			<Switch id="toggle-test" aria-labelledby="sw-toggle" />
+			<Label id="sw-toggle" htmlFor="toggle-test">Toggle me</Label>
 		</div>
 	),
 	play: async ({ canvasElement }) => {

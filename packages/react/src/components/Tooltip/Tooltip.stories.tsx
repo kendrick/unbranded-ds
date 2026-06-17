@@ -25,7 +25,7 @@ export const Default: Story = {
 	},
 	render: (args) => (
 		<Tooltip.Provider {...args}>
-			<Tooltip.Trigger>
+			<Tooltip.Trigger asChild>
 				<Button variant="outline">Hover me</Button>
 			</Tooltip.Trigger>
 			<Tooltip.Content>Helpful detail</Tooltip.Content>
@@ -46,7 +46,7 @@ export const Sides: Story = {
 		<div className="flex flex-wrap items-center justify-center gap-8 p-16">
 			{(['top', 'right', 'bottom', 'left'] as const).map((side) => (
 				<Tooltip.Provider key={side} {...args}>
-					<Tooltip.Trigger>
+					<Tooltip.Trigger asChild>
 						<Button variant="outline">{side}</Button>
 					</Tooltip.Trigger>
 					<Tooltip.Content side={side}>
@@ -73,7 +73,7 @@ export const Alignments: Story = {
 		<div className="flex flex-wrap items-center justify-center gap-8 p-16">
 			{(['start', 'center', 'end'] as const).map((align) => (
 				<Tooltip.Provider key={align} {...args}>
-					<Tooltip.Trigger>
+					<Tooltip.Trigger asChild>
 						<Button variant="outline">{align}</Button>
 					</Tooltip.Trigger>
 					<Tooltip.Content side="bottom" align={align}>
@@ -122,7 +122,7 @@ export const HoverToOpen: Story = {
 	args: { delayDuration: 0 },
 	render: (args) => (
 		<Tooltip.Provider {...args}>
-			<Tooltip.Trigger>
+			<Tooltip.Trigger asChild>
 				<Button variant="outline">Hover target</Button>
 			</Tooltip.Trigger>
 			<Tooltip.Content>Tooltip is open</Tooltip.Content>
@@ -143,7 +143,7 @@ export const KeyboardFocusToOpen: Story = {
 	args: { delayDuration: 700 },
 	render: (args) => (
 		<Tooltip.Provider {...args}>
-			<Tooltip.Trigger>
+			<Tooltip.Trigger asChild>
 				<Button variant="outline">Focus target</Button>
 			</Tooltip.Trigger>
 			<Tooltip.Content>Opened by keyboard</Tooltip.Content>
@@ -163,7 +163,7 @@ export const EscapeDismisses: Story = {
 	args: { delayDuration: 0 },
 	render: (args) => (
 		<Tooltip.Provider {...args}>
-			<Tooltip.Trigger>
+			<Tooltip.Trigger asChild>
 				<Button variant="outline">Open then Escape</Button>
 			</Tooltip.Trigger>
 			<Tooltip.Content>Will close on Escape</Tooltip.Content>

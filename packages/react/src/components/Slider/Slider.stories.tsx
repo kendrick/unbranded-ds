@@ -27,7 +27,7 @@ export const Default: Story = {
 					<Slider.Track>
 						<Slider.Indicator />
 					</Slider.Track>
-					<Slider.Thumb />
+					<Slider.Thumb aria-label="Value" />
 				</Slider.Control>
 			</Slider.Root>
 		</div>
@@ -50,7 +50,7 @@ export const Sizes: Story = {
 						<Slider.Track>
 							<Slider.Indicator />
 						</Slider.Track>
-						<Slider.Thumb />
+						<Slider.Thumb aria-label="Value" />
 					</Slider.Control>
 				</Slider.Root>
 			))}
@@ -74,7 +74,7 @@ export const Orientations: Story = {
 						<Slider.Track>
 							<Slider.Indicator />
 						</Slider.Track>
-						<Slider.Thumb />
+						<Slider.Thumb aria-label="Value" />
 					</Slider.Control>
 				</Slider.Root>
 			</div>
@@ -84,7 +84,7 @@ export const Orientations: Story = {
 						<Slider.Track>
 							<Slider.Indicator />
 						</Slider.Track>
-						<Slider.Thumb />
+						<Slider.Thumb aria-label="Value" />
 					</Slider.Control>
 				</Slider.Root>
 			</div>
@@ -107,8 +107,8 @@ export const Range: Story = {
 					<Slider.Track>
 						<Slider.Indicator />
 					</Slider.Track>
-					<Slider.Thumb />
-					<Slider.Thumb />
+					<Slider.Thumb aria-label="Value" />
+					<Slider.Thumb aria-label="Value" />
 				</Slider.Control>
 			</Slider.Root>
 		</div>
@@ -130,7 +130,7 @@ export const Disabled: Story = {
 					<Slider.Track>
 						<Slider.Indicator />
 					</Slider.Track>
-					<Slider.Thumb />
+					<Slider.Thumb aria-label="Value" />
 				</Slider.Control>
 			</Slider.Root>
 		</div>
@@ -149,7 +149,7 @@ function ControlledSliderExample() {
 					<Slider.Track>
 						<Slider.Indicator />
 					</Slider.Track>
-					<Slider.Thumb />
+					<Slider.Thumb aria-label="Value" />
 				</Slider.Control>
 			</Slider.Root>
 			<output style={{ fontSize: '14px' }}>
@@ -185,7 +185,7 @@ export const KeyboardIncrement: Story = {
 					<Slider.Track>
 						<Slider.Indicator />
 					</Slider.Track>
-					<Slider.Thumb />
+					<Slider.Thumb aria-label="Value" />
 				</Slider.Control>
 			</Slider.Root>
 		</div>
@@ -214,7 +214,7 @@ export const KeyboardHomeEnd: Story = {
 					<Slider.Track>
 						<Slider.Indicator />
 					</Slider.Track>
-					<Slider.Thumb />
+					<Slider.Thumb aria-label="Value" />
 				</Slider.Control>
 			</Slider.Root>
 		</div>
@@ -245,7 +245,7 @@ export const Touch: Story = {
 					<Slider.Track>
 						<Slider.Indicator />
 					</Slider.Track>
-					<Slider.Thumb />
+					<Slider.Thumb aria-label="Value" />
 				</Slider.Control>
 			</Slider.Root>
 		</div>
@@ -260,7 +260,9 @@ export const Touch: Story = {
 			keys: '[TouchA>]',
 			target: thumb,
 		});
-		await userEvent.pointer({ keys: '[/TouchA]' });
+		// The release needs its own target: in browser mode user-event has no
+		// implicit "previous position" to fall back on the way jsdom did.
+		await userEvent.pointer({ keys: '[/TouchA]', target: thumb });
 		await expect(thumb).toHaveAttribute('aria-valuenow');
 	},
 };
