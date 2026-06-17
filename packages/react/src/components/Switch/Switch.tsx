@@ -4,6 +4,7 @@ import type * as React from 'react';
 import { Switch as SwitchPrimitive } from '@base-ui-components/react/switch';
 
 import { cn } from '../../lib/cn';
+import { useAccessibleNameWarning } from '../../lib/use-accessible-name-warning';
 
 interface SwitchOwnProps {
 	/**
@@ -144,8 +145,8 @@ type SwitchProps = SwitchPrimitive.Root.Props & SwitchOwnProps;
  * export function AirplaneMode() {
  *   return (
  *     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
- *       <Switch id="airplane-mode" />
- *       <Label htmlFor="airplane-mode">Airplane mode</Label>
+ *       <Switch id="airplane-mode" aria-labelledby="airplane-mode-label" />
+ *       <Label id="airplane-mode-label" htmlFor="airplane-mode">Airplane mode</Label>
  *     </div>
  *   );
  * }
@@ -164,8 +165,9 @@ type SwitchProps = SwitchPrimitive.Root.Props & SwitchOwnProps;
  *         id="notifications"
  *         checked={enabled}
  *         onCheckedChange={(checked) => setEnabled(checked)}
+ *         aria-labelledby="notifications-label"
  *       />
- *       <Label htmlFor="notifications">Push notifications</Label>
+ *       <Label id="notifications-label" htmlFor="notifications">Push notifications</Label>
  *     </div>
  *   );
  * }
@@ -179,6 +181,8 @@ function Switch({
 	size = 'default',
 	...props
 }: SwitchProps) {
+	useAccessibleNameWarning('Switch', props);
+
 	return (
 		<SwitchPrimitive.Root
 			data-slot="switch"

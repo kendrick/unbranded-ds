@@ -32,7 +32,7 @@ import { Switch } from '@unbranded-ds/react';
 
 ### Paired with a label
 
-The Switch does not render its own label text. Wire a `<Label>` via matching `id` and `htmlFor` so clicking the label text also toggles the switch.
+The Switch does not render its own label text. The `htmlFor`/`id` pairing makes clicking the label toggle the switch, but it does not name a `role="switch"` element — so also point `aria-labelledby` at the `<Label>` to give the switch its accessible name.
 
 ```tsx
 import { Label, Switch } from '@unbranded-ds/react';
@@ -40,8 +40,8 @@ import { Label, Switch } from '@unbranded-ds/react';
 export function AirplaneMode() {
 	return (
 		<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-			<Switch id="airplane-mode" />
-			<Label htmlFor="airplane-mode">Airplane mode</Label>
+			<Switch id="airplane-mode" aria-labelledby="airplane-mode-label" />
+			<Label id="airplane-mode-label" htmlFor="airplane-mode">Airplane mode</Label>
 		</div>
 	);
 }
@@ -64,8 +64,9 @@ export function NotificationsToggle() {
 				id="notifications"
 				checked={enabled}
 				onCheckedChange={(checked) => setEnabled(checked)}
+				aria-labelledby="notifications-label"
 			/>
-			<Label htmlFor="notifications">Push notifications</Label>
+			<Label id="notifications-label" htmlFor="notifications">Push notifications</Label>
 		</div>
 	);
 }
@@ -81,8 +82,8 @@ import { Label, Switch } from '@unbranded-ds/react';
 export function CompactSetting() {
 	return (
 		<div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-			<Switch id="compact-wifi" size="sm" defaultChecked />
-			<Label htmlFor="compact-wifi">Wi-Fi</Label>
+			<Switch id="compact-wifi" size="sm" defaultChecked aria-labelledby="compact-wifi-label" />
+			<Label id="compact-wifi-label" htmlFor="compact-wifi">Wi-Fi</Label>
 		</div>
 	);
 }
@@ -98,8 +99,8 @@ import { Label, Switch } from '@unbranded-ds/react';
 export function UnavailableSetting() {
 	return (
 		<div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-			<Switch id="enterprise-feature" disabled defaultChecked />
-			<Label htmlFor="enterprise-feature">Advanced audit log (Enterprise only)</Label>
+			<Switch id="enterprise-feature" disabled defaultChecked aria-labelledby="enterprise-feature-label" />
+			<Label id="enterprise-feature-label" htmlFor="enterprise-feature">Advanced audit log (Enterprise only)</Label>
 		</div>
 	);
 }
@@ -111,7 +112,7 @@ Switch renders a `<span>` with `role="switch"` and a hidden `<input>` beside it.
 
 The component is reachable via Tab. Space toggles the current state. A visible focus ring appears on `:focus-visible` so keyboard users get a clear indicator without pointer clicks picking up the ring.
 
-`aria-invalid` styling activates automatically when the underlying input is marked invalid — the border and ring shift to destructive red. Pair every Switch with a `<Label>`, `aria-label`, or `aria-labelledby` so screen readers can announce what setting the switch controls; the component does not inject label text on its own.
+`aria-invalid` styling activates automatically when the underlying input is marked invalid — the border and ring shift to destructive red. Give every Switch an accessible name with `aria-label` or `aria-labelledby`. A `<Label htmlFor>` is worth keeping for the click-to-toggle target, but on its own it names nothing here: the switch is a `role="switch"` element, not a native `<input>`. For a labeled switch, keep the `htmlFor` association and point `aria-labelledby` at the visible `<Label>`. The component injects no label text of its own.
 
 ## Variants and slots
 
