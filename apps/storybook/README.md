@@ -73,3 +73,20 @@ Non-zero exit if anything's missing. CI runs it after Chromatic publish.
 ## Access
 
 The endpoint is as public as the Storybook. Auth is a paid Chromatic feature and out of scope for v0.1.
+
+## Running the interaction and accessibility tests
+
+The story `play` functions and the accessibility (axe) pass run through the Vitest browser-mode test-runner. They need a Chromium browser, installed once:
+
+```bash
+pnpm --filter @unbranded-ds/storybook exec playwright install --with-deps chromium
+```
+
+Then build the packages (the stories import their built output) and run the gate:
+
+```bash
+pnpm --filter @unbranded-ds/tokens --filter @unbranded-ds/react build
+pnpm --filter @unbranded-ds/storybook test:storybook
+```
+
+This is the same gate CI runs on every pull request. A failing `play` or an accessibility violation fails it.

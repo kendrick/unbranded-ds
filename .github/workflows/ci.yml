@@ -120,3 +120,36 @@ jobs:
       # The Playwright webServer runs `next build` then `next start` itself.
       - name: Playwright e2e (production build)
         run: pnpm --filter @unbranded-ds/example-nextjs e2e
+
+  storybook-test:
+    name: Storybook test-runner (interaction + a11y)
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # The stories import the packages' built dist (theme CSS + components),
+      # so build them before the gate runs.
+      - name: Build packages
+        run: pnpm --filter @unbranded-ds/tokens --filter @unbranded-ds/react build
+
+      - name: Install Playwright browser
+        run: pnpm --filter @unbranded-ds/storybook exec playwright install --with-deps chromium
+
+      - name: Storybook test-runner (interaction + a11y)
+        run: pnpm --filter @unbranded-ds/storybook test:storybook
