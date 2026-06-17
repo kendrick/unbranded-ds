@@ -29,7 +29,7 @@ export const Default: Story = {
 	},
 	render: () => (
 		<Select>
-			<SelectTrigger style={{ width: '200px' }}>
+			<SelectTrigger style={{ width: '200px' }} aria-label="Select an option">
 				<SelectValue>Select a fruit</SelectValue>
 			</SelectTrigger>
 			<SelectContent>
@@ -52,7 +52,7 @@ export const WithGroups: Story = {
 	},
 	render: () => (
 		<Select>
-			<SelectTrigger style={{ width: '200px' }}>
+			<SelectTrigger style={{ width: '200px' }} aria-label="Select an option">
 				<SelectValue>Select a food</SelectValue>
 			</SelectTrigger>
 			<SelectContent>
@@ -82,7 +82,7 @@ export const Disabled: Story = {
 	},
 	render: () => (
 		<Select disabled>
-			<SelectTrigger style={{ width: '200px' }}>
+			<SelectTrigger style={{ width: '200px' }} aria-label="Select an option">
 				<SelectValue>Disabled</SelectValue>
 			</SelectTrigger>
 			<SelectContent>
@@ -103,7 +103,7 @@ export const ManyOptions: Story = {
 	},
 	render: () => (
 		<Select>
-			<SelectTrigger style={{ width: '200px' }}>
+			<SelectTrigger style={{ width: '200px' }} aria-label="Select an option">
 				<SelectValue>Pick a number</SelectValue>
 			</SelectTrigger>
 			<SelectContent>

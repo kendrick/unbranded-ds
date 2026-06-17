@@ -1,5 +1,8 @@
 import type { Preview } from '@storybook/react-vite';
-import React from 'react';
+// Named imports, not `import React from 'react'`: under the Vitest browser
+// dep-optimizer the default import resolves to null, so `React.useEffect` threw
+// in the test-runner (spec 019). Named imports work the same in dev, build, and test.
+import { createElement, useEffect } from 'react';
 
 // Three axes (spec 016): the color scheme (light/dark) and the aesthetic identity
 // (default/brand/vaporwave) ride separate attributes, so each identity ships a
@@ -51,7 +54,7 @@ const preview: Preview = {
 			const colorScheme = context.globals.colorScheme || 'light';
 			const theme = context.globals.theme || 'default';
 
-			React.useEffect(() => {
+			useEffect(() => {
 				const d = document.documentElement;
 				d.setAttribute('data-color-scheme', colorScheme);
 				d.setAttribute('data-theme', theme);
@@ -59,7 +62,7 @@ const preview: Preview = {
 				localStorage.setItem('unbranded-ds-theme', theme);
 			}, [colorScheme, theme]);
 
-			return React.createElement(
+			return createElement(
 				'div',
 				{
 					'data-color-scheme': colorScheme,
@@ -71,7 +74,7 @@ const preview: Preview = {
 						padding: '1rem',
 					},
 				},
-				React.createElement(Story),
+				createElement(Story),
 			);
 		},
 	],

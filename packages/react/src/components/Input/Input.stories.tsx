@@ -65,7 +65,7 @@ export const WithLabel: Story = {
 };
 
 export const File: Story = {
-	args: { type: 'file' },
+	args: { type: 'file', 'aria-label': 'Upload file' },
 	parameters: {
 		docs: {
 			description: {

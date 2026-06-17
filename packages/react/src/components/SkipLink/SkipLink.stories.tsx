@@ -81,12 +81,10 @@ export const CustomTarget: Story = {
 
 		await userEvent.tab();
 		expect(link).toHaveFocus();
+		// Assert the anchor's target wiring rather than pressing Enter: in a real
+		// browser (the test-runner, spec 019) activating the anchor performs the
+		// hash navigation and tears down the test page. The href is the contract.
 		expect(link.getAttribute('href')).toBe('#content');
-
-		// Pressing Enter activates the native anchor. The browser handles
-		// the scroll-and-focus jump; we just confirm the keystroke does
-		// not throw and the link has the right target wiring.
-		await userEvent.keyboard('{Enter}');
 	},
 };
 

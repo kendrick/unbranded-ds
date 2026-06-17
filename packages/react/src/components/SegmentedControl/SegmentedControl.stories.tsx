@@ -35,7 +35,7 @@ export const Default: Story = {
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const radios = canvas.getAllByRole('radio');
+		const radios = await canvas.findAllByRole('radio');
 
 		// Middle item starts checked because `defaultValue="medium"`.
 		expect(radios[1]?.getAttribute('aria-checked')).toBe('true');
@@ -223,7 +223,7 @@ export const HorizontalKeyboard: Story = {
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const radios = canvas.getAllByRole('radio');
+		const radios = await canvas.findAllByRole('radio');
 
 		// Focus the first item so subsequent keyboard events have a target.
 		radios[0]!.focus();
@@ -264,7 +264,7 @@ export const VerticalKeyboard: Story = {
 	},
 	play: async ({ canvasElement }) => {
 		const canvas = within(canvasElement);
-		const radios = canvas.getAllByRole('radio');
+		const radios = await canvas.findAllByRole('radio');
 
 		radios[0]!.focus();
 		expect(radios[0]).toHaveFocus();
