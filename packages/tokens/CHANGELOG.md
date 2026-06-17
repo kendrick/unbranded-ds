@@ -1,5 +1,29 @@
 # @unbranded-ds/tokens changelog
 
+## 0.6.0
+
+### Minor Changes
+
+- 54ec4fc: Split the conflated theme axis into two composable axes: a color scheme (light/dark, on `data-color-scheme`, plus a `system` intent that follows the OS) and an aesthetic identity (default/brand/vaporwave, keeping `data-theme`, renamed internally from `aesthetic` to `theme`). They join the existing density axis.
+
+  Tokens: each identity now ships a complete authored palette per color scheme — six cells, every one validated WCAG AA, including the muted-foreground/background pair that slipped through in spec 015. The build emits per-combination CSS under compound `[data-theme][data-color-scheme]` selectors in the cascade order `@layer ds-color-scheme, ds-theme, ds-density;`, with new per-axis storage keys and a three-attribute flash-free bootstrap.
+
+  React: `useTheme()` gains a top-level `colorScheme` convenience (the resolved value plus a one-arg setter) for the common light/dark case; the axis maps stay the source of truth. The old `ThemeToggle` is renamed `ColorSchemeToggle` (light/system/dark), and a new data-driven `ThemeToggle` drives the identity axis.
+
+  No migration path ships: there are no external consumers yet, so this is a clean break rather than a deprecation window.
+
+- 9105983: Fix the destructive Button's contrast and ship the soft destructive treatment as a reusable token.
+
+  The Button's `destructive` variant rendered the destructive color as text on a translucent tint, which fell to about 4.1:1 in the light themes — below WCAG AA. It now paints a new canonical `destructive-subtle` surface with a darker `destructive-subtle-foreground`, authored to pass AA in every identity-by-scheme cell (all six) and surface-independent so it holds on cards and the page background alike.
+
+  A sixth declared contrast pair guards `destructive-subtle-foreground` on `destructive-subtle`, so a theme that drifts below 4.5:1 fails the build with a structured issue; the matrix test also checks the hover state. The pair is canonical and reusable, mirroring `muted`/`muted-foreground`, for any component that needs destructive content on a quiet surface.
+
+- c1b4f49: Define the popover surface token so Dialog, Tooltip, and Select content render on a real, opaque background.
+
+  The Dialog, Tooltip, and Select content components style themselves with `bg-popover` / `text-popover-foreground`, but the color schema never defined a `popover` token, so those surfaces resolved to unset CSS variables and rendered transparent. The accessibility gate then measured the Dialog description's muted-foreground text against the overlay showing through instead of a solid panel. That read 3.98:1, below the 4.5:1 floor for WCAG AA.
+
+  `popover` and `popover-foreground` are now canonical color tokens, authored per theme cell as a flat copy of that cell's `background` / `foreground`; elevation stays visual, from the components' ring and shadow. Because `muted-foreground` on `background` already passes AA, the description clears the threshold with no `muted-foreground` change. Two new declared contrast pairs guard `popover-foreground` / `popover` and `muted-foreground` / `popover` across all six identity-by-scheme cells, so a theme that omits the pair or drifts below 4.5:1 fails the build with a structured issue. The spec-020 color-contrast quarantine on the two Dialog stories is gone.
+
 ## 0.5.0
 
 ### Minor Changes

@@ -1,5 +1,43 @@
 # @unbranded-ds/react changelog
 
+## 0.5.0
+
+### Minor Changes
+
+- 54ec4fc: Split the conflated theme axis into two composable axes: a color scheme (light/dark, on `data-color-scheme`, plus a `system` intent that follows the OS) and an aesthetic identity (default/brand/vaporwave, keeping `data-theme`, renamed internally from `aesthetic` to `theme`). They join the existing density axis.
+
+  Tokens: each identity now ships a complete authored palette per color scheme — six cells, every one validated WCAG AA, including the muted-foreground/background pair that slipped through in spec 015. The build emits per-combination CSS under compound `[data-theme][data-color-scheme]` selectors in the cascade order `@layer ds-color-scheme, ds-theme, ds-density;`, with new per-axis storage keys and a three-attribute flash-free bootstrap.
+
+  React: `useTheme()` gains a top-level `colorScheme` convenience (the resolved value plus a one-arg setter) for the common light/dark case; the axis maps stay the source of truth. The old `ThemeToggle` is renamed `ColorSchemeToggle` (light/system/dark), and a new data-driven `ThemeToggle` drives the identity axis.
+
+  No migration path ships: there are no external consumers yet, so this is a clean break rather than a deprecation window.
+
+- 9105983: Fix the destructive Button's contrast and ship the soft destructive treatment as a reusable token.
+
+  The Button's `destructive` variant rendered the destructive color as text on a translucent tint, which fell to about 4.1:1 in the light themes — below WCAG AA. It now paints a new canonical `destructive-subtle` surface with a darker `destructive-subtle-foreground`, authored to pass AA in every identity-by-scheme cell (all six) and surface-independent so it holds on cards and the page background alike.
+
+  A sixth declared contrast pair guards `destructive-subtle-foreground` on `destructive-subtle`, so a theme that drifts below 4.5:1 fails the build with a structured issue; the matrix test also checks the hover state. The pair is canonical and reusable, mirroring `muted`/`muted-foreground`, for any component that needs destructive content on a quiet surface.
+
+### Patch Changes
+
+- bbd8d1f: Fix the accessible-name guidance for the ARIA-role form controls, and warn in development when one renders unnamed.
+
+  Checkbox, Switch, and Slider render a `role="checkbox"`/`"switch"`/`"slider"` element, which a native `<label>` does not name — only `aria-label` or `aria-labelledby` does. The docs taught the native-label pattern, so a developer who copied an example shipped an unnamed control. The `@example` blocks and usage sidecars now show the working pattern: `aria-label` for an unlabeled control, or a visible `<Label id>` paired with `aria-labelledby` for a labeled one. The wrapping `<label>` (Checkbox) and `htmlFor` association (Switch) stay for click-to-toggle.
+
+  A development-only warning now fires when one of these controls mounts with neither `aria-label` nor `aria-labelledby`, naming the control and the fix. It reads props only, never the DOM, and production builds strip it. Neither the warning nor the doc fixes change any rendered DOM.
+
+- c1b4f49: Define the popover surface token so Dialog, Tooltip, and Select content render on a real, opaque background.
+
+  The Dialog, Tooltip, and Select content components style themselves with `bg-popover` / `text-popover-foreground`, but the color schema never defined a `popover` token, so those surfaces resolved to unset CSS variables and rendered transparent. The accessibility gate then measured the Dialog description's muted-foreground text against the overlay showing through instead of a solid panel. That read 3.98:1, below the 4.5:1 floor for WCAG AA.
+
+  `popover` and `popover-foreground` are now canonical color tokens, authored per theme cell as a flat copy of that cell's `background` / `foreground`; elevation stays visual, from the components' ring and shadow. Because `muted-foreground` on `background` already passes AA, the description clears the threshold with no `muted-foreground` change. Two new declared contrast pairs guard `popover-foreground` / `popover` and `muted-foreground` / `popover` across all six identity-by-scheme cells, so a theme that omits the pair or drifts below 4.5:1 fails the build with a structured issue. The spec-020 color-contrast quarantine on the two Dialog stories is gone.
+
+- 4e7426e: The published bundle now declares itself a client module, so React Server Component consumers (Next.js App Router) can import a component without their own `'use client'` boundary. The components have always been client components — they use hooks — but the bundle never said so, so importing one into a server component pulled client code into the server graph and broke the build. A tsup banner adds the directive. No public API change: same exports, same props, same behavior.
+- Updated dependencies [54ec4fc]
+- Updated dependencies [9105983]
+- Updated dependencies [c1b4f49]
+  - @unbranded-ds/tokens@0.6.0
+
 ## 0.4.0
 
 ### Minor Changes
