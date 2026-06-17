@@ -14,7 +14,7 @@ The fix is small and mechanical. Add the missing `vitest.config.ts` in `apps/sto
 **Language/Version**: TypeScript 5.x, strict, no `any` (Constitution VIII)
 **Primary Dependencies**: Vitest 3 (browser mode), `@vitest/browser` (^3, the optional peer that is currently absent), `playwright` (Chromium; `playwright@1.61.0` is already in the workspace store), `@storybook/addon-vitest` ^10.3 (`storybookTest()` plugin, already a devDep), `@storybook/addon-a11y` ^10.3 (axe, `test: 'error'` already set), Storybook 10.3 `@storybook/react-vite`, GitHub Actions
 **Storage**: N/A — CI and test configuration; no runtime or persisted state
-**Testing**: this feature *is* test infrastructure. It executes the interaction (`play`) and accessibility (axe) layers across every story in headless Chromium, the layers Constitution VI.2/VI.3 require
+**Testing**: this feature _is_ test infrastructure. It executes the interaction (`play`) and accessibility (axe) layers across every story in headless Chromium, the layers Constitution VI.2/VI.3 require
 **Target Platform**: GitHub Actions (ubuntu) for the gate, plus local developer runs
 **Project Type**: monorepo — a test-config addition in `apps/storybook` plus a new CI job in the existing workflow
 **Performance Goals**: no hard CI-time budget (per clarification); correctness first. The gate is one Chromium job running in parallel with `example-e2e`, so it does not extend the critical path beyond that job
@@ -23,7 +23,7 @@ The fix is small and mechanical. Add the missing `vitest.config.ts` in `apps/sto
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 - **Section I (repository shape)** — PASS. No new package. The change lives in the existing `apps/storybook` and the CI workflow; adding dev dependencies to the private Storybook app is within its role.
 - **Section VI (testing: three layers)** — PASS, and the point. This makes layers 2 (interaction) and 3 (accessibility) actually execute and block merge, which they do not today. It fulfills VI rather than straining it.

@@ -13,7 +13,7 @@
 - Q: What rendering should the accessibility gate check — each story as it renders by default, or every color-scheme/theme/density combination? → A: Default rendering per story. The full contrast matrix is already guarded by the tokens unit test (`themes-contrast.test.ts`), so this gate checks component accessibility on the default rendering and does not re-render the matrix.
 - Q: If first run surfaces a latent play or a11y failure, how do we keep the required gate green? → A: Fix it in this PR (a justified bug-fix exception to the CI-only scope), excluding the one failing story or rule under a tracked follow-up only when the fix is too large for this PR.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Interaction tests run in CI and block merge (Priority: P1)
 
@@ -69,7 +69,7 @@ A contributor wants to run the interaction and accessibility gate before pushing
 - **A latent pre-existing failure**: the very first execution runs `play` functions and axe passes that have never run. The expectation is a green gate on the current codebase (spec 018 closed the known contrast gap). If first execution surfaces a genuine failure, it is fixed in this pull request — a justified exception to the CI-only scope, since the gate just caught a real bug — and the one failing story or rule is excluded under a tracked follow-up only when the fix is too large for this PR. The gate is never loosened to pass.
 - **Coexistence with the existing unit tests**: the new browser-rendered story gate runs alongside the existing fast unit tests, not in place of them; both run on a pull request.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -82,7 +82,7 @@ A contributor wants to run the interaction and accessibility gate before pushing
 - **FR-007**: The gate MUST be runnable locally with the same configuration CI uses and produce the same outcome; the command MUST NOT error for lack of a defined test project.
 - **FR-008**: The plumbing itself MUST be limited to CI and test configuration and MUST NOT modify component, token, or story source merely to manufacture a passing gate. The one exception is a genuine failure the gate surfaces on first run, which is fixed as a real defect (see the latent-failure edge case), not worked around.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

@@ -14,13 +14,13 @@ import { Button } from '@unbranded-ds/react';
 
 ## Props
 
-| Prop        | Type                                                                                   | Default     | Description                                                                                                                                                                                              |
-| ----------- | -------------------------------------------------------------------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `variant`   | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'`          | `'default'` | Controls visual weight and semantic intent. Use `'default'` for the one primary action per region, `'destructive'` for delete or hard-reset flows, and the lighter variants for secondary choices.        |
-| `size`      | `'default' \| 'xs' \| 'sm' \| 'lg' \| 'icon' \| 'icon-xs' \| 'icon-sm' \| 'icon-lg'` | `'default'` | Sets height, padding, and (for icon sizes) a fixed square dimension. Use `'sm'` / `'xs'` in dense toolbars, `'lg'` for touch-friendly CTAs, and the `icon-*` variants when the child is a solo icon.     |
-| `disabled`  | `boolean`                                                                              | —           | Removes the button from tab order and suppresses pointer events. Pair with a visible explanation when the reason isn't obvious from context.                                                              |
-| `className` | `string`                                                                               | —           | Merged on top of variant classes via `cn()`. Useful for one-off spacing overrides without forking the component.                                                                                         |
-| `children`  | `React.ReactNode`                                                                      | —           | Button label or icon. For icon-only buttons, children is the icon element and the accessible name comes from `aria-label`.                                                                                |
+| Prop        | Type                                                                                 | Default     | Description                                                                                                                                                                                          |
+| ----------- | ------------------------------------------------------------------------------------ | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`   | `'default' \| 'destructive' \| 'outline' \| 'secondary' \| 'ghost' \| 'link'`        | `'default'` | Controls visual weight and semantic intent. Use `'default'` for the one primary action per region, `'destructive'` for delete or hard-reset flows, and the lighter variants for secondary choices.   |
+| `size`      | `'default' \| 'xs' \| 'sm' \| 'lg' \| 'icon' \| 'icon-xs' \| 'icon-sm' \| 'icon-lg'` | `'default'` | Sets height, padding, and (for icon sizes) a fixed square dimension. Use `'sm'` / `'xs'` in dense toolbars, `'lg'` for touch-friendly CTAs, and the `icon-*` variants when the child is a solo icon. |
+| `disabled`  | `boolean`                                                                            | —           | Removes the button from tab order and suppresses pointer events. Pair with a visible explanation when the reason isn't obvious from context.                                                         |
+| `className` | `string`                                                                             | —           | Merged on top of variant classes via `cn()`. Useful for one-off spacing overrides without forking the component.                                                                                     |
+| `children`  | `React.ReactNode`                                                                    | —           | Button label or icon. For icon-only buttons, children is the icon element and the accessible name comes from `aria-label`.                                                                           |
 
 All other props (`onClick`, `type`, `form`, `aria-*`, etc.) forward directly to the underlying `<button>` element via Base UI's button primitive.
 
@@ -34,7 +34,7 @@ The default variant is for the single highest-priority action on a surface. One 
 import { Button } from '@unbranded-ds/react';
 
 export function SaveAction() {
-  return <Button>Save changes</Button>;
+	return <Button>Save changes</Button>;
 }
 ```
 
@@ -46,11 +46,11 @@ export function SaveAction() {
 import { Button } from '@unbranded-ds/react';
 
 export function DeleteAction() {
-  return (
-    <Button variant="destructive" size="sm">
-      Delete account
-    </Button>
-  );
+	return (
+		<Button variant="destructive" size="sm">
+			Delete account
+		</Button>
+	);
 }
 ```
 
@@ -62,12 +62,12 @@ When a surface needs a primary action alongside a lower-priority one, pair `defa
 import { Button } from '@unbranded-ds/react';
 
 export function ActionPair() {
-  return (
-    <div style={{ display: 'flex', gap: '8px' }}>
-      <Button variant="ghost">Cancel</Button>
-      <Button>Confirm</Button>
-    </div>
-  );
+	return (
+		<div style={{ display: 'flex', gap: '8px' }}>
+			<Button variant="ghost">Cancel</Button>
+			<Button>Confirm</Button>
+		</div>
+	);
 }
 ```
 
@@ -79,13 +79,13 @@ Use `size="icon"` when the button holds a single icon. Always supply `aria-label
 import { Button } from '@unbranded-ds/react';
 
 export function CloseButton() {
-  return (
-    <Button variant="ghost" size="icon" aria-label="Close panel">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M18 6 6 18M6 6l12 12" />
-      </svg>
-    </Button>
-  );
+	return (
+		<Button variant="ghost" size="icon" aria-label="Close panel">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+				<path d="M18 6 6 18M6 6l12 12" />
+			</svg>
+		</Button>
+	);
 }
 ```
 
@@ -99,15 +99,16 @@ import { Button } from '@unbranded-ds/react';
 function openTerms() { /* open modal or navigate */ }
 
 export function InlineAction() {
-  return (
-    <p>
-      By continuing you agree to the{' '}
-      <Button variant="link" onClick={() => openTerms()}>
-        terms of service
-      </Button>
-      .
-    </p>
-  );
+	return (
+		<p>
+			By continuing you agree to the
+			{' '}
+			<Button variant="link" onClick={() => openTerms()}>
+				terms of service
+			</Button>
+			.
+		</p>
+	);
 }
 ```
 

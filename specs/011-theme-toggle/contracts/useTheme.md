@@ -20,12 +20,12 @@ No arguments. Configuration (`defaults`, `forced`, `root`) lives on the provider
 
 ```ts
 interface UseThemeReturn {
-  preference: Record<Axis, string>;        // stated choice; aesthetic may be 'system'
-  resolved: Record<Axis, string>;          // applied value; 'system' resolved to light/dark
-  system: Partial<Record<Axis, string>>;   // current OS value where a signal exists (aesthetic only)
-  forced: Partial<Record<Axis, string>>;   // provider-pinned, non-overridable
-  available: Record<Axis, string[]>;       // allowed values per axis, incl. the file-less default
-  set: (partial: Partial<Record<Axis, string>>) => void; // one object, any subset of axes
+	preference: Record<Axis, string>; // stated choice; aesthetic may be 'system'
+	resolved: Record<Axis, string>; // applied value; 'system' resolved to light/dark
+	system: Partial<Record<Axis, string>>; // current OS value where a signal exists (aesthetic only)
+	forced: Partial<Record<Axis, string>>; // provider-pinned, non-overridable
+	available: Record<Axis, string[]>; // allowed values per axis, incl. the file-less default
+	set: (partial: Partial<Record<Axis, string>>) => void; // one object, any subset of axes
 }
 ```
 
@@ -33,14 +33,14 @@ interface UseThemeReturn {
 
 ## If you know `next-themes`, here is the translation (FR-019)
 
-| `useTheme()` (ours) | `next-themes` | Difference |
-|---------------------|---------------|------------|
-| `preference` | `theme` | Ours is a per-axis map and renamed, because a field called `theme` that is secretly an object is a false friend. The aesthetic axis may be `'system'`, like next-themes' `theme`. |
-| `resolved` | `resolvedTheme` | Per-axis map; same idea (`system` resolved to a concrete value). |
-| `system` | `systemTheme` | Per-axis; only axes with an OS signal appear (aesthetic). |
-| `forced` | `forcedTheme` | Per-axis; the pinned value set on the provider. |
-| `available` | `themes` | Per-axis lists rather than one flat list. |
-| `set(partial)` | `setTheme(value)` | One object setting any subset of axes in a single call, rather than one value. |
+| `useTheme()` (ours) | `next-themes`     | Difference                                                                                                                                                                        |
+| ------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `preference`        | `theme`           | Ours is a per-axis map and renamed, because a field called `theme` that is secretly an object is a false friend. The aesthetic axis may be `'system'`, like next-themes' `theme`. |
+| `resolved`          | `resolvedTheme`   | Per-axis map; same idea (`system` resolved to a concrete value).                                                                                                                  |
+| `system`            | `systemTheme`     | Per-axis; only axes with an OS signal appear (aesthetic).                                                                                                                         |
+| `forced`            | `forcedTheme`     | Per-axis; the pinned value set on the provider.                                                                                                                                   |
+| `available`         | `themes`          | Per-axis lists rather than one flat list.                                                                                                                                         |
+| `set(partial)`      | `setTheme(value)` | One object setting any subset of axes in a single call, rather than one value.                                                                                                    |
 
 The provider-plus-hook shape itself mirrors next-themes. The multi-axis object shape is ours; the concepts and names track upstream wherever they map one-to-one.
 

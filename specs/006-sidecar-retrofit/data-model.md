@@ -17,16 +17,16 @@ A `<Component>.usage.md` file co-located with a single-component source.
 
 **Required sections** (in order, per spec 005's sidecar-shape contract):
 
-| Section | Content | Validation |
-|---|---|---|
-| Heading + tagline | `# <Component>` followed by a one-line role tagline | Markdown H1 |
-| When to use | One paragraph describing the consumer scenario the component addresses | Active voice, no promotional language, no AI tells |
-| Import | One `tsx` code block showing the import statement | Compile-validated by CI validator |
-| Props | One flat table with columns `Prop`, `Type`, `Default`, `Description` | `Type` from TS signature; `Default` from destructuring default; `argTypes` derivative |
-| Common patterns | One or more `tsx` blocks tagged for compilation, each preceded by a one-paragraph use-case explanation | Compile-validated; multi-component examples allowed |
-| Accessibility | Plain-prose narrative covering keyboard interaction, screen-reader announcements, ARIA roles, focus management | Names specific keys and behaviors |
-| Variants and slots | Lists CVA variant axes with values and defaults; for components with neither, the canonical placeholder text from spec 005's contract | — |
-| Related | Bulleted list of sibling components or related primitives, each with a one-line "why you'd reach for it" note | Forward-only on per-PR pass; omitted when nothing relates |
+| Section            | Content                                                                                                                               | Validation                                                                            |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Heading + tagline  | `# <Component>` followed by a one-line role tagline                                                                                   | Markdown H1                                                                           |
+| When to use        | One paragraph describing the consumer scenario the component addresses                                                                | Active voice, no promotional language, no AI tells                                    |
+| Import             | One `tsx` code block showing the import statement                                                                                     | Compile-validated by CI validator                                                     |
+| Props              | One flat table with columns `Prop`, `Type`, `Default`, `Description`                                                                  | `Type` from TS signature; `Default` from destructuring default; `argTypes` derivative |
+| Common patterns    | One or more `tsx` blocks tagged for compilation, each preceded by a one-paragraph use-case explanation                                | Compile-validated; multi-component examples allowed                                   |
+| Accessibility      | Plain-prose narrative covering keyboard interaction, screen-reader announcements, ARIA roles, focus management                        | Names specific keys and behaviors                                                     |
+| Variants and slots | Lists CVA variant axes with values and defaults; for components with neither, the canonical placeholder text from spec 005's contract | —                                                                                     |
+| Related            | Bulleted list of sibling components or related primitives, each with a one-line "why you'd reach for it" note                         | Forward-only on per-PR pass; omitted when nothing relates                             |
 
 **Validation rules**:
 
@@ -48,10 +48,10 @@ A `<Component>.usage.md` file co-located with a compound-component source.
 
 **Per-slot Props subsection**:
 
-| Slot category | Subsection format | Length |
-|---|---|---|
-| Core slot (e.g., `Dialog.Content`, `Tabs.List`) | Full prop table with `Prop`/`Type`/`Default`/`Description` columns | Proportional to props surface |
-| Escape-hatch slot (e.g., `Dialog.Portal`, `Dialog.Overlay`) | One-line subsection: "Inherits all props from [underlying primitive]. Reach for this only when you need to [override scenario]." | One line, no table |
+| Slot category                                               | Subsection format                                                                                                                | Length                        |
+| ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| Core slot (e.g., `Dialog.Content`, `Tabs.List`)             | Full prop table with `Prop`/`Type`/`Default`/`Description` columns                                                               | Proportional to props surface |
+| Escape-hatch slot (e.g., `Dialog.Portal`, `Dialog.Overlay`) | One-line subsection: "Inherits all props from [underlying primitive]. Reach for this only when you need to [override scenario]." | One line, no table            |
 
 **Variants and slots section**: For compound sidecars, names every slot the component exposes with a one-line role description.
 

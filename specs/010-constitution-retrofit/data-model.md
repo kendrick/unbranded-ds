@@ -8,26 +8,26 @@ No runtime data. The "model" is the catalog of swap sites: which file, which har
 
 ### Ring width (`ring-3` → `ring.width`)
 
-| Component | Sites | Form |
-| --- | --- | --- |
-| Button | 2 | `focus-visible:ring-3` → `focus-visible:ring-(length:--ring-width)` |
-| Checkbox | 2 | same pattern |
-| Input | 2 | `focus-visible:ring-3`, `aria-invalid:ring-3` |
-| Switch | 2 | same |
-| Select | 2 | `focus-visible:ring-3`, `aria-invalid:ring-3` (on the trigger) |
-| Slider | 1 | `focus-visible:ring-3` (on the thumb) |
-| SegmentedControl | 1 | `focus-visible:ring-3` |
-| SkipLink | 1 | `focus-visible:ring-3` (ring swapped; z-50 retained) |
+| Component        | Sites | Form                                                                |
+| ---------------- | ----- | ------------------------------------------------------------------- |
+| Button           | 2     | `focus-visible:ring-3` → `focus-visible:ring-(length:--ring-width)` |
+| Checkbox         | 2     | same pattern                                                        |
+| Input            | 2     | `focus-visible:ring-3`, `aria-invalid:ring-3`                       |
+| Switch           | 2     | same                                                                |
+| Select           | 2     | `focus-visible:ring-3`, `aria-invalid:ring-3` (on the trigger)      |
+| Slider           | 1     | `focus-visible:ring-3` (on the thumb)                               |
+| SegmentedControl | 1     | `focus-visible:ring-3`                                              |
+| SkipLink         | 1     | `focus-visible:ring-3` (ring swapped; z-50 retained)                |
 
 ~13 sites, 8 components. Default value unchanged (3px), so focus rings render identically; the gain is a themeable width.
 
 ### Z-index (`z-50` → the scale, overlay components only)
 
-| Component | Sites | Stop | Form |
-| --- | --- | --- | --- |
-| Dialog | 2 (backdrop, popup) | `overlay` (50) | `z-50` → `z-(--z-index-overlay)` |
-| Select | 2 (positioner, popup) | `popover` (55) | `z-50` → `z-(--z-index-popover)` |
-| Tooltip | 1 (popup) | `tooltip` (60) | `z-50` → `z-(--z-index-tooltip)` |
+| Component | Sites                 | Stop           | Form                             |
+| --------- | --------------------- | -------------- | -------------------------------- |
+| Dialog    | 2 (backdrop, popup)   | `overlay` (50) | `z-50` → `z-(--z-index-overlay)` |
+| Select    | 2 (positioner, popup) | `popover` (55) | `z-50` → `z-(--z-index-popover)` |
+| Tooltip   | 1 (popup)             | `tooltip` (60) | `z-50` → `z-(--z-index-tooltip)` |
 
 5 sites, 3 components. The ordering (overlay 50 < popover 55 < tooltip 60) is what fixes the nested-overlay bug: a Select dropdown inside a Dialog now sits above the dialog, and a Tooltip sits above both.
 
@@ -35,11 +35,11 @@ No runtime data. The "model" is the catalog of swap sites: which file, which har
 
 ### Motion (overlay open/close timing → `motion` tokens)
 
-| Component | Mechanism | Current | After |
-| --- | --- | --- | --- |
-| Tooltip | `transition-[opacity,transform]` | `duration-150` | `duration-(--duration-fast)` + `ease-standard` (or `data-open:ease-decelerate data-closed:ease-accelerate`) |
-| Dialog | keyframe `animate-in/out` | `duration-100` | `duration-(--duration-fast)`; keyframe presets stay |
-| Select | keyframe `animate-in/out` | `duration-100` | `duration-(--duration-fast)`; keyframe presets stay |
+| Component | Mechanism                        | Current        | After                                                                                                       |
+| --------- | -------------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------- |
+| Tooltip   | `transition-[opacity,transform]` | `duration-150` | `duration-(--duration-fast)` + `ease-standard` (or `data-open:ease-decelerate data-closed:ease-accelerate`) |
+| Dialog    | keyframe `animate-in/out`        | `duration-100` | `duration-(--duration-fast)`; keyframe presets stay                                                         |
+| Select    | keyframe `animate-in/out`        | `duration-100` | `duration-(--duration-fast)`; keyframe presets stay                                                         |
 
 3 components. The `fade`/`zoom`/`slide` keyframe presets are not motion tokens and stay. `motion-reduce:*` and `data-instant:*` handling on Tooltip stays intact.
 

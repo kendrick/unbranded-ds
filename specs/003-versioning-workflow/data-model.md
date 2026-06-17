@@ -13,20 +13,21 @@ No persistent database model. The "data" here is a set of filesystem artifacts t
 **Shape** (TypeScript-style):
 
 ```ts
-type ChangesetConfig = {
-  $schema?: string
-  changelog: string | [string, unknown]  // formatter ID; default "@changesets/cli/changelog"
-  commit: boolean | [string, unknown]    // false; Version Packages PR handles commits
-  fixed: string[][]                       // []; packages bump independently
-  linked: string[][]                      // []; same reason
-  access: "public" | "restricted"        // "public"
-  baseBranch: string                      // "main"
-  updateInternalDependencies: "patch" | "minor"  // "patch"
-  ignore: string[]                        // package names excluded from version bumps
+interface ChangesetConfig {
+	$schema?: string;
+	changelog: string | [string, unknown]; // formatter ID; default "@changesets/cli/changelog"
+	commit: boolean | [string, unknown]; // false; Version Packages PR handles commits
+	fixed: string[][]; // []; packages bump independently
+	linked: string[][]; // []; same reason
+	access: 'public' | 'restricted'; // "public"
+	baseBranch: string; // "main"
+	updateInternalDependencies: 'patch' | 'minor'; // "patch"
+	ignore: string[]; // package names excluded from version bumps
 }
 ```
 
 **Required field values for this monorepo** (per FR-002 and clarifications):
+
 - `access: "public"` — matches existing `publishConfig` on both packages
 - `baseBranch: "main"`
 - `updateInternalDependencies: "patch"` — supports FR-012
@@ -53,12 +54,13 @@ Short summary of the change. For non-breaking changes this can be one line.
 For breaking changes, a multi-paragraph migration guide goes here:
 
 - Before: `import { foo } from '@unbranded-ds/tokens/dist/...'`
-- After:  `import { foo } from '@unbranded-ds/tokens/foo'`
+- After: `import { foo } from '@unbranded-ds/tokens/foo'`
 
 Why: the dist path was leaking internal package layout.
 ```
 
 **Validation**:
+
 - Frontmatter package names MUST appear in `pnpm-workspace.yaml`. The CLI rejects unknown packages.
 - Bump levels MUST be `major`, `minor`, or `patch`. Any other string is rejected.
 - The body MAY be empty for no-op changesets (per Story 2 Acceptance Scenario 3), in which case it produces no CHANGELOG entry but satisfies the CI presence check.
@@ -93,6 +95,7 @@ Why: the dist path was leaking internal package layout.
 ```
 
 **Validation**:
+
 - The file is tool-owned from 0.3.0 onward. Contributors do not hand-edit it.
 - The 0.2.0 section and the header note are the only hand-authored content.
 
@@ -103,6 +106,7 @@ Why: the dist path was leaking internal package layout.
 **Lifecycle**: Opened when one or more `.changeset/*.md` files exist on `main`. Updated automatically every time additional changesets land on `main`. Closed (auto-merged or manually merged) by the release shepherd, which triggers the publish step.
 
 **Shape**: a PR whose diff against `main` includes:
+
 - `version` field bumps in `packages/tokens/package.json` and/or `packages/react/package.json`
 - New entries appended to `packages/tokens/CHANGELOG.md` and/or `packages/react/CHANGELOG.md`
 - Deletion of every `.changeset/*.md` file that contributed to the bump
@@ -117,6 +121,7 @@ Why: the dist path was leaking internal package layout.
 **Lifecycle**: Created once as part of this spec's implementation. Edited rarely (when the workflow itself changes).
 
 **Shape** (per FR-010): a markdown file covering:
+
 - When to run `pnpm changeset` (every PR that modifies `packages/`)
 - How to pick a bump level (`major` for breaking, `minor` for additions, `patch` for fixes)
 - What to write in the description (with the FR-013 quality bar explicit)

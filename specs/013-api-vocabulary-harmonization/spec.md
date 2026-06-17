@@ -27,7 +27,7 @@ The work is gated on discovery. No one has enumerated the real violations yet, a
 - Q: Which names does this spec touch? → A: Only our own drift. Rename props/slots WE introduced that diverge from the shared or upstream vocabulary; anything inherited from shadcn/Base UI keeps upstream's name untouched.
 - Q: How do the breaking renames reach consumers? → A: A deprecation window by default (old and new coexist for one minor, the old warns with a structured XI.4 payload, removed the next), with the audit recommending a hard break only where a soft landing is impractical.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - The discovery audit (Priority: P1) 🎯 MVP
 
@@ -113,7 +113,7 @@ A consumer (or agent) that hits a component or helper warning or error receives 
 - **The example app (spec 012) or a theme (spec 009) consumes a renamed prop or slot**: it updates in lockstep with the rename, in the same change, so no in-repo consumer references a stale name.
 - **Two components disagree on a "canonical" name** (the audit proposes different names for the same role): the audit resolves it to one canonical name before any rename, so the shared vocabulary stays internally consistent.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -151,14 +151,14 @@ A consumer (or agent) that hits a component or helper warning or error receives 
 - **FR-015**: The harmonization MUST keep the API compatible with shadcn/ui and Base UI conventions. A prop or slot inherited unchanged from a wrapped library MUST keep the upstream name; the rename scope is the design system's own drift from the upstream or shared vocabulary, never the upstream conventions themselves.
 - **FR-016**: This spec MUST amend Constitution Section XI.2 to be compat-first: the shared vocabulary governs the props and slots the design system introduces, while props and slots inherited from a wrapped library follow the upstream name. This is a MINOR constitution bump.
 
-### Key Entities *(include if feature involves data)*
+### Key Entities _(include if feature involves data)_
 
 - **Audit entry**: one flagged violation. Carries the component, the current name, the proposed canonical name, the blast radius, codemod feasibility, and a hard-break-or-deprecate recommendation. The approved set of entries is the exact scope of every rename.
 - **Shared vocabulary**: the XI.2 canonical names. Variant axes (`variant`, `size`, `intent`, `disabled`), the compound slot roles (`Root`, `Trigger`, `Content`, `Item`), and the one polymorphic prop. The target every rename moves toward.
 - **Rename**: a single name change (a prop, a slot, or the polymorphic prop), with its lockstep doc and test updates, its codemod (if mechanical), and its deprecation treatment.
 - **Structured failure**: the `{ code, path, message }` payload a warning or throw emits, with the readable message layered on.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

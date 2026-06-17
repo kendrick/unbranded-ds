@@ -21,22 +21,22 @@ Wire the Tailwind preset once (already done if you migrated from 0.1.0 per spec 
 import { Tooltip } from '@unbranded-ds/react';
 
 <Tooltip.Provider>
-  <Tooltip.Trigger>Hover me</Tooltip.Trigger>
-  <Tooltip.Content>Helpful detail</Tooltip.Content>
-</Tooltip.Provider>
+	<Tooltip.Trigger>Hover me</Tooltip.Trigger>
+	<Tooltip.Content>Helpful detail</Tooltip.Content>
+</Tooltip.Provider>;
 ```
 
 ### Wrapping an inline element (citation pattern)
 
 ```tsx
 <Tooltip.Provider>
-  <sup>
-    <Tooltip.Trigger asChild>
-      <a href="#source-P-04">[P-04]</a>
-    </Tooltip.Trigger>
-  </sup>
-  <Tooltip.Content>Spencer interview, NPR 2017</Tooltip.Content>
-</Tooltip.Provider>
+	<sup>
+		<Tooltip.Trigger asChild>
+			<a href="#source-P-04">[P-04]</a>
+		</Tooltip.Trigger>
+	</sup>
+	<Tooltip.Content>Spencer interview, NPR 2017</Tooltip.Content>
+</Tooltip.Provider>;
 ```
 
 `asChild` passes the trigger props onto the existing `<a>`, so the original markup is preserved.
@@ -44,7 +44,7 @@ import { Tooltip } from '@unbranded-ds/react';
 ### Positioning
 
 ```tsx
-<Tooltip.Content side="right" align="start">Detail</Tooltip.Content>
+<Tooltip.Content side="right" align="start">Detail</Tooltip.Content>;
 ```
 
 Defaults are `side="top"` and `align="center"`.
@@ -76,27 +76,27 @@ Layout the instances however you want — the component takes no layout opinion.
 import { Slider } from '@unbranded-ds/react';
 
 <Slider.Root defaultValue={[50]} min={0} max={100}>
-  <Slider.Control>
-    <Slider.Track>
-      <Slider.Indicator />
-    </Slider.Track>
-    <Slider.Thumb />
-  </Slider.Control>
-</Slider.Root>
+	<Slider.Control>
+		<Slider.Track>
+			<Slider.Indicator />
+		</Slider.Track>
+		<Slider.Thumb />
+	</Slider.Control>
+</Slider.Root>;
 ```
 
 ### Range (two-thumb)
 
 ```tsx
 <Slider.Root defaultValue={[20, 80]} min={0} max={100}>
-  <Slider.Control>
-    <Slider.Track>
-      <Slider.Indicator />
-    </Slider.Track>
-    <Slider.Thumb />
-    <Slider.Thumb />
-  </Slider.Control>
-</Slider.Root>
+	<Slider.Control>
+		<Slider.Track>
+			<Slider.Indicator />
+		</Slider.Track>
+		<Slider.Thumb />
+		<Slider.Thumb />
+	</Slider.Control>
+</Slider.Root>;
 ```
 
 ### Controlled
@@ -105,11 +105,11 @@ import { Slider } from '@unbranded-ds/react';
 const [value, setValue] = useState<number[]>([50]);
 
 <Slider.Root value={value} onValueChange={setValue}>
-  <Slider.Control>
-    <Slider.Track><Slider.Indicator /></Slider.Track>
-    <Slider.Thumb />
-  </Slider.Control>
-</Slider.Root>
+	<Slider.Control>
+		<Slider.Track><Slider.Indicator /></Slider.Track>
+		<Slider.Thumb />
+	</Slider.Control>
+</Slider.Root>;
 ```
 
 `value` is always `number[]` — single is `[50]`, range is `[20, 80]`. `onValueChange` receives the same shape.
@@ -120,10 +120,10 @@ const [value, setValue] = useState<number[]>([50]);
 import { SegmentedControl } from '@unbranded-ds/react';
 
 <SegmentedControl.Root defaultValue="medium">
-  <SegmentedControl.Item value="small">S</SegmentedControl.Item>
-  <SegmentedControl.Item value="medium">M</SegmentedControl.Item>
-  <SegmentedControl.Item value="large">L</SegmentedControl.Item>
-</SegmentedControl.Root>
+	<SegmentedControl.Item value="small">S</SegmentedControl.Item>
+	<SegmentedControl.Item value="medium">M</SegmentedControl.Item>
+	<SegmentedControl.Item value="large">L</SegmentedControl.Item>
+</SegmentedControl.Root>;
 ```
 
 ### Controlled with onValueChange
@@ -132,10 +132,10 @@ import { SegmentedControl } from '@unbranded-ds/react';
 const [size, setSize] = useState('medium');
 
 <SegmentedControl.Root value={size} onValueChange={setSize}>
-  <SegmentedControl.Item value="small">S</SegmentedControl.Item>
-  <SegmentedControl.Item value="medium">M</SegmentedControl.Item>
-  <SegmentedControl.Item value="large">L</SegmentedControl.Item>
-</SegmentedControl.Root>
+	<SegmentedControl.Item value="small">S</SegmentedControl.Item>
+	<SegmentedControl.Item value="medium">M</SegmentedControl.Item>
+	<SegmentedControl.Item value="large">L</SegmentedControl.Item>
+</SegmentedControl.Root>;
 ```
 
 ## Variants
@@ -155,16 +155,16 @@ The shared variant axes apply where they're meaningful:
 
 ```tsx
 <Slider.Root value={value} onValueChange={setValue}>
-  <Slider.Control>
-    <Slider.Track><Slider.Indicator /></Slider.Track>
-    <Tooltip.Provider>
-      <Tooltip.Trigger asChild>
-        <Slider.Thumb />
-      </Tooltip.Trigger>
-      <Tooltip.Content>{value[0]}</Tooltip.Content>
-    </Tooltip.Provider>
-  </Slider.Control>
-</Slider.Root>
+	<Slider.Control>
+		<Slider.Track><Slider.Indicator /></Slider.Track>
+		<Tooltip.Provider>
+			<Tooltip.Trigger asChild>
+				<Slider.Thumb />
+			</Tooltip.Trigger>
+			<Tooltip.Content>{value[0]}</Tooltip.Content>
+		</Tooltip.Provider>
+	</Slider.Control>
+</Slider.Root>;
 ```
 
 Combines the inline-element pattern (`asChild` on a Slider.Thumb) with a tooltip that reflects the controlled value.

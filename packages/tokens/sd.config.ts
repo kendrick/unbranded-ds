@@ -25,8 +25,10 @@ import { AXIS_ATTRIBUTE } from './src/axes.js';
 function flattenedName(token: TransformedToken): string {
 	if (token.path[0] === 'motion') {
 		const [, group, key] = token.path;
-		if (group === 'duration') return `duration-${key}`;
-		if (group === 'easing') return `ease-${key}`;
+		if (group === 'duration')
+			return `duration-${key}`;
+		if (group === 'easing')
+			return `ease-${key}`;
 	}
 	return token.name;
 }
@@ -139,14 +141,14 @@ StyleDictionary.registerFormat({
 	name: 'typescript/token-map',
 	format: ({ dictionary }) => {
 		const categoryMap: Record<string, string> = {
-			color: 'color',
-			spacing: 'spacing',
-			typography: 'typography',
-			radius: 'radii',
-			shadow: 'shadows',
-			opacity: 'opacity',
-			motion: 'motion',
-			ring: 'ring',
+			'color': 'color',
+			'spacing': 'spacing',
+			'typography': 'typography',
+			'radius': 'radii',
+			'shadow': 'shadows',
+			'opacity': 'opacity',
+			'motion': 'motion',
+			'ring': 'ring',
 			'z-index': 'z-index',
 		};
 

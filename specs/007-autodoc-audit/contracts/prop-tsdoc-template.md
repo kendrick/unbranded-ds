@@ -4,29 +4,29 @@ The canonical shape for TSDoc on every property in an exported prop interface or
 
 ## Template
 
-```typescript
+````typescript
 interface ComponentProps {
-  /**
-   * WHAT clause — WHEN clause. [One sentence, active voice.]
-   *
-   * Optional behavior nuance. [One sentence. Edge cases, controlled vs
-   * uncontrolled, side effects on focus/ARIA. Only when the type signature
-   * doesn't communicate the nuance.]
-   *
-   * Accessibility: [One sentence. Only when setting this prop has an
-   * ARIA/keyboard/focus consequence. Prefixed with "Accessibility:" for
-   * Cmd+F discoverability.]
-   *
-   * @defaultValue `false`
-   *
-   * @example
-   * ```tsx
-   * <Component prop="value" />
-   * ```
-   */
-  prop: string;
+	/**
+	 * WHAT clause — WHEN clause. [One sentence, active voice.]
+	 *
+	 * Optional behavior nuance. [One sentence. Edge cases, controlled vs
+	 * uncontrolled, side effects on focus/ARIA. Only when the type signature
+	 * doesn't communicate the nuance.]
+	 *
+	 * Accessibility: [One sentence. Only when setting this prop has an
+	 * ARIA/keyboard/focus consequence. Prefixed with "Accessibility:" for
+	 * Cmd+F discoverability.]
+	 *
+	 * @defaultValue `false`
+	 *
+	 * @example
+	 * ```tsx
+	 * <Component prop="value" />
+	 * ```
+	 */
+	prop: string;
 }
-```
+````
 
 ## The WHAT + WHEN bar (FR-003)
 
@@ -37,11 +37,11 @@ Every prop description MUST contain both:
 
 ### Anti-patterns (reject these)
 
-| Pattern | Problem |
-| --- | --- |
-| `"The visual style of the button."` | WHAT only, no WHEN |
+| Pattern                                                                                    | Problem                                      |
+| ------------------------------------------------------------------------------------------ | -------------------------------------------- |
+| `"The visual style of the button."`                                                        | WHAT only, no WHEN                           |
 | `"The visual style of the button. Reach for this when you want a different visual style."` | Filler WHEN that restates the prop's purpose |
-| `"Controls the size."` | WHAT only, generic |
+| `"Controls the size."`                                                                     | WHAT only, generic                           |
 
 ### Good examples
 

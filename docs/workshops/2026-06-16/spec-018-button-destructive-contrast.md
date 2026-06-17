@@ -44,4 +44,4 @@ Whichever shape wins, add a `destructive`-text-on-surface contrast pair to `cont
 
 ## Scope guardrails
 
-This is a Button-and-destructive-token fix, not a re-theming. It does not touch the axis model. The destructive *color* itself is the untouched base token set; the bug is the variant's use of it as text on a pale tint, so the fix can be contained to the variant plus one guarding contrast pair.
+This is a Button-and-destructive-token fix, not a re-theming. It does not touch the axis model. The destructive _color_ itself is the untouched base token set; the bug is the variant's use of it as text on a pale tint, so the fix can be contained to the variant plus one guarding contrast pair.

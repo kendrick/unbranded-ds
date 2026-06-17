@@ -10,16 +10,16 @@ No persisted data. The "model" is the audit's structured output and the artifact
 
 One flagged drift from the shared/upstream vocabulary. The audit is a list of these; the approved list is the exact scope of every rename.
 
-| Field | Meaning |
-| --- | --- |
-| `component` | the component the entry belongs to |
-| `kind` | `prop` \| `slot` \| `polymorphic` \| `failure` |
-| `current` | the current name (or the prose-only failure site) |
-| `canonical` | the proposed name, defaulting to the upstream (shadcn/Base UI) name |
+| Field         | Meaning                                                                             |
+| ------------- | ----------------------------------------------------------------------------------- |
+| `component`   | the component the entry belongs to                                                  |
+| `kind`        | `prop` \| `slot` \| `polymorphic` \| `failure`                                      |
+| `current`     | the current name (or the prose-only failure site)                                   |
+| `canonical`   | the proposed name, defaulting to the upstream (shadcn/Base UI) name                 |
 | `blastRadius` | the stories, sidecars, TSDoc blocks, tests, and example-app sites that move with it |
-| `codemod` | `mechanical` (a codemod covers it) \| `manual` (a documented step) |
-| `disposition` | `deprecate` (window) \| `hard-break`, per the audit's recommendation |
-| `status` | `compliant` (no change) \| `flagged` |
+| `codemod`     | `mechanical` (a codemod covers it) \| `manual` (a documented step)                  |
+| `disposition` | `deprecate` (window) \| `hard-break`, per the audit's recommendation                |
+| `status`      | `compliant` (no change) \| `flagged`                                                |
 
 A component with no drift is recorded `compliant`, not omitted, so the audit is provably complete.
 

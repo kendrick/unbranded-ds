@@ -11,7 +11,7 @@
 - [x] Written for non-technical stakeholders
 - [x] All mandatory sections completed
 
-> Note: this feature is an example *app*, so the framework (Next.js App Router), Tailwind, and the two packages are the subject of the spec, not leaked implementation detail. Success criteria stay outcome-focused (no-flash, clone-out, one-file traceability). The "stakeholders" for a starter are developers and agents.
+> Note: this feature is an example _app_, so the framework (Next.js App Router), Tailwind, and the two packages are the subject of the spec, not leaked implementation detail. Success criteria stay outcome-focused (no-flash, clone-out, one-file traceability). The "stakeholders" for a starter are developers and agents.
 
 ## Requirement Completeness
 

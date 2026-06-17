@@ -14,11 +14,11 @@ import { SkipLink } from '@unbranded-ds/react';
 
 ## Props
 
-| Prop        | Type                | Default                    | Description                                                                                                                                               |
-| ----------- | ------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `targetId`  | `string`            | `'main'`                   | The `id` of the element to land on when the link is activated. The rendered `<a>` receives an `href` of `#${targetId}`. Point this at whatever landmark receives the skip. |
-| `children`  | `React.ReactNode`   | `'Skip to main content'`   | The visible label shown when the link has focus. Screen readers announce this label whether the link is visible or not, so keep it descriptive.           |
-| `className` | `string`            | —                          | Extra Tailwind utilities merged via `cn()`. Use this to adjust the focus-revealed treatment (position, color, size) without replacing the hidden baseline. |
+| Prop        | Type              | Default                  | Description                                                                                                                                                                |
+| ----------- | ----------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `targetId`  | `string`          | `'main'`                 | The `id` of the element to land on when the link is activated. The rendered `<a>` receives an `href` of `#${targetId}`. Point this at whatever landmark receives the skip. |
+| `children`  | `React.ReactNode` | `'Skip to main content'` | The visible label shown when the link has focus. Screen readers announce this label whether the link is visible or not, so keep it descriptive.                            |
+| `className` | `string`          | —                        | Extra Tailwind utilities merged via `cn()`. Use this to adjust the focus-revealed treatment (position, color, size) without replacing the hidden baseline.                 |
 
 ## Common patterns
 
@@ -30,17 +30,17 @@ The SkipLink must come before any navigation in DOM order so it is the first foc
 import { SkipLink } from '@unbranded-ds/react';
 
 export function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <body>
-      <SkipLink />
-      <nav aria-label="Primary">
-        {/* navigation links */}
-      </nav>
-      <main id="main" tabIndex={-1}>
-        {children}
-      </main>
-    </body>
-  );
+	return (
+		<body>
+			<SkipLink />
+			<nav aria-label="Primary">
+				{/* navigation links */}
+			</nav>
+			<main id="main" tabIndex={-1}>
+				{children}
+			</main>
+		</body>
+	);
 }
 ```
 
@@ -52,15 +52,15 @@ When the page's primary content region uses an id other than `"main"`, pass `tar
 import { SkipLink } from '@unbranded-ds/react';
 
 export function AppShell({ children }: { children: React.ReactNode }) {
-  return (
-    <body>
-      <SkipLink targetId="content">Skip to content</SkipLink>
-      <nav aria-label="Primary">{/* nav links */}</nav>
-      <div id="content" tabIndex={-1}>
-        {children}
-      </div>
-    </body>
-  );
+	return (
+		<body>
+			<SkipLink targetId="content">Skip to content</SkipLink>
+			<nav aria-label="Primary">{/* nav links */}</nav>
+			<div id="content" tabIndex={-1}>
+				{children}
+			</div>
+		</body>
+	);
 }
 ```
 
@@ -72,17 +72,17 @@ When a page has several distinct landmark regions — navigation, main content, 
 import { SkipLink } from '@unbranded-ds/react';
 
 export function RichLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <body>
-      <SkipLink targetId="main">Skip to main content</SkipLink>
-      <SkipLink targetId="search">Skip to search</SkipLink>
-      <nav id="nav" aria-label="Primary" tabIndex={-1}>{/* nav */}</nav>
-      <form id="search" role="search" tabIndex={-1}>{/* search */}</form>
-      <main id="main" tabIndex={-1}>
-        {children}
-      </main>
-    </body>
-  );
+	return (
+		<body>
+			<SkipLink targetId="main">Skip to main content</SkipLink>
+			<SkipLink targetId="search">Skip to search</SkipLink>
+			<nav id="nav" aria-label="Primary" tabIndex={-1}>{/* nav */}</nav>
+			<form id="search" role="search" tabIndex={-1}>{/* search */}</form>
+			<main id="main" tabIndex={-1}>
+				{children}
+			</main>
+		</body>
+	);
 }
 ```
 

@@ -7,7 +7,7 @@
 
 Collapse the two resolution engines 009 left behind. Style Dictionary already resolves each bundled theme for the CSS; have it **also emit each theme's resolved delta as data**, generate the defaults baseline from its resolved base, and repoint the MCP and the bundled-theme validation at that emitted data instead of re-resolving. Once a bundled theme is resolved by exactly one engine, the cross-surface parity matrix and the canonical-defaults drift guard are no longer load-bearing: the matrix becomes a thin read-the-artifact canary, the drift guard becomes a regenerate-and-diff check, and `dtcgToResolved` (whose only purpose was the MCP's second resolution path) is deleted. No consumer-facing theming behavior changes; the win is structural, not feature.
 
-The delta is the load-bearing decision (clarify Q1): the artifact is each theme's *overrides*, build-resolved, so `composeTokens` folds them exactly as in 009 and `defaults ⊕ delta == the CSS full set` by construction. The delta-emission mechanism already exists — 009's density themes emit delta CSS via theme-alone sourcing; 014 reuses it for a JSON sibling across all themes.
+The delta is the load-bearing decision (clarify Q1): the artifact is each theme's _overrides_, build-resolved, so `composeTokens` folds them exactly as in 009 and `defaults ⊕ delta == the CSS full set` by construction. The delta-emission mechanism already exists — 009's density themes emit delta CSS via theme-alone sourcing; 014 reuses it for a JSON sibling across all themes.
 
 ## Technical Context
 
@@ -23,7 +23,7 @@ The delta is the load-bearing decision (clarify Q1): the artifact is each theme'
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 - [x] **Section I (Repository shape)** — no new package; all work in `packages/tokens`.
 - [x] **Section II (Tokens independent of components)** — stays within `@unbranded-ds/tokens`; no React/Storybook enters the graph.
@@ -82,9 +82,10 @@ This spec is more sequential than 009 — the foundational build change gates th
 **Step 1 — Foundational (the build emits the data).** In `sd.config.ts`: emit, per theme, a resolved-delta JSON (a new `json` format over a theme-alone source, mirroring the proven density-delta CSS path), and emit the resolved base; generate the committed `defaults.generated.ts` from that base. This is the single change everything downstream reads. It must land first.
 
 **Step 2 — Repoint the consumers (parallel, two disjoint files).** Once the artifacts exist:
+
 - `src/mcp/compose.ts` reads the delta artifact for each axis and folds via `composeTokens`, replacing the `dtcgToResolved(getTheme())` path.
 - `src/themes-contrast.test.ts` (the bundled-theme validation) reads the artifact (composed onto defaults) instead of raw DTCG.
-These touch different files and can run concurrently.
+  These touch different files and can run concurrently.
 
 **Step 3 — Reduce and delete (after the repoints, mostly cleanup).** Reduce `resolution-parity.test.ts` to the thin canary; convert `defaults.test.ts` to the regen-and-diff check; remove `dtcgToResolved` from `resolve.ts` / `index.ts` / `resolve.test.ts` and switch the `validate.test.ts` helper to the artifact. These are coupled to Step 2 landing (no caller left) but are otherwise independent edits.
 
@@ -94,14 +95,14 @@ So: **foundational build change → two parallel repoints → cleanup deletions 
 
 ## Testing Strategy
 
-The decisive test is the one that *doesn't change*: the full 009 theming, composition, MCP, runtime, and contrast suites must pass **unchanged**, which is what proves "no consumer-facing behavior change" (FR-011, SC-006). On top of that:
+The decisive test is the one that _doesn't change_: the full 009 theming, composition, MCP, runtime, and contrast suites must pass **unchanged**, which is what proves "no consumer-facing behavior change" (FR-011, SC-006). On top of that:
 
 - **The thin parity canary** (replacing the matrix): for one representative composition (vaporwave + compact), assert the MCP value equals the emitted-artifact-composed value equals the CSS value, for a sample of tokens. Guards the one residual risk — a consumer reading stale data instead of the artifact.
 - **The regenerate-and-diff check** (replacing the drift guard): regenerate the defaults baseline from the resolved base and assert it equals the committed `defaults.generated.ts`. A stale baseline fails CI.
 - **A single-engine assertion** (SC-001): confirm `dtcgToResolved` is gone and no JS path re-resolves a bundled source theme (structural / grep-style check, recorded so the absence is intentional, not silent).
 - **MCP smoke** (Section VII): `tools/list` still returns the four tools.
 
-What gets *deleted* is as important as what's added: the (combination × token) parity matrix and the hand-maintained drift guard both go, because the invariants they defended are now structural. Each deletion carries a one-line note recording why.
+What gets _deleted_ is as important as what's added: the (combination × token) parity matrix and the hand-maintained drift guard both go, because the invariants they defended are now structural. Each deletion carries a one-line note recording why.
 
 ## Research Summary
 
@@ -118,5 +119,5 @@ See [research.md](research.md). Resolved against the 009 code:
 > No constitution violations. The possible Section III wording touch is a tracked patch clarification, not a violation.
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| — | — | — |
+| --------- | ---------- | ------------------------------------ |
+| —         | —          | —                                    |

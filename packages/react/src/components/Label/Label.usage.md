@@ -29,16 +29,15 @@ All other props (`id`, `style`, `data-*`, `aria-*`, etc.) forward directly to th
 Pass `htmlFor` matching the input's `id` when the two elements are siblings. This is the most common pattern in column-layout forms.
 
 ```tsx
-import { Input } from '@unbranded-ds/react';
-import { Label } from '@unbranded-ds/react';
+import { Input, Label } from '@unbranded-ds/react';
 
 export function LinkedField() {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-      <Label htmlFor="email">Email address</Label>
-      <Input id="email" type="email" placeholder="you@example.com" />
-    </div>
-  );
+	return (
+		<div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+			<Label htmlFor="email">Email address</Label>
+			<Input id="email" type="email" placeholder="you@example.com" />
+		</div>
+	);
 }
 ```
 
@@ -47,16 +46,15 @@ export function LinkedField() {
 Nesting the input inside Label lets the browser infer the association without `htmlFor`/`id`. Useful when generating unique IDs would be awkward.
 
 ```tsx
-import { Input } from '@unbranded-ds/react';
-import { Label } from '@unbranded-ds/react';
+import { Input, Label } from '@unbranded-ds/react';
 
 export function WrappingField() {
-  return (
-    <Label>
-      Username
-      <Input placeholder="handle" />
-    </Label>
-  );
+	return (
+		<Label>
+			Username
+			<Input placeholder="handle" />
+		</Label>
+	);
 }
 ```
 
@@ -65,19 +63,19 @@ export function WrappingField() {
 Append a visual asterisk inside the label text. Screen readers that read the full label text will announce it, so keep the marker's meaning clear from surrounding form context or an explicit legend.
 
 ```tsx
-import { Input } from '@unbranded-ds/react';
-import { Label } from '@unbranded-ds/react';
+import { Input, Label } from '@unbranded-ds/react';
 
 export function RequiredField() {
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-      <Label htmlFor="required-name">
-        Full name{' '}
-        <span style={{ color: 'var(--color-destructive)' }}>*</span>
-      </Label>
-      <Input id="required-name" required />
-    </div>
-  );
+	return (
+		<div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+			<Label htmlFor="required-name">
+				Full name
+				{' '}
+				<span style={{ color: 'var(--color-destructive)' }}>*</span>
+			</Label>
+			<Input id="required-name" required />
+		</div>
+	);
 }
 ```
 
@@ -86,16 +84,15 @@ export function RequiredField() {
 When a fieldset or container controls the disabled state, add `data-disabled="true"` to the wrapping element. Label reads the `group-data-[disabled=true]` class and dims itself to match the disabled input — no per-element prop needed.
 
 ```tsx
-import { Input } from '@unbranded-ds/react';
-import { Label } from '@unbranded-ds/react';
+import { Input, Label } from '@unbranded-ds/react';
 
 export function DisabledField() {
-  return (
-    <div className="group" data-disabled="true" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-      <Label htmlFor="disabled-field">Account number</Label>
-      <Input id="disabled-field" disabled />
-    </div>
-  );
+	return (
+		<div className="group" data-disabled="true" style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+			<Label htmlFor="disabled-field">Account number</Label>
+			<Input id="disabled-field" disabled />
+		</div>
+	);
 }
 ```
 

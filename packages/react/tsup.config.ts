@@ -12,7 +12,7 @@ export default defineConfig({
 	// their own. A banner is the reliable way to land the directive as the literal
 	// first line: esbuild does not carry a 'use client' written in source through
 	// bundling into one file — it hoists or drops it.
-	banner: { js: "'use client';" },
+	banner: { js: '\'use client\';' },
 	external: ['react', 'react-dom', '@base-ui-components/react'],
 	onSuccess: async () => {
 		await copyFile('src/preset.css', 'dist/preset.css');

@@ -4,10 +4,10 @@ The "data" here is two new canonical color tokens, their values across the six c
 
 ## New canonical tokens
 
-| Token | Role | Type | Required | CSS variable | Tailwind utility |
-|-------|------|------|----------|--------------|------------------|
-| `color.destructive-subtle` | The opaque subtle destructive surface the button paints | color | yes | `--color-destructive-subtle` | `bg-destructive-subtle` |
-| `color.destructive-subtle-foreground` | The destructive text/icon color on that surface | color | yes | `--color-destructive-subtle-foreground` | `text-destructive-subtle-foreground` |
+| Token                                 | Role                                                    | Type  | Required | CSS variable                            | Tailwind utility                     |
+| ------------------------------------- | ------------------------------------------------------- | ----- | -------- | --------------------------------------- | ------------------------------------ |
+| `color.destructive-subtle`            | The opaque subtle destructive surface the button paints | color | yes      | `--color-destructive-subtle`            | `bg-destructive-subtle`              |
+| `color.destructive-subtle-foreground` | The destructive text/icon color on that surface         | color | yes      | `--color-destructive-subtle-foreground` | `text-destructive-subtle-foreground` |
 
 Both are added to `colorTokens` in `packages/tokens/src/schema.ts` (alongside `destructive` / `destructive-foreground`), so the strict `themeSchema` requires them in any merged theme. Because validation runs on the merged result (`resolveTheme` folds a partial onto `canonicalDefaultTokens` first), a partial consumer theme that omits them inherits the canonical default and still validates. The token map tags them `source: 'schema'` automatically (they are canonical, not theme-extension), so the token-query MCP lists them like any other token.
 
@@ -15,14 +15,14 @@ Both are added to `colorTokens` in `packages/tokens/src/schema.ts` (alongside `d
 
 Each cell authors both tokens as opaque colors that clear the contrast pair with headroom. The surface is a low-chroma destructive color (high lightness in light cells, low lightness in dark cells); the foreground is a destructive-hued text dark or light enough to clear ≥5:1 at rest (so the hover darken stays ≥4.5:1).
 
-| Cell | File | Surface intent | Foreground intent |
-|------|------|----------------|-------------------|
-| default-light | `src/tokens/color.json` (canonical base) | pale destructive | dark destructive text |
-| default-dark | `themes/color-scheme/dark.json` | deep destructive | light destructive text |
-| brand-light | `themes/theme/brand/light.json` | pale destructive | dark destructive text |
-| brand-dark | `themes/theme/brand/dark.json` | deep destructive | light destructive text |
-| vaporwave-light | `themes/theme/vaporwave/light.json` | pale destructive (vaporwave hue) | dark destructive text |
-| vaporwave-dark | `themes/theme/vaporwave/dark.json` | deep destructive (vaporwave hue) | light destructive text |
+| Cell            | File                                     | Surface intent                   | Foreground intent      |
+| --------------- | ---------------------------------------- | -------------------------------- | ---------------------- |
+| default-light   | `src/tokens/color.json` (canonical base) | pale destructive                 | dark destructive text  |
+| default-dark    | `themes/color-scheme/dark.json`          | deep destructive                 | light destructive text |
+| brand-light     | `themes/theme/brand/light.json`          | pale destructive                 | dark destructive text  |
+| brand-dark      | `themes/theme/brand/dark.json`           | deep destructive                 | light destructive text |
+| vaporwave-light | `themes/theme/vaporwave/light.json`      | pale destructive (vaporwave hue) | dark destructive text  |
+| vaporwave-dark  | `themes/theme/vaporwave/dark.json`       | deep destructive (vaporwave hue) | light destructive text |
 
 Exact oklch values are authored and verified during implementation with the package's own `contrastRatio` (the tsx check that proved the spec-016 palettes), not eyeballed. The build regenerates `src/tokens/defaults.generated.ts` from the canonical base.
 

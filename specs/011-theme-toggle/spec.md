@@ -26,7 +26,7 @@
 - Q: Do the `THEME_*` failures throw or warn-and-continue? → A: `THEME_INVALID_VALUE`, `THEME_AXIS_FORCED`, and `THEME_NO_SYSTEM_SOURCE` warn via `warn()` and no-op; `THEME_NO_PROVIDER` throws, since there is no usable state to return.
 - Q: What do toggles render before mount (SSR/hydration)? → A: An unresolved state (no segment selected) until mounted, then the stored preference. Server and first client render agree, so no mismatch and no layout shift.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Composable multi-axis theme state (Priority: P1)
 
@@ -109,7 +109,7 @@ An agent or developer who knows next-themes can predict this API and find the al
 - **Two consumers of `useTheme()`** in one tree: both reflect a single state, because the provider is the source of truth.
 - **OS signals other than color scheme** (reduced-motion, contrast): out of scope; the aesthetic axis, via its light/dark values, is the only one with an OS source today.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -163,7 +163,7 @@ An agent or developer who knows next-themes can predict this API and find the al
 - **Forced value**: a provider-pinned value for an axis that overrides stored preferences and cannot be changed through the hook.
 - **ThemeProvider**: the single source of truth holding per-axis state plus the `defaults` and `forced` configuration.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

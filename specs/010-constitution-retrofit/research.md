@@ -6,14 +6,14 @@
 
 **Decision**: Use the v4 custom-property utility forms, with a length type hint where the property is ambiguous.
 
-| Token | Consumption form | Confidence |
-| --- | --- | --- |
-| `ring.width` | `ring-(length:--ring-width)` | Verify at the syntax-lock step; fallback `ring-[length:var(--ring-width)]` |
-| `z-index.overlay` | `z-(--z-index-overlay)` | Confirmed (v4 `z-(<custom-property>)` documented) |
-| `z-index.popover` | `z-(--z-index-popover)` | Confirmed |
-| `z-index.tooltip` | `z-(--z-index-tooltip)` | Confirmed |
-| `motion.duration.*` | `duration-(--duration-fast)` | Verify it applies to keyframe animations, not only transitions |
-| `motion.easing.*` | `ease-standard` / `ease-decelerate` / `ease-accelerate` (real utilities) | Confirmed (spec 008 emits the `--ease-*` namespace) |
+| Token               | Consumption form                                                         | Confidence                                                                 |
+| ------------------- | ------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| `ring.width`        | `ring-(length:--ring-width)`                                             | Verify at the syntax-lock step; fallback `ring-[length:var(--ring-width)]` |
+| `z-index.overlay`   | `z-(--z-index-overlay)`                                                  | Confirmed (v4 `z-(<custom-property>)` documented)                          |
+| `z-index.popover`   | `z-(--z-index-popover)`                                                  | Confirmed                                                                  |
+| `z-index.tooltip`   | `z-(--z-index-tooltip)`                                                  | Confirmed                                                                  |
+| `motion.duration.*` | `duration-(--duration-fast)`                                             | Verify it applies to keyframe animations, not only transitions             |
+| `motion.easing.*`   | `ease-standard` / `ease-decelerate` / `ease-accelerate` (real utilities) | Confirmed (spec 008 emits the `--ease-*` namespace)                        |
 
 **Rationale**: Tailwind v4 documents `z-(<custom-property>)` for z-index and the `text-(length:--my-var)` type-hint pattern for length-ambiguous properties. The ring utility takes a width, so `ring-(length:--ring-width)` follows the same hinted-custom-property convention. The easings are real utilities because spec 008 emits them under the `--ease-*` theme namespace.
 

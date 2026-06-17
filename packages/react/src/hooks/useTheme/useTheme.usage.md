@@ -18,14 +18,14 @@ There are three orthogonal axes (spec 016), each on its own `data-*` attribute:
 
 ## Return shape
 
-| Field         | Type                            | Description                                                                       |
-| ------------- | ------------------------------- | --------------------------------------------------------------------------------- |
-| `preference`  | `Record<Axis, string>`          | Stated choice per axis; the `colorScheme` axis may be `'system'`.                  |
-| `resolved`    | `Record<Axis, string>`          | Applied value per axis; `'system'` resolved to light or dark.                     |
-| `system`      | `Partial<Record<Axis, string>>` | OS value for each axis that has a signal (`colorScheme` only).                     |
-| `forced`      | `Partial<Record<Axis, string>>` | Provider-pinned value per axis; an absent key is not forced.                       |
-| `available`   | `Record<Axis, string[]>`        | Allowed values per axis (registry built-ins plus runtime registrations).          |
-| `set`         | `(partial) => void`             | Set any subset of axes in one object.                                             |
+| Field         | Type                            | Description                                                                         |
+| ------------- | ------------------------------- | ----------------------------------------------------------------------------------- |
+| `preference`  | `Record<Axis, string>`          | Stated choice per axis; the `colorScheme` axis may be `'system'`.                   |
+| `resolved`    | `Record<Axis, string>`          | Applied value per axis; `'system'` resolved to light or dark.                       |
+| `system`      | `Partial<Record<Axis, string>>` | OS value for each axis that has a signal (`colorScheme` only).                      |
+| `forced`      | `Partial<Record<Axis, string>>` | Provider-pinned value per axis; an absent key is not forced.                        |
+| `available`   | `Record<Axis, string[]>`        | Allowed values per axis (registry built-ins plus runtime registrations).            |
+| `set`         | `(partial) => void`             | Set any subset of axes in one object.                                               |
 | `colorScheme` | `ColorSchemeConvenience`        | The common case: `{ resolved, preference, system, set }` for the color-scheme axis. |
 
 The `colorScheme` convenience is a flattened view of the most-used axis plus a one-arg setter, so `colorScheme.set('dark')` replaces the verbose `set({ colorScheme: 'dark' })`. The axis maps stay the source of truth; the convenience just reads from them.
@@ -34,14 +34,14 @@ The `colorScheme` convenience is a flattened view of the most-used axis plus a o
 
 The vocabulary tracks `next-themes` where a concept maps one-to-one, and renames only where the multi-axis shape forces it. The shape itself, a provider plus a hook, mirrors next-themes. The one thing to internalize: next-themes' `theme` (the named look) is our **identity** axis, while its `resolvedTheme`/`systemTheme` (light/dark) are our **color-scheme** axis. Spec 016 split what next-themes conflates.
 
-| Ours                    | next-themes       | Difference                                                                                  |
-| ----------------------- | ----------------- | ------------------------------------------------------------------------------------------- |
-| `preference.theme`      | `theme`           | The aesthetic identity (default/brand/vaporwave), not light/dark.                           |
-| `colorScheme.resolved`  | `resolvedTheme`   | The applied light/dark, with `system` resolved.                                             |
-| `colorScheme.system`    | `systemTheme`     | The OS light/dark.                                                                          |
-| `colorScheme.preference`| —                 | The stated color-scheme intent; may be `'system'`.                                          |
-| `forced`                | `forcedTheme`     | Per-axis pinned value.                                                                      |
-| `available`             | `themes`          | Per-axis lists rather than one flat list.                                                   |
+| Ours                                      | next-themes       | Difference                                                            |
+| ----------------------------------------- | ----------------- | --------------------------------------------------------------------- |
+| `preference.theme`                        | `theme`           | The aesthetic identity (default/brand/vaporwave), not light/dark.     |
+| `colorScheme.resolved`                    | `resolvedTheme`   | The applied light/dark, with `system` resolved.                       |
+| `colorScheme.system`                      | `systemTheme`     | The OS light/dark.                                                    |
+| `colorScheme.preference`                  | —                 | The stated color-scheme intent; may be `'system'`.                    |
+| `forced`                                  | `forcedTheme`     | Per-axis pinned value.                                                |
+| `available`                               | `themes`          | Per-axis lists rather than one flat list.                             |
 | `set(partial)` / `colorScheme.set(value)` | `setTheme(value)` | One object setting any subset of axes, or the color-scheme shorthand. |
 
 ## Why multi-axis, and why a provider

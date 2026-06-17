@@ -5,7 +5,7 @@ Two thin, named sibling controls over `useTheme()` and `SegmentedControl`. Neith
 ## Import
 
 ```ts
-import { ThemeToggle, DensityToggle } from '@unbranded-ds/react';
+import { DensityToggle, ThemeToggle } from '@unbranded-ds/react';
 ```
 
 ## Shared props
@@ -14,11 +14,11 @@ Both forward to `SegmentedControl.Root` and accept:
 
 ```ts
 interface SharedToggleProps {
-  size?: 'sm' | 'md' | 'lg';                  // forwarded; default 'md'
-  orientation?: 'horizontal' | 'vertical';    // forwarded; default 'horizontal'
-  'aria-label'?: string;                       // accessible group name
-  className?: string;
-  // ...rest spreads onto SegmentedControl.Root
+	'size'?: 'sm' | 'md' | 'lg'; // forwarded; default 'md'
+	'orientation'?: 'horizontal' | 'vertical'; // forwarded; default 'horizontal'
+	'aria-label'?: string; // accessible group name
+	'className'?: string;
+	// ...rest spreads onto SegmentedControl.Root
 }
 ```
 
@@ -30,8 +30,8 @@ interface SharedToggleProps {
 type ColorScheme = 'light' | 'system' | 'dark';
 
 interface ThemeToggleProps extends SharedToggleProps {
-  labels?: Partial<Record<ColorScheme, string>>;        // default: Light / System / Dark
-  icons?: Partial<Record<ColorScheme, React.ReactNode>>; // default: Sun / SunMoon / Moon (lucide)
+	labels?: Partial<Record<ColorScheme, string>>; // default: Light / System / Dark
+	icons?: Partial<Record<ColorScheme, React.ReactNode>>; // default: Sun / SunMoon / Moon (lucide)
 }
 ```
 
@@ -43,8 +43,8 @@ interface ThemeToggleProps extends SharedToggleProps {
 
 ```ts
 interface DensityToggleProps extends SharedToggleProps {
-  labels?: Record<string, string>;            // keyed by density value; defaults English per value
-  icons?: Record<string, React.ReactNode>;    // keyed by density value; lucide defaults
+	labels?: Record<string, string>; // keyed by density value; defaults English per value
+	icons?: Record<string, React.ReactNode>; // keyed by density value; lucide defaults
 }
 ```
 

@@ -9,7 +9,7 @@ description: "Task list for spec 019 — Storybook interaction and accessibility
 
 **Tests**: The "verify" tasks below are this feature's whole point — proving the gate actually catches a broken `play` and a sub-AA story. They are do-and-undo checks, not committed test files, so they appear as verification tasks rather than new test sources.
 
-**Organization**: Most of the work is foundational — one config file, two dev dependencies, one CI job — because a single runner delivers all three stories. The stories differ in what they *guarantee* (interaction / accessibility / local parity), each independently verifiable.
+**Organization**: Most of the work is foundational — one config file, two dev dependencies, one CI job — because a single runner delivers all three stories. The stories differ in what they _guarantee_ (interaction / accessibility / local parity), each independently verifiable.
 
 ## Format: `[ID] [P?] [Story] Description`
 
@@ -32,10 +32,10 @@ No setup tasks. There is no project to scaffold — the work is two dev dependen
 
 **Purpose**: Stand up the `storybook` Vitest project so the gate can run at all. Every user story depends on this.
 
-- [X] T001 Add `@vitest/browser` (^3, matching the repo's Vitest 3) and `playwright` to `devDependencies` in `apps/storybook/package.json`, then run `pnpm install` so `pnpm-lock.yaml` is updated. CI installs with `--frozen-lockfile`, so the committed lockfile must already include them.
-- [X] T002 [P] Create `apps/storybook/vitest.config.ts` defining the `storybook` project: the `storybookTest({ configDir: '.storybook' })` plugin from `@storybook/addon-vitest/vitest-plugin`, `test.name: 'storybook'`, browser mode (`test.browser` with `enabled: true`, `provider: 'playwright'`, `headless: true`, `instances: [{ browser: 'chromium' }]`), and `setupFiles: ['.storybook/vitest.setup.ts']` (the existing setup file). This is what `vitest run --project storybook` needs.
-- [X] T003 [P] Install the Chromium browser locally: `pnpm --filter @unbranded-ds/storybook exec playwright install --with-deps chromium`. Lets the gate run on this machine; CI does its own install.
-- [X] T004 Build the packages the stories import and run the gate once: `pnpm --filter @unbranded-ds/tokens --filter @unbranded-ds/react build` then `pnpm --filter @unbranded-ds/storybook test:storybook`. Confirm the "No projects matched the filter" error is gone and every story passes. This is the first-ever real execution — the latent-failure moment (see T010).
+- [x] T001 Add `@vitest/browser` (^3, matching the repo's Vitest 3) and `playwright` to `devDependencies` in `apps/storybook/package.json`, then run `pnpm install` so `pnpm-lock.yaml` is updated. CI installs with `--frozen-lockfile`, so the committed lockfile must already include them.
+- [x] T002 [P] Create `apps/storybook/vitest.config.ts` defining the `storybook` project: the `storybookTest({ configDir: '.storybook' })` plugin from `@storybook/addon-vitest/vitest-plugin`, `test.name: 'storybook'`, browser mode (`test.browser` with `enabled: true`, `provider: 'playwright'`, `headless: true`, `instances: [{ browser: 'chromium' }]`), and `setupFiles: ['.storybook/vitest.setup.ts']` (the existing setup file). This is what `vitest run --project storybook` needs.
+- [x] T003 [P] Install the Chromium browser locally: `pnpm --filter @unbranded-ds/storybook exec playwright install --with-deps chromium`. Lets the gate run on this machine; CI does its own install.
+- [x] T004 Build the packages the stories import and run the gate once: `pnpm --filter @unbranded-ds/tokens --filter @unbranded-ds/react build` then `pnpm --filter @unbranded-ds/storybook test:storybook`. Confirm the "No projects matched the filter" error is gone and every story passes. This is the first-ever real execution — the latent-failure moment (see T010).
 
 **Checkpoint**: the runner exists and is green locally. User-story work can begin.
 
@@ -47,8 +47,8 @@ No setup tasks. There is no project to scaffold — the work is two dev dependen
 
 **Independent Test**: Break one story's `play` assertion, run the gate, confirm it fails and names the story; restore it and it passes.
 
-- [X] T005 [US1] Add a `storybook-test` job to `.github/workflows/ci.yml`, `needs: verify`, parallel to `example-e2e`: checkout, setup pnpm, setup Node, `pnpm install --frozen-lockfile`, build `@unbranded-ds/tokens` + `@unbranded-ds/react`, `pnpm --filter @unbranded-ds/storybook exec playwright install --with-deps chromium`, then `pnpm --filter @unbranded-ds/storybook test:storybook`. Mirror the `example-e2e` job's structure.
-- [X] T006 [US1] Verify the interaction layer catches a regression: temporarily make a story's `play` assertion fail, run `test:storybook`, confirm it fails and names the story, then restore the story. (Proves SC-001.)
+- [x] T005 [US1] Add a `storybook-test` job to `.github/workflows/ci.yml`, `needs: verify`, parallel to `example-e2e`: checkout, setup pnpm, setup Node, `pnpm install --frozen-lockfile`, build `@unbranded-ds/tokens` + `@unbranded-ds/react`, `pnpm --filter @unbranded-ds/storybook exec playwright install --with-deps chromium`, then `pnpm --filter @unbranded-ds/storybook test:storybook`. Mirror the `example-e2e` job's structure.
+- [x] T006 [US1] Verify the interaction layer catches a regression: temporarily make a story's `play` assertion fail, run `test:storybook`, confirm it fails and names the story, then restore the story. (Proves SC-001.)
 - [ ] T007 [P] [US1] Mark the `storybook-test` check as a required status check in the repository's branch-protection settings so a red gate blocks merge (manual, repo-admin action — not a file change; needed for SC-004).
 
 **Checkpoint**: interaction tests run in CI; a broken `play` fails and cannot merge.
@@ -63,7 +63,7 @@ No setup tasks. There is no project to scaffold — the work is two dev dependen
 
 **Note**: US2 rides the same runner and CI job as US1 — the browser-mode config (T002) and the `storybook-test` job (T005) already run the a11y pass on every story. US2's distinct deliverable is the proof that real contrast is computed.
 
-- [X] T008 [US2] Verify the accessibility layer catches a contrast regression: temporarily drop a rendered story's foreground/background pair below AA (for example, set a near-background text color), run `test:storybook`, confirm the axe `color-contrast` rule fails and names the story, then restore. (Proves SC-002 and SC-003, and that browser-mode contrast computation works.)
+- [x] T008 [US2] Verify the accessibility layer catches a contrast regression: temporarily drop a rendered story's foreground/background pair below AA (for example, set a near-background text color), run `test:storybook`, confirm the axe `color-contrast` rule fails and names the story, then restore. (Proves SC-002 and SC-003, and that browser-mode contrast computation works.)
 
 **Checkpoint**: the accessibility gate runs in a real browser; a sub-AA story fails.
 
@@ -75,7 +75,7 @@ No setup tasks. There is no project to scaffold — the work is two dev dependen
 
 **Independent Test**: On a clean checkout, run the gate command and confirm it executes the interaction and accessibility suite and reports pass/fail, with no "No projects matched" error.
 
-- [X] T009 [US3] Confirm local parity (`pnpm --filter @unbranded-ds/storybook test:storybook` runs the full suite and matches CI), and document the local workflow in `apps/storybook/README.md`: the one-time `playwright install --with-deps chromium` and the `test:storybook` command. (Proves SC-005; the doc closes the loop for contributors.)
+- [x] T009 [US3] Confirm local parity (`pnpm --filter @unbranded-ds/storybook test:storybook` runs the full suite and matches CI), and document the local workflow in `apps/storybook/README.md`: the one-time `playwright install --with-deps chromium` and the `test:storybook` command. (Proves SC-005; the doc closes the loop for contributors.)
 
 **Checkpoint**: a contributor can reproduce the CI gate locally.
 
@@ -83,8 +83,8 @@ No setup tasks. There is no project to scaffold — the work is two dev dependen
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [X] T010 Triage the first real execution (T004). If it surfaced a genuine `play` or a11y failure, fix it in this PR as a real defect, excluding a single story or rule under a tracked follow-up only if the fix is too large (per the spec's latent-failure policy). If T004 was green, record that and take no action.
-- [X] T011 Final gate: run `pnpm typecheck`, `pnpm build`, and `pnpm test:unit` (confirm the existing layers still pass), then `pnpm --filter @unbranded-ds/storybook test:storybook` (the new gate). All green confirms no regression and the gate passes on the current codebase.
+- [x] T010 Triage the first real execution (T004). If it surfaced a genuine `play` or a11y failure, fix it in this PR as a real defect, excluding a single story or rule under a tracked follow-up only if the fix is too large (per the spec's latent-failure policy). If T004 was green, record that and take no action.
+- [x] T011 Final gate: run `pnpm typecheck`, `pnpm build`, and `pnpm test:unit` (confirm the existing layers still pass), then `pnpm --filter @unbranded-ds/storybook test:storybook` (the new gate). All green confirms no regression and the gate passes on the current codebase.
 
 ---
 

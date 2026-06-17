@@ -14,7 +14,7 @@
 - Q: On which surfaces must the destructive Button hold AA? → A: Any standard design-system surface — the page background and card/muted surfaces — so the treatment is surface-independent, not reliant on a translucent tint that shifts over whatever sits behind it.
 - Q: Should the new destructive-subtle token pair be canonical reusable tokens or Button-private? → A: Canonical and reusable — a destructive-subtle surface token plus its foreground, provided by every theme like muted/muted-foreground, so future components reuse the same AA-guaranteed pair.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - A legible destructive button in any theme (Priority: P1)
 
@@ -70,7 +70,7 @@ The reference Next.js app currently leaves its light color scheme on the file-le
 - **Icon-only destructive button**: a destructive button with only an icon and no text must also meet AA for the icon against its background.
 - **A future identity or color scheme**: any newly added theme cell inherits the same AA requirement for the destructive button automatically.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -86,12 +86,12 @@ The reference Next.js app currently leaves its light color scheme on the file-le
 - **FR-010**: The change MUST NOT weaken any existing guarantee: the solid `destructive` / `destructive-foreground` relationship stays valid for solid destructive usage, and no other variant's contrast regresses.
 - **FR-011**: The change MUST ship with a changeset declaring the affected packages and bump levels, per the repository's versioning policy.
 
-### Key Entities *(include if feature involves data)*
+### Key Entities _(include if feature involves data)_
 
 - **Destructive-subtle token pair**: a canonical, reusable pair every theme provides — a subtle destructive surface and its foreground — that the destructive Button paints with, authored per cell so each clears AA. Mirrors `muted` / `muted-foreground` and is available to any future component that needs destructive content on a quiet surface.
 - **Contrast pair (destructive)**: the declared foreground/background relationship the validator checks against AA — the destructive-subtle surface against its foreground — added so the destructive button's real rendered pairing is guarded for every shipped theme cell.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

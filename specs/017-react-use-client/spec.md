@@ -13,7 +13,7 @@
 - Q: How should CI guard against the directive being dropped later? → A: A cheap directive check on the built bundle plus the example app's server-component build (US3) as the real RSC guard — no separate smoke fixture, since the example proves the same thing.
 - Q: Should the class-name helper `cn` stay server-importable? → A: Defer — with the whole-entry approach `cn` is client-tagged from the main entry; add a server-safe entry only if a consumer needs it. Types are erased and stay server-safe regardless.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Import a component into a server component without boilerplate (Priority: P1)
 
@@ -68,7 +68,7 @@ The reference Next.js app currently wraps its design-system usage in `'use clien
 - **Tree-shaking**: declaring the entry a client module must not prevent a consumer's bundler from dropping unused exports.
 - **Non-Next.js bundlers**: the declaration is a standard React convention; consumers on other RSC-aware bundlers get the same benefit, and consumers with no RSC concept are unaffected.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -80,11 +80,11 @@ The reference Next.js app currently wraps its design-system usage in `'use clien
 - **FR-006**: Existing client-component usage of the design system MUST keep working unchanged after the declaration ships.
 - **FR-007**: The change MUST ship with a changeset declaring the affected package and bump level.
 
-### Key Entities *(include if feature involves data)*
+### Key Entities _(include if feature involves data)_
 
 - **Published bundle**: the built entry of the component package that consumers import. The change is whether this artifact declares itself a client module at its top; its exports and their behavior are unchanged.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

@@ -16,7 +16,7 @@
 
 ## Phase 1: Setup
 
-- [X] T001 Confirm baseline green: `pnpm --filter @unbranded-ds/react test && pnpm typecheck && pnpm --filter @unbranded-ds/storybook build`.
+- [x] T001 Confirm baseline green: `pnpm --filter @unbranded-ds/react test && pnpm typecheck && pnpm --filter @unbranded-ds/storybook build`.
 - [ ] T002 Add `jscodeshift` (+ types) as a dev dependency and create `packages/react/codemods/` for the rename transforms.
 
 ---
@@ -37,8 +37,8 @@
 
 **Independent Test**: `audit.md` covers every component (compliant or flagged); each flagged entry has a canonical (upstream-default) name, blast radius, codemod feasibility, and disposition. Approval is recorded before any rename lands.
 
-- [X] T004 [US1] Produce the discovery audit at `specs/013-api-vocabulary-harmonization/audit.md` per `contracts/audit-format.md`: audit EVERY component for prop-vocabulary, slot, polymorphic, and prose-only-failure drift from the shared/upstream (shadcn/Base UI) vocabulary. Canonical names default to the upstream name; public slots already on shadcn (`Content`/`Trigger`/`Item`) are compliant; Base UI's internal `Popup`/`Positioner` are out of scope. Record compliant components as compliant. Run the audit prose through the `humanizer`. (Can fan out per-component, then converge.)
-- [X] T005 [US1] Review and approve the audit; record approval. Resolve any conflict where one role is proposed different canonical names (FR-003). **This gate blocks every rename below** — Phase 4+ draws only from approved `flagged` entries.
+- [x] T004 [US1] Produce the discovery audit at `specs/013-api-vocabulary-harmonization/audit.md` per `contracts/audit-format.md`: audit EVERY component for prop-vocabulary, slot, polymorphic, and prose-only-failure drift from the shared/upstream (shadcn/Base UI) vocabulary. Canonical names default to the upstream name; public slots already on shadcn (`Content`/`Trigger`/`Item`) are compliant; Base UI's internal `Popup`/`Positioner` are out of scope. Record compliant components as compliant. Run the audit prose through the `humanizer`. (Can fan out per-component, then converge.)
+- [x] T005 [US1] Review and approve the audit; record approval. Resolve any conflict where one role is proposed different canonical names (FR-003). **This gate blocks every rename below** — Phase 4+ draws only from approved `flagged` entries.
 
 **Checkpoint**: the rename scope is known and approved.
 
@@ -87,8 +87,8 @@
 ## Phase 8: Polish, migration & governance
 
 - [ ] T012 Add the migration note to the changeset and `CHANGELOG`: every rename old→new, with the codemod command for the mechanical ones. Run the prose through the `humanizer`.
-- [X] T013 Amend Constitution Section XI.2 to be compat-first (the shared vocabulary governs props/slots the design system introduces; props/slots inherited from a wrapped library follow the upstream name). Minor bump; update the Sync Impact Report. Run the prose through the `humanizer`.
-- [X] T014 Full verification: `pnpm --filter @unbranded-ds/react test` (renamed components green; deprecation + codemod tests pass), `pnpm typecheck`, `pnpm --filter @unbranded-ds/react lint`, `pnpm --filter @unbranded-ds/storybook build && pnpm --filter @unbranded-ds/storybook test:storybook`. Grep for stale names: no in-repo doc/story/test references a renamed old name.
+- [x] T013 Amend Constitution Section XI.2 to be compat-first (the shared vocabulary governs props/slots the design system introduces; props/slots inherited from a wrapped library follow the upstream name). Minor bump; update the Sync Impact Report. Run the prose through the `humanizer`.
+- [x] T014 Full verification: `pnpm --filter @unbranded-ds/react test` (renamed components green; deprecation + codemod tests pass), `pnpm typecheck`, `pnpm --filter @unbranded-ds/react lint`, `pnpm --filter @unbranded-ds/storybook build && pnpm --filter @unbranded-ds/storybook test:storybook`. Grep for stale names: no in-repo doc/story/test references a renamed old name.
 - [ ] T015 Add `.changeset/*.md`: `@unbranded-ds/react` minor (pre-1.0 breaking), referencing the migration note and the XI.2 amendment.
 
 ---

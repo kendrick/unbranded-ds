@@ -97,7 +97,6 @@ Each task below is one PR. Each PR adds its component's sidecar AND a `.changese
 
 > Status: deferred during `/speckit.implement`. The 14 per-component audit tasks below remain as the canonical detail; spec 007's `/speckit.tasks` run lifts them. FR-030 (revised during clarify) already allows the TSDoc-edit scope these tasks need. See "Deferred work" at the end of spec.md.
 
-
 **Goal**: Run the humanizer audit across four prose surfaces — `argTypes` descriptions, component-level descriptions, story-level descriptions, and TSDoc comments — for every shipped component. Fix issues in place; git history is the audit ledger.
 
 **Independent Test**: Reviewer reads every component's stories.tsx (component-level + argTypes + story-level descriptions) and `.tsx` source TSDoc. Every prop description explains both WHAT and WHEN; no three-item prose lists remain; no em-dash overuse; no promotional vocabulary.
@@ -131,36 +130,36 @@ Each task audits one component across all four prose surfaces. Audit work runs i
 
 ### Runtime infrastructure (foundation for the tools)
 
-- [X] T039 [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/runtime/stdio.ts` exposing `createServer({ name, version, tools })` that instantiates `@modelcontextprotocol/sdk`'s `Server` with the stdio transport, registers the provided tools, and returns the configured server.
-- [X] T040 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/runtime/errors.ts` exposing `mcpError(payload: { component: string; issue: string; [key: string]: unknown })` that wraps the structured payload in the MCP protocol's error envelope (`isError: true` with the parseable payload as the message body) per Section XI.4 and FR-027.
-- [X] T041 [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/runtime/testing.ts` exposing `spawnAndQuery(toolName, args)` for unit tests (in-process call into the tool handler with mocked input) and `runSmokeTest()` for CI (spawns the built binary, calls `tools/list`, asserts the four expected tools). Depends on stdio.ts.
-- [X] T042 [P] [US4] Create unit tests at `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/runtime/stdio.test.ts` covering `createServer` configuration, tool registration, and lifecycle handling with a mocked SDK.
-- [X] T043 [P] [US4] Create unit tests at `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/runtime/errors.test.ts` covering the `mcpError` payload wrapping for each expected error shape.
-- [X] T044 [P] [US4] Create unit tests at `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/runtime/testing.test.ts` covering `spawnAndQuery` invocation patterns.
+- [x] T039 [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/runtime/stdio.ts` exposing `createServer({ name, version, tools })` that instantiates `@modelcontextprotocol/sdk`'s `Server` with the stdio transport, registers the provided tools, and returns the configured server.
+- [x] T040 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/runtime/errors.ts` exposing `mcpError(payload: { component: string; issue: string; [key: string]: unknown })` that wraps the structured payload in the MCP protocol's error envelope (`isError: true` with the parseable payload as the message body) per Section XI.4 and FR-027.
+- [x] T041 [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/runtime/testing.ts` exposing `spawnAndQuery(toolName, args)` for unit tests (in-process call into the tool handler with mocked input) and `runSmokeTest()` for CI (spawns the built binary, calls `tools/list`, asserts the four expected tools). Depends on stdio.ts.
+- [x] T042 [P] [US4] Create unit tests at `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/runtime/stdio.test.ts` covering `createServer` configuration, tool registration, and lifecycle handling with a mocked SDK.
+- [x] T043 [P] [US4] Create unit tests at `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/runtime/errors.test.ts` covering the `mcpError` payload wrapping for each expected error shape.
+- [x] T044 [P] [US4] Create unit tests at `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/runtime/testing.test.ts` covering `spawnAndQuery` invocation patterns.
 
 ### Per-tool implementation
 
-- [X] T045 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/listThemes.ts` implementing the `listThemes` tool per `contracts/token-query-mcp.md`. Returns the theme keys exposed by `@unbranded-ds/tokens` with their descriptions.
-- [X] T046 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/palette.ts` implementing the `palette` tool. Accepts flat (`'color'`) or hierarchical (`'color.foreground'`) categories per the clarified contract; walks the token tree from the given prefix. Emits `unknown-category` and `unknown-theme` errors via `mcpError`.
-- [X] T047 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/contrast.ts` implementing the `contrast` tool. Accepts color strings (hex/rgb/hsl) or named token references for both `foreground` and `background`; resolves tokens against the active theme; reuses the existing WCAG contrast math from `@unbranded-ds/tokens` (expose the function from `validateTheme` internals if not already public). Emits `unparseable-color`, `unknown-token`, and `unknown-theme` errors.
-- [X] T048 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/lookupToken.ts` implementing the `lookupToken` tool. Returns the resolved CSS variable name and current value; emits `unknown-token` and `unknown-theme` errors.
+- [x] T045 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/listThemes.ts` implementing the `listThemes` tool per `contracts/token-query-mcp.md`. Returns the theme keys exposed by `@unbranded-ds/tokens` with their descriptions.
+- [x] T046 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/palette.ts` implementing the `palette` tool. Accepts flat (`'color'`) or hierarchical (`'color.foreground'`) categories per the clarified contract; walks the token tree from the given prefix. Emits `unknown-category` and `unknown-theme` errors via `mcpError`.
+- [x] T047 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/contrast.ts` implementing the `contrast` tool. Accepts color strings (hex/rgb/hsl) or named token references for both `foreground` and `background`; resolves tokens against the active theme; reuses the existing WCAG contrast math from `@unbranded-ds/tokens` (expose the function from `validateTheme` internals if not already public). Emits `unparseable-color`, `unknown-token`, and `unknown-theme` errors.
+- [x] T048 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/lookupToken.ts` implementing the `lookupToken` tool. Returns the resolved CSS variable name and current value; emits `unknown-token` and `unknown-theme` errors.
 
 ### Per-tool tests
 
-- [X] T049 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/listThemes.test.ts` covering the success path.
-- [X] T050 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/palette.test.ts` covering: success for flat category; success for hierarchical category; `unknown-category` error; `unknown-theme` error.
-- [X] T051 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/contrast.test.ts` covering: success with two hex colors; success with token references resolved against a theme; `unparseable-color` error; `unknown-token` error; AA/AAA/normal/large flags computed correctly.
-- [X] T052 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/lookupToken.test.ts` covering: success path; `unknown-token` error; `unknown-theme` error; default-theme fallback when `theme` omitted.
+- [x] T049 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/listThemes.test.ts` covering the success path.
+- [x] T050 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/palette.test.ts` covering: success for flat category; success for hierarchical category; `unknown-category` error; `unknown-theme` error.
+- [x] T051 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/contrast.test.ts` covering: success with two hex colors; success with token references resolved against a theme; `unparseable-color` error; `unknown-token` error; AA/AAA/normal/large flags computed correctly.
+- [x] T052 [P] [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/tools/lookupToken.test.ts` covering: success path; `unknown-token` error; `unknown-theme` error; default-theme fallback when `theme` omitted.
 
 ### Server + integration
 
-- [X] T053 [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/server.ts` as the binary entry point. Includes the `#!/usr/bin/env node` shebang. Calls `createServer({ name: 'unbranded-ds-tokens-mcp', version, tools })` with all four tools registered, then connects and runs. Depends on T039–T048.
-- [X] T054 [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/smoke.test.ts` per FR-029a. Builds the binary, spawns it, sends `tools/list`, asserts all four tools are present with their expected input schemas; sends a `tools/call` for `listThemes` and asserts non-empty themes.
-- [X] T055 [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/index.ts` re-exporting the runtime primitives so a future `@unbranded-ds/react` MCP can adopt them.
-- [X] T056 [US4] Update `/Users/k.arnett/repos/unbranded-ds/packages/tokens/tsup.config.ts` to add `src/mcp/server.ts` as a build entry with the `#!/usr/bin/env node` banner.
-- [X] T057 [US4] Add an MCP smoke test step to `/Users/k.arnett/repos/unbranded-ds/.github/workflows/ci.yml` in the verify job, after the package build step, running `pnpm --filter @unbranded-ds/tokens test smoke`.
-- [X] T058 [US4] Update `/Users/k.arnett/repos/unbranded-ds/AGENTS.md`'s Tool inventory section with the four token-query tools using the FR-003 three-line format (name, purpose, useful-when). Update the MCP endpoints section to include the token-query connection block.
-- [X] T059 [US4] Create `/Users/k.arnett/repos/unbranded-ds/.changeset/add-tokens-mcp.md` declaring `@unbranded-ds/tokens: minor` (new feature).
+- [x] T053 [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/server.ts` as the binary entry point. Includes the `#!/usr/bin/env node` shebang. Calls `createServer({ name: 'unbranded-ds-tokens-mcp', version, tools })` with all four tools registered, then connects and runs. Depends on T039–T048.
+- [x] T054 [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/smoke.test.ts` per FR-029a. Builds the binary, spawns it, sends `tools/list`, asserts all four tools are present with their expected input schemas; sends a `tools/call` for `listThemes` and asserts non-empty themes.
+- [x] T055 [US4] Create `/Users/k.arnett/repos/unbranded-ds/packages/tokens/src/mcp/index.ts` re-exporting the runtime primitives so a future `@unbranded-ds/react` MCP can adopt them.
+- [x] T056 [US4] Update `/Users/k.arnett/repos/unbranded-ds/packages/tokens/tsup.config.ts` to add `src/mcp/server.ts` as a build entry with the `#!/usr/bin/env node` banner.
+- [x] T057 [US4] Add an MCP smoke test step to `/Users/k.arnett/repos/unbranded-ds/.github/workflows/ci.yml` in the verify job, after the package build step, running `pnpm --filter @unbranded-ds/tokens test smoke`.
+- [x] T058 [US4] Update `/Users/k.arnett/repos/unbranded-ds/AGENTS.md`'s Tool inventory section with the four token-query tools using the FR-003 three-line format (name, purpose, useful-when). Update the MCP endpoints section to include the token-query connection block.
+- [x] T059 [US4] Create `/Users/k.arnett/repos/unbranded-ds/.changeset/add-tokens-mcp.md` declaring `@unbranded-ds/tokens: minor` (new feature).
 
 **Checkpoint**: Token-query MCP is built, tested, and CI-smoke-tested. AGENTS.md documents the connection. The package is ready for the next release.
 
@@ -170,12 +169,12 @@ Each task audits one component across all four prose surfaces. Audit work runs i
 
 **Purpose**: Final integration verification across all four user stories' output.
 
-- [X] T060 [P] Run `pnpm exec tsx scripts/validate-sidecars.ts` locally and verify all 14 sidecars plus the template pass compile-validation.
-- [X] T061 [P] Run `pnpm test` across all packages and verify all unit tests pass (including the new MCP runtime + per-tool + smoke tests).
-- [X] T062 [P] Run `pnpm build` (Turbo) across all packages and verify the MCP binary builds at `packages/tokens/dist/mcp/server.js` with the shebang in place.
-- [X] T063 Run `pnpm --filter @unbranded-ds/storybook build` and verify all stories still compile (the audit edits should not break stories).
-- [X] T064 Final humanizer pass on `AGENTS.md` prose. Confirm no three-item lists, no em-dash overuse, no promotional language. The file passes its own contract.
-- [X] T065 Verify `/Users/k.arnett/repos/unbranded-ds/.specify/memory/constitution.md` is at version 1.1.1 with both the Section XI principle (from the prior `/speckit.constitution` invocation) and the Section VIII MCP-SDK amendment from T004 present.
+- [x] T060 [P] Run `pnpm exec tsx scripts/validate-sidecars.ts` locally and verify all 14 sidecars plus the template pass compile-validation.
+- [x] T061 [P] Run `pnpm test` across all packages and verify all unit tests pass (including the new MCP runtime + per-tool + smoke tests).
+- [x] T062 [P] Run `pnpm build` (Turbo) across all packages and verify the MCP binary builds at `packages/tokens/dist/mcp/server.js` with the shebang in place.
+- [x] T063 Run `pnpm --filter @unbranded-ds/storybook build` and verify all stories still compile (the audit edits should not break stories).
+- [x] T064 Final humanizer pass on `AGENTS.md` prose. Confirm no three-item lists, no em-dash overuse, no promotional language. The file passes its own contract.
+- [x] T065 Verify `/Users/k.arnett/repos/unbranded-ds/.specify/memory/constitution.md` is at version 1.1.1 with both the Section XI principle (from the prior `/speckit.constitution` invocation) and the Section VIII MCP-SDK amendment from T004 present.
 
 ---
 

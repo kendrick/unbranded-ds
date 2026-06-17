@@ -21,21 +21,21 @@ Author a `<Component>.usage.md` sidecar for every shipped component in `packages
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 This spec is the per-component manifestation of Section XI.3 — sidecars are a co-equal documentation surface, not a fallback. The gate questions:
 
-- [X] **Section I — Repository shape**: No new packages. Sidecars live inside `packages/react/src/components/` next to existing source.
-- [X] **Section II — Tokens independent of components**: Not touched. No tokens-package changes.
-- [X] **Section III — Theming contract**: Not touched. Sidecars may reference theming concepts in prose but no schema or runtime changes.
-- [X] **Section IV — Components thin and unopinionated**: Not touched. No component source modifications per FR-015 + FR-015a.
-- [X] **Section V — Stories are the source of truth**: Honored as the source for usage patterns per FR-004. Stories drive what the sidecar's Common patterns section demonstrates.
-- [X] **Section VI — Testing layers**: Existing CI validator covers `tsx` block compile. No new test infrastructure needed.
-- [X] **Section VII — Deployment and MCP**: Not touched. Storybook + token-query MCP endpoints unchanged.
-- [X] **Section VIII — Tooling baseline**: No new tools. Uses existing tsx + tsc + the validator from spec 005.
-- [X] **Section IX — Definition of done for components**: Sidecars are added as a documentation supplement, not a replacement for autodocs (Section IX bullet 7). DoD for shipping a component is unchanged.
-- [X] **Section X — Governance + changesets**: Each PR ships a changeset per FR-013. The repo's existing `changeset-check.yml` enforces the rule.
-- [X] **Section XI — Agent and human legibility are co-equal**: this spec exists to fully satisfy XI.3 ("an agent or human with a local clone can answer 'how do I use Button' with no network connection"). Prose passes through the humanizer per XI.1 + FR-006. API consistency is reflected in the sidecars but not enforced beyond what spec 010 will retrofit. Documentation surfaces are now complete across all 14 shipped components. Failure modes (the CI validator) produce structured compile output. Story coverage stays the contract per XI.5 — sidecars mirror what stories already exercise.
+- [x] **Section I — Repository shape**: No new packages. Sidecars live inside `packages/react/src/components/` next to existing source.
+- [x] **Section II — Tokens independent of components**: Not touched. No tokens-package changes.
+- [x] **Section III — Theming contract**: Not touched. Sidecars may reference theming concepts in prose but no schema or runtime changes.
+- [x] **Section IV — Components thin and unopinionated**: Not touched. No component source modifications per FR-015 + FR-015a.
+- [x] **Section V — Stories are the source of truth**: Honored as the source for usage patterns per FR-004. Stories drive what the sidecar's Common patterns section demonstrates.
+- [x] **Section VI — Testing layers**: Existing CI validator covers `tsx` block compile. No new test infrastructure needed.
+- [x] **Section VII — Deployment and MCP**: Not touched. Storybook + token-query MCP endpoints unchanged.
+- [x] **Section VIII — Tooling baseline**: No new tools. Uses existing tsx + tsc + the validator from spec 005.
+- [x] **Section IX — Definition of done for components**: Sidecars are added as a documentation supplement, not a replacement for autodocs (Section IX bullet 7). DoD for shipping a component is unchanged.
+- [x] **Section X — Governance + changesets**: Each PR ships a changeset per FR-013. The repo's existing `changeset-check.yml` enforces the rule.
+- [x] **Section XI — Agent and human legibility are co-equal**: this spec exists to fully satisfy XI.3 ("an agent or human with a local clone can answer 'how do I use Button' with no network connection"). Prose passes through the humanizer per XI.1 + FR-006. API consistency is reflected in the sidecars but not enforced beyond what spec 010 will retrofit. Documentation surfaces are now complete across all 14 shipped components. Failure modes (the CI validator) produce structured compile output. Story coverage stays the contract per XI.5 — sidecars mirror what stories already exercise.
 
 No concessions. Gate passes pre-Phase 0.
 

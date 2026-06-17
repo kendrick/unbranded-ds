@@ -10,7 +10,7 @@ This is the spec-002 script, unchanged. It sets `data-theme` and `data-density` 
 import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime';
 
 // In your document <head>, before the app renders:
-<script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+<script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />;
 ```
 
 ## 2. Wrap the app in the provider
@@ -19,7 +19,7 @@ import { themeBootstrapScript } from '@unbranded-ds/tokens/runtime';
 import { ThemeProvider } from '@unbranded-ds/react';
 
 export function App({ children }) {
-  return <ThemeProvider>{children}</ThemeProvider>;
+	return <ThemeProvider>{children}</ThemeProvider>;
 }
 ```
 
@@ -40,8 +40,8 @@ Lock density to `compact` and expose only the color scheme. The `<DensityToggle>
 
 ```tsx
 <ThemeProvider forced={{ density: 'compact' }}>
-  <ThemeToggle />
-</ThemeProvider>
+	<ThemeToggle />
+</ThemeProvider>;
 ```
 
 ## 5. Read or set any axis directly
@@ -50,12 +50,17 @@ Lock density to `compact` and expose only the color scheme. The `<DensityToggle>
 import { useTheme } from '@unbranded-ds/react';
 
 function Example() {
-  const { resolved, set } = useTheme();
-  return (
-    <button onClick={() => set({ aesthetic: 'vaporwave', density: 'compact' })}>
-      Current: {resolved.aesthetic} / {resolved.density}
-    </button>
-  );
+	const { resolved, set } = useTheme();
+	return (
+		<button onClick={() => set({ aesthetic: 'vaporwave', density: 'compact' })}>
+			Current:
+			{' '}
+			{resolved.aesthetic}
+			{' '}
+			/
+			{resolved.density}
+		</button>
+	);
 }
 ```
 
@@ -68,16 +73,16 @@ import { useTheme } from '@unbranded-ds/react';
 import { SegmentedControl } from '@unbranded-ds/react';
 
 function LightDarkToggle() {
-  const { resolved, set } = useTheme();
-  return (
-    <SegmentedControl.Root
-      aria-label="Color scheme"
-      value={resolved.aesthetic}
-      onValueChange={(value) => set({ aesthetic: value })}
-    >
-      <SegmentedControl.Item value="light">Light</SegmentedControl.Item>
-      <SegmentedControl.Item value="dark">Dark</SegmentedControl.Item>
-    </SegmentedControl.Root>
-  );
+	const { resolved, set } = useTheme();
+	return (
+		<SegmentedControl.Root
+			aria-label="Color scheme"
+			value={resolved.aesthetic}
+			onValueChange={(value) => set({ aesthetic: value })}
+		>
+			<SegmentedControl.Item value="light">Light</SegmentedControl.Item>
+			<SegmentedControl.Item value="dark">Dark</SegmentedControl.Item>
+		</SegmentedControl.Root>
+	);
 }
 ```

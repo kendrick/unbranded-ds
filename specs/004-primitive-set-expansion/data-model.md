@@ -8,34 +8,34 @@ This document describes the structural model — components, slot composition, p
 
 ### Slot components
 
-| Slot | Underlying Base UI | Role |
-|---|---|---|
-| `<Tooltip.Provider>` | `Tooltip.Provider` | Configuration boundary (delayDuration, portal container) |
-| `<Tooltip.Trigger>` | `Tooltip.Trigger` | The element that opens the tooltip on hover, focus, or tap |
-| `<Tooltip.Content>` | `Tooltip.Content` | The floating panel |
+| Slot                 | Underlying Base UI | Role                                                       |
+| -------------------- | ------------------ | ---------------------------------------------------------- |
+| `<Tooltip.Provider>` | `Tooltip.Provider` | Configuration boundary (delayDuration, portal container)   |
+| `<Tooltip.Trigger>`  | `Tooltip.Trigger`  | The element that opens the tooltip on hover, focus, or tap |
+| `<Tooltip.Content>`  | `Tooltip.Content`  | The floating panel                                         |
 
 ### Props — Provider
 
-| Prop | Type | Default | Notes |
-|---|---|---|---|
-| `delayDuration` | `number` | `700` | Hover-open delay in milliseconds |
-| `container` | `HTMLElement \| null` | `document.body` | Portal mount target |
-| `onOpenChange` | `(open: boolean) => void` | — | Pass-through from Base UI |
+| Prop            | Type                      | Default         | Notes                            |
+| --------------- | ------------------------- | --------------- | -------------------------------- |
+| `delayDuration` | `number`                  | `700`           | Hover-open delay in milliseconds |
+| `container`     | `HTMLElement \| null`     | `document.body` | Portal mount target              |
+| `onOpenChange`  | `(open: boolean) => void` | —               | Pass-through from Base UI        |
 
 ### Props — Trigger
 
-| Prop | Type | Default | Notes |
-|---|---|---|---|
-| `asChild` | `boolean` | `false` | When true, passes props to the single child instead of injecting a `<button>` |
-| `className` | `string` | — | Merged via `cn()` |
+| Prop        | Type      | Default | Notes                                                                         |
+| ----------- | --------- | ------- | ----------------------------------------------------------------------------- |
+| `asChild`   | `boolean` | `false` | When true, passes props to the single child instead of injecting a `<button>` |
+| `className` | `string`  | —       | Merged via `cn()`                                                             |
 
 ### Props — Content
 
-| Prop | Type | Default | Notes |
-|---|---|---|---|
-| `side` | `'top' \| 'right' \| 'bottom' \| 'left'` | `'top'` | Position relative to trigger |
-| `align` | `'start' \| 'center' \| 'end'` | `'center'` | Alignment along the side |
-| `className` | `string` | — | Merged via `cn()` |
+| Prop        | Type                                     | Default    | Notes                        |
+| ----------- | ---------------------------------------- | ---------- | ---------------------------- |
+| `side`      | `'top' \| 'right' \| 'bottom' \| 'left'` | `'top'`    | Position relative to trigger |
+| `align`     | `'start' \| 'center' \| 'end'`           | `'center'` | Alignment along the side     |
+| `className` | `string`                                 | —          | Merged via `cn()`            |
 
 ### State
 
@@ -59,11 +59,11 @@ The wrapper does not add new events. Base UI's `onOpenChange` on the Provider is
 
 ### Props
 
-| Prop | Type | Default | Notes |
-|---|---|---|---|
-| `targetId` | `string` | `'main'` | The `id` of the element to jump to |
-| `children` | `ReactNode` | `'Skip to main content'` | The link text |
-| `className` | `string` | — | Merged via `cn()` |
+| Prop        | Type        | Default                  | Notes                              |
+| ----------- | ----------- | ------------------------ | ---------------------------------- |
+| `targetId`  | `string`    | `'main'`                 | The `id` of the element to jump to |
+| `children`  | `ReactNode` | `'Skip to main content'` | The link text                      |
+| `className` | `string`    | —                        | Merged via `cn()`                  |
 
 ### State
 
@@ -89,28 +89,28 @@ Native anchor `onClick`. The wrapper does NOT call `preventDefault()`. Native br
 
 ### Slot components
 
-| Slot | Underlying Base UI | Role |
-|---|---|---|
-| `<Slider.Root>` | `Slider.Root` | Container; holds value state |
-| `<Slider.Control>` | `Slider.Control` | The interactive surface where pointer and touch events are captured |
-| `<Slider.Track>` | `Slider.Track` | Visual track background |
-| `<Slider.Indicator>` | `Slider.Indicator` | Filled portion of the track |
-| `<Slider.Thumb>` | `Slider.Thumb` | Draggable handle; one for single-value, two for range |
+| Slot                 | Underlying Base UI | Role                                                                |
+| -------------------- | ------------------ | ------------------------------------------------------------------- |
+| `<Slider.Root>`      | `Slider.Root`      | Container; holds value state                                        |
+| `<Slider.Control>`   | `Slider.Control`   | The interactive surface where pointer and touch events are captured |
+| `<Slider.Track>`     | `Slider.Track`     | Visual track background                                             |
+| `<Slider.Indicator>` | `Slider.Indicator` | Filled portion of the track                                         |
+| `<Slider.Thumb>`     | `Slider.Thumb`     | Draggable handle; one for single-value, two for range               |
 
 ### Props — Root
 
-| Prop | Type | Default | Notes |
-|---|---|---|---|
-| `value` | `number[]` | — | Controlled. Single-value: `[50]`; range: `[20, 80]` |
-| `defaultValue` | `number[]` | `[min]` | Uncontrolled |
-| `min` | `number` | `0` | Lower bound (inclusive) |
-| `max` | `number` | `100` | Upper bound (inclusive) |
-| `step` | `number` | `1` | Increment for keyboard and drag |
-| `onValueChange` | `(value: number[]) => void` | — | Fired on every value change |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | CVA size axis |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | CVA orientation axis |
-| `disabled` | `boolean` | `false` | Disables drag, keyboard, and focus on thumbs |
-| `className` | `string` | — | Merged via `cn()` |
+| Prop            | Type                         | Default        | Notes                                               |
+| --------------- | ---------------------------- | -------------- | --------------------------------------------------- |
+| `value`         | `number[]`                   | —              | Controlled. Single-value: `[50]`; range: `[20, 80]` |
+| `defaultValue`  | `number[]`                   | `[min]`        | Uncontrolled                                        |
+| `min`           | `number`                     | `0`            | Lower bound (inclusive)                             |
+| `max`           | `number`                     | `100`          | Upper bound (inclusive)                             |
+| `step`          | `number`                     | `1`            | Increment for keyboard and drag                     |
+| `onValueChange` | `(value: number[]) => void`  | —              | Fired on every value change                         |
+| `size`          | `'sm' \| 'md' \| 'lg'`       | `'md'`         | CVA size axis                                       |
+| `orientation`   | `'horizontal' \| 'vertical'` | `'horizontal'` | CVA orientation axis                                |
+| `disabled`      | `boolean`                    | `false`        | Disables drag, keyboard, and focus on thumbs        |
+| `className`     | `string`                     | —              | Merged via `cn()`                                   |
 
 ### Props — Control, Track, Indicator, Thumb
 
@@ -125,14 +125,14 @@ All accept `className` (merged via `cn()`). Track accepts `children` (commonly t
 
 ### Keyboard (FR-018)
 
-| Key | Effect |
-|---|---|
-| Arrow Up / Arrow Right | Increment focused thumb by `step` |
-| Arrow Down / Arrow Left | Decrement focused thumb by `step` |
-| Home | Jump focused thumb to `min` |
-| End | Jump focused thumb to `max` |
-| PageUp | Increment by 10% of `(max - min)`, rounded to nearest step |
-| PageDown | Decrement by 10% of `(max - min)`, rounded to nearest step |
+| Key                     | Effect                                                     |
+| ----------------------- | ---------------------------------------------------------- |
+| Arrow Up / Arrow Right  | Increment focused thumb by `step`                          |
+| Arrow Down / Arrow Left | Decrement focused thumb by `step`                          |
+| Home                    | Jump focused thumb to `min`                                |
+| End                     | Jump focused thumb to `max`                                |
+| PageUp                  | Increment by 10% of `(max - min)`, rounded to nearest step |
+| PageDown                | Decrement by 10% of `(max - min)`, rounded to nearest step |
 
 ### Touch (FR-019)
 
@@ -157,31 +157,31 @@ When dragging one thumb past another, the dragged thumb stops at the other's cur
 
 ### Slot components
 
-| Slot | Underlying Base UI | Role |
-|---|---|---|
-| `<SegmentedControl.Root>` | `RadioGroup.Root` | Container; holds selected value |
-| `<SegmentedControl.Item>` | `RadioGroup.Item` | A single option |
+| Slot                      | Underlying Base UI | Role                            |
+| ------------------------- | ------------------ | ------------------------------- |
+| `<SegmentedControl.Root>` | `RadioGroup.Root`  | Container; holds selected value |
+| `<SegmentedControl.Item>` | `RadioGroup.Item`  | A single option                 |
 
 ### Props — Root
 
-| Prop | Type | Default | Notes |
-|---|---|---|---|
-| `value` | `string` | — | Controlled selected value |
-| `defaultValue` | `string` | — | Uncontrolled initial selected value |
-| `onValueChange` | `(value: string) => void` | — | Fired on selection change |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | CVA size axis |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | CVA orientation axis |
-| `disabled` | `boolean` | `false` | Disables all items |
-| `className` | `string` | — | Merged via `cn()` |
+| Prop            | Type                         | Default        | Notes                               |
+| --------------- | ---------------------------- | -------------- | ----------------------------------- |
+| `value`         | `string`                     | —              | Controlled selected value           |
+| `defaultValue`  | `string`                     | —              | Uncontrolled initial selected value |
+| `onValueChange` | `(value: string) => void`    | —              | Fired on selection change           |
+| `size`          | `'sm' \| 'md' \| 'lg'`       | `'md'`         | CVA size axis                       |
+| `orientation`   | `'horizontal' \| 'vertical'` | `'horizontal'` | CVA orientation axis                |
+| `disabled`      | `boolean`                    | `false`        | Disables all items                  |
+| `className`     | `string`                     | —              | Merged via `cn()`                   |
 
 ### Props — Item
 
-| Prop | Type | Default | Notes |
-|---|---|---|---|
-| `value` | `string` | — | Required. The value this item represents |
-| `disabled` | `boolean` | `false` | Per-item disable |
-| `children` | `ReactNode` | — | Visible label |
-| `className` | `string` | — | Merged via `cn()` |
+| Prop        | Type        | Default | Notes                                    |
+| ----------- | ----------- | ------- | ---------------------------------------- |
+| `value`     | `string`    | —       | Required. The value this item represents |
+| `disabled`  | `boolean`   | `false` | Per-item disable                         |
+| `children`  | `ReactNode` | —       | Visible label                            |
+| `className` | `string`    | —       | Merged via `cn()`                        |
 
 ### ARIA (FR-024)
 
@@ -191,14 +191,14 @@ When dragging one thumb past another, the dragged thumb stops at the other's cur
 
 ### Keyboard (FR-025, strict axis)
 
-| Orientation | Key | Effect |
-|---|---|---|
-| Horizontal | Left Arrow / Right Arrow | Move focus and selection between items |
-| Horizontal | Up Arrow / Down Arrow | No-op |
-| Vertical | Up Arrow / Down Arrow | Move focus and selection between items |
-| Vertical | Left Arrow / Right Arrow | No-op |
-| Both | Home | Jump to first item |
-| Both | End | Jump to last item |
+| Orientation | Key                      | Effect                                 |
+| ----------- | ------------------------ | -------------------------------------- |
+| Horizontal  | Left Arrow / Right Arrow | Move focus and selection between items |
+| Horizontal  | Up Arrow / Down Arrow    | No-op                                  |
+| Vertical    | Up Arrow / Down Arrow    | Move focus and selection between items |
+| Vertical    | Left Arrow / Right Arrow | No-op                                  |
+| Both        | Home                     | Jump to first item                     |
+| Both        | End                      | Jump to last item                      |
 
 ### Edge cases
 

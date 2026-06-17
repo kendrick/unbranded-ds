@@ -246,9 +246,9 @@ interface TabsListOwnProps {
 	children?: React.ReactNode;
 }
 
-type TabsListProps = TabsPrimitive.List.Props &
-	TabsListOwnProps &
-	VariantProps<typeof tabsListVariants>;
+type TabsListProps = TabsPrimitive.List.Props
+	& TabsListOwnProps
+	& VariantProps<typeof tabsListVariants>;
 
 /**
  * Groups tab trigger buttons with `role="tablist"`. Owns the `variant` axis
@@ -301,8 +301,8 @@ interface TabsTriggerOwnProps {
 	children?: React.ReactNode;
 }
 
-type TabsTriggerProps = Omit<TabsPrimitive.Tab.Props, 'value'> &
-	TabsTriggerOwnProps;
+type TabsTriggerProps = Omit<TabsPrimitive.Tab.Props, 'value'>
+	& TabsTriggerOwnProps;
 
 /**
  * An individual tab button with `role="tab"`. Requires a `value` prop
@@ -356,8 +356,8 @@ interface TabsContentOwnProps {
 	children?: React.ReactNode;
 }
 
-type TabsContentProps = Omit<TabsPrimitive.Panel.Props, 'value'> &
-	TabsContentOwnProps;
+type TabsContentProps = Omit<TabsPrimitive.Panel.Props, 'value'>
+	& TabsContentOwnProps;
 
 /**
  * A panel shown when its corresponding {@link TabsTrigger} is active.

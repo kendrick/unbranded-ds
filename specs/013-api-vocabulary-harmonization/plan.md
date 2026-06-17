@@ -29,7 +29,7 @@ So the substantive deliverables are the **audit** (which mostly confirms complia
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 - [x] **Section I/II (Repository shape)** — all work in `packages/react` (+ the constitution amendment and a migration note). No new package.
 - [⚠] **Section XI.2 (Shared vocabulary)** — **this spec amends Section XI.2** (FR-016) to be compat-first: the shared vocabulary governs props/slots the design system introduces; props/slots inherited from a wrapped library follow the upstream name. A sanctioned MINOR amendment via the Section X procedure, shipped in this PR with its rationale. Not a violation; the amendment is the point.
@@ -83,6 +83,7 @@ This spec has a hard internal gate, so the plan is two-phase, not a flat fan-out
 **Phase A — The audit (US1, the gate).** Enumerate, per component, each prop/slot that drifts from the shared/upstream vocabulary, with the proposed canonical name (defaulting to the upstream name), the blast radius (stories, sidecars, TSDoc, tests), codemod feasibility, and a hard-break-or-deprecate recommendation. **No rename starts until this is reviewed and approved.** The audit can fan out per-component (each component read independently), then converge into one reviewed list. Given the grounding, the audit is expected to confirm broad compliance and surface a short tail.
 
 **Phase B — Execute the approved list (after the gate).**
+
 - **The renames (parallel, per-component).** Each audit entry's rename, with its sidecar, TSDoc, stories, and tests moving in the same change. Disjoint component files, so the tail runs in parallel. Each ships the deprecation alias (old name accepted, warns via `warn()`).
 - **The structured-failure pass.** Route any prose-only warning/throw the audit flagged through `warn()`'s `{ code, path, message }` shape.
 - **The codemods.** One jscodeshift transform per mechanical rename (a prop or import rename), so a consumer migrates with one command.
@@ -106,5 +107,5 @@ See [research.md](research.md). Grounded against the code:
 > No constitution violations to justify. The Section XI.2 change is a governed amendment, tracked above.
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| — | — | — |
+| --------- | ---------- | ------------------------------------ |
+| —         | —          | —                                    |

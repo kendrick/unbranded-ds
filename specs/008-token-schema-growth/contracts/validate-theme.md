@@ -5,10 +5,10 @@ The runtime-theme validation API after this spec. Applies to the **runtime theme
 ## validateTheme
 
 ```ts
-function validateTheme(themeJson: unknown): ValidationResult
+function validateTheme(themeJson: unknown): ValidationResult;
 ```
 
-**Behavior change**: accept a *partial* theme (any subset of categories/keys), resolve it against the canonical defaults, and validate the merged result.
+**Behavior change**: accept a _partial_ theme (any subset of categories/keys), resolve it against the canonical defaults, and validate the merged result.
 
 ```
 1. parse: Zod schema accepts a partial theme (categories/keys optional).
@@ -25,25 +25,29 @@ function validateTheme(themeJson: unknown): ValidationResult
 **Result shape (unchanged):**
 
 ```ts
-type ValidationResult =
-  | { ok: true; theme: Theme }
-  | { ok: false; issues: ValidationIssue[] }
+type ValidationResult
+	= | { ok: true; theme: Theme }
+		| { ok: false; issues: ValidationIssue[] };
 
 interface ValidationIssue {
-  path: string
-  code: 'MISSING_TOKEN' | 'INVALID_TYPE' | 'UNKNOWN_TOKEN' | 'CONTRAST_FAILURE'
-  message: string
-  expected?: string; actual?: string; ratio?: number; threshold?: number
+	path: string;
+	code: 'MISSING_TOKEN' | 'INVALID_TYPE' | 'UNKNOWN_TOKEN' | 'CONTRAST_FAILURE';
+	message: string;
+	expected?: string;
+	actual?: string;
+	ratio?: number;
+	threshold?: number;
 }
 ```
 
 ## registerTheme
 
 ```ts
-function registerTheme(themeJson: Theme): void   // throws ThemeValidationError
+function registerTheme(themeJson: Theme): void; // throws ThemeValidationError
 ```
 
 Same resolve-then-validate, applied before BOTH:
+
 - the `validateTheme` call (already there), and
 - the post-oklch-conversion contrast pass (`runtime.ts:97`), which currently skips a pair when one converted side is absent. It MUST instead resolve the converted colors against the resolved defaults and check the full pair set.
 
@@ -51,14 +55,14 @@ Then it injects `<style>[data-theme="<name>"]{ ... }`. Injection is unchanged.
 
 ## Behavioral contract (acceptance)
 
-| Input | Expected |
-| --- | --- |
-| Full valid runtime theme | `{ ok: true }` (unchanged from today) |
-| Partial theme: only `color` + `radius` | `{ ok: true }`; omitted categories inherit defaults; resolved theme is complete |
+| Input                                                                    | Expected                                                                                                           |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| Full valid runtime theme                                                 | `{ ok: true }` (unchanged from today)                                                                              |
+| Partial theme: only `color` + `radius`                                   | `{ ok: true }`; omitted categories inherit defaults; resolved theme is complete                                    |
 | Partial theme: overrides `color.background`, inherits `color.foreground` | contrast checked against inherited foreground + overridden background; fails AA → `CONTRAST_FAILURE` (NOT skipped) |
-| Color-only theme (prior format) | `{ ok: true }` — no regression |
-| Theme + defaults both missing a required token | `MISSING_TOKEN(path)` (guards default completeness) |
-| Override with a malformed value | `INVALID_TYPE(path)` |
+| Color-only theme (prior format)                                          | `{ ok: true }` — no regression                                                                                     |
+| Theme + defaults both missing a required token                           | `MISSING_TOKEN(path)` (guards default completeness)                                                                |
+| Override with a malformed value                                          | `INVALID_TYPE(path)`                                                                                               |
 
 ## Non-goals
 

@@ -32,7 +32,7 @@ The steering for this first example is **simple and clone-able**, which the clar
 - Q: How does the example participate in CI? → A: Strict lint and typecheck plus the Playwright suite, excluded from the published build and release.
 - Q: What does the nested route demonstrate? → A: Theme and density persistence across navigation with no flash, and it hosts the pinned vaporwave + compact showcase.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Clone a working starter and run it (Priority: P1)
 
@@ -122,7 +122,7 @@ A maintainer changes a component, a token, or the wiring and needs to know the e
 - JavaScript is disabled: the page still renders with the default (or pre-saved) theme, even though the toggle cannot operate.
 - A component is placed in a narrow container such as a sidebar or modal rather than full width: container-query-driven layout keeps it correct instead of relying on the viewport width.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -149,7 +149,7 @@ A maintainer changes a component, a token, or the wiring and needs to know the e
 
 This feature persists no new data. It reads and writes the existing theme and density preferences through the storage keys the design system already owns; it introduces no entities of its own.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

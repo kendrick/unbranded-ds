@@ -16,29 +16,29 @@ The **polymorphic prop** is the only finding, and it is not a rename list; it is
 
 ## Per-component result
 
-| Component | Prop vocab | Slots | Polymorphic | Failures | Status |
-|---|---|---|---|---|---|
-| Button | `variant`/`size` ✓ | n/a | n/a | none ✓ | compliant |
-| Card | ✓ | shadcn slots ✓ | n/a | none ✓ | compliant |
-| Checkbox | ✓ | Base UI passthrough ✓ | none | none ✓ | compliant |
-| Dialog | ✓ | shadcn `Content`/`Trigger` ✓ | `render` passthrough | none ✓ | compliant |
-| Input | ✓ | n/a | n/a | none ✓ | compliant |
-| Label | ✓ | n/a | n/a | none ✓ | compliant |
-| SegmentedControl | `variant`/`size` ✓ | ✓ | none | `warn()` ✓ | compliant |
-| Select | ✓ | shadcn `Content`/`Trigger` ✓ | `render` passthrough | none ✓ | compliant |
-| SkipLink | ✓ | n/a | none | none ✓ | compliant |
-| Slider | ✓ | Base UI `Root`/`Track`/`Thumb` ✓ | none | `warn()` ✓ | compliant |
-| Switch | ✓ | Base UI passthrough ✓ | none | none ✓ | compliant |
-| Tabs | `variant` (`default`/`line`) ✓ | shadcn slots ✓ | none | none ✓ | compliant |
-| Tooltip | ✓ | shadcn `Trigger`/`Content` ✓ | **`asChild`** (shadcn) | none ✓ | compliant; see finding |
-| VisuallyHidden | ✓ | n/a | **`as`** (element-type) | none ✓ | flagged; see finding |
+| Component        | Prop vocab                     | Slots                            | Polymorphic             | Failures   | Status                 |
+| ---------------- | ------------------------------ | -------------------------------- | ----------------------- | ---------- | ---------------------- |
+| Button           | `variant`/`size` ✓             | n/a                              | n/a                     | none ✓     | compliant              |
+| Card             | ✓                              | shadcn slots ✓                   | n/a                     | none ✓     | compliant              |
+| Checkbox         | ✓                              | Base UI passthrough ✓            | none                    | none ✓     | compliant              |
+| Dialog           | ✓                              | shadcn `Content`/`Trigger` ✓     | `render` passthrough    | none ✓     | compliant              |
+| Input            | ✓                              | n/a                              | n/a                     | none ✓     | compliant              |
+| Label            | ✓                              | n/a                              | n/a                     | none ✓     | compliant              |
+| SegmentedControl | `variant`/`size` ✓             | ✓                                | none                    | `warn()` ✓ | compliant              |
+| Select           | ✓                              | shadcn `Content`/`Trigger` ✓     | `render` passthrough    | none ✓     | compliant              |
+| SkipLink         | ✓                              | n/a                              | none                    | none ✓     | compliant              |
+| Slider           | ✓                              | Base UI `Root`/`Track`/`Thumb` ✓ | none                    | `warn()` ✓ | compliant              |
+| Switch           | ✓                              | Base UI passthrough ✓            | none                    | none ✓     | compliant              |
+| Tabs             | `variant` (`default`/`line`) ✓ | shadcn slots ✓                   | none                    | none ✓     | compliant              |
+| Tooltip          | ✓                              | shadcn `Trigger`/`Content` ✓     | **`asChild`** (shadcn)  | none ✓     | compliant; see finding |
+| VisuallyHidden   | ✓                              | n/a                              | **`as`** (element-type) | none ✓     | flagged; see finding   |
 
 ## The one finding: the polymorphic prop is three distinct mechanisms
 
 The brief and the clarify (Q4: "unify on `render`, deprecate `as`") assumed one polymorphic prop split across `as` and `render`. The code has **three patterns that do different things**:
 
-- **`as`** (VisuallyHidden): polymorphic *element type*; render as a `div` instead of a `span`. A leaf-primitive concern.
-- **`asChild`** (Tooltip): the *Slot / merge* pattern; attach the trigger's behavior to an existing child, no wrapper. This is **shadcn's (Radix's) idiom**, and a shadcn user expects it.
+- **`as`** (VisuallyHidden): polymorphic _element type_; render as a `div` instead of a `span`. A leaf-primitive concern.
+- **`asChild`** (Tooltip): the _Slot / merge_ pattern; attach the trigger's behavior to an existing child, no wrapper. This is **shadcn's (Radix's) idiom**, and a shadcn user expects it.
 - **`render`** (the Base UI compounds): Base UI's prop, inherited by passthrough. This is **Base UI's idiom**.
 
 They are not interchangeable. You cannot rename `as` to `asChild` (one swaps the element, the other merges onto a child), and renaming Tooltip's `asChild` to `render` would **break shadcn compatibility**; exactly the non-negotiable this spec is built to protect.

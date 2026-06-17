@@ -9,12 +9,12 @@ For one minor, a renamed prop accepts BOTH names. The old name is mapped onto th
 ```ts
 // per-component alias, at the top of the component body
 if (oldName !== undefined) {
-  warn({
-    code: 'deprecated-prop',
-    path: 'Tooltip.as',
-    message: '`as` is deprecated; use `render`. It will be removed next minor.',
-  });
-  newName ??= oldName; // the new name wins if both are passed
+	warn({
+		code: 'deprecated-prop',
+		path: 'Tooltip.as',
+		message: '`as` is deprecated; use `render`. It will be removed next minor.',
+	});
+	newName ??= oldName; // the new name wins if both are passed
 }
 ```
 

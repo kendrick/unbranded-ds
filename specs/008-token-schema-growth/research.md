@@ -13,11 +13,11 @@
 
 **Bonus finding**: the three easing values from FR-004 are exactly Tailwind's default easing curves, renamed by role:
 
-| DS token | Value | Tailwind default equivalent |
-| --- | --- | --- |
-| `ease-standard` | `cubic-bezier(0.4, 0, 0.2, 1)` | `--ease-in-out` |
-| `ease-decelerate` | `cubic-bezier(0, 0, 0.2, 1)` | `--ease-out` |
-| `ease-accelerate` | `cubic-bezier(0.4, 0, 1, 1)` | `--ease-in` |
+| DS token          | Value                          | Tailwind default equivalent |
+| ----------------- | ------------------------------ | --------------------------- |
+| `ease-standard`   | `cubic-bezier(0.4, 0, 0.2, 1)` | `--ease-in-out`             |
+| `ease-decelerate` | `cubic-bezier(0, 0, 0.2, 1)`   | `--ease-out`                |
+| `ease-accelerate` | `cubic-bezier(0.4, 0, 1, 1)`   | `--ease-in`                 |
 
 So the easing set is maximally conservative — it is the platform default, given semantic names that map to motion intent.
 
@@ -35,14 +35,14 @@ So the easing set is maximally conservative — it is the platform default, give
 
 **Decision**: Author with standard DTCG `$type` values consistent with the existing sources.
 
-| Token | `$type` | Example `$value` |
-| --- | --- | --- |
-| `motion.duration.*` | `duration` | `120ms` |
-| `motion.easing.*` | `cubicBezier` | `cubic-bezier(0.4, 0, 0.2, 1)` |
-| `typography.font-serif` | `fontFamily` | `ui-serif, Georgia, Cambria, "Times New Roman", Times, serif` |
-| `typography.size-2xl` / `size-3xl` | `dimension` | `1.5rem` / `1.875rem` |
-| `ring.width` | `dimension` | `3px` |
-| `z-index.*` | `number` | `50` |
+| Token                              | `$type`       | Example `$value`                                              |
+| ---------------------------------- | ------------- | ------------------------------------------------------------- |
+| `motion.duration.*`                | `duration`    | `120ms`                                                       |
+| `motion.easing.*`                  | `cubicBezier` | `cubic-bezier(0.4, 0, 0.2, 1)`                                |
+| `typography.font-serif`            | `fontFamily`  | `ui-serif, Georgia, Cambria, "Times New Roman", Times, serif` |
+| `typography.size-2xl` / `size-3xl` | `dimension`   | `1.5rem` / `1.875rem`                                         |
+| `ring.width`                       | `dimension`   | `3px`                                                         |
+| `z-index.*`                        | `number`      | `50`                                                          |
 
 **Rationale**: mirrors how the existing categories declare `$type` (`dimension`, `fontFamily`, `fontWeight`, `number`, `shadow`, `color`). The Style Dictionary `css` transform group already handles these; the TS token map records `$type` verbatim.
 

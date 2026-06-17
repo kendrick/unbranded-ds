@@ -16,7 +16,7 @@
 - Q: Where in the constitution does the new per-PR changeset rule live? → A: Append to Section X (Governance) Compliance Review (option B). Section X already has the exact scope the changeset rule needs ("every PR that touches packages/..."); appending one sentence extends the existing compliance pattern. Section VIII still gets the `@changesets/cli` tool-list entry separately.
 - Q: Should we support snapshot or prerelease releases? → A: Defer (option A). Spec 003 ships `latest`-only releases. Snapshot or pre-mode support lands in a future spec when there's concrete demand (for-coleman asking for early-access builds, a community consumer testing a breaking change, etc.). Low value for a single-contributor DS at this stage.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 — Maintainer captures intent per PR rather than hand-authoring releases (Priority: P1)
 
@@ -90,7 +90,7 @@ The 0.2.0 release shipped CHANGELOG entries that were hand-authored as a one-tim
 - **The `workspace:*` internal dependency reference between packages.** When one package bumps, the other's lockfile reference to it must stay accurate. The configured `updateInternalDependencies: "patch"` setting handles this automatically; a separate manual lockfile edit is never required.
 - **Constitution amendment lands together or separately?** This spec includes the Section VIII tooling-baseline update and the new workflow rule. If spec 005 (Section XI amendment) lands first, the constitution version is already 1.1.0 and this spec bumps to 1.2.0. If this spec lands first, it bumps to 1.1.0 and spec 005 later goes to 1.2.0. Either ordering produces a coherent SYNC IMPACT REPORT chain.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -116,7 +116,7 @@ The 0.2.0 release shipped CHANGELOG entries that were hand-authored as a one-tim
 - **"Version Packages" pull request**: A canonical PR opened by the release workflow that batches version bumps and CHANGELOG updates for review before publish. Pattern is standard to Changesets and well-known to anyone who has used the tool elsewhere.
 - **Contributor doc**: A short walkthrough of the workflow from a contributor's perspective, discoverable from the repo root. Pairs the CI check with a place to learn the right answer when CI complains.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

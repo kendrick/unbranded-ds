@@ -10,10 +10,10 @@ No persisted data. The "model" is the set of token/theme entities and the resolu
 
 A named dimension of theming. Fixed set for this spec.
 
-| Axis | Attribute | Source dir | Precedence |
-| --- | --- | --- | --- |
-| `aesthetic` | `data-theme` | `themes/aesthetic/` | base |
-| `density` | `data-density` | `themes/density/` | wins collisions |
+| Axis        | Attribute      | Source dir          | Precedence      |
+| ----------- | -------------- | ------------------- | --------------- |
+| `aesthetic` | `data-theme`   | `themes/aesthetic/` | base            |
+| `density`   | `data-density` | `themes/density/`   | wins collisions |
 
 A consumer activates at most one theme per axis. The axis → attribute map and the per-axis theme list come from `src/axes.ts` (`listThemesByAxis()`), the single source the build, MCP, and runtime read.
 

@@ -50,16 +50,16 @@ grep -r "shadow-neon" packages/tokens/dist/css        # emits as a CSS var
 
 ## The test matrix (what "test everything" means here)
 
-| Surface | Must assert |
-|---------|-------------|
-| `composeTokens` | fold, density-wins on overlap, single=identity, empty=defaults; `resolveTheme` unchanged |
-| `validateTheme` | composed contrast fails loudly; `AXIS_CONFLICT` on two-on-one-axis; single-axis byte-identical |
-| token map | schema `source:'schema'` shape unchanged; `shadows.neon` `source:'theme-extension'`; drift guard; dedupe |
-| MCP | multi-axis resolve; `source` labels; extension returned not rejected; soft absent vs hard unknown; unknown axis ignored |
-| runtime | per-axis selector; composed vars = `composeTokens`; bootstrap `data-density` |
-| demo themes | validate + build; compose to the union; `shadows.neon` emits |
-| build | `@layer` order; density delta-only (doesn't clobber aesthetic non-density tokens) |
-| CI | MCP `tools/list` smoke still green |
+| Surface         | Must assert                                                                                                             |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `composeTokens` | fold, density-wins on overlap, single=identity, empty=defaults; `resolveTheme` unchanged                                |
+| `validateTheme` | composed contrast fails loudly; `AXIS_CONFLICT` on two-on-one-axis; single-axis byte-identical                          |
+| token map       | schema `source:'schema'` shape unchanged; `shadows.neon` `source:'theme-extension'`; drift guard; dedupe                |
+| MCP             | multi-axis resolve; `source` labels; extension returned not rejected; soft absent vs hard unknown; unknown axis ignored |
+| runtime         | per-axis selector; composed vars = `composeTokens`; bootstrap `data-density`                                            |
+| demo themes     | validate + build; compose to the union; `shadows.neon` emits                                                            |
+| build           | `@layer` order; density delta-only (doesn't clobber aesthetic non-density tokens)                                       |
+| CI              | MCP `tools/list` smoke still green                                                                                      |
 
 ## Watch-outs
 

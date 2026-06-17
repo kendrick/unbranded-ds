@@ -10,7 +10,7 @@
 ## Format: `[ID] [P?] [Story] Description`
 
 - **[P]** = parallelizable: a different file with no dependency on an incomplete task.
-- The five Phase-3 units are mutually `[P]`; tasks *within* a unit that share a file are sequential.
+- The five Phase-3 units are mutually `[P]`; tasks _within_ a unit that share a file are sequential.
 
 ---
 
@@ -143,7 +143,7 @@ F1 + F2 → P1 (validator) + P2's T009 (CSS @layer) + P4 (runtime) → T020 (par
 
 ### Notes
 
-- **The delta-fold is the correctness crux** (research D2): compose folds each axis's resolved *overrides*, not complete sets. A complete-set merge clobbers; the tests in T003 pin this.
+- **The delta-fold is the correctness crux** (research D2): compose folds each axis's resolved _overrides_, not complete sets. A complete-set merge clobbers; the tests in T003 pin this.
 - **The parity oracle (T020) is the robustness backstop** (research D9): it services the interest on the inherited multi-engine debt. The principal is the resolution-unification follow-up; T020 gets deleted when that lands.
 - **Density emits its delta, not the full set** (T009) — else it clobbers aesthetic's non-density tokens. Verify the emitted density CSS contains only compact's overrides.
 - **`source` is optional** on `TokenDefinition` — existing consumers keep compiling; always emit a value.
