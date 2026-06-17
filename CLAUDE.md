@@ -13,6 +13,8 @@ Auto-generated from all feature plans. Last updated: 2026-06-16
 - N/A — build/packaging change; no runtime or persisted state (017-react-use-client)
 - TypeScript 5.x, strict, no `any` (Constitution VIII) + Vitest 3 (browser mode), `@vitest/browser` (^3, the optional peer that is currently absent), `playwright` (Chromium; `playwright@1.61.0` is already in the workspace store), `@storybook/addon-vitest` ^10.3 (`storybookTest()` plugin, already a devDep), `@storybook/addon-a11y` ^10.3 (axe, `test: 'error'` already set), Storybook 10.3 `@storybook/react-vite`, GitHub Actions (019-storybook-test-runner-ci)
 - N/A — CI and test configuration; no runtime or persisted state (019-storybook-test-runner-ci)
+- TypeScript 5.x, strict, no `any` (Constitution VIII) + Vitest 3 (browser mode), `@vitest/browser` + `playwright` (Chromium), `@storybook/addon-vitest` (`storybookTest()`), `@storybook/addon-a11y`, Storybook 10.3 `@storybook/react-vite`, Tailwind CSS v4 (`@tailwindcss/vite`; the preset's `@theme inline` block) (020-storybook-zindex-test-env)
+- N/A — test config; no runtime or persisted state (020-storybook-zindex-test-env)
 
 - TypeScript 5.x in `tsx`-tagged code blocks only (validated via `tsc --noEmit` per spec 005's compile validator). Sidecar prose is plain CommonMark. + All shipped in spec 005. The template at `packages/react/src/components/_template/Component.usage.md`, the validator at `scripts/validate-sidecars.ts`, the `AGENTS.md` component index, and the CI step that wires the validator into the verify job. (006-sidecar-retrofit)
 - Filesystem only. 14 `<Component>.usage.md` files co-located with their `.tsx` source. One running inbox file: `specs/006-sidecar-retrofit/spec-007-inbox.md`. 15 `.changeset/*.md` files (14 component + 1 backfill). (006-sidecar-retrofit)
@@ -58,9 +60,9 @@ npm test && npm run lint
 TypeScript 5.x, strict mode, no `any` (EVER): Follow standard conventions
 
 ## Recent Changes
+- 020-storybook-zindex-test-env: Added TypeScript 5.x, strict, no `any` (Constitution VIII) + Vitest 3 (browser mode), `@vitest/browser` + `playwright` (Chromium), `@storybook/addon-vitest` (`storybookTest()`), `@storybook/addon-a11y`, Storybook 10.3 `@storybook/react-vite`, Tailwind CSS v4 (`@tailwindcss/vite`; the preset's `@theme inline` block)
 - 019-storybook-test-runner-ci: Added TypeScript 5.x, strict, no `any` (Constitution VIII) + Vitest 3 (browser mode), `@vitest/browser` (^3, the optional peer that is currently absent), `playwright` (Chromium; `playwright@1.61.0` is already in the workspace store), `@storybook/addon-vitest` ^10.3 (`storybookTest()` plugin, already a devDep), `@storybook/addon-a11y` ^10.3 (axe, `test: 'error'` already set), Storybook 10.3 `@storybook/react-vite`, GitHub Actions
 - 017-react-use-client: Added TypeScript 5.x, strict, no `any` (Constitution VIII) + sup ^8 (the bundler gaining the banner), React 19 (peer), `@base-ui-components/react` (peer), Next.js 15 App Router (the RSC consumer and guard), Vitest ^3 (the directive unit test), `@playwright/test` (the example e2e that runs `next build`)
-- 018-button-destructive-contrast: Added TypeScript 5.x, strict, no `any` (Constitution VIII). + Style Dictionary v4 (token build + per-cell CSS emission), Zod (`schema.ts` token schema + `contrastPairs`), the `color.ts` WCAG contrast math, Tailwind CSS v4 (`@theme` preset auto-maps tokens to utilities), `class-variance-authority` + `cn()` (the Button `destructive` variant), React 19, Storybook 10.3 (Button stories + addon-a11y), `@playwright/test` + `@axe-core/playwright` (example e2e a11y).
 
 
 <!-- MANUAL ADDITIONS START -->
