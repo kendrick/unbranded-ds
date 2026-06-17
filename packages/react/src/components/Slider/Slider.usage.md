@@ -16,32 +16,32 @@ import { Slider } from '@unbranded-ds/react';
 
 ### Slider.Root props
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `number[]` | — | Controlled value. A single-thumb slider passes `[50]`; a range slider passes `[20, 80]`. Pair with `onValueChange` to own the value yourself. Values outside `[min, max]` are clamped at render time and a structured warning is emitted. |
-| `defaultValue` | `number[]` | — | Uncontrolled initial value. Same array shape as `value`. Use this when you don't need to read or drive the value from parent state. |
-| `min` | `number` | `0` | Lower bound of the value range, inclusive. When `min >= max` the component clamps to `[min, min + 1]` and warns. |
-| `max` | `number` | `100` | Upper bound of the value range, inclusive. |
-| `step` | `number` | `1` | Increment applied by keyboard and drag. Values at or below zero fall back to `1` with a structured warning. PageUp/PageDown move 10% of the range rounded to the nearest step. |
-| `onValueChange` | `(value: number[]) => void` | — | Fires on every change. Receives the new value as `number[]`, matching the shape of `value` and `defaultValue`. Base UI's event-details object is stripped; the array is all you need. |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Visual size axis. Affects track height and thumb diameter. |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Layout axis. Horizontal sliders stretch along the inline axis; vertical sliders along the block axis. |
-| `disabled` | `boolean` | `false` | Blocks drag, keyboard interaction, and focus on the thumbs. The slider still renders with the current value. |
-| `className` | `string` | — | Additional classes merged onto the root element via `cn()`. |
+| Prop            | Type                         | Default        | Description                                                                                                                                                                                                                               |
+| --------------- | ---------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`         | `number[]`                   | —              | Controlled value. A single-thumb slider passes `[50]`; a range slider passes `[20, 80]`. Pair with `onValueChange` to own the value yourself. Values outside `[min, max]` are clamped at render time and a structured warning is emitted. |
+| `defaultValue`  | `number[]`                   | —              | Uncontrolled initial value. Same array shape as `value`. Use this when you don't need to read or drive the value from parent state.                                                                                                       |
+| `min`           | `number`                     | `0`            | Lower bound of the value range, inclusive. When `min >= max` the component clamps to `[min, min + 1]` and warns.                                                                                                                          |
+| `max`           | `number`                     | `100`          | Upper bound of the value range, inclusive.                                                                                                                                                                                                |
+| `step`          | `number`                     | `1`            | Increment applied by keyboard and drag. Values at or below zero fall back to `1` with a structured warning. PageUp/PageDown move 10% of the range rounded to the nearest step.                                                            |
+| `onValueChange` | `(value: number[]) => void`  | —              | Fires on every change. Receives the new value as `number[]`, matching the shape of `value` and `defaultValue`. Base UI's event-details object is stripped; the array is all you need.                                                     |
+| `size`          | `'sm' \| 'md' \| 'lg'`       | `'md'`         | Visual size axis. Affects track height and thumb diameter.                                                                                                                                                                                |
+| `orientation`   | `'horizontal' \| 'vertical'` | `'horizontal'` | Layout axis. Horizontal sliders stretch along the inline axis; vertical sliders along the block axis.                                                                                                                                     |
+| `disabled`      | `boolean`                    | `false`        | Blocks drag, keyboard interaction, and focus on the thumbs. The slider still renders with the current value.                                                                                                                              |
+| `className`     | `string`                     | —              | Additional classes merged onto the root element via `cn()`.                                                                                                                                                                               |
 
 ### Slider.Control props
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | — | Additional classes merged via `cn()`. |
+| Prop        | Type     | Default | Description                           |
+| ----------- | -------- | ------- | ------------------------------------- |
+| `className` | `string` | —       | Additional classes merged via `cn()`. |
 
 `Slider.Control` is the positioning wrapper that holds `Slider.Track` and the thumb(s) in alignment. It inherits the remaining Base UI `Slider.Control` props (e.g., `ref`) and passes them through.
 
 ### Slider.Track props
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | — | Additional classes merged via `cn()`. |
+| Prop        | Type     | Default | Description                           |
+| ----------- | -------- | ------- | ------------------------------------- |
+| `className` | `string` | —       | Additional classes merged via `cn()`. |
 
 `Slider.Track` is the bar background that gives the slider its visual rail. It inherits the remaining Base UI `Slider.Track` props and passes them through.
 
@@ -49,15 +49,15 @@ import { Slider } from '@unbranded-ds/react';
 
 Inherits all props from Base UI's `Slider.Indicator`. Reach for this slot only when you need to suppress the filled range or replace it with a custom visual — omitting it from the tree hides the fill entirely.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | — | Additional classes merged via `cn()`. |
+| Prop        | Type     | Default | Description                           |
+| ----------- | -------- | ------- | ------------------------------------- |
+| `className` | `string` | —       | Additional classes merged via `cn()`. |
 
 ### Slider.Thumb props
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | — | Additional classes merged via `cn()`. |
+| Prop        | Type     | Default | Description                           |
+| ----------- | -------- | ------- | ------------------------------------- |
+| `className` | `string` | —       | Additional classes merged via `cn()`. |
 
 Add one `Slider.Thumb` per value: a single-thumb slider renders one, a range slider renders two. `Slider.Thumb` inherits the remaining Base UI `Slider.Thumb` props (e.g., `aria-label`) and passes them through.
 
@@ -71,18 +71,18 @@ The minimal composition: a root with bounds and a default value, the control/tra
 import { Slider } from '@unbranded-ds/react';
 
 export function BasicSlider() {
-  return (
-    <div style={{ width: '320px' }}>
-      <Slider.Root defaultValue={[50]} min={0} max={100} step={1}>
-        <Slider.Control>
-          <Slider.Track>
-            <Slider.Indicator />
-          </Slider.Track>
-          <Slider.Thumb />
-        </Slider.Control>
-      </Slider.Root>
-    </div>
-  );
+	return (
+		<div style={{ width: '320px' }}>
+			<Slider.Root defaultValue={[50]} min={0} max={100} step={1}>
+				<Slider.Control>
+					<Slider.Track>
+						<Slider.Indicator />
+					</Slider.Track>
+					<Slider.Thumb />
+				</Slider.Control>
+			</Slider.Root>
+		</div>
+	);
 }
 ```
 
@@ -91,24 +91,24 @@ export function BasicSlider() {
 When the parent needs to read or drive the current value, pass `value` and `onValueChange`. Render the value alongside the slider so users with low vision can confirm the exact figure.
 
 ```tsx
-import { useState } from 'react';
 import { Slider } from '@unbranded-ds/react';
+import { useState } from 'react';
 
 export function ControlledSlider() {
-  const [value, setValue] = useState<number[]>([42]);
-  return (
-    <div style={{ width: '320px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      <Slider.Root value={value} onValueChange={setValue}>
-        <Slider.Control>
-          <Slider.Track>
-            <Slider.Indicator />
-          </Slider.Track>
-          <Slider.Thumb />
-        </Slider.Control>
-      </Slider.Root>
-      <output>{`Value: ${value[0]}`}</output>
-    </div>
-  );
+	const [value, setValue] = useState<number[]>([42]);
+	return (
+		<div style={{ width: '320px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+			<Slider.Root value={value} onValueChange={setValue}>
+				<Slider.Control>
+					<Slider.Track>
+						<Slider.Indicator />
+					</Slider.Track>
+					<Slider.Thumb />
+				</Slider.Control>
+			</Slider.Root>
+			<output>{`Value: ${value[0]}`}</output>
+		</div>
+	);
 }
 ```
 
@@ -120,19 +120,19 @@ Pass two values in `defaultValue` and render two `Slider.Thumb` elements. Base U
 import { Slider } from '@unbranded-ds/react';
 
 export function RangeSlider() {
-  return (
-    <div style={{ width: '320px' }}>
-      <Slider.Root defaultValue={[20, 80]}>
-        <Slider.Control>
-          <Slider.Track>
-            <Slider.Indicator />
-          </Slider.Track>
-          <Slider.Thumb />
-          <Slider.Thumb />
-        </Slider.Control>
-      </Slider.Root>
-    </div>
-  );
+	return (
+		<div style={{ width: '320px' }}>
+			<Slider.Root defaultValue={[20, 80]}>
+				<Slider.Control>
+					<Slider.Track>
+						<Slider.Indicator />
+					</Slider.Track>
+					<Slider.Thumb />
+					<Slider.Thumb />
+				</Slider.Control>
+			</Slider.Root>
+		</div>
+	);
 }
 ```
 
@@ -144,18 +144,18 @@ Set `orientation="vertical"` on the root. The track grows along the block axis a
 import { Slider } from '@unbranded-ds/react';
 
 export function VerticalSlider() {
-  return (
-    <div style={{ height: '240px' }}>
-      <Slider.Root defaultValue={[50]} orientation="vertical">
-        <Slider.Control>
-          <Slider.Track>
-            <Slider.Indicator />
-          </Slider.Track>
-          <Slider.Thumb />
-        </Slider.Control>
-      </Slider.Root>
-    </div>
-  );
+	return (
+		<div style={{ height: '240px' }}>
+			<Slider.Root defaultValue={[50]} orientation="vertical">
+				<Slider.Control>
+					<Slider.Track>
+						<Slider.Indicator />
+					</Slider.Track>
+					<Slider.Thumb />
+				</Slider.Control>
+			</Slider.Root>
+		</div>
+	);
 }
 ```
 

@@ -61,6 +61,7 @@ jobs:
 ```
 
 **Required behavior**:
+
 - A PR that modifies only docs, configuration, or files outside `packages/tokens/` and `packages/react/` MUST pass without requiring a changeset (the `detect` step short-circuits).
 - A PR that modifies any file under `packages/tokens/` or `packages/react/` and lacks a `.changeset/*.md` file MUST fail with the named error message that points the contributor at `.changeset/README.md`.
 - The check MUST complete in under 30 seconds for any PR.
@@ -117,14 +118,15 @@ jobs:
         with:
           version: pnpm changeset version
           publish: pnpm changeset publish
-          commit: "chore(release): version packages"
-          title: "chore(release): version packages"
+          commit: 'chore(release): version packages'
+          title: 'chore(release): version packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 ```
 
 **Required behavior**:
+
 - When unconsumed changesets are on `main`, the action MUST open or update a single "Version Packages" PR. The PR's commit and title both use the prefix `chore(release):` to keep the conventional-commits style consistent with the rest of the repo.
 - When the "Version Packages" PR is merged (i.e., the version-bump commits are on `main`), the action MUST run `pnpm changeset publish` and publish the affected packages to npm using the `NPM_TOKEN` secret.
 - The build step MUST run before publish — `pnpm changeset publish` will publish whatever is in each package's `files` array, which assumes `dist/` is present.

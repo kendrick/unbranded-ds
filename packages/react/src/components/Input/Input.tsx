@@ -1,5 +1,5 @@
-import { Input as InputPrimitive } from '@base-ui-components/react/input';
 import type * as React from 'react';
+import { Input as InputPrimitive } from '@base-ui-components/react/input';
 
 import { cn } from '../../lib/cn';
 
@@ -85,8 +85,8 @@ interface InputOwnProps {
 // HTML input attribute (id, aria-*, data-*, autoComplete, etc.). InputOwnProps
 // wins on overlap — TypeScript prefers the later type in a right-leaning
 // intersection, which is what we want for the documented props.
-type InputProps = Omit<React.ComponentProps<'input'>, keyof InputOwnProps> &
-	InputOwnProps;
+type InputProps = Omit<React.ComponentProps<'input'>, keyof InputOwnProps>
+	& InputOwnProps;
 
 /**
  * A single-line text field for collecting short, unformatted strings from the user.

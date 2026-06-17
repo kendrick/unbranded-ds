@@ -10,16 +10,16 @@ Use Select when the list of options is long enough that showing them all inline 
 
 ```tsx
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectScrollDownButton,
-  SelectScrollUpButton,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectScrollDownButton,
+	SelectScrollUpButton,
+	SelectSeparator,
+	SelectTrigger,
+	SelectValue,
 } from '@unbranded-ds/react';
 ```
 
@@ -29,51 +29,51 @@ import {
 
 `Select` is a direct alias for the Base UI `SelectRoot`. It owns the open/closed state, the selected value, and the form integration surface.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `Value \| null` | — | The controlled selected value. Use with `onValueChange` when you need to own the state. |
-| `defaultValue` | `Value \| null` | — | The uncontrolled initial value. Omit if you want to start with nothing selected. |
-| `onValueChange` | `(value: Value \| null, event) => void` | — | Fires whenever the selection changes. Receives the new value plus Base UI change event details. |
-| `open` | `boolean` | — | Controls the popup open state from outside. Pair with `onOpenChange`. |
-| `defaultOpen` | `boolean` | `false` | Opens the popup on first render without owning the state. Useful for demos or auto-open flows. |
-| `onOpenChange` | `(open: boolean, event) => void` | — | Fires when the popup opens or closes. |
-| `disabled` | `boolean` | `false` | Disables the entire Select, including the trigger and all items. |
-| `required` | `boolean` | `false` | Marks the hidden input required for form validation. |
-| `name` | `string` | — | The field name for form submission. |
-| `multiple` | `boolean` | `false` | Allows selecting more than one item at a time. When `true`, `value` and `onValueChange` operate on arrays. |
-| `modal` | `boolean` | `true` | When `true`, locks page scroll and blocks pointer interaction outside the popup while it is open. Set to `false` when the Select lives inside a modal that already handles scroll lock. |
+| Prop            | Type                                    | Default | Description                                                                                                                                                                             |
+| --------------- | --------------------------------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`         | `Value \| null`                         | —       | The controlled selected value. Use with `onValueChange` when you need to own the state.                                                                                                 |
+| `defaultValue`  | `Value \| null`                         | —       | The uncontrolled initial value. Omit if you want to start with nothing selected.                                                                                                        |
+| `onValueChange` | `(value: Value \| null, event) => void` | —       | Fires whenever the selection changes. Receives the new value plus Base UI change event details.                                                                                         |
+| `open`          | `boolean`                               | —       | Controls the popup open state from outside. Pair with `onOpenChange`.                                                                                                                   |
+| `defaultOpen`   | `boolean`                               | `false` | Opens the popup on first render without owning the state. Useful for demos or auto-open flows.                                                                                          |
+| `onOpenChange`  | `(open: boolean, event) => void`        | —       | Fires when the popup opens or closes.                                                                                                                                                   |
+| `disabled`      | `boolean`                               | `false` | Disables the entire Select, including the trigger and all items.                                                                                                                        |
+| `required`      | `boolean`                               | `false` | Marks the hidden input required for form validation.                                                                                                                                    |
+| `name`          | `string`                                | —       | The field name for form submission.                                                                                                                                                     |
+| `multiple`      | `boolean`                               | `false` | Allows selecting more than one item at a time. When `true`, `value` and `onValueChange` operate on arrays.                                                                              |
+| `modal`         | `boolean`                               | `true`  | When `true`, locks page scroll and blocks pointer interaction outside the popup while it is open. Set to `false` when the Select lives inside a modal that already handles scroll lock. |
 
 ### SelectTrigger props
 
 Renders a `<button>` that opens the popup. Appends a `ChevronDownIcon` automatically — you do not need to add it.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `size` | `'sm' \| 'default'` | `'default'` | Controls trigger height. `'sm'` renders at `h-8`; `'default'` at `h-9`. Choose `'sm'` for compact forms or dense toolbars. |
-| `disabled` | `boolean` | — | Disables this trigger independently of the root `disabled` prop. Rarely needed — prefer disabling at the `Select` level. |
-| `className` | `string` | — | Merged via `cn()` after the built-in trigger classes. |
+| Prop        | Type                | Default     | Description                                                                                                                |
+| ----------- | ------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `size`      | `'sm' \| 'default'` | `'default'` | Controls trigger height. `'sm'` renders at `h-8`; `'default'` at `h-9`. Choose `'sm'` for compact forms or dense toolbars. |
+| `disabled`  | `boolean`           | —           | Disables this trigger independently of the root `disabled` prop. Rarely needed — prefer disabling at the `Select` level.   |
+| `className` | `string`            | —           | Merged via `cn()` after the built-in trigger classes.                                                                      |
 
 ### SelectValue props
 
 Renders the label of the currently selected item inside the trigger. When nothing is selected, renders its `children` as a placeholder.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `children` | `ReactNode \| ((value) => ReactNode)` | — | Static children act as a placeholder when no value is selected. Pass a render function to format the live selected value (e.g., to prepend a currency symbol). |
-| `className` | `string` | — | Merged via `cn()` after the built-in flex classes. |
+| Prop        | Type                                  | Default | Description                                                                                                                                                    |
+| ----------- | ------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`  | `ReactNode \| ((value) => ReactNode)` | —       | Static children act as a placeholder when no value is selected. Pass a render function to format the live selected value (e.g., to prepend a currency symbol). |
+| `className` | `string`                              | —       | Merged via `cn()` after the built-in flex classes.                                                                                                             |
 
 ### SelectContent props
 
 Wraps the floating popup. Accepts positioning props alongside the standard popup props.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `side` | `'top' \| 'bottom' \| 'left' \| 'right'`  | `'bottom'` | Which side of the trigger the popup opens on. The positioner may flip to the opposite side when there is not enough space. |
-| `sideOffset` | `number` | `4` | Gap in pixels between the trigger and the popup edge. |
-| `align` | `'start' \| 'center' \| 'end'` | `'center'` | Horizontal alignment of the popup relative to the trigger. |
-| `alignOffset` | `number` | `0` | Pixel offset applied along the alignment axis. |
-| `alignItemWithTrigger` | `boolean` | `true` | When `true`, the popup scrolls so the selected item visually aligns with the trigger's text on open. Automatically disables when there is not enough room or when touch input is detected. |
-| `className` | `string` | — | Merged via `cn()` onto the popup element. |
+| Prop                   | Type                                     | Default    | Description                                                                                                                                                                                |
+| ---------------------- | ---------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `side`                 | `'top' \| 'bottom' \| 'left' \| 'right'` | `'bottom'` | Which side of the trigger the popup opens on. The positioner may flip to the opposite side when there is not enough space.                                                                 |
+| `sideOffset`           | `number`                                 | `4`        | Gap in pixels between the trigger and the popup edge.                                                                                                                                      |
+| `align`                | `'start' \| 'center' \| 'end'`           | `'center'` | Horizontal alignment of the popup relative to the trigger.                                                                                                                                 |
+| `alignOffset`          | `number`                                 | `0`        | Pixel offset applied along the alignment axis.                                                                                                                                             |
+| `alignItemWithTrigger` | `boolean`                                | `true`     | When `true`, the popup scrolls so the selected item visually aligns with the trigger's text on open. Automatically disables when there is not enough room or when touch input is detected. |
+| `className`            | `string`                                 | —          | Merged via `cn()` onto the popup element.                                                                                                                                                  |
 
 ### SelectGroup props
 
@@ -87,12 +87,12 @@ A non-interactive heading inside a `SelectGroup`. Inherits all props from `BaseU
 
 A single selectable option.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `any` | `null` | The value submitted when this item is chosen. Must be unique within the Select. |
-| `disabled` | `boolean` | `false` | Marks this item as non-interactive. It remains visible but skipped during keyboard navigation. Use to show unavailable options without removing them. |
-| `label` | `string` | — | Text used for keyboard type-ahead matching. Defaults to the item's text content; set this explicitly when the item contains icons or formatted content that would confuse type-ahead. |
-| `className` | `string` | — | Merged via `cn()` after the built-in item classes. |
+| Prop        | Type      | Default | Description                                                                                                                                                                           |
+| ----------- | --------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`     | `any`     | `null`  | The value submitted when this item is chosen. Must be unique within the Select.                                                                                                       |
+| `disabled`  | `boolean` | `false` | Marks this item as non-interactive. It remains visible but skipped during keyboard navigation. Use to show unavailable options without removing them.                                 |
+| `label`     | `string`  | —       | Text used for keyboard type-ahead matching. Defaults to the item's text content; set this explicitly when the item contains icons or formatted content that would confuse type-ahead. |
+| `className` | `string`  | —       | Merged via `cn()` after the built-in item classes.                                                                                                                                    |
 
 ### SelectSeparator props
 
@@ -114,26 +114,26 @@ The most common usage: an uncontrolled select with a placeholder. Base UI stores
 
 ```tsx
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
 } from '@unbranded-ds/react';
 
 export function FruitPicker() {
-  return (
-    <Select>
-      <SelectTrigger style={{ width: '200px' }}>
-        <SelectValue>Select a fruit</SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="apple">Apple</SelectItem>
-        <SelectItem value="banana">Banana</SelectItem>
-        <SelectItem value="cherry">Cherry</SelectItem>
-      </SelectContent>
-    </Select>
-  );
+	return (
+		<Select>
+			<SelectTrigger style={{ width: '200px' }}>
+				<SelectValue>Select a fruit</SelectValue>
+			</SelectTrigger>
+			<SelectContent>
+				<SelectItem value="apple">Apple</SelectItem>
+				<SelectItem value="banana">Banana</SelectItem>
+				<SelectItem value="cherry">Cherry</SelectItem>
+			</SelectContent>
+		</Select>
+	);
 }
 ```
 
@@ -142,30 +142,30 @@ export function FruitPicker() {
 Own the value in your component when you need to react to changes — for instance, to update a sibling field or submit the value via a form library.
 
 ```tsx
-import { useState } from 'react';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
 } from '@unbranded-ds/react';
+import { useState } from 'react';
 
 export function ControlledFruitPicker() {
-  const [fruit, setFruit] = useState<string | null>(null);
+	const [fruit, setFruit] = useState<string | null>(null);
 
-  return (
-    <Select value={fruit} onValueChange={(v) => setFruit(v)}>
-      <SelectTrigger style={{ width: '200px' }}>
-        <SelectValue>{fruit ?? 'Select a fruit'}</SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="apple">Apple</SelectItem>
-        <SelectItem value="banana">Banana</SelectItem>
-        <SelectItem value="cherry">Cherry</SelectItem>
-      </SelectContent>
-    </Select>
-  );
+	return (
+		<Select value={fruit} onValueChange={(v) => setFruit(v)}>
+			<SelectTrigger style={{ width: '200px' }}>
+				<SelectValue>{fruit ?? 'Select a fruit'}</SelectValue>
+			</SelectTrigger>
+			<SelectContent>
+				<SelectItem value="apple">Apple</SelectItem>
+				<SelectItem value="banana">Banana</SelectItem>
+				<SelectItem value="cherry">Cherry</SelectItem>
+			</SelectContent>
+		</Select>
+	);
 }
 ```
 
@@ -175,35 +175,35 @@ Wrap related items in `SelectGroup` with a `SelectLabel` when the option list sp
 
 ```tsx
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectLabel,
+	SelectTrigger,
+	SelectValue,
 } from '@unbranded-ds/react';
 
 export function FoodPicker() {
-  return (
-    <Select>
-      <SelectTrigger style={{ width: '200px' }}>
-        <SelectValue>Select a food</SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>Fruits</SelectLabel>
-          <SelectItem value="apple">Apple</SelectItem>
-          <SelectItem value="banana">Banana</SelectItem>
-        </SelectGroup>
-        <SelectGroup>
-          <SelectLabel>Vegetables</SelectLabel>
-          <SelectItem value="carrot">Carrot</SelectItem>
-          <SelectItem value="lettuce">Lettuce</SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select>
-  );
+	return (
+		<Select>
+			<SelectTrigger style={{ width: '200px' }}>
+				<SelectValue>Select a food</SelectValue>
+			</SelectTrigger>
+			<SelectContent>
+				<SelectGroup>
+					<SelectLabel>Fruits</SelectLabel>
+					<SelectItem value="apple">Apple</SelectItem>
+					<SelectItem value="banana">Banana</SelectItem>
+				</SelectGroup>
+				<SelectGroup>
+					<SelectLabel>Vegetables</SelectLabel>
+					<SelectItem value="carrot">Carrot</SelectItem>
+					<SelectItem value="lettuce">Lettuce</SelectItem>
+				</SelectGroup>
+			</SelectContent>
+		</Select>
+	);
 }
 ```
 
@@ -213,24 +213,24 @@ Pass `disabled` to the root `Select` when the field is temporarily unavailable. 
 
 ```tsx
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
 } from '@unbranded-ds/react';
 
 export function DisabledSelect() {
-  return (
-    <Select disabled>
-      <SelectTrigger style={{ width: '200px' }}>
-        <SelectValue>Unavailable</SelectValue>
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="a">Option A</SelectItem>
-      </SelectContent>
-    </Select>
-  );
+	return (
+		<Select disabled>
+			<SelectTrigger style={{ width: '200px' }}>
+				<SelectValue>Unavailable</SelectValue>
+			</SelectTrigger>
+			<SelectContent>
+				<SelectItem value="a">Option A</SelectItem>
+			</SelectContent>
+		</Select>
+	);
 }
 ```
 

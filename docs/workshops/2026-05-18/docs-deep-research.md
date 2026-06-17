@@ -2,9 +2,9 @@
 
 ## TL;DR
 
-- **Study Adobe React Aria + GitHub Primer + IBM Carbon as your three anchors.** React Aria is the gold standard for accessibility-as-architecture and is the closest match to your shadcn/Radix substrate; Carbon is the gold standard for designer/developer parity and per-component a11y reporting; Primer is the gold standard for transparent "known a11y issues" and design-time accessibility annotations. For your stated priorities (usability, a11y depth, designer+dev parity), use Carbon's *page template* as your skeleton, React Aria's *accessibility-first prose* as your model for what to write, and Primer's *known-issues link + annotation toolkit* as your transparency pattern.
+- **Study Adobe React Aria + GitHub Primer + IBM Carbon as your three anchors.** React Aria is the gold standard for accessibility-as-architecture and is the closest match to your shadcn/Radix substrate; Carbon is the gold standard for designer/developer parity and per-component a11y reporting; Primer is the gold standard for transparent "known a11y issues" and design-time accessibility annotations. For your stated priorities (usability, a11y depth, designer+dev parity), use Carbon's _page template_ as your skeleton, React Aria's _accessibility-first prose_ as your model for what to write, and Primer's _known-issues link + annotation toolkit_ as your transparency pattern.
 - **In TSDoc, put accessibility in the IDE — not just on the docs site.** Adopt a strict 6-section component-level prose order (one-liner → `@remarks` extended description → "Accessibility" sub-section → "Keyboard interactions" sub-section → "When to use / alternatives" → `@example` → `@see`) and a strict 3-section prop-level order (description → behavior nuance → `@defaultValue` / a11y implication). Use TSDoc release tags (`@alpha`, `@beta`, `@public`, `@deprecated`) as canonicalized by the TSDoc spec and consumed by API Extractor and TypeDoc.
-- **Treat MDX/Storybook as the designer surface; treat TSDoc as the developer surface — and make one canonical source.** Best-in-class systems (Carbon, Primer, Polaris) split content into Usage, Style/Anatomy, Code, and Accessibility tabs; in a shadcn-style repo you can mirror that split by keeping prose authority in the TSDoc on the source `.tsx` file and re-using/importing those same comments into the MDX doc site via TypeDoc or a `react-docgen` pipeline. Write component docs *before* implementation by stubbing the file with `@alpha` + a full TSDoc block, exporting only the type definition.
+- **Treat MDX/Storybook as the designer surface; treat TSDoc as the developer surface — and make one canonical source.** Best-in-class systems (Carbon, Primer, Polaris) split content into Usage, Style/Anatomy, Code, and Accessibility tabs; in a shadcn-style repo you can mirror that split by keeping prose authority in the TSDoc on the source `.tsx` file and re-using/importing those same comments into the MDX doc site via TypeDoc or a `react-docgen` pipeline. Write component docs _before_ implementation by stubbing the file with `@alpha` + a full TSDoc block, exporting only the type definition.
 
 ---
 
@@ -34,23 +34,23 @@ The final ranking weights a11y heaviest (because you've declared it the differen
 
 #### The ranking
 
-| Rank | System | Usability | A11y depth | Parity | Why it ranks here |
-|------|--------|-----------|------------|--------|-------------------|
-| 1 | **Adobe React Aria / React Spectrum** | 5 | 5 | 4 | Accessibility *is* the product. WAI-ARIA APG pattern reference at the top of every component; behavior, keyboard, focus, i18n explicitly enumerated. The closest analog to what `unbranded-ds` is technically. |
-| 2 | **IBM Carbon** | 5 | 5 | 5 | The reference template for multi-audience docs. Per-component **Usage / Style / Code / Accessibility** tabs with a documented status taxonomy (Draft → Preview candidate → Preview → Stable) and a public testing-status matrix. |
-| 3 | **GitHub Primer** | 4 | 5 | 5 | Best-in-class *transparency*: a per-component "Known accessibility issues" link plus an open-source Figma Annotation Toolkit and Primer A11y Presets that bridge design handoff. |
-| 4 | **Shopify Polaris** | 5 | 4 | 5 | Best designer/UX-writing guidance and the cleanest do/don't pattern; a11y is covered foundationally but not consistently per-component. |
-| 5 | **Radix Primitives** | 4 | 4 | 2 | Every component page has an *explicit* keyboard interactions table mapping `Key → Description`. Developer-only audience, but the API/keyboard pattern is what shadcn already ships on top of. |
-| 6 | **GOV.UK Design System** | 5 | 5 | 3 | Documents WCAG 2.2 AA conformance and tracks individual failures publicly under the GitHub label `accessibility regulations failure` across both the GOV.UK Design System website repo and the GOV.UK Frontend codebase repo. Less applicable for product UI primitives but excellent transparency model. |
-| 7 | **Atlassian Design System** | 4 | 3 | 4 | Strong status tags (e.g., `beta`, `early access`, `caution`, `deprecated`) shown right in the component index; weaker per-component a11y. |
-| 8 | **Microsoft Fluent UI** | 3 | 4 | 4 | Strong on accessibility behaviors (`useAccessibility` hook surface); API Extractor / TSDoc pipeline is documented in-house. Docs site itself fragmented across Fluent 1/2 and Northstar. |
-| 9 | **Workday Canvas Kit** | 4 | 4 | 4 | Explicit *Main / Preview / Labs* maturity buckets analogous to TSDoc's `@public`/`@beta`/`@alpha`. Useful precedent for status conventions. |
-| 10 | **USWDS** | 4 | 5 | 3 | Publishes a real VPAT 2.5 ACR. Per the official accessibility documentation: "we assessed 44 components of USWDS 3.11.0 in March 2025 and published the report in May 2025." Lower parity for designers/devs because focus is government accessibility compliance. |
-| 11 | **Nord (Nordhealth)** | 5 | 3 | 4 | Beautiful, highly opinionated information design — frequently cited as a docs reference. Less per-component a11y depth than Carbon/React Aria. |
-| 12 | **Orbit (Kiwi.com)** | 4 | 3 | 3 | Categorizes components into UI / Layout / Utility / **Accessibility components** (a useful taxonomy), and ships explicit a11y helpers (`SkipLink`, `SkipNavigation`). |
-| 13 | **Material Design (Google)** | 4 | 3 | 4 | Excellent visual specs and do/don't, but a11y per-component is shallower and the docs split between MDC, MUI, and m3.material.io is confusing. |
-| 14 | **shadcn/ui** | 4 | 2 | 2 | Optimized for developer copy-paste; intentionally inherits a11y from Radix and provides almost no in-page a11y prose. **This is exactly the gap `unbranded-ds` should fill.** |
-| 15 | **Salesforce Lightning Design System** | 3 | 3 | 3 | Comprehensive but legacy IA; some Aura/LWC API split confuses readers. Not a strong template. |
+| Rank | System                                 | Usability | A11y depth | Parity | Why it ranks here                                                                                                                                                                                                                                                                                         |
+| ---- | -------------------------------------- | --------- | ---------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | **Adobe React Aria / React Spectrum**  | 5         | 5          | 4      | Accessibility _is_ the product. WAI-ARIA APG pattern reference at the top of every component; behavior, keyboard, focus, i18n explicitly enumerated. The closest analog to what `unbranded-ds` is technically.                                                                                            |
+| 2    | **IBM Carbon**                         | 5         | 5          | 5      | The reference template for multi-audience docs. Per-component **Usage / Style / Code / Accessibility** tabs with a documented status taxonomy (Draft → Preview candidate → Preview → Stable) and a public testing-status matrix.                                                                          |
+| 3    | **GitHub Primer**                      | 4         | 5          | 5      | Best-in-class _transparency_: a per-component "Known accessibility issues" link plus an open-source Figma Annotation Toolkit and Primer A11y Presets that bridge design handoff.                                                                                                                          |
+| 4    | **Shopify Polaris**                    | 5         | 4          | 5      | Best designer/UX-writing guidance and the cleanest do/don't pattern; a11y is covered foundationally but not consistently per-component.                                                                                                                                                                   |
+| 5    | **Radix Primitives**                   | 4         | 4          | 2      | Every component page has an _explicit_ keyboard interactions table mapping `Key → Description`. Developer-only audience, but the API/keyboard pattern is what shadcn already ships on top of.                                                                                                             |
+| 6    | **GOV.UK Design System**               | 5         | 5          | 3      | Documents WCAG 2.2 AA conformance and tracks individual failures publicly under the GitHub label `accessibility regulations failure` across both the GOV.UK Design System website repo and the GOV.UK Frontend codebase repo. Less applicable for product UI primitives but excellent transparency model. |
+| 7    | **Atlassian Design System**            | 4         | 3          | 4      | Strong status tags (e.g., `beta`, `early access`, `caution`, `deprecated`) shown right in the component index; weaker per-component a11y.                                                                                                                                                                 |
+| 8    | **Microsoft Fluent UI**                | 3         | 4          | 4      | Strong on accessibility behaviors (`useAccessibility` hook surface); API Extractor / TSDoc pipeline is documented in-house. Docs site itself fragmented across Fluent 1/2 and Northstar.                                                                                                                  |
+| 9    | **Workday Canvas Kit**                 | 4         | 4          | 4      | Explicit _Main / Preview / Labs_ maturity buckets analogous to TSDoc's `@public`/`@beta`/`@alpha`. Useful precedent for status conventions.                                                                                                                                                               |
+| 10   | **USWDS**                              | 4         | 5          | 3      | Publishes a real VPAT 2.5 ACR. Per the official accessibility documentation: "we assessed 44 components of USWDS 3.11.0 in March 2025 and published the report in May 2025." Lower parity for designers/devs because focus is government accessibility compliance.                                        |
+| 11   | **Nord (Nordhealth)**                  | 5         | 3          | 4      | Beautiful, highly opinionated information design — frequently cited as a docs reference. Less per-component a11y depth than Carbon/React Aria.                                                                                                                                                            |
+| 12   | **Orbit (Kiwi.com)**                   | 4         | 3          | 3      | Categorizes components into UI / Layout / Utility / **Accessibility components** (a useful taxonomy), and ships explicit a11y helpers (`SkipLink`, `SkipNavigation`).                                                                                                                                     |
+| 13   | **Material Design (Google)**           | 4         | 3          | 4      | Excellent visual specs and do/don't, but a11y per-component is shallower and the docs split between MDC, MUI, and m3.material.io is confusing.                                                                                                                                                            |
+| 14   | **shadcn/ui**                          | 4         | 2          | 2      | Optimized for developer copy-paste; intentionally inherits a11y from Radix and provides almost no in-page a11y prose. **This is exactly the gap `unbranded-ds` should fill.**                                                                                                                             |
+| 15   | **Salesforce Lightning Design System** | 3         | 3          | 3      | Comprehensive but legacy IA; some Aura/LWC API split confuses readers. Not a strong template.                                                                                                                                                                                                             |
 
 > Material Design and Salesforce Lightning are included for completeness but I'd skip them as primary models — they're too platform-specific and their docs IA is older than the others.
 
@@ -66,7 +66,7 @@ The final ranking weights a11y heaviest (because you've declared it the differen
 
 **Where others exceed Carbon:**
 
-- **React Aria — accessibility-as-architecture and APG-link-at-the-top.** React Aria component pages don't actually contain a keyboard-table; they place a single `HeaderInfo` reference to the W3C ARIA APG pattern at the top (e.g., ComboBox links to `https://www.w3.org/WAI/ARIA/apg/patterns/combobox/`) and a bulleted "Features" list. The "Keyboard navigation" bullet states behavior in prose: *"ComboBox can be opened and navigated using the arrow keys, along with page up/down, home/end, etc. The list of options is filtered while typing into the input, and items can be selected with the enter key."* The Dialog/useDialog page describes focus management verbatim: *"Focus is moved into the dialog on mount, and restored to the trigger element on unmount. While open, focus is contained within the dialog, preventing the user from tabbing outside."* This pattern — short, behavioral, vendor-neutral, and linked to the APG — is what you want inside your TSDoc.
+- **React Aria — accessibility-as-architecture and APG-link-at-the-top.** React Aria component pages don't actually contain a keyboard-table; they place a single `HeaderInfo` reference to the W3C ARIA APG pattern at the top (e.g., ComboBox links to `https://www.w3.org/WAI/ARIA/apg/patterns/combobox/`) and a bulleted "Features" list. The "Keyboard navigation" bullet states behavior in prose: _"ComboBox can be opened and navigated using the arrow keys, along with page up/down, home/end, etc. The list of options is filtered while typing into the input, and items can be selected with the enter key."_ The Dialog/useDialog page describes focus management verbatim: _"Focus is moved into the dialog on mount, and restored to the trigger element on unmount. While open, focus is contained within the dialog, preventing the user from tabbing outside."_ This pattern — short, behavioral, vendor-neutral, and linked to the APG — is what you want inside your TSDoc.
 - **Primer — known-issues transparency.** Every Primer component page renders an `<AccessibilityLink label="ComponentName"/>` that links to the open issues filed in the GitHub repo for that component, exposing not just what works but what's broken. This is unusual and powerful.
 - **Radix — explicit keyboard interactions table.** Radix is the only system among your shadcn-substrate set that ships an explicit per-component table mapping `Key → Description` (e.g., Dialog: `Tab → Moves focus to the next focusable element. Escape → Closes the component and moves focus to Dialog.Trigger.`). Since your components inherit Radix behavior, you should reproduce these tables in your TSDoc verbatim where applicable.
 - **GOV.UK — public WCAG-2.2-failure ledger.** Per the GOV.UK Design System accessibility statement: "The team documents WCAG 2.2 A and AA failures in two repositories under the 'accessibility regulations failure' issue label: GOV.UK Design System website label for accessibility regulations failures · GOV.UK Frontend codebase label for accessibility regulations failures." The pattern is more transparent than Carbon's "Tested / Manually tested" labels.
@@ -77,14 +77,14 @@ The final ranking weights a11y heaviest (because you've declared it the differen
 
 ##### How they structure component pages
 
-| System | Page template (top-level sections) |
-|---|---|
-| Carbon | `Usage` · `Style` · `Code` · `Accessibility` (tabbed) |
+| System     | Page template (top-level sections)                                                                                                                   |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Carbon     | `Usage` · `Style` · `Code` · `Accessibility` (tabbed)                                                                                                |
 | React Aria | `Example` → `Features` → `Anatomy` → `Examples` → `Reusable wrappers` → … → `Props` → `Styling` → `Advanced customization` → `Testing` (single page) |
-| Primer | `Overview` → `Examples` → `Accessibility` → `Anatomy` → `Options/Props` → `Status` → `Related links` |
-| Polaris | `Examples` → `Best practices` → `Content guidelines` → `Accessibility` → `Props` |
-| Radix | `Features` → `Installation` → `Anatomy` → `API Reference` → `Accessibility` (with **Keyboard Interactions** sub-table) → `Examples` |
-| Atlassian | `Description (with status tag)` → `Examples` → `Props` (with deprecation banners inline) |
+| Primer     | `Overview` → `Examples` → `Accessibility` → `Anatomy` → `Options/Props` → `Status` → `Related links`                                                 |
+| Polaris    | `Examples` → `Best practices` → `Content guidelines` → `Accessibility` → `Props`                                                                     |
+| Radix      | `Features` → `Installation` → `Anatomy` → `API Reference` → `Accessibility` (with **Keyboard Interactions** sub-table) → `Examples`                  |
+| Atlassian  | `Description (with status tag)` → `Examples` → `Props` (with deprecation banners inline)                                                             |
 
 **Recommendation:** Adopt a 6-tab/section template: **Overview → Anatomy → Usage (Do/Don't) → API/Props → Accessibility → Examples**. This is the union of Carbon's four-tab template and Radix's explicit keyboard table, with Primer's anatomy diagram in slot 2.
 
@@ -99,17 +99,17 @@ The final ranking weights a11y heaviest (because you've declared it the differen
 
 ##### How they handle accessibility documentation specifically
 
-| Pattern | Best example | What it looks like |
-|---|---|---|
-| **Per-component WCAG conformance statement** | Carbon, GOV.UK | "This component has been validated to meet the WCAG 2.1 AA and Section 508 accessibility guidelines, however changes made by the content owner can affect accessibility compliance." (verbatim from Carbon Button page) |
-| **Per-component WCAG failure ledger** | GOV.UK | GitHub issue label `accessibility regulations failure` per failed WCAG 2.2 A/AA criterion, tracked across both the design-system website repo and the `govuk-frontend` codebase repo |
-| **Keyboard interactions table** | Radix, plus implicit in Carbon's "What Carbon provides" prose | `Tab → Moves focus to next element` — two columns: Key (using `<kbd>` semantically) and Description |
-| **ARIA attribute disclosure** | Radix, React Aria | Lists which ARIA roles/states are applied (e.g., Radix Dialog: "automatically has `role='dialog'`, `aria-modal='true'`") |
-| **Screen reader testing notes per component** | Carbon (v10 docs) | Records test environment: `macOS Mojave 10.14.6 + VoiceOver + Chrome 77 + Carbon React 7.7.1` and tested-against-the-script results |
-| **Accessibility design-handoff annotations** | Primer (Figma Annotation Toolkit), GitHub Annotation Toolkit | Reusable Figma stamps for landmarks, heading structure, focus management, live regions |
-| **Known a11y issues link** | Primer | `<AccessibilityLink label="Button"/>` rendered on every component page |
-| **Component-level ACR/VPAT** | USWDS | VPAT 2.5 ACR covering 44 components assessed in March 2025 and published in May 2025 against USWDS 3.11.0 |
-| **Accessibility status matrix** | Carbon | Public table per component × {Default state, Advanced states, Keyboard navigation, Screen reader} × {Tested, Manually tested} |
+| Pattern                                       | Best example                                                  | What it looks like                                                                                                                                                                                                      |
+| --------------------------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Per-component WCAG conformance statement**  | Carbon, GOV.UK                                                | "This component has been validated to meet the WCAG 2.1 AA and Section 508 accessibility guidelines, however changes made by the content owner can affect accessibility compliance." (verbatim from Carbon Button page) |
+| **Per-component WCAG failure ledger**         | GOV.UK                                                        | GitHub issue label `accessibility regulations failure` per failed WCAG 2.2 A/AA criterion, tracked across both the design-system website repo and the `govuk-frontend` codebase repo                                    |
+| **Keyboard interactions table**               | Radix, plus implicit in Carbon's "What Carbon provides" prose | `Tab → Moves focus to next element` — two columns: Key (using `<kbd>` semantically) and Description                                                                                                                     |
+| **ARIA attribute disclosure**                 | Radix, React Aria                                             | Lists which ARIA roles/states are applied (e.g., Radix Dialog: "automatically has `role='dialog'`, `aria-modal='true'`")                                                                                                |
+| **Screen reader testing notes per component** | Carbon (v10 docs)                                             | Records test environment: `macOS Mojave 10.14.6 + VoiceOver + Chrome 77 + Carbon React 7.7.1` and tested-against-the-script results                                                                                     |
+| **Accessibility design-handoff annotations**  | Primer (Figma Annotation Toolkit), GitHub Annotation Toolkit  | Reusable Figma stamps for landmarks, heading structure, focus management, live regions                                                                                                                                  |
+| **Known a11y issues link**                    | Primer                                                        | `<AccessibilityLink label="Button"/>` rendered on every component page                                                                                                                                                  |
+| **Component-level ACR/VPAT**                  | USWDS                                                         | VPAT 2.5 ACR covering 44 components assessed in March 2025 and published in May 2025 against USWDS 3.11.0                                                                                                               |
+| **Accessibility status matrix**               | Carbon                                                        | Public table per component × {Default state, Advanced states, Keyboard navigation, Screen reader} × {Tested, Manually tested}                                                                                           |
 
 **Recommendation for `unbranded-ds`:** Combine **Radix's keyboard table** (you can quote it directly from Radix's docs since your behavior is identical) with **Carbon's per-component WCAG conformance statement** and Carbon's testing-status matrix, plus **Primer's "Known issues" link** out to your GitHub issue tracker filtered by component label. This trio uniquely positions you as the most transparent shadcn-style design system available.
 
@@ -124,18 +124,18 @@ The final ranking weights a11y heaviest (because you've declared it the differen
 - **Carbon's markdown templates are public and prescribe a Usage template, a Code template, and an Accessibility template separately**, so designers writing prose and engineers writing code own different files.
 - **Primer's Annotation Toolkit** is the strongest tool for bridging design and engineering — it turns accessibility considerations into a Figma library of stamps designers drop on their canvases.
 - **Atlassian** publishes a "Design component template" through Confluence (component basics → anatomy → states → content/accessibility/mobile guidance) — a useful checklist even if you don't use Confluence.
-- **Nord** keeps a public *accessibility checklist* alongside the system, frequently cited as one of the best.
+- **Nord** keeps a public _accessibility checklist_ alongside the system, frequently cited as one of the best.
 - **shadcn/ui** does effectively zero of this. That is the opportunity.
 
 ##### Versioning / status / experimental / deprecated handling
 
-| System | Status taxonomy | How it's surfaced |
-|---|---|---|
-| Carbon | Draft, Preview candidate, Preview, Stable | Badge on component card; PDLC page documents semantics |
-| Workday Canvas | Main, Preview, Labs | Separate npm packages (`@workday/canvas-kit-react`, `@workday/canvas-kit-preview-react`, `@workday/canvas-kit-labs-react`) |
-| Atlassian | New, Beta, Early access, Caution, Deprecated | Inline tag on every component in the index |
-| Fluent UI | API Extractor release tags | `@public`/`@beta`/`@alpha`/`@internal` in TSDoc |
-| TSDoc spec | `@alpha`, `@beta`, `@public`, `@internal`, `@experimental`, `@deprecated` | TSDoc modifier tags; trimmable by API Extractor |
+| System         | Status taxonomy                                                           | How it's surfaced                                                                                                          |
+| -------------- | ------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| Carbon         | Draft, Preview candidate, Preview, Stable                                 | Badge on component card; PDLC page documents semantics                                                                     |
+| Workday Canvas | Main, Preview, Labs                                                       | Separate npm packages (`@workday/canvas-kit-react`, `@workday/canvas-kit-preview-react`, `@workday/canvas-kit-labs-react`) |
+| Atlassian      | New, Beta, Early access, Caution, Deprecated                              | Inline tag on every component in the index                                                                                 |
+| Fluent UI      | API Extractor release tags                                                | `@public`/`@beta`/`@alpha`/`@internal` in TSDoc                                                                            |
+| TSDoc spec     | `@alpha`, `@beta`, `@public`, `@internal`, `@experimental`, `@deprecated` | TSDoc modifier tags; trimmable by API Extractor                                                                            |
 
 **Recommendation:** Align your status taxonomy with TSDoc release tags (which API Extractor and TypeDoc both natively respect) and mirror Atlassian's pattern of rendering the status as a visible badge on the docs site. Concretely: `@alpha` → Atlassian's "early access" badge; `@beta` → Atlassian's "beta" badge; `@public` → no badge (stable); `@deprecated` → red banner with `@see` migration target.
 
@@ -166,7 +166,7 @@ Block-tag ordering convention (from the TSDoc spec and the API Extractor referen
 3. **`### Accessibility` (using a Markdown heading inside the TSDoc).** ARIA pattern reference link, ARIA roles applied automatically, focus management behavior, screen reader name resolution.
 4. **`### Keyboard interactions`.** A Markdown table of `Key | Description`, copied/adapted from Radix's docs or the WAI-ARIA APG.
 5. **`### When to use`** and **`### When not to use`** (alternatives → use `{@link}` to point at sibling components).
-6. **`@example`** — one per common usage; the *first* `@example` should be the minimum viable usage; subsequent ones should layer in `asChild`, controlled state, and a11y-relevant variants (e.g., icon-only).
+6. **`@example`** — one per common usage; the _first_ `@example` should be the minimum viable usage; subsequent ones should layer in `asChild`, controlled state, and a11y-relevant variants (e.g., icon-only).
 7. **`@see`** for the Radix/React Aria/W3C APG link and any deeper design-doc URL.
 8. **Modifier tag** (`@public` / `@beta` / `@alpha`) on its own final line.
 
@@ -180,11 +180,12 @@ Block-tag ordering convention (from the TSDoc spec and the API Extractor referen
 
 #### Worked example 1 — Button (simple)
 
-```tsx
-import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+````tsx
+import type { VariantProps } from 'class-variance-authority';
+import { Slot } from '@radix-ui/react-slot';
+import { cva } from 'class-variance-authority';
+import * as React from 'react';
+import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(/* … */);
 
@@ -194,31 +195,31 @@ const buttonVariants = cva(/* … */);
  * @public
  */
 export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  /**
-   * Render as the immediate child element, merging the Button's props and
-   * behavior onto it (Radix `Slot` pattern).
-   *
-   * Use this to render a Button as an `<a>` (link) or a custom component
-   * while preserving Button's styling, focus handling, and `aria-disabled`
-   * semantics.
-   *
-   * Accessibility: when `asChild` is `true`, the child element MUST be a
-   * focusable, semantically appropriate element (e.g. `<a href>` for
-   * navigation). The component will not transform a non-focusable element
-   * into a focusable one.
-   *
-   * @defaultValue `false`
-   *
-   * @example
-   * ```tsx
-   * <Button asChild>
-   *   <a href="/docs">Read the docs</a>
-   * </Button>
-   * ```
-   */
-  asChild?: boolean;
+	extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+	VariantProps<typeof buttonVariants> {
+	/**
+	 * Render as the immediate child element, merging the Button's props and
+	 * behavior onto it (Radix `Slot` pattern).
+	 *
+	 * Use this to render a Button as an `<a>` (link) or a custom component
+	 * while preserving Button's styling, focus handling, and `aria-disabled`
+	 * semantics.
+	 *
+	 * Accessibility: when `asChild` is `true`, the child element MUST be a
+	 * focusable, semantically appropriate element (e.g. `<a href>` for
+	 * navigation). The component will not transform a non-focusable element
+	 * into a focusable one.
+	 *
+	 * @defaultValue `false`
+	 *
+	 * @example
+	 * ```tsx
+	 * <Button asChild>
+	 *   <a href="/docs">Read the docs</a>
+	 * </Button>
+	 * ```
+	 */
+	asChild?: boolean;
 }
 
 /**
@@ -294,24 +295,24 @@ export interface ButtonProps
  * @public
  */
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
-    return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
-    );
-  },
+	({ className, variant, size, asChild = false, ...props }, ref) => {
+		const Comp = asChild ? Slot : 'button';
+		return (
+			<Comp
+				className={cn(buttonVariants({ variant, size, className }))}
+				ref={ref}
+				{...props}
+			/>
+		);
+	},
 );
-Button.displayName = "Button";
-```
+Button.displayName = 'Button';
+````
 
 #### Worked example 2 — Dialog (composed, focus-trapping, a11y-rich)
 
-```tsx
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+````tsx
+import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 /**
  * A modal dialog that interrupts the user with important content and
@@ -433,63 +434,63 @@ export const Dialog = DialogPrimitive.Root;
  * @public
  */
 export const DialogTitle = DialogPrimitive.Title;
-```
+````
 
 #### Worked example 3 — Combobox (complex, keyboard-heavy)
 
-```tsx
+````tsx
 /**
  * Props for the `Combobox` component.
  *
  * @public
  */
 export interface ComboboxProps<TValue> {
-  /**
-   * The list of selectable options.
-   *
-   * Accessibility: each option's `label` is used as the option's accessible
-   * name. Provide a non-empty, human-readable label even for icon-led options.
-   */
-  options: ReadonlyArray<ComboboxOption<TValue>>;
+	/**
+	 * The list of selectable options.
+	 *
+	 * Accessibility: each option's `label` is used as the option's accessible
+	 * name. Provide a non-empty, human-readable label even for icon-led options.
+	 */
+	options: ReadonlyArray<ComboboxOption<TValue>>;
 
-  /**
-   * The currently selected value (controlled).
-   *
-   * Leave undefined to use uncontrolled state; in that case the component
-   * tracks its own selection internally and notifies via `onValueChange`.
-   *
-   * @defaultValue `undefined`
-   */
-  value?: TValue;
+	/**
+	 * The currently selected value (controlled).
+	 *
+	 * Leave undefined to use uncontrolled state; in that case the component
+	 * tracks its own selection internally and notifies via `onValueChange`.
+	 *
+	 * @defaultValue `undefined`
+	 */
+	value?: TValue;
 
-  /**
-   * Called whenever the selected value changes, including via keyboard
-   * (Enter on a highlighted option), pointer (click), or via the
-   * type-ahead match-on-Enter behavior.
-   *
-   * @defaultValue `undefined`
-   */
-  onValueChange?: (value: TValue) => void;
+	/**
+	 * Called whenever the selected value changes, including via keyboard
+	 * (Enter on a highlighted option), pointer (click), or via the
+	 * type-ahead match-on-Enter behavior.
+	 *
+	 * @defaultValue `undefined`
+	 */
+	onValueChange?: (value: TValue) => void;
 
-  /**
-   * Whether the combobox accepts custom (non-list) values typed by the user.
-   *
-   * Accessibility: when `true`, the combobox uses `aria-autocomplete="list"`
-   * and the listbox is treated as a suggestion list rather than the
-   * authoritative source of valid values. When `false`, the combobox uses
-   * `aria-autocomplete="list"` but rejects values that don't match an option.
-   *
-   * @defaultValue `false`
-   */
-  allowsCustomValue?: boolean;
+	/**
+	 * Whether the combobox accepts custom (non-list) values typed by the user.
+	 *
+	 * Accessibility: when `true`, the combobox uses `aria-autocomplete="list"`
+	 * and the listbox is treated as a suggestion list rather than the
+	 * authoritative source of valid values. When `false`, the combobox uses
+	 * `aria-autocomplete="list"` but rejects values that don't match an option.
+	 *
+	 * @defaultValue `false`
+	 */
+	allowsCustomValue?: boolean;
 
-  /**
-   * Custom filter function. Receives the current input value and the
-   * option's label, and returns `true` to include the option.
-   *
-   * @defaultValue case-insensitive `startsWith` match
-   */
-  filter?: (inputValue: string, optionLabel: string) => boolean;
+	/**
+	 * Custom filter function. Receives the current input value and the
+	 * option's label, and returns `true` to include the option.
+	 *
+	 * @defaultValue case-insensitive `startsWith` match
+	 */
+	filter?: (inputValue: string, optionLabel: string) => boolean;
 }
 
 /**
@@ -575,52 +576,52 @@ export interface ComboboxProps<TValue> {
  * @public
  */
 export function Combobox<TValue>(props: ComboboxProps<TValue>): JSX.Element {
-  /* … */
+	/* … */
 }
-```
+````
 
 #### Worked example 4 — Checkbox (form primitive)
 
-```tsx
+````tsx
 /**
  * Props for the `Checkbox` component.
  *
  * @public
  */
 export interface CheckboxProps {
-  /**
-   * The controlled checked state. Use `"indeterminate"` for the
-   * "partially checked" tri-state (e.g., a parent checkbox whose children
-   * are mixed).
-   *
-   * Accessibility: `"indeterminate"` is exposed as `aria-checked="mixed"`,
-   * which screen readers announce as "mixed". The visual rendering uses
-   * a horizontal line glyph by default.
-   *
-   * @defaultValue `false` (uncontrolled defaults to `defaultChecked` or `false`)
-   */
-  checked?: boolean | "indeterminate";
+	/**
+	 * The controlled checked state. Use `"indeterminate"` for the
+	 * "partially checked" tri-state (e.g., a parent checkbox whose children
+	 * are mixed).
+	 *
+	 * Accessibility: `"indeterminate"` is exposed as `aria-checked="mixed"`,
+	 * which screen readers announce as "mixed". The visual rendering uses
+	 * a horizontal line glyph by default.
+	 *
+	 * @defaultValue `false` (uncontrolled defaults to `defaultChecked` or `false`)
+	 */
+	checked?: boolean | 'indeterminate';
 
-  /**
-   * Called when the checked state changes via user interaction.
-   *
-   * The callback receives the new state, including `"indeterminate"` →
-   * `true` transitions. Indeterminate is not reachable via user input;
-   * it must be set programmatically.
-   */
-  onCheckedChange?: (checked: boolean | "indeterminate") => void;
+	/**
+	 * Called when the checked state changes via user interaction.
+	 *
+	 * The callback receives the new state, including `"indeterminate"` →
+	 * `true` transitions. Indeterminate is not reachable via user input;
+	 * it must be set programmatically.
+	 */
+	onCheckedChange?: (checked: boolean | 'indeterminate') => void;
 
-  /**
-   * Whether the checkbox is required for form submission.
-   *
-   * Accessibility: when `true`, the underlying input receives
-   * `aria-required="true"`. Pair with a visible required indicator
-   * (e.g., an asterisk in the label) and a descriptive error message
-   * via {@link FormMessage}.
-   *
-   * @defaultValue `false`
-   */
-  required?: boolean;
+	/**
+	 * Whether the checkbox is required for form submission.
+	 *
+	 * Accessibility: when `true`, the underlying input receives
+	 * `aria-required="true"`. Pair with a visible required indicator
+	 * (e.g., an asterisk in the label) and a descriptive error message
+	 * via {@link FormMessage}.
+	 *
+	 * @defaultValue `false`
+	 */
+	required?: boolean;
 }
 
 /**
@@ -677,10 +678,10 @@ export interface CheckboxProps {
  * @public
  */
 export const Checkbox = React.forwardRef<
-  React.ElementRef<typeof CheckboxPrimitive.Root>,
+	React.ElementRef<typeof CheckboxPrimitive.Root>,
   CheckboxProps & React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>
 >(/* … */);
-```
+````
 
 #### Documenting components that don't exist yet ("stubs")
 
@@ -690,7 +691,7 @@ This is a real and useful workflow because in your repo the registry, the docs s
 
 ```tsx
 // packages/ui/src/data-table/data-table.tsx
-import * as React from "react";
+import * as React from 'react';
 
 /**
  * Props for the `DataTable` component.
@@ -698,10 +699,10 @@ import * as React from "react";
  * @alpha
  */
 export interface DataTableProps<TRow> {
-  /** Rows to render. */
-  rows: ReadonlyArray<TRow>;
-  /** Column definitions. */
-  columns: ReadonlyArray<DataTableColumn<TRow>>;
+	/** Rows to render. */
+	rows: ReadonlyArray<TRow>;
+	/** Column definitions. */
+	columns: ReadonlyArray<DataTableColumn<TRow>>;
 }
 
 /**
@@ -725,10 +726,10 @@ export interface DataTableProps<TRow> {
  * @alpha
  */
 export function DataTable<TRow>(_props: DataTableProps<TRow>): JSX.Element {
-  throw new Error(
-    "DataTable is not yet implemented. Track progress at " +
-      "https://github.com/your-org/unbranded-ds/issues/42",
-  );
+	throw new Error(
+		'DataTable is not yet implemented. Track progress at '
+		+ 'https://github.com/your-org/unbranded-ds/issues/42',
+	);
 }
 ```
 
@@ -769,7 +770,7 @@ packages/
    - `## Accessibility` — the **only** place where you re-author prose that's also in TSDoc; this prose can be the designer-flavored long form (whereas the TSDoc is the developer-flavored short form). Carbon does this split explicitly.
    - `## Examples` — Storybook iframes.
 
-3. **Hand designers a Figma "Annotation Toolkit."** Per the official `github/annotation-toolkit` README: "The GitHub Annotation Toolkit is a fork of the CVS Health Inclusive Design team's Web Accessibility Annotation Kit (CC-BY 4.0)… This project is licensed under the terms of the CC-BY 4.0 license." It was open-sourced on September 22, 2025 (GitHub Changelog) and provides ready-made annotation stamps for landmarks, headings, focus order, live regions, and per-component a11y presets. Either fork it for `unbranded-ds` brand-neutrality or document how designers can use it as-is with your components — this single move closes the design-handoff gap better than any other practice in the industry. (Carbon, Polaris, and Atlassian all *talk about* accessibility annotations but no one else ships a free tool of this quality.)
+3. **Hand designers a Figma "Annotation Toolkit."** Per the official `github/annotation-toolkit` README: "The GitHub Annotation Toolkit is a fork of the CVS Health Inclusive Design team's Web Accessibility Annotation Kit (CC-BY 4.0)… This project is licensed under the terms of the CC-BY 4.0 license." It was open-sourced on September 22, 2025 (GitHub Changelog) and provides ready-made annotation stamps for landmarks, headings, focus order, live regions, and per-component a11y presets. Either fork it for `unbranded-ds` brand-neutrality or document how designers can use it as-is with your components — this single move closes the design-handoff gap better than any other practice in the industry. (Carbon, Polaris, and Atlassian all _talk about_ accessibility annotations but no one else ships a free tool of this quality.)
 
 4. **Surface "known a11y issues" per component.** Adopt Primer's pattern: in each MDX page, render a link to GitHub issues filtered to `label:a11y label:component/<name>`. Combined with a per-major-release ACR (USWDS's pattern), this is the highest transparency posture in the industry.
 
@@ -780,27 +781,32 @@ packages/
 ## Recommendations
 
 ### Stage 1 — Foundations (week 1)
+
 - Adopt the **6-section component-level TSDoc template** above and the **3-section prop-level TSDoc template**. Commit the templates as `.github/COMPONENT_TSDOC_TEMPLATE.md` and `.github/PROP_TSDOC_TEMPLATE.md`.
 - Configure **TypeDoc** in the monorepo with `jsDocCompatibility.exampleTag: true` to allow your `@example` fenced blocks to render as code.
 - Decide on release-tag semantics: `@alpha` = API may change, `@beta` = API frozen / impl unstable, `@public` = SemVer-stable, `@deprecated` = remove in next major.
 
 ### Stage 2 — Write docs ahead of code (weeks 1-4)
-- For every component you plan to ship — *including* not-yet-implemented ones — create the file with the typed `interface` + a throwing stub function + full TSDoc + `@alpha` tag. This forces design decisions early and gives you a complete docs site before implementation.
+
+- For every component you plan to ship — _including_ not-yet-implemented ones — create the file with the typed `interface` + a throwing stub function + full TSDoc + `@alpha` tag. This forces design decisions early and gives you a complete docs site before implementation.
 - For each component, copy the relevant **Radix keyboard interactions table verbatim** into the TSDoc. (Radix's docs license allows this; your behavior is identical.)
 - Link every Accessibility section to the relevant **W3C WAI-ARIA APG pattern** as a `@see`.
 
 ### Stage 3 — Docs site (weeks 2-6)
+
 - Stand up an MDX docs site using Next.js or Astro with a fixed 6-section component-page template (Overview / Anatomy / Usage / API / Accessibility / Examples).
 - Auto-generate prop tables from your TSDoc via `react-docgen-typescript` or API Extractor.
 - Embed Storybook iframes for live examples.
 
 ### Stage 4 — Accessibility differentiator (weeks 6-12)
+
 - Publish a **per-component accessibility status matrix** modeled on Carbon's (`carbondesignsystem.com/components/overview/accessibility-status/`): rows = components, columns = {Default state, Advanced states, Keyboard navigation, Screen reader}, statuses = {Tested, Manually tested, Not tested}.
 - Adopt or fork the **GitHub Annotation Toolkit** for Figma (CC-BY-4.0) and link it from your docs.
 - Set up the issue label scheme `a11y` + `component/<name>` and render the "Known a11y issues" link on every component page (Primer's pattern).
 - For your first major release, consider publishing a **VPAT 2.5 ACR** modeled on USWDS's — they assessed 44 components of USWDS 3.11.0 in March 2025 and published the report in May 2025.
 
 ### Decision benchmarks (when to change course)
+
 - If maintaining hand-written keyboard tables in TSDoc is more than 10% of doc churn → switch to `{@inheritDoc}` from a shared `keyboard-tables.ts` data file.
 - If your props tables drift from your interfaces → stop hand-writing them; mandate `react-docgen` / API Extractor generation.
 - If consumers ignore status tags → make `npx unbranded-ds add <component>` refuse to install `@alpha` components without `--include-alpha`.
@@ -811,7 +817,7 @@ packages/
 
 - **Several "best practice" claims about competing systems are based on docs that change frequently.** I observed React Aria's pages directly: contrary to a widespread assumption, React Aria does **not** use a per-component `Key | Description` keyboard table — it uses a bulleted "Features" list and links once to the WAI-ARIA APG. The keyboard tables you may have seen actually live on the APG itself and in **Radix's docs** (where they're explicit and tabular). Use Radix as your tabular keyboard reference.
 - **Carbon renamed its "experimental" status to "Preview"** to raise the bar for production-readiness. Don't reuse the word "experimental" in your status taxonomy without weighing this — Carbon's PDLC page explicitly says preview is "available to use in production" but "not stable yet."
-- **The shadcn registry CLI strips non-declaration-attached comments on install.** Per GitHub issue #9206 (shadcn-ui/ui), titled *"[bug]: Registry install strips leading comments and JSDoc blocks not attached to declarations,"* CLI version 2.10.0+ has this behavior; the root cause is that ts-morph treats comments as "trivia" attached to nodes, and the CLI's `transform-import.ts` and `transform-rsc.ts` neither explicitly preserves leading trivia. Verbatim from the issue: *"Only JSDoc comments that are directly attached to a declaration (const, function, type) are preserved."* Test that your TSDoc blocks survive the install path; **always attach blocks directly to the declaration (`forwardRef`, `interface`, `type`) rather than floating them between imports**.
+- **The shadcn registry CLI strips non-declaration-attached comments on install.** Per GitHub issue #9206 (shadcn-ui/ui), titled _"[bug]: Registry install strips leading comments and JSDoc blocks not attached to declarations,"_ CLI version 2.10.0+ has this behavior; the root cause is that ts-morph treats comments as "trivia" attached to nodes, and the CLI's `transform-import.ts` and `transform-rsc.ts` neither explicitly preserves leading trivia. Verbatim from the issue: _"Only JSDoc comments that are directly attached to a declaration (const, function, type) are preserved."_ Test that your TSDoc blocks survive the install path; **always attach blocks directly to the declaration (`forwardRef`, `interface`, `type`) rather than floating them between imports**.
 - **TypeDoc and TSDoc disagree about `@example`**: TSDoc treats the first line as a heading title; TypeDoc by default treats the whole tag content as a code block. Configure `jsDocCompatibility.exampleTag` deliberately and pick one convention across the repo.
 - **USWDS's, GOV.UK's, and Carbon's a11y transparency are exceptional but expensive to maintain.** Don't promise an ACR/VPAT unless you have a sustained tester budget. The Primer "known issues link" model is the cheapest meaningful transparency posture and is the recommended starting point.
-- **Designer-facing docs require *someone* to write them.** TSDoc is a developer artifact. The recommended MDX/Storybook layer above is necessary but adds an authoring surface; budget for it explicitly or accept that `unbranded-ds` will be a developer-only system in practice, like Radix and React Aria.
+- **Designer-facing docs require _someone_ to write them.** TSDoc is a developer artifact. The recommended MDX/Storybook layer above is necessary but adds an authoring surface; budget for it explicitly or accept that `unbranded-ds` will be a developer-only system in practice, like Radix and React Aria.

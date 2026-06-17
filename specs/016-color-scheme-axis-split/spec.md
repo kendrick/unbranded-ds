@@ -17,7 +17,7 @@ A vocabulary note, because it bites: most people, and `next-themes`, use "theme"
 
 ### Session 2026-06-15
 
-- Q: Which data-* attribute holds which axis, and how do consumers migrate? → A: `data-theme` becomes the theme (identity) axis, matching the vocabulary; color scheme moves to a new `data-color-scheme`. Current `data-theme="light"/"dark"` consumers migrate via a codemod, with the legacy form honored through a deprecation window.
+- Q: Which data-\* attribute holds which axis, and how do consumers migrate? → A: `data-theme` becomes the theme (identity) axis, matching the vocabulary; color scheme moves to a new `data-color-scheme`. Current `data-theme="light"/"dark"` consumers migrate via a codemod, with the legacy form honored through a deprecation window.
 - Q: How do the identities decompose into light and dark? → A: Hand-design a light and a dark variant for each identity (default, brand, vaporwave), no algorithmic derivation, so the AA-contrast bar is cleared reliably.
 - Q: Does a control for the theme axis ship here? → A: Yes, a data-driven identity toggle mirroring the existing DensityToggle, alongside the re-pointed color-scheme control.
 - Q: How do identity and color scheme combine in the tokens? → A: Each identity ships an explicit light and dark palette, selected by the `data-theme` plus `data-color-scheme` attribute pair (authored per combination), not composed from separate layers.
@@ -27,7 +27,7 @@ A vocabulary note, because it bites: most people, and `next-themes`, use "theme"
 - Q: How does `useTheme` present the axes? → A: The axis-keyed shape (preference/resolved/set over colorScheme, theme, density) plus a top-level `colorScheme` convenience, with the next-themes mapping documented.
 - Q: What does this spec update directly? → A: All in-repo consumers (the spec-015 example app, the Storybook stories, any other usage) move to the new axes in this change.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Compose a color scheme with an aesthetic identity (Priority: P1)
 
@@ -98,7 +98,7 @@ A future axis (high contrast, spacing, or another preference) can be added addit
 - The color scheme is `system` and an identity is active: the OS resolves the scheme, and the identity stays orthogonal.
 - A shipped identity-by-color-scheme combination fails WCAG AA contrast (the muted-foreground pair surfaced by spec 015 is the known offender): it must fail loudly before release, not ship.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -124,7 +124,7 @@ A future axis (high contrast, spacing, or another preference) can be added addit
 - **Density**: the existing axis (`comfortable`, `compact`), unchanged here.
 - **Resolved theme**: the composition of the active value on each axis, produced by the cascade.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

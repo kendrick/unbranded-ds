@@ -21,7 +21,7 @@ Split today's conflated `data-theme` into two composable axes: a new **color sch
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-checked after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-checked after Phase 1 design._
 
 This change edits `packages/tokens` and `packages/react` (and `apps/storybook`, `examples/`), so the constitution applies in full and the Section X gates are triggered.
 
@@ -84,7 +84,7 @@ examples/nextjs-15-app-router/  # globals.css override selector, header, pinned-
 
 ## Complexity Tracking
 
-| Item | Why needed | Note |
-|------|------------|------|
-| Section III amendment | The feature evolves the theming contract from two axes to three, with color scheme split out. Section III states the old model normatively, so it must be ratified. | A MINOR constitution bump with a sync report, the same shape as the 1.2.0 per-axis-composition amendment. Not a violation; a governed evolution. |
-| Renaming `aesthetic` to `theme` and `ThemeToggle` to `ColorSchemeToggle` | The vocabulary (theme means identity) only holds if the axis key, the attribute, and the control names agree. Leaving `aesthetic`, or a `ThemeToggle` that drives color scheme, would re-create the conflation in the names. | A clean rename is safe because there are no external consumers; the in-repo usage is updated in the same change. |
+| Item                                                                     | Why needed                                                                                                                                                                                                                   | Note                                                                                                                                             |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Section III amendment                                                    | The feature evolves the theming contract from two axes to three, with color scheme split out. Section III states the old model normatively, so it must be ratified.                                                          | A MINOR constitution bump with a sync report, the same shape as the 1.2.0 per-axis-composition amendment. Not a violation; a governed evolution. |
+| Renaming `aesthetic` to `theme` and `ThemeToggle` to `ColorSchemeToggle` | The vocabulary (theme means identity) only holds if the axis key, the attribute, and the control names agree. Leaving `aesthetic`, or a `ThemeToggle` that drives color scheme, would re-create the conflation in the names. | A clean rename is safe because there are no external consumers; the in-repo usage is updated in the same change.                                 |

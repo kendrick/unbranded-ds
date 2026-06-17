@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { canonicalDefaultTokens } from './defaults';
 import validCustom from './__fixtures__/valid-custom.json';
+import { canonicalDefaultTokens } from './defaults';
 import { contrastPairs, partialThemeSchema, themeSchema } from './schema';
 
 // A COMPLETE token set, built from the canonical defaults so these schema-shape
@@ -194,7 +194,7 @@ describe('partialThemeSchema — optional ring/z-index inheritance', () => {
 			name: 'drift-only',
 			displayName: 'Drift Only',
 			tokens: {
-				ring: { width: '2px' },
+				'ring': { width: '2px' },
 				'z-index': { overlay: '40', popover: '45', tooltip: '50' },
 			},
 		};

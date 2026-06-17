@@ -23,13 +23,13 @@ The fix is a tsup `banner` that prepends `'use client';` to the single bundled e
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 - **Section I (repository shape)** — PASS. No new package; the change lives in the existing `packages/react` build config and the example app.
 - **Section IV (component set)** — PASS. No component added, removed, or renamed; this is packaging, not surface.
 - **Section VI (testing)** — PASS. The three-layer rule governs components; this packaging change carries no new component, so no new stories, play functions, or a11y runs. It is guarded instead by a Vitest unit test (the built-bundle directive) and the example's `next build`, the layers that actually apply.
 - **Section VIII (tooling baseline)** — PASS. tsup stays the bundler; a `banner` is configuration, not a substitution, so no amendment is needed.
-- **Section IX.6 (SSR/RSC compatibility)** — PASS. This feature fulfills the commitment: it extends the existing SSR safety to a clean RSC *import*, which is the whole point.
+- **Section IX.6 (SSR/RSC compatibility)** — PASS. This feature fulfills the commitment: it extends the existing SSR safety to a clean RSC _import_, which is the whole point.
 - **Section X (changeset per PR)** — PASS. FR-007 ships a `.changeset/*.md` declaring a patch on `@unbranded-ds/react`.
 - [x] **Section XI — does this change keep prose, API shape, docs surfaces, failure modes, and story coverage legible to both agents and humans? List any concessions.**
   - Prose: research, quickstart, the changeset, and commit/PR text pass through the `humanizer` skill before merge.

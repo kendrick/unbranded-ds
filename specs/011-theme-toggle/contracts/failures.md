@@ -12,18 +12,18 @@ warn({ component: 'useTheme', issue: 'invalid-value', code: 'THEME_INVALID_VALUE
 
 ## The four codes
 
-| Code | Trigger | Behavior | Extra payload |
-|------|---------|----------|---------------|
-| `THEME_INVALID_VALUE` | `set()` given a value not in `available[axis]` and not `system` | warn, no-op | `axis`, `value`, `available` |
-| `THEME_AXIS_FORCED` | `set()` targets a `forced` axis | warn, no-op | `axis`, `value`, `forced` |
-| `THEME_NO_SYSTEM_SOURCE` | `system` set on an axis with no OS signal (e.g. density) | warn, no-op | `axis` |
-| `THEME_NO_PROVIDER` | `useTheme()` called with no `<ThemeProvider>` ancestor | **throw** | `code` on the error |
+| Code                     | Trigger                                                         | Behavior    | Extra payload                |
+| ------------------------ | --------------------------------------------------------------- | ----------- | ---------------------------- |
+| `THEME_INVALID_VALUE`    | `set()` given a value not in `available[axis]` and not `system` | warn, no-op | `axis`, `value`, `available` |
+| `THEME_AXIS_FORCED`      | `set()` targets a `forced` axis                                 | warn, no-op | `axis`, `value`, `forced`    |
+| `THEME_NO_SYSTEM_SOURCE` | `system` set on an axis with no OS signal (e.g. density)        | warn, no-op | `axis`                       |
+| `THEME_NO_PROVIDER`      | `useTheme()` called with no `<ThemeProvider>` ancestor          | **throw**   | `code` on the error          |
 
 ## The thrown case
 
 ```ts
 class ThemeProviderError extends Error {
-  code: 'THEME_NO_PROVIDER';
+	code: 'THEME_NO_PROVIDER';
 }
 ```
 

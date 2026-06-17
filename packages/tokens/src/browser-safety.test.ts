@@ -29,10 +29,12 @@ function specifiers(source: string): string[] {
 	const clean = stripComments(source);
 	const out: string[] = [];
 	for (const m of clean.matchAll(FROM_RE)) {
-		if (m[1]) out.push(m[1]);
+		if (m[1])
+			out.push(m[1]);
 	}
 	for (const m of clean.matchAll(SIDE_EFFECT_RE)) {
-		if (m[1]) out.push(m[1]);
+		if (m[1])
+			out.push(m[1]);
 	}
 	return out;
 }
@@ -41,7 +43,8 @@ function specifiers(source: string): string[] {
 function resolveSource(fromFile: string, spec: string): string | undefined {
 	const base = resolve(dirname(fromFile), spec);
 	for (const candidate of [base.replace(/\.js$/, '.ts'), base, `${base}.ts`]) {
-		if (existsSync(candidate)) return candidate;
+		if (existsSync(candidate))
+			return candidate;
 	}
 	return undefined;
 }
@@ -56,7 +59,8 @@ function nodeBuiltinsInGraph(entry: string): string[] {
 	const stack = [resolve(SRC, entry)];
 	while (stack.length > 0) {
 		const file = stack.pop();
-		if (!file || seen.has(file)) continue;
+		if (!file || seen.has(file))
+			continue;
 		seen.add(file);
 		for (const spec of specifiers(readFileSync(file, 'utf8'))) {
 			if (isNodeBuiltin(spec)) {
@@ -64,7 +68,8 @@ function nodeBuiltinsInGraph(entry: string): string[] {
 			}
 			else if (spec.startsWith('.')) {
 				const target = resolveSource(file, spec);
-				if (target) stack.push(target);
+				if (target)
+					stack.push(target);
 			}
 		}
 	}

@@ -7,7 +7,7 @@
 
 ## Background
 
-Spec 009 shipped theme composition on a resolution stack that already had more than one engine, and it added a cross-surface parity oracle to keep them honest. That oracle was the right move: it turned silent divergence into a loud CI failure across the full combination matrix, and on its first run it caught a real accessibility regression. But it services the *interest* on the debt. It detects divergence; it does not remove the thing that can diverge.
+Spec 009 shipped theme composition on a resolution stack that already had more than one engine, and it added a cross-surface parity oracle to keep them honest. That oracle was the right move: it turned silent divergence into a loud CI failure across the full combination matrix, and on its first run it caught a real accessibility regression. But it services the _interest_ on the debt. It detects divergence; it does not remove the thing that can diverge.
 
 The debt is concrete. A bundled theme is resolved **twice**: Style Dictionary resolves it into CSS at build, and the JS side re-resolves the same theme for the token-query MCP and the validator. Two implementations of "merge a theme onto the base," kept equal by a test rather than by construction. On top of that, the inheritance baseline (`canonicalDefaultTokens`) is a hand-maintained third copy of the base values, kept honest by its own drift guard because the package ships only its built output and cannot import the source files.
 
@@ -24,7 +24,7 @@ This is plumbing. No consumer-facing theming behavior changes.
 - Q: How is the generated `canonicalDefaultTokens` baseline produced and shipped? → A: A committed generated module produced from the build's resolved base, with a CI regenerate-and-diff check that replaces the hand-maintained drift guard. It stays a normal source file (no build-order problem) and the baseline is visible in the tree.
 - Q: What happens to the 009 `dtcgToResolved` bridge once the MCP reads emitted artifacts? → A: Remove it entirely (export and tests included). No production caller remains once the MCP reads the resolved artifacts and the parity matrix is gone; runtime consumer themes use the flat runtime-document format, not raw DTCG.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Bundled themes resolve exactly once (Priority: P1) 🎯 MVP
 
@@ -47,7 +47,7 @@ The build emits each bundled theme's fully-resolved token set as data, alongside
 
 The cross-surface parity matrix from 009 is removed and replaced by a thin canary, and the canonical-defaults drift guard is replaced by a regenerate-and-diff check, because the invariant each defended is now true by construction rather than by test. A maintainer stops paying the standing test tax, and a future reader sees one resolution path instead of two-kept-in-sync.
 
-**Why this priority**: It is the payoff, and it only becomes safe to do *after* US1 makes the invariant structural. Removing the oracle before the engines collapse would drop the safety net while the divergence still exists. After US1, the oracle proves nothing a single source of truth doesn't already guarantee.
+**Why this priority**: It is the payoff, and it only becomes safe to do _after_ US1 makes the invariant structural. Removing the oracle before the engines collapse would drop the safety net while the divergence still exists. After US1, the oracle proves nothing a single source of truth doesn't already guarantee.
 
 **Independent Test**: Remove the parity oracle and the defaults drift guard; confirm the suite stays green and that nothing else depended on them. Confirm a recorded note explains why each is no longer load-bearing.
 
@@ -60,7 +60,7 @@ The cross-surface parity matrix from 009 is removed and replaced by a thin canar
 
 ### User Story 3 - The runtime path stays the one isolated second context (Priority: P3)
 
-Consumer themes supplied at runtime keep their own JS resolver, untouched. That is the one genuinely necessary second engine, because those themes are never seen by the build. After this spec it is the *only* remaining second resolution context, it never overlaps a bundled theme, and the branded boundary still forbids feeding it the wrong shape.
+Consumer themes supplied at runtime keep their own JS resolver, untouched. That is the one genuinely necessary second engine, because those themes are never seen by the build. After this spec it is the _only_ remaining second resolution context, it never overlaps a bundled theme, and the branded boundary still forbids feeding it the wrong shape.
 
 **Why this priority**: It is the correctness boundary that makes US1 safe to state absolutely ("bundled themes resolve once"). It is mostly a verification-and-isolation story rather than new construction: confirm the runtime resolver is the sole survivor and that no bundled theme flows through it.
 
@@ -81,7 +81,7 @@ Consumer themes supplied at runtime keep their own JS resolver, untouched. That 
 - **The 009 `dtcgToResolved` bridge has no caller left** after the MCP repoints and the parity matrix is gone: it is removed entirely, and the test helpers that used it switch to the emitted artifact.
 - **Composition still works**: `composeTokens` folds the build-emitted resolved deltas with the same density-over-aesthetic precedence; the composition contract from 009 is unchanged.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -98,13 +98,13 @@ Consumer themes supplied at runtime keep their own JS resolver, untouched. That 
 - **FR-011**: No consumer-facing theming behavior changes — per-axis attributes, density-over-aesthetic precedence, the public theming API, and the composition semantics are all unchanged.
 - **FR-012**: Constitution Section III's "themes validated, fail loudly" wording MAY get a patch or minor clarification if the validation entry point moves; this spec introduces no new principle.
 
-### Key Entities *(include if feature involves data)*
+### Key Entities _(include if feature involves data)_
 
 - **Resolved artifact**: the per-theme canonical resolved token set the build emits alongside the CSS. The single source of truth for a bundled theme's values; read by the MCP, the bundled-theme validator, and the baseline.
 - **Build-time (bundled) theme**: a theme that ships in the package and is resolved once, by the build. The set of themes the divergence used to be possible across.
 - **Runtime consumer theme**: a theme supplied at runtime, resolved by the JS resolver. The one legitimate second resolution context, isolated and never overlapping a bundled theme.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 
@@ -131,5 +131,5 @@ Consumer themes supplied at runtime keep their own JS resolver, untouched. That 
 ## Out of Scope
 
 - **The runtime consumer-theme resolver.** It stays; it is the legitimate second context, isolated.
-- **Derived tokens.** This spec is about *where* resolution happens, not *what* resolution can compute. It clears the ground a derived-token spec would build on (a single resolver stage), but builds nothing of it.
+- **Derived tokens.** This spec is about _where_ resolution happens, not _what_ resolution can compute. It clears the ground a derived-token spec would build on (a single resolver stage), but builds nothing of it.
 - **Composition semantics and the public theming API.** Per-axis attributes, density-over-aesthetic, and the consumer-facing surface from 009 are unchanged; this changes the plumbing beneath them.

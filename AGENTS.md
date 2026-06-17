@@ -92,34 +92,34 @@ The whole flow takes four MCP calls plus two local file reads. No network is req
 
 Every shipped component has a `<Component>.usage.md` sidecar next to its source. Links resolve as each sidecar PR merges; this index is updated alongside the sidecar work in spec 005.
 
-| Component        | Summary                                                                                              | Sidecar                                                                                                 |
-| ---------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Button           | Token-styled button with variant, size, and an asChild render slot.                                  | [Button.usage.md](./packages/react/src/components/Button/Button.usage.md)                               |
-| Card             | Container surface with rounded corners and shadow tokens.                                            | [Card.usage.md](./packages/react/src/components/Card/Card.usage.md)                                     |
-| Checkbox         | Token-styled checkbox built on Base UI's Checkbox primitive.                                         | [Checkbox.usage.md](./packages/react/src/components/Checkbox/Checkbox.usage.md)                         |
-| ColorSchemeToggle | Light/system/dark color-scheme control wired to useTheme; persisted and system-aware.               | [ColorSchemeToggle.usage.md](./packages/react/src/components/ColorSchemeToggle/ColorSchemeToggle.usage.md) |
-| DensityToggle    | Density-axis control, data-driven from the theme registry; pairs with ColorSchemeToggle and ThemeToggle. | [DensityToggle.usage.md](./packages/react/src/components/DensityToggle/DensityToggle.usage.md)          |
-| Dialog           | Modal dialog with title, description, and action slots.                                              | [Dialog.usage.md](./packages/react/src/components/Dialog/Dialog.usage.md)                               |
-| Input            | Single-line text input.                                                                              | [Input.usage.md](./packages/react/src/components/Input/Input.usage.md)                                  |
-| Label            | Form label, pairs with Input.                                                                        | [Label.usage.md](./packages/react/src/components/Label/Label.usage.md)                                  |
-| SegmentedControl | Connected pill control built on radio-group semantics with strict-axis arrow navigation.             | [SegmentedControl.usage.md](./packages/react/src/components/SegmentedControl/SegmentedControl.usage.md) |
-| Select           | Compound select control with trigger, value, and item slots.                                         | [Select.usage.md](./packages/react/src/components/Select/Select.usage.md)                               |
-| SkipLink         | Visually-hidden "skip to main content" anchor for keyboard accessibility (WCAG 2.4.1).               | [SkipLink.usage.md](./packages/react/src/components/SkipLink/SkipLink.usage.md)                         |
-| Slider           | Numeric range input supporting single-value and range modes with pointer, keyboard, and touch input. | [Slider.usage.md](./packages/react/src/components/Slider/Slider.usage.md)                               |
-| Switch           | Token-styled toggle switch.                                                                          | [Switch.usage.md](./packages/react/src/components/Switch/Switch.usage.md)                               |
-| Tabs             | Tab-style navigation with panel content keyed by value.                                              | [Tabs.usage.md](./packages/react/src/components/Tabs/Tabs.usage.md)                                     |
-| ThemeToggle      | Aesthetic-identity control (default/brand/vaporwave), data-driven from the theme registry; pairs with ColorSchemeToggle. | [ThemeToggle.usage.md](./packages/react/src/components/ThemeToggle/ThemeToggle.usage.md)                |
-| Tooltip          | Contextual hover and focus tooltip; supports asChild for inline-element wrapping (citation pattern). | [Tooltip.usage.md](./packages/react/src/components/Tooltip/Tooltip.usage.md)                            |
-| VisuallyHidden   | Polymorphic component for screen-reader-only content.                                                | [VisuallyHidden.usage.md](./packages/react/src/components/VisuallyHidden/VisuallyHidden.usage.md)       |
+| Component         | Summary                                                                                                                  | Sidecar                                                                                                    |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| Button            | Token-styled button with variant, size, and an asChild render slot.                                                      | [Button.usage.md](./packages/react/src/components/Button/Button.usage.md)                                  |
+| Card              | Container surface with rounded corners and shadow tokens.                                                                | [Card.usage.md](./packages/react/src/components/Card/Card.usage.md)                                        |
+| Checkbox          | Token-styled checkbox built on Base UI's Checkbox primitive.                                                             | [Checkbox.usage.md](./packages/react/src/components/Checkbox/Checkbox.usage.md)                            |
+| ColorSchemeToggle | Light/system/dark color-scheme control wired to useTheme; persisted and system-aware.                                    | [ColorSchemeToggle.usage.md](./packages/react/src/components/ColorSchemeToggle/ColorSchemeToggle.usage.md) |
+| DensityToggle     | Density-axis control, data-driven from the theme registry; pairs with ColorSchemeToggle and ThemeToggle.                 | [DensityToggle.usage.md](./packages/react/src/components/DensityToggle/DensityToggle.usage.md)             |
+| Dialog            | Modal dialog with title, description, and action slots.                                                                  | [Dialog.usage.md](./packages/react/src/components/Dialog/Dialog.usage.md)                                  |
+| Input             | Single-line text input.                                                                                                  | [Input.usage.md](./packages/react/src/components/Input/Input.usage.md)                                     |
+| Label             | Form label, pairs with Input.                                                                                            | [Label.usage.md](./packages/react/src/components/Label/Label.usage.md)                                     |
+| SegmentedControl  | Connected pill control built on radio-group semantics with strict-axis arrow navigation.                                 | [SegmentedControl.usage.md](./packages/react/src/components/SegmentedControl/SegmentedControl.usage.md)    |
+| Select            | Compound select control with trigger, value, and item slots.                                                             | [Select.usage.md](./packages/react/src/components/Select/Select.usage.md)                                  |
+| SkipLink          | Visually-hidden "skip to main content" anchor for keyboard accessibility (WCAG 2.4.1).                                   | [SkipLink.usage.md](./packages/react/src/components/SkipLink/SkipLink.usage.md)                            |
+| Slider            | Numeric range input supporting single-value and range modes with pointer, keyboard, and touch input.                     | [Slider.usage.md](./packages/react/src/components/Slider/Slider.usage.md)                                  |
+| Switch            | Token-styled toggle switch.                                                                                              | [Switch.usage.md](./packages/react/src/components/Switch/Switch.usage.md)                                  |
+| Tabs              | Tab-style navigation with panel content keyed by value.                                                                  | [Tabs.usage.md](./packages/react/src/components/Tabs/Tabs.usage.md)                                        |
+| ThemeToggle       | Aesthetic-identity control (default/brand/vaporwave), data-driven from the theme registry; pairs with ColorSchemeToggle. | [ThemeToggle.usage.md](./packages/react/src/components/ThemeToggle/ThemeToggle.usage.md)                   |
+| Tooltip           | Contextual hover and focus tooltip; supports asChild for inline-element wrapping (citation pattern).                     | [Tooltip.usage.md](./packages/react/src/components/Tooltip/Tooltip.usage.md)                               |
+| VisuallyHidden    | Polymorphic component for screen-reader-only content.                                                                    | [VisuallyHidden.usage.md](./packages/react/src/components/VisuallyHidden/VisuallyHidden.usage.md)          |
 
 ## Hook index
 
 Theme state is read and set through a hook plus its provider, rather than a component. Both ship a sidecar like the components do.
 
-| Export | Summary | Sidecar |
-| --- | --- | --- |
-| useTheme | Three-axis theme hook (colorScheme, theme, density): per-axis preference, resolved, forced, available, one set(partial), plus a top-level colorScheme convenience. The next-themes analog. | [useTheme.usage.md](./packages/react/src/hooks/useTheme/useTheme.usage.md) |
-| ThemeProvider | Single source of truth for theme state; the home for defaults and forced. | [useTheme.usage.md](./packages/react/src/hooks/useTheme/useTheme.usage.md) |
+| Export        | Summary                                                                                                                                                                                    | Sidecar                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| useTheme      | Three-axis theme hook (colorScheme, theme, density): per-axis preference, resolved, forced, available, one set(partial), plus a top-level colorScheme convenience. The next-themes analog. | [useTheme.usage.md](./packages/react/src/hooks/useTheme/useTheme.usage.md) |
+| ThemeProvider | Single source of truth for theme state; the home for defaults and forced.                                                                                                                  | [useTheme.usage.md](./packages/react/src/hooks/useTheme/useTheme.usage.md) |
 
 ## Sidecar convention
 

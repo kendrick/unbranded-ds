@@ -21,7 +21,7 @@ The destructive Button renders the destructive color as text on a pale destructi
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 - **Section II (tokens independent of components)**: PASS. The pair lives in `@unbranded-ds/tokens`, emits as CSS variables, and the Button consumes it through Tailwind utilities — no runtime import of the tokens package into the component.
 - **Section III (theming contract — schema locked, values float)**: PASS, with a note. Adding `destructive-subtle` and `destructive-subtle-foreground` grows the canonical token set. Section III locks the set at build time but the set has always grown by spec (precedent: spec 008 added `font-serif`, `ring`, `z-index`). This is a deliberate canonical-schema addition, not a redefinition of the theming model, so it needs **no constitution amendment** (unlike spec 016, which changed the axis model normatively). Both tokens are provided by every bundled cell and defaulted in the canonical baseline, so a partial consumer theme that omits them still resolves.

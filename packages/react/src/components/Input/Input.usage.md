@@ -16,10 +16,10 @@ import { Input } from '@unbranded-ds/react';
 
 Input spreads all props from `React.ComponentProps<'input'>` onto the underlying element, so every valid HTML input attribute is accepted. The named props in the signature are:
 
-| Prop        | Type     | Default | Description                                                                                                           |
-| ----------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------------- |
-| `type`      | `string` | —       | The HTML input type (`"text"`, `"email"`, `"password"`, `"file"`, etc.). Passed directly to the underlying element.  |
-| `className` | `string` | —       | Merged with the default classes via `cn()`. Use this to override width or add one-off layout adjustments.            |
+| Prop        | Type     | Default | Description                                                                                                         |
+| ----------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
+| `type`      | `string` | —       | The HTML input type (`"text"`, `"email"`, `"password"`, `"file"`, etc.). Passed directly to the underlying element. |
+| `className` | `string` | —       | Merged with the default classes via `cn()`. Use this to override width or add one-off layout adjustments.           |
 
 All other props — `id`, `name`, `value`, `defaultValue`, `onChange`, `disabled`, `required`, `aria-*`, `data-*`, and the rest — pass through to the underlying `<input>`.
 
@@ -30,8 +30,7 @@ All other props — `id`, `name`, `value`, `defaultValue`, `onChange`, `disabled
 Always associate a label with the input so assistive technology can announce the field's purpose. The `htmlFor`/`id` pairing is the most straightforward way to do this.
 
 ```tsx
-import { Input } from '@unbranded-ds/react';
-import { Label } from '@unbranded-ds/react';
+import { Input, Label } from '@unbranded-ds/react';
 
 export function EmailField() {
 	return (
@@ -60,8 +59,7 @@ export function DisabledField() {
 Set `aria-invalid="true"` on the input to trigger the destructive-colored border and ring. This attribute is the contract between your form validation logic and the input's visual error state.
 
 ```tsx
-import { Input } from '@unbranded-ds/react';
-import { Label } from '@unbranded-ds/react';
+import { Input, Label } from '@unbranded-ds/react';
 
 export function ErrorField() {
 	return (

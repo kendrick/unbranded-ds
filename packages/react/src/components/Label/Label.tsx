@@ -31,8 +31,8 @@ interface LabelOwnProps {
 // HTML label attribute (id, aria-*, data-*, form, etc.). LabelOwnProps wins on
 // overlap — TypeScript prefers the later type in a right-leaning intersection,
 // which is what we want for the documented props.
-type LabelProps = Omit<React.ComponentProps<'label'>, keyof LabelOwnProps> &
-	LabelOwnProps;
+type LabelProps = Omit<React.ComponentProps<'label'>, keyof LabelOwnProps>
+	& LabelOwnProps;
 
 /**
  * A thin semantic wrapper around `<label>` that applies design-token typography and disabled-state styling.

@@ -80,7 +80,7 @@ This is the only stories-meta surface that has no TSDoc fallback — per-story d
 - **Story description that's terse and serviceable**: prefer keeping it terse. The humanizer rule is "no AI tells," not "longer is better." A two-sentence story description that names the use case beats a five-sentence one that pads.
 - **Three-item code list inside prose**: code unions like `'a' | 'b' | 'c'` are exempt from the no-three-item rule per Section XI.1. A prose list of three things is not.
 - **TSDoc drift surfaces a Section XI.2 API issue** (e.g., a prop name violates the shared vocabulary): record the API issue for spec 010 (constitution-driven retrofit); do not rename the prop in this spec.
-- **Prose surface disagrees with the corresponding sidecar from spec 006**: the audit aligns the autodoc surface to the sidecar's *intent* (same WHAT + WHEN, same use cases named). Verbatim copying is not required — the sidecar's "When to use" paragraph maps to the TSDoc's `@remarks` + `### When to use` subsection; the sidecar's Accessibility section maps to TSDoc's `### Accessibility` + `### Keyboard interactions`; the sidecar's prop-table Description column maps to per-prop TSDoc. The mapping is structural rather than copy-paste.
+- **Prose surface disagrees with the corresponding sidecar from spec 006**: the audit aligns the autodoc surface to the sidecar's _intent_ (same WHAT + WHEN, same use cases named). Verbatim copying is not required — the sidecar's "When to use" paragraph maps to the TSDoc's `@remarks` + `### When to use` subsection; the sidecar's Accessibility section maps to TSDoc's `### Accessibility` + `### Keyboard interactions`; the sidecar's prop-table Description column maps to per-prop TSDoc. The mapping is structural rather than copy-paste.
 
 ## Requirements _(mandatory)_
 
@@ -103,6 +103,7 @@ This is the only stories-meta surface that has no TSDoc fallback — per-story d
   - **Good (WHAT + WHEN with concrete consumer scenarios)**: `variant`: "The button's visual treatment. Pick by user intent: `default` for the primary action, `destructive` for irreversible actions (delete, sign out), `outline` or `ghost` for de-emphasized choices, `link` for inline navigation."
 
   Reviewers reject descriptions that meet the rule textually but don't help a consumer decide.
+
 - **FR-004**: Every component's canonical component-level description (the TSDoc on the component function per FR-010, which renders in both IDE hover and the Storybook autodoc banner) MUST identify the consumer scenario the component addresses, in active voice. When the optional `stories.tsx` override is set per FR-007, it follows the same standard.
 - **FR-005**: Every named story's description MUST name the use case the story exemplifies.
 - **FR-006**: Three-item prose enumerations MUST be restructured to two, four, or a sentence per Section XI.1. Code unions (`'sm' | 'md' | 'lg'`) are exempt.
@@ -127,6 +128,7 @@ This is the only stories-meta surface that has no TSDoc fallback — per-story d
   Placement varies by shape:
   - **Single-component shapes** (Button, Checkbox, Input, Label, SkipLink, Switch, VisuallyHidden): one structured TSDoc block on the component function.
   - **Compound shapes** (Card, Dialog, SegmentedControl, Select, Slider, Tabs, Tooltip): both surfaces. A per-slot TSDoc on each individual slot function/declaration (what surfaces when hovering `<Dialog.Content>` or `<CardHeader>`) AND an overview TSDoc on the aggregating export (the object literal for dot-notation compounds like Tooltip/SegmentedControl, or on the primary component for sibling-export compounds like Dialog/Card). The overview block carries the 6-section structure; per-slot blocks are shorter (one-line summary + accessibility + props pointer, no full keyboard table on slots that share the compound's keyboard model).
+
 - **FR-011**: Each exported prop interface or type across the 14 components MUST have per-property TSDoc comments following the 3-section prop-level template:
   1. **One-sentence description** (active voice) explaining WHAT the prop does plus WHEN a consumer would reach for it per the FR-003 codified bar.
   2. **(Optional) one-sentence behavior nuance.** Edge cases, controlled vs uncontrolled, side effects on focus/ARIA. Reserve for props where the type signature doesn't communicate the nuance.
@@ -135,6 +137,7 @@ This is the only stories-meta surface that has no TSDoc fallback — per-story d
   5. **(Optional) `@example`** — only for props whose behavior is hard to grasp from the type signature alone.
 
   Storybook's react-docgen propagates the description to `argTypes.description` automatically; the audit removes any duplicate `argTypes.description` in stories.tsx per FR-008. Per-prop TSDoc paraphrases the corresponding sidecar prop-table Description column with the same intent (same WHAT + WHEN, same use cases named) without copying verbatim.
+
 - **FR-012**: Every bullet currently open in `specs/006-sidecar-retrofit/spec-007-inbox.md` MUST be resolved by a corresponding TSDoc edit (and, for bullet 1, an incidental stories.tsx argTypes cleanup). The inbox file is updated as bullets close — either remove the bullet or strike it through with a link to the resolving commit. Under the Q9 substantial-incorporation reframing, all six bullets are US1 work (the canonical TSDoc surface):
   - **Bullet 1 (Button argTypes drift)**: add per-prop TSDoc on `ButtonProps.size` listing all 8 values; remove the now-stale `options: [...]` array from `Button.stories.tsx` argTypes (or leave the override only if it's intentionally narrower for a Storybook-UI reason — but in this case it isn't).
   - **Bullets 2-3 (Dialog `showCloseButton` gaps on DialogContent and DialogFooter)**: per-prop TSDoc on the respective interfaces.
@@ -191,7 +194,7 @@ This is the only stories-meta surface that has no TSDoc fallback — per-story d
 - Humanizer review is manual during PR review. Future specs may add automated humanizer linting, but that's out of scope here.
 - "WHAT + WHEN" prop descriptions are a quality bar enforced by reviewer judgment per the codified rule in FR-003. The bar requires a meaningful consumer decision context in the WHEN clause — not just textual satisfaction of the rule. Reviewer rejects descriptions like "Reach for this when you want X" where X is the prop's own purpose restated.
 - This spec stays prose-only. No snapshot tests currently exist in the repo (verified by grep); prose edits cannot produce snapshot drift. Interaction tests (`play` functions) and a11y tests assert on DOM and behavior, not on autodoc prose, so they're unaffected by this audit.
-- The sidecar text from spec 006 is the canonical voice and intent reference. The audit aligns each autodoc surface to the sidecar's *intent* (same WHAT + WHEN, same use cases named) structurally rather than verbatim. The component-level TSDoc (which renders in both IDE hover and the Storybook autodoc banner via react-docgen — see Q5-collapse) carries the rich 6-section structure with `### Accessibility`, `### Keyboard interactions`, layered `@example`, and `@see`; per-prop TSDoc carries the terse 3-section structure; per-story descriptions carry one tight sentence. Sidecar-to-TSDoc-section mapping is structural rather than copy-paste.
+- The sidecar text from spec 006 is the canonical voice and intent reference. The audit aligns each autodoc surface to the sidecar's _intent_ (same WHAT + WHEN, same use cases named) structurally rather than verbatim. The component-level TSDoc (which renders in both IDE hover and the Storybook autodoc banner via react-docgen — see Q5-collapse) carries the rich 6-section structure with `### Accessibility`, `### Keyboard interactions`, layered `@example`, and `@see`; per-prop TSDoc carries the terse 3-section structure; per-story descriptions carry one tight sentence. Sidecar-to-TSDoc-section mapping is structural rather than copy-paste.
 
 ## Dependencies
 

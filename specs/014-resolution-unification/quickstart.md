@@ -12,6 +12,7 @@ How to implement and verify spec 014. All in `packages/tokens`.
 ### 1. Foundational — the build emits the data (do first; everything reads it)
 
 In `sd.config.ts`:
+
 - Add a per-theme resolved-delta JSON emission: a Style Dictionary pass sourced on `themes/<axis>/<name>.json` ALONE (no base), emitting the theme's resolved keys as flat JSON. This mirrors the proven density-delta CSS path (compact already emits delta-only CSS this way).
 - Emit the resolved base (`src/tokens/**`) and generate a committed `src/defaults.generated.ts` (a branded `ResolvedTokens`). Point `defaults.ts` at it (re-export) or replace it.
 

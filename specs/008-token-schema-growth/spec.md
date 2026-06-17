@@ -22,7 +22,7 @@ Adding required tokens is a breaking change to any existing consumer theme. Pre-
 - Q: Does `brand.json` ship a demonstrative non-color override, or do the built-in themes stay color-only? → A: `brand.json` ships a richer multi-category non-color override (a `radius` override plus a `typography` override such as a font weight or font family), demonstrating more of the theming surface. `light.json` and `dark.json` stay color-only. This gives FR-014's THEMING.md example a real, shipped theme to reference.
 - Q: Which packages bump for the release? → A: `@unbranded-ds/tokens` minor to 0.4.0 plus `@unbranded-ds/react` patch (a dependency-range bump to `^0.4.0` so react consumers receive the new tokens through the re-exported preset). Standard Changesets dependent-bump; no react source changes.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Canonical tokens for serif, motion, and larger type (Priority: P1) 🎯 MVP
 
@@ -99,7 +99,7 @@ A component author who today hardcodes the same raw value in many places (a `rin
 - **A consumer references a motion token through Tailwind that doesn't exist** (a typo like `duration-medium`): standard Tailwind behavior — the utility doesn't resolve. The token set defines fast, base, and slow; there is no `medium`.
 - **Display-tier sizes** (`display-sm`, `display`, `display-lg`, `display-xl`) are requested by a consumer: not in scope for this spec. They are deferred until a component contract (likely a `<Heading>`) needs them, since naming display stops without a consumer is premature.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -141,7 +141,7 @@ A component author who today hardcodes the same raw value in many places (a `rin
 - **FR-015**: The release MUST bump `@unbranded-ds/tokens` minor to 0.4.0 and `@unbranded-ds/react` patch (a dependency-range bump to `^0.4.0` so react consumers receive the new tokens through the re-exported preset; no react source changes). The changeset entry MUST announce the breaking change to consumer themes (the newly required tokens).
 - **FR-016**: Validation error output MUST stay structured (a result shape carrying a code, a path, and a message per issue), consistent with the existing failure-mode pattern. Human-readable messages layer on top of the structured payload, never in place of it.
 
-### Key Entities *(include if feature involves data)*
+### Key Entities _(include if feature involves data)_
 
 - **Token category**: A named group of related tokens (color, spacing, typography, radius, shadow, opacity, and the new motion). Each category defines a fixed set of token names known to the build at compile time. This spec adds one category (motion) and three keys to an existing category (typography).
 - **Motion token**: A duration or an easing value. Durations express how long a transition runs; easings express its acceleration curve. Three of each, named by role rather than by raw value.
@@ -149,7 +149,7 @@ A component author who today hardcodes the same raw value in many places (a `rin
 - **Runtime theme document**: The flat `{ name, displayName, tokens }` shape passed to `registerTheme` / `validateTheme`, validated (schema plus WCAG AA contrast on the resolved result) and injected as a `<style>` block at runtime. After this spec it may override any subset of any category; omitted tokens inherit the canonical defaults, and validation runs against the merged result.
 - **Canonical default layer**: The source token definitions plus built-in themes that together provide a complete value for every required token. Partial consumer themes inherit from this layer; it must itself be complete.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

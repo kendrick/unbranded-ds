@@ -26,22 +26,22 @@ An independent theming dimension. The canonical list is the `Axis` union from `@
 
 ```ts
 interface UseThemeReturn {
-  preference: Record<Axis, string>;        // stated; aesthetic may be 'system'
-  resolved: Record<Axis, string>;          // applied; system resolved to light/dark
-  system: Partial<Record<Axis, string>>;   // OS value where a signal exists
-  forced: Partial<Record<Axis, string>>;   // provider-pinned, non-overridable
-  available: Record<Axis, string[]>;       // allowed values per axis (incl. file-less default)
-  set: (partial: Partial<Record<Axis, string>>) => void; // one object, any subset of axes
+	preference: Record<Axis, string>; // stated; aesthetic may be 'system'
+	resolved: Record<Axis, string>; // applied; system resolved to light/dark
+	system: Partial<Record<Axis, string>>; // OS value where a signal exists
+	forced: Partial<Record<Axis, string>>; // provider-pinned, non-overridable
+	available: Record<Axis, string[]>; // allowed values per axis (incl. file-less default)
+	set: (partial: Partial<Record<Axis, string>>) => void; // one object, any subset of axes
 }
 ```
 
 ## Storage model
 
-| Key | Holds | Read by |
-|-----|-------|---------|
-| `unbranded-ds-theme` | the concrete applied aesthetic value (never `system`) | spec-002 bootstrap, hook |
-| `unbranded-ds-theme-preference` | the stated aesthetic intent, including `system` (new companion key) | hook |
-| `unbranded-ds-density` | the density value | spec-002 bootstrap, hook |
+| Key                             | Holds                                                               | Read by                  |
+| ------------------------------- | ------------------------------------------------------------------- | ------------------------ |
+| `unbranded-ds-theme`            | the concrete applied aesthetic value (never `system`)               | spec-002 bootstrap, hook |
+| `unbranded-ds-theme-preference` | the stated aesthetic intent, including `system` (new companion key) | hook                     |
+| `unbranded-ds-density`          | the density value                                                   | spec-002 bootstrap, hook |
 
 The bootstrap reads only the concrete keys, so it never applies a non-existent `data-theme="system"`. The hook treats the companion key as authoritative for intent, falling back to the concrete key and then the default.
 
@@ -54,9 +54,9 @@ The bootstrap reads only the concrete keys, so it never applies a non-existent `
 
 ## Validation rules
 
-| Condition | Outcome |
-|-----------|---------|
-| value not in `available[axis]` and not `system` | `THEME_INVALID_VALUE` (warn, no-op) |
-| `system` on an axis with no OS signal | `THEME_NO_SYSTEM_SOURCE` (warn, no-op) |
-| `set()` targets a forced axis | `THEME_AXIS_FORCED` (warn, no-op) |
-| `useTheme()` with no provider ancestor | `THEME_NO_PROVIDER` (throw) |
+| Condition                                       | Outcome                                |
+| ----------------------------------------------- | -------------------------------------- |
+| value not in `available[axis]` and not `system` | `THEME_INVALID_VALUE` (warn, no-op)    |
+| `system` on an axis with no OS signal           | `THEME_NO_SYSTEM_SOURCE` (warn, no-op) |
+| `set()` targets a forced axis                   | `THEME_AXIS_FORCED` (warn, no-op)      |
+| `useTheme()` with no provider ancestor          | `THEME_NO_PROVIDER` (throw)            |

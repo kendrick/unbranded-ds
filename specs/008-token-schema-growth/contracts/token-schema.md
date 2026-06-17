@@ -22,22 +22,23 @@ Emit as `--typography-font-serif`, `--typography-size-2xl`, `--typography-size-3
 ```jsonc
 // packages/tokens/src/tokens/motion.json
 {
-  "motion": {
-    "duration": {
-      "fast": { "$value": "120ms", "$type": "duration" },
-      "base": { "$value": "240ms", "$type": "duration" },
-      "slow": { "$value": "480ms", "$type": "duration" }
-    },
-    "easing": {
-      "standard":   { "$value": "cubic-bezier(0.4, 0, 0.2, 1)", "$type": "cubicBezier" },
-      "decelerate": { "$value": "cubic-bezier(0, 0, 0.2, 1)",   "$type": "cubicBezier" },
-      "accelerate": { "$value": "cubic-bezier(0.4, 0, 1, 1)",   "$type": "cubicBezier" }
-    }
-  }
+	"motion": {
+		"duration": {
+			"fast": { "$value": "120ms", "$type": "duration" },
+			"base": { "$value": "240ms", "$type": "duration" },
+			"slow": { "$value": "480ms", "$type": "duration" }
+		},
+		"easing": {
+			"standard": { "$value": "cubic-bezier(0.4, 0, 0.2, 1)", "$type": "cubicBezier" },
+			"decelerate": { "$value": "cubic-bezier(0, 0, 0.2, 1)", "$type": "cubicBezier" },
+			"accelerate": { "$value": "cubic-bezier(0.4, 0, 1, 1)", "$type": "cubicBezier" }
+		}
+	}
 }
 ```
 
 Emit (special-cased in `sd.config.ts`) as Tailwind-aligned names:
+
 - `--ease-standard`, `--ease-decelerate`, `--ease-accelerate` → real `ease-*` utilities.
 - `--duration-fast`, `--duration-base`, `--duration-slow` → plain CSS vars (no `duration-*` namespace in v4).
 
@@ -58,11 +59,13 @@ Default `3px` matches what the hardcoded `ring-3` usages resolve to. Emits `--ri
 
 ```jsonc
 // packages/tokens/src/tokens/z-index.json — illustrative stops; finalize in tasks
-{ "z-index": {
-    "overlay": { "$value": "50", "$type": "number" },
-    "popover": { "$value": "55", "$type": "number" },
-    "tooltip": { "$value": "60", "$type": "number" }
-} }
+{
+	"z-index": {
+		"overlay": { "$value": "50", "$type": "number" },
+		"popover": { "$value": "55", "$type": "number" },
+		"tooltip": { "$value": "60", "$type": "number" }
+	}
+}
 ```
 
 Ordered so `tooltip` sits above `popover`/`overlay`, giving nested overlays a defined stacking order (the latent `z-50` bug). Exact stop names and values are settled in tasks; the ordering invariant is the contract. Emits `--z-index-overlay` etc.
@@ -79,8 +82,8 @@ Ordered so `tooltip` sits above `popover`/`overlay`, giving nested overlays a de
 Extend `categoryMap` and the `TokenCategory` union to include the new categories:
 
 ```ts
-const categoryMap = { color, spacing, typography, radius: 'radii', shadow: 'shadows', opacity, motion: 'motion', ring: 'ring', 'z-index': 'z-index' }
-type TokenCategory = "color" | "spacing" | "typography" | "radii" | "shadows" | "opacity" | "motion" | "ring" | "z-index"
+const categoryMap = { color, spacing, typography, 'radius': 'radii', 'shadow': 'shadows', opacity, 'motion': 'motion', 'ring': 'ring', 'z-index': 'z-index' };
+type TokenCategory = 'color' | 'spacing' | 'typography' | 'radii' | 'shadows' | 'opacity' | 'motion' | 'ring' | 'z-index';
 ```
 
 Every new token MUST appear in all four artifacts: CSS vars, Tailwind preset, TS token map, JSON.

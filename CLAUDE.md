@@ -3,6 +3,7 @@
 Auto-generated from all feature plans. Last updated: 2026-06-16
 
 ## Active Technologies
+
 - TypeScript 5.x, strict, no `any` (Constitution VIII). React 19, Next.js 15 (App Router). + `next` ^15, `react`/`react-dom` 19, `@unbranded-ds/tokens` and `@unbranded-ds/react` at `workspace:*`, Tailwind CSS v4 (consumed through `@unbranded-ds/react/preset.css`), `next/font/local` (self-hosted font), `@playwright/test`, `@axe-core/playwright`. (015-nextjs-example-app)
 - `localStorage` only, through the design system's existing keys (`unbranded-ds-theme`, `unbranded-ds-density`, `unbranded-ds-theme-preference`). No new storage. (015-nextjs-example-app)
 - TypeScript 5.x, strict, no `any` (Constitution VIII). + Style Dictionary v4 (the token build, `sd.config.ts`), Zod (theme schema and validation), Tailwind CSS v4 (`@theme` preset, `@layer` cascade), `@base-ui-components/react` (SegmentedControl, reached through the toggles), React 19 (`useSyncExternalStore`), `@modelcontextprotocol/sdk` (the token-query MCP, re-pointed to three axes). (016-color-scheme-axis-split)
@@ -58,10 +59,10 @@ npm test && npm run lint
 TypeScript 5.x, strict mode, no `any` (EVER): Follow standard conventions
 
 ## Recent Changes
+
 - 019-storybook-test-runner-ci: Added TypeScript 5.x, strict, no `any` (Constitution VIII) + Vitest 3 (browser mode), `@vitest/browser` (^3, the optional peer that is currently absent), `playwright` (Chromium; `playwright@1.61.0` is already in the workspace store), `@storybook/addon-vitest` ^10.3 (`storybookTest()` plugin, already a devDep), `@storybook/addon-a11y` ^10.3 (axe, `test: 'error'` already set), Storybook 10.3 `@storybook/react-vite`, GitHub Actions
 - 017-react-use-client: Added TypeScript 5.x, strict, no `any` (Constitution VIII) + sup ^8 (the bundler gaining the banner), React 19 (peer), `@base-ui-components/react` (peer), Next.js 15 App Router (the RSC consumer and guard), Vitest ^3 (the directive unit test), `@playwright/test` (the example e2e that runs `next build`)
 - 018-button-destructive-contrast: Added TypeScript 5.x, strict, no `any` (Constitution VIII). + Style Dictionary v4 (token build + per-cell CSS emission), Zod (`schema.ts` token schema + `contrastPairs`), the `color.ts` WCAG contrast math, Tailwind CSS v4 (`@theme` preset auto-maps tokens to utilities), `class-variance-authority` + `cn()` (the Button `destructive` variant), React 19, Storybook 10.3 (Button stories + addon-a11y), `@playwright/test` + `@axe-core/playwright` (example e2e a11y).
-
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

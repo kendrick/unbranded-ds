@@ -12,16 +12,22 @@ import { ThemeProvider } from '@unbranded-ds/react';
 
 ```ts
 interface ThemeProviderProps {
-  children: React.ReactNode;
-  /** Per-axis starting value, used until a stored preference loads. Falls back
-   *  to the tokens system constants ('light' aesthetic, 'comfortable' density). */
-  defaults?: Partial<Record<Axis, string>>;
-  /** Per-axis pinned value. A forced axis is applied, overrides any stored
-   *  preference, and cannot change through set() (next-themes' forcedTheme). */
-  forced?: Partial<Record<Axis, string>>;
-  /** Element the data-* attributes are written to. Defaults to
-   *  document.documentElement. */
-  root?: HTMLElement;
+	children: React.ReactNode;
+	/**
+	 * Per-axis starting value, used until a stored preference loads. Falls back
+	 *  to the tokens system constants ('light' aesthetic, 'comfortable' density).
+	 */
+	defaults?: Partial<Record<Axis, string>>;
+	/**
+	 * Per-axis pinned value. A forced axis is applied, overrides any stored
+	 *  preference, and cannot change through set() (next-themes' forcedTheme).
+	 */
+	forced?: Partial<Record<Axis, string>>;
+	/**
+	 * Element the data-* attributes are written to. Defaults to
+	 *  document.documentElement.
+	 */
+	root?: HTMLElement;
 }
 ```
 

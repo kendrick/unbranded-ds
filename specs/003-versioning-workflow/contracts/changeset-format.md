@@ -10,15 +10,15 @@ Two file formats land under `.changeset/` as part of this spec. Their contracts 
 
 ```json
 {
-  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": "@changesets/cli/changelog",
-  "commit": false,
-  "fixed": [],
-  "linked": [],
-  "access": "public",
-  "baseBranch": "main",
-  "updateInternalDependencies": "patch",
-  "ignore": ["@unbranded-ds/storybook"]
+	"$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
+	"changelog": "@changesets/cli/changelog",
+	"commit": false,
+	"fixed": [],
+	"linked": [],
+	"access": "public",
+	"baseBranch": "main",
+	"updateInternalDependencies": "patch",
+	"ignore": ["@unbranded-ds/storybook"]
 }
 ```
 
@@ -34,6 +34,7 @@ Two file formats land under `.changeset/` as part of this spec. Their contracts 
 - `ignore: ["@unbranded-ds/storybook"]`: per FR-011, the storybook workspace member is not published. Listing it here prevents `pnpm changeset version` from offering it as a bump target.
 
 **Forbidden values**:
+
 - `commit: true` — would conflict with the Version Packages PR pattern
 - `fixed` or `linked` containing both packages — would force lockstep bumps, removing independent versioning
 - `access: "restricted"` — would conflict with the public scope on both packages
@@ -78,7 +79,7 @@ Add `<Tooltip>` component wrapping the `@base-ui-components/react/tooltip` primi
 
 **Example — breaking change**:
 
-```markdown
+````markdown
 ---
 "@unbranded-ds/tokens": minor
 "@unbranded-ds/react": patch
@@ -92,6 +93,7 @@ BREAKING: remove the wildcard exports `./dist/css/*` and `./dist/tailwind/*` fro
 @import '@unbranded-ds/tokens/dist/tailwind/preset.css';
 @import '@unbranded-ds/tokens/dist/css/tokens-light.css';
 ```
+````
 
 **After:**
 
@@ -101,6 +103,7 @@ BREAKING: remove the wildcard exports `./dist/css/*` and `./dist/tailwind/*` fro
 ```
 
 The localStorage key for theme persistence also changed from `ds-theme` to `unbranded-ds-theme`. Users with the old key saved see the default theme on their first load after upgrade — their saved preference falls back to the default. No automatic migration is provided.
+
 ```
 
 (Note: the example above uses spec 002's actual breaking change, just to demonstrate the format. Spec 002's CHANGELOG entries were hand-authored — see R7 for the disposition of those.)
@@ -113,3 +116,8 @@ The localStorage key for theme persistence also changed from `ds-theme` to `unbr
   - Breaking-change changesets with a one-line body
   - Changesets that bump a package but contain no description of what changed
   - Changesets that mention a third package outside the workspace (would fail schema validation anyway)
+```
+
+```
+
+```

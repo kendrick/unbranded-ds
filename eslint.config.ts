@@ -20,7 +20,7 @@ export default antfu(
 		},
 
 		rules: {
-			camelcase: ['error', { ignoreImports: true }],
+			'camelcase': ['error', { ignoreImports: true }],
 			'style/multiline-ternary': 'off',
 			'style/arrow-parens': ['error', 'always'],
 

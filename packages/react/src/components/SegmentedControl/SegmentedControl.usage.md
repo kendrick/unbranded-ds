@@ -20,27 +20,27 @@ import { SegmentedControl } from '@unbranded-ds/react';
 
 The root element. Renders a Base UI `RadioGroup` and manages selection state, keyboard navigation, and context propagation to child Items.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `string` | — | The controlled selected value. When set, the consumer owns selection state and must update it from `onValueChange` for the selection to visually change. Pair with `onValueChange`. |
-| `defaultValue` | `string` | — | Seeds the selected value for uncontrolled usage. Pass either `defaultValue` or `value`, not both. |
-| `onValueChange` | `(value: string) => void` | — | Fires with the newly selected string when the user picks an item via click or keyboard. |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Controls item height, horizontal padding, and font size across all child Items. |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Lays items in a row (horizontal) or column (vertical). Also determines which arrow keys move focus — Left/Right for horizontal, Up/Down for vertical. |
-| `disabled` | `boolean` | `false` | When `true`, the entire control is non-interactive. Sets `aria-disabled="true"` on the root and suppresses pointer events. |
-| `className` | `string` | — | Extra classes merged onto the root via `cn()`. |
-| `children` | `React.ReactNode` | — | One or more `SegmentedControl.Item` children. Renders a dev warning if no children are present. |
+| Prop            | Type                         | Default        | Description                                                                                                                                                                         |
+| --------------- | ---------------------------- | -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`         | `string`                     | —              | The controlled selected value. When set, the consumer owns selection state and must update it from `onValueChange` for the selection to visually change. Pair with `onValueChange`. |
+| `defaultValue`  | `string`                     | —              | Seeds the selected value for uncontrolled usage. Pass either `defaultValue` or `value`, not both.                                                                                   |
+| `onValueChange` | `(value: string) => void`    | —              | Fires with the newly selected string when the user picks an item via click or keyboard.                                                                                             |
+| `size`          | `'sm' \| 'md' \| 'lg'`       | `'md'`         | Controls item height, horizontal padding, and font size across all child Items.                                                                                                     |
+| `orientation`   | `'horizontal' \| 'vertical'` | `'horizontal'` | Lays items in a row (horizontal) or column (vertical). Also determines which arrow keys move focus — Left/Right for horizontal, Up/Down for vertical.                               |
+| `disabled`      | `boolean`                    | `false`        | When `true`, the entire control is non-interactive. Sets `aria-disabled="true"` on the root and suppresses pointer events.                                                          |
+| `className`     | `string`                     | —              | Extra classes merged onto the root via `cn()`.                                                                                                                                      |
+| `children`      | `React.ReactNode`            | —              | One or more `SegmentedControl.Item` children. Renders a dev warning if no children are present.                                                                                     |
 
 ### SegmentedControl.Item props
 
 A single selectable segment. Renders a Base UI `Radio.Root` with the size and orientation it reads from context.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `string` | — | **Required.** The value this item represents. Matched against the Root's `value` or `defaultValue` to determine the checked state. |
-| `disabled` | `boolean` | `false` | When `true`, this item is non-interactive while the rest of the control remains active. Sets `aria-disabled` and `data-disabled` on the element. |
-| `className` | `string` | — | Extra classes merged onto the item via `cn()`. |
-| `children` | `React.ReactNode` | — | The visible label. Can include text, an icon, or both. |
+| Prop        | Type              | Default | Description                                                                                                                                      |
+| ----------- | ----------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `value`     | `string`          | —       | **Required.** The value this item represents. Matched against the Root's `value` or `defaultValue` to determine the checked state.               |
+| `disabled`  | `boolean`         | `false` | When `true`, this item is non-interactive while the rest of the control remains active. Sets `aria-disabled` and `data-disabled` on the element. |
+| `className` | `string`          | —       | Extra classes merged onto the item via `cn()`.                                                                                                   |
+| `children`  | `React.ReactNode` | —       | The visible label. Can include text, an icon, or both.                                                                                           |
 
 ## Common patterns
 
@@ -52,13 +52,13 @@ The simplest case: pass `defaultValue` and let the component own state internall
 import { SegmentedControl } from '@unbranded-ds/react';
 
 export function ViewSwitcher() {
-  return (
-    <SegmentedControl.Root defaultValue="week">
-      <SegmentedControl.Item value="day">Day</SegmentedControl.Item>
-      <SegmentedControl.Item value="week">Week</SegmentedControl.Item>
-      <SegmentedControl.Item value="month">Month</SegmentedControl.Item>
-    </SegmentedControl.Root>
-  );
+	return (
+		<SegmentedControl.Root defaultValue="week">
+			<SegmentedControl.Item value="day">Day</SegmentedControl.Item>
+			<SegmentedControl.Item value="week">Week</SegmentedControl.Item>
+			<SegmentedControl.Item value="month">Month</SegmentedControl.Item>
+		</SegmentedControl.Root>
+	);
 }
 ```
 
@@ -67,19 +67,19 @@ export function ViewSwitcher() {
 When external logic needs to read or drive the selection — a URL param, a keyboard shortcut, a server response — manage `value` yourself with `useState`.
 
 ```tsx
-import * as React from 'react';
 import { SegmentedControl } from '@unbranded-ds/react';
+import * as React from 'react';
 
 export function ControlledViewSwitcher() {
-  const [view, setView] = React.useState('week');
+	const [view, setView] = React.useState('week');
 
-  return (
-    <SegmentedControl.Root value={view} onValueChange={setView}>
-      <SegmentedControl.Item value="day">Day</SegmentedControl.Item>
-      <SegmentedControl.Item value="week">Week</SegmentedControl.Item>
-      <SegmentedControl.Item value="month">Month</SegmentedControl.Item>
-    </SegmentedControl.Root>
-  );
+	return (
+		<SegmentedControl.Root value={view} onValueChange={setView}>
+			<SegmentedControl.Item value="day">Day</SegmentedControl.Item>
+			<SegmentedControl.Item value="week">Week</SegmentedControl.Item>
+			<SegmentedControl.Item value="month">Month</SegmentedControl.Item>
+		</SegmentedControl.Root>
+	);
 }
 ```
 
@@ -91,13 +91,13 @@ Pass `orientation="vertical"` to stack items in a column. Up/Down arrows navigat
 import { SegmentedControl } from '@unbranded-ds/react';
 
 export function VerticalFilter() {
-  return (
-    <SegmentedControl.Root defaultValue="all" orientation="vertical">
-      <SegmentedControl.Item value="all">All</SegmentedControl.Item>
-      <SegmentedControl.Item value="active">Active</SegmentedControl.Item>
-      <SegmentedControl.Item value="archived">Archived</SegmentedControl.Item>
-    </SegmentedControl.Root>
-  );
+	return (
+		<SegmentedControl.Root defaultValue="all" orientation="vertical">
+			<SegmentedControl.Item value="all">All</SegmentedControl.Item>
+			<SegmentedControl.Item value="active">Active</SegmentedControl.Item>
+			<SegmentedControl.Item value="archived">Archived</SegmentedControl.Item>
+		</SegmentedControl.Root>
+	);
 }
 ```
 
@@ -109,14 +109,14 @@ Disable individual items to signal that an option exists but is unavailable in t
 import { SegmentedControl } from '@unbranded-ds/react';
 
 export function SizeSelector() {
-  return (
-    <SegmentedControl.Root defaultValue="md" size="sm">
-      <SegmentedControl.Item value="sm">S</SegmentedControl.Item>
-      <SegmentedControl.Item value="md">M</SegmentedControl.Item>
-      <SegmentedControl.Item value="lg">L</SegmentedControl.Item>
-      <SegmentedControl.Item value="xl" disabled>XL</SegmentedControl.Item>
-    </SegmentedControl.Root>
-  );
+	return (
+		<SegmentedControl.Root defaultValue="md" size="sm">
+			<SegmentedControl.Item value="sm">S</SegmentedControl.Item>
+			<SegmentedControl.Item value="md">M</SegmentedControl.Item>
+			<SegmentedControl.Item value="lg">L</SegmentedControl.Item>
+			<SegmentedControl.Item value="xl" disabled>XL</SegmentedControl.Item>
+		</SegmentedControl.Root>
+	);
 }
 ```
 

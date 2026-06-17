@@ -53,22 +53,22 @@ Add four React components — Tooltip, SkipLink, Slider, SegmentedControl — to
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 Constitution version at planning time: **1.0.2** (amended on this branch to add Section IX #6 SSR safety; see `.specify/memory/constitution.md` SYNC IMPACT REPORT).
 
-| Section | Gate | Status | Notes |
-|---|---|---|---|
-| I. Repository shape | No new packages | Pass | All work in `packages/react`; no new top-level packages |
-| II. Tokens independent of components | Tokens unchanged | Pass | No edits to `packages/tokens` |
-| III. Theming contract | No new theming surface | Pass | Components consume tokens via the Tailwind preset |
-| IV. Components thin and unopinionated | Base UI wraps, tokens only, `className` merged via `cn()`, no `@unbranded-ds/tokens` runtime import | Pass | Tooltip, Slider, and SegmentedControl wrap Base UI primitives; SkipLink is a native `<a>` + `.sr-only` |
-| V. Stories source of truth | Default + variants + play function + autodocs | Pass | FR-030 names required stories per component; FR-031 mandates humanizer pass |
-| VI. Testing — three layers | Unit + interaction + a11y | Pass | All three required by FR-030 and FR-033 |
-| VII. Deployment and MCP | No MCP surface change | Pass | New components surface through existing `@storybook/addon-mcp` |
-| VIII. Tooling baseline | Per Section VIII | Pass | No tool substitutions |
-| IX. DoD per component | All nine bullets | Pass | Including new bullet 6 (SSR safety) |
-| X. Governance | Constitution Check + per-PR changeset | Pass | Branch amends constitution; each component PR adds a `.changeset/*.md` declaring `@unbranded-ds/react: minor` |
+| Section                               | Gate                                                                                                | Status | Notes                                                                                                         |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------------------------------- |
+| I. Repository shape                   | No new packages                                                                                     | Pass   | All work in `packages/react`; no new top-level packages                                                       |
+| II. Tokens independent of components  | Tokens unchanged                                                                                    | Pass   | No edits to `packages/tokens`                                                                                 |
+| III. Theming contract                 | No new theming surface                                                                              | Pass   | Components consume tokens via the Tailwind preset                                                             |
+| IV. Components thin and unopinionated | Base UI wraps, tokens only, `className` merged via `cn()`, no `@unbranded-ds/tokens` runtime import | Pass   | Tooltip, Slider, and SegmentedControl wrap Base UI primitives; SkipLink is a native `<a>` + `.sr-only`        |
+| V. Stories source of truth            | Default + variants + play function + autodocs                                                       | Pass   | FR-030 names required stories per component; FR-031 mandates humanizer pass                                   |
+| VI. Testing — three layers            | Unit + interaction + a11y                                                                           | Pass   | All three required by FR-030 and FR-033                                                                       |
+| VII. Deployment and MCP               | No MCP surface change                                                                               | Pass   | New components surface through existing `@storybook/addon-mcp`                                                |
+| VIII. Tooling baseline                | Per Section VIII                                                                                    | Pass   | No tool substitutions                                                                                         |
+| IX. DoD per component                 | All nine bullets                                                                                    | Pass   | Including new bullet 6 (SSR safety)                                                                           |
+| X. Governance                         | Constitution Check + per-PR changeset                                                               | Pass   | Branch amends constitution; each component PR adds a `.changeset/*.md` declaring `@unbranded-ds/react: minor` |
 
 No violations. Complexity tracking section below stays empty.
 

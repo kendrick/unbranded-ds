@@ -10,13 +10,13 @@ Use Card when you need to visually separate a chunk of information or a workflow
 
 ```tsx
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-  CardAction,
+	Card,
+	CardAction,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
 } from '@unbranded-ds/react';
 ```
 
@@ -26,11 +26,11 @@ import {
 
 The root shell. Renders a `<div>` with `data-slot="card"` and owns the `size` variant. All child slots that respond to size pull from this element via the `group/card` context class.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `size` | `'default' \| 'sm'` | `'default'` | Controls the spacing scale for the entire card tree. `'sm'` tightens gap and padding across Card, CardHeader, CardContent, and CardFooter simultaneously. Use when cards appear in dense grids or sidebars where the default spacing is too airy. |
-| `className` | `string` | — | Merged with the card's base classes via `cn()`. Use to override max-width, background, or ring color on a per-instance basis. |
-| `children` | `React.ReactNode` | — | The card tree. Compose with CardHeader, CardContent, and optionally CardFooter. |
+| Prop        | Type                | Default     | Description                                                                                                                                                                                                                                       |
+| ----------- | ------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `size`      | `'default' \| 'sm'` | `'default'` | Controls the spacing scale for the entire card tree. `'sm'` tightens gap and padding across Card, CardHeader, CardContent, and CardFooter simultaneously. Use when cards appear in dense grids or sidebars where the default spacing is too airy. |
+| `className` | `string`            | —           | Merged with the card's base classes via `cn()`. Use to override max-width, background, or ring color on a per-instance basis.                                                                                                                     |
+| `children`  | `React.ReactNode`   | —           | The card tree. Compose with CardHeader, CardContent, and optionally CardFooter.                                                                                                                                                                   |
 
 All other `<div>` props (`id`, `style`, `aria-*`, etc.) pass through to the root element.
 
@@ -38,10 +38,10 @@ All other `<div>` props (`id`, `style`, `aria-*`, etc.) pass through to the root
 
 The header region. Renders a `<div>` with `data-slot="card-header"`. Its grid layout automatically expands to two columns when a `CardAction` is present — the title and description occupy the left column, the action occupies the right.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | — | Merged with the header's grid layout classes. Rarely needed unless you're overriding padding or border-bottom spacing. |
-| `children` | `React.ReactNode` | — | Typically `CardTitle`, optionally `CardDescription`, and optionally `CardAction`. |
+| Prop        | Type              | Default | Description                                                                                                            |
+| ----------- | ----------------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `className` | `string`          | —       | Merged with the header's grid layout classes. Rarely needed unless you're overriding padding or border-bottom spacing. |
+| `children`  | `React.ReactNode` | —       | Typically `CardTitle`, optionally `CardDescription`, and optionally `CardAction`.                                      |
 
 All other `<div>` props pass through.
 
@@ -49,10 +49,10 @@ All other `<div>` props pass through.
 
 The card's display heading. Renders as a `<div>` (not an `<h2>` or `<h3>`) with `data-slot="card-title"`.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | — | Merged with the title's typography classes. Use to adjust font size or weight when design calls for a variant that the `size` prop doesn't cover. |
-| `children` | `React.ReactNode` | — | The heading text. |
+| Prop        | Type              | Default | Description                                                                                                                                       |
+| ----------- | ----------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `className` | `string`          | —       | Merged with the title's typography classes. Use to adjust font size or weight when design calls for a variant that the `size` prop doesn't cover. |
+| `children`  | `React.ReactNode` | —       | The heading text.                                                                                                                                 |
 
 All other `<div>` props pass through.
 
@@ -60,10 +60,10 @@ All other `<div>` props pass through.
 
 Supporting text beneath the title. Renders a `<div>` with `data-slot="card-description"` and muted foreground color.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | — | Merged with the description's muted-text classes. |
-| `children` | `React.ReactNode` | — | Brief explanatory text or metadata. Omit when the title alone is self-explanatory. |
+| Prop        | Type              | Default | Description                                                                        |
+| ----------- | ----------------- | ------- | ---------------------------------------------------------------------------------- |
+| `className` | `string`          | —       | Merged with the description's muted-text classes.                                  |
+| `children`  | `React.ReactNode` | —       | Brief explanatory text or metadata. Omit when the title alone is self-explanatory. |
 
 All other `<div>` props pass through.
 
@@ -71,10 +71,10 @@ All other `<div>` props pass through.
 
 The main body region. Renders a `<div>` with `data-slot="card-content"`. Horizontal padding tracks the card's `size` value.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | — | Merged with the content's padding classes. Use to add vertical padding or override the horizontal inset. |
-| `children` | `React.ReactNode` | — | Anything goes here: paragraphs, form fields, data tables, charts, images. |
+| Prop        | Type              | Default | Description                                                                                              |
+| ----------- | ----------------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| `className` | `string`          | —       | Merged with the content's padding classes. Use to add vertical padding or override the horizontal inset. |
+| `children`  | `React.ReactNode` | —       | Anything goes here: paragraphs, form fields, data tables, charts, images.                                |
 
 All other `<div>` props pass through.
 
@@ -82,10 +82,10 @@ All other `<div>` props pass through.
 
 The footer action bar. Renders a `<div>` with `data-slot="card-footer"` and flex layout. Horizontal padding and optional top-border spacing track the card's `size` value.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | — | Merged with the footer's flex layout classes. Use to add `gap`, change alignment, or apply `justify-between` for split-button layouts. |
-| `children` | `React.ReactNode` | — | Action buttons. Pair with the `Button` component. A cancel-then-confirm ordering matches platform convention and is easiest for keyboard users. |
+| Prop        | Type              | Default | Description                                                                                                                                     |
+| ----------- | ----------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| `className` | `string`          | —       | Merged with the footer's flex layout classes. Use to add `gap`, change alignment, or apply `justify-between` for split-button layouts.          |
+| `children`  | `React.ReactNode` | —       | Action buttons. Pair with the `Button` component. A cancel-then-confirm ordering matches platform convention and is easiest for keyboard users. |
 
 All other `<div>` props pass through.
 
@@ -93,10 +93,10 @@ All other `<div>` props pass through.
 
 A pinned action slot in the header's top-right corner. Renders a `<div>` with `data-slot="card-action"`. When present, `CardHeader`'s grid shifts to two columns and `CardAction` spans both rows of the title/description column.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | — | Merged with the positioning classes. Override only if you need to change the self-alignment or end-justification. |
-| `children` | `React.ReactNode` | — | A button, icon button, badge, or any other inline action. Keep it compact — the column width adjusts to the content. |
+| Prop        | Type              | Default | Description                                                                                                          |
+| ----------- | ----------------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
+| `className` | `string`          | —       | Merged with the positioning classes. Override only if you need to change the self-alignment or end-justification.    |
+| `children`  | `React.ReactNode` | —       | A button, icon button, badge, or any other inline action. Keep it compact — the column width adjusts to the content. |
 
 All other `<div>` props pass through.
 
@@ -107,20 +107,20 @@ All other `<div>` props pass through.
 The minimal useful composition: a title, optional description, and a body region.
 
 ```tsx
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@unbranded-ds/react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@unbranded-ds/react';
 
 export function SummaryCard() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Account summary</CardTitle>
-        <CardDescription>Your current plan and usage at a glance.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>You have used 4 of 10 seats.</p>
-      </CardContent>
-    </Card>
-  );
+	return (
+		<Card>
+			<CardHeader>
+				<CardTitle>Account summary</CardTitle>
+				<CardDescription>Your current plan and usage at a glance.</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<p>You have used 4 of 10 seats.</p>
+			</CardContent>
+		</Card>
+	);
 }
 ```
 
@@ -130,31 +130,31 @@ Add `CardFooter` when the card needs action buttons — the most common full-lay
 
 ```tsx
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
+	Button,
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle
 } from '@unbranded-ds/react';
-import { Button } from '@unbranded-ds/react';
 
 export function NotificationsCard() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Notifications</CardTitle>
-        <CardDescription>Manage your notification preferences.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>Choose which events you want to be notified about.</p>
-      </CardContent>
-      <CardFooter style={{ gap: '8px' }}>
-        <Button variant="outline">Cancel</Button>
-        <Button>Save</Button>
-      </CardFooter>
-    </Card>
-  );
+	return (
+		<Card>
+			<CardHeader>
+				<CardTitle>Notifications</CardTitle>
+				<CardDescription>Manage your notification preferences.</CardDescription>
+			</CardHeader>
+			<CardContent>
+				<p>Choose which events you want to be notified about.</p>
+			</CardContent>
+			<CardFooter style={{ gap: '8px' }}>
+				<Button variant="outline">Cancel</Button>
+				<Button>Save</Button>
+			</CardFooter>
+		</Card>
+	);
 }
 ```
 
@@ -164,30 +164,30 @@ export function NotificationsCard() {
 
 ```tsx
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardAction,
+	Button,
+	Card,
+	CardAction,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle
 } from '@unbranded-ds/react';
-import { Button } from '@unbranded-ds/react';
 
 export function AlertCard() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>New message</CardTitle>
-        <CardDescription>You have an unread message from your team.</CardDescription>
-        <CardAction>
-          <Button variant="outline" size="sm">View</Button>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <p>Check your inbox for the latest update from the team channel.</p>
-      </CardContent>
-    </Card>
-  );
+	return (
+		<Card>
+			<CardHeader>
+				<CardTitle>New message</CardTitle>
+				<CardDescription>You have an unread message from your team.</CardDescription>
+				<CardAction>
+					<Button variant="outline" size="sm">View</Button>
+				</CardAction>
+			</CardHeader>
+			<CardContent>
+				<p>Check your inbox for the latest update from the team channel.</p>
+			</CardContent>
+		</Card>
+	);
 }
 ```
 
@@ -196,19 +196,19 @@ export function AlertCard() {
 Switch to `size="sm"` in grid contexts — dashboard panels, sidebar widgets — where the default spacing leaves cards feeling too tall.
 
 ```tsx
-import { Card, CardHeader, CardTitle, CardContent } from '@unbranded-ds/react';
+import { Card, CardContent, CardHeader, CardTitle } from '@unbranded-ds/react';
 
 export function DenseCard() {
-  return (
-    <Card size="sm">
-      <CardHeader>
-        <CardTitle>Storage</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p>12.4 GB of 50 GB used</p>
-      </CardContent>
-    </Card>
-  );
+	return (
+		<Card size="sm">
+			<CardHeader>
+				<CardTitle>Storage</CardTitle>
+			</CardHeader>
+			<CardContent>
+				<p>12.4 GB of 50 GB used</p>
+			</CardContent>
+		</Card>
+	);
 }
 ```
 
@@ -222,13 +222,13 @@ Card itself is a non-interactive container. It carries no ARIA role by default a
 import { Card, CardHeader, CardTitle } from '@unbranded-ds/react';
 
 export function AccessibleCard() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle><h2>Account summary</h2></CardTitle>
-      </CardHeader>
-    </Card>
-  );
+	return (
+		<Card>
+			<CardHeader>
+				<CardTitle><h2>Account summary</h2></CardTitle>
+			</CardHeader>
+		</Card>
+	);
 }
 ```
 
@@ -242,9 +242,9 @@ If a card contains interactive elements (buttons, form fields, links), those ele
 
 Card exposes one CVA variant axis:
 
-| Variant | Values | Default | Effect |
-| --- | --- | --- | --- |
-| `size` | `'default' \| 'sm'` | `'default'` | Scales gap and padding across the entire card tree via `data-[size=sm]` attribute propagation. `CardHeader`, `CardContent`, and `CardFooter` all read the parent's `data-size` value through Tailwind's group modifier. |
+| Variant | Values              | Default     | Effect                                                                                                                                                                                                                  |
+| ------- | ------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `size`  | `'default' \| 'sm'` | `'default'` | Scales gap and padding across the entire card tree via `data-[size=sm]` attribute propagation. `CardHeader`, `CardContent`, and `CardFooter` all read the parent's `data-size` value through Tailwind's group modifier. |
 
 ### Slots
 

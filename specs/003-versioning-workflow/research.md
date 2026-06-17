@@ -6,19 +6,20 @@
 
 ```json
 {
-  "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": "@changesets/cli/changelog",
-  "commit": false,
-  "fixed": [],
-  "linked": [],
-  "access": "public",
-  "baseBranch": "main",
-  "updateInternalDependencies": "patch",
-  "ignore": ["@unbranded-ds/storybook"]
+	"$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
+	"changelog": "@changesets/cli/changelog",
+	"commit": false,
+	"fixed": [],
+	"linked": [],
+	"access": "public",
+	"baseBranch": "main",
+	"updateInternalDependencies": "patch",
+	"ignore": ["@unbranded-ds/storybook"]
 }
 ```
 
 **Rationale**:
+
 - `access: "public"` matches the existing `publishConfig.access` on both packages
 - `baseBranch: "main"` matches the repo's default branch
 - `updateInternalDependencies: "patch"` is what FR-002 requires — when `@unbranded-ds/tokens` bumps, `@unbranded-ds/react` (which depends on tokens via `workspace:*`) gets at least a patch bump
@@ -28,6 +29,7 @@
 - `changelog: "@changesets/cli/changelog"` uses the default Changesets changelog formatter; per-spec-clarification Q3, breaking-change descriptions in the markdown body carry the migration content, so a custom formatter isn't needed
 
 **Alternatives considered**:
+
 - `fixed` mode where both packages always bump together: rejected. Pre-1.0, the two packages have legitimately independent change cadences. Forcing lockstep would inflate version numbers on the package that didn't actually change.
 - `@changesets/changelog-github` formatter (auto-links to PRs and contributors): considered. Adds a small dependency and requires GITHUB_TOKEN at version-bump time. Defer — the default formatter is enough for now; switch to the GitHub formatter if PR-linked CHANGELOGs become valuable (likely once there are external contributors).
 
@@ -55,6 +57,7 @@ The `version` command opens the Version Packages PR; the `publish` command runs 
 **Rationale**: Canonical pattern documented by the Changesets team. Battle-tested across hundreds of monorepos (Radix, Astro, Shadcn, etc.). Handles all the orchestration that would otherwise need custom scripting.
 
 **Alternatives considered**:
+
 - Hand-rolled release workflow using `pnpm changeset version` + `git commit` + `gh pr create`: more control, more code to maintain. Not worth the complexity.
 - Running `pnpm changeset version` locally and pushing the result manually: bypasses the review pause in the "Version Packages" PR pattern. Loses the human-review checkpoint that the spec relies on for Story 3.
 
@@ -82,12 +85,14 @@ The `version` command opens the Version Packages PR; the `publish` command runs 
 ```
 
 **Rationale**:
+
 - `changesets/action` itself does not have a built-in "block PR if no changeset" mode — its PR-time behavior is to post a comment with status info, not to fail the check
 - Several third-party actions exist (e.g., `dotansimha/changesets-changelog-enforcer`) but they add an external dependency for what's a 15-line script
 - The custom script gives precise control over the failure message (per FR-005's "clearly-named failure that names the missing artifact" requirement)
 - The script reuses `pnpm changeset status` so we don't reimplement the file-detection logic Changesets already has
 
 **Alternatives considered**:
+
 - `changesets/action` with `setupGitUser: false` and a custom step to fail on missing: tangled, mixes status-comment concern with PR-block concern
 - A separate npm package that does this check: more deps, no real benefit
 
@@ -105,11 +110,13 @@ Specific provisioning steps for the implementation phase:
 6. Verify by triggering the release workflow against a test changeset (after the rest of this spec lands)
 
 **Rationale**:
+
 - Automation tokens are the type npm recommends for CI publishing (vs Publish tokens which can require 2FA at publish time)
 - Scoping to the org limits blast radius if the token leaks
 - "Classic" tokens (not granular access tokens) are required by `npm publish` in CI — granular tokens have limitations with `pnpm publish` in some configurations
 
 **Alternatives considered**:
+
 - npm trusted publishing via GitHub OIDC: more secure (no long-lived secret), but requires per-package configuration on the npm side and adds setup ceremony. Already documented as a future improvement in FR-007.
 - Granular access tokens: better security model in theory, but interoperability with `pnpm changeset publish` is inconsistent. Not worth fighting.
 
@@ -118,12 +125,14 @@ Specific provisioning steps for the implementation phase:
 **Decision**: Add the new changeset-check and release workflows as separate files (`changeset-check.yml` and `release.yml`) rather than extending the existing `ci.yml`.
 
 **Rationale**:
+
 - Different triggers: `ci.yml` runs on push to main + PRs; `changeset-check.yml` only on PRs; `release.yml` only on push to main
 - Different concerns: `ci.yml` is about correctness (lint/typecheck/test/build); the new workflows are about release management
 - Separating files keeps each one short and reviewable
 - Failure of one workflow does not gate the other (e.g., a missing changeset shouldn't block the verify job from running)
 
 **Alternatives considered**:
+
 - Add new jobs to `ci.yml`: tangles concerns and makes the file harder to scan
 - Replace `ci.yml` entirely with a multi-workflow setup: too disruptive; spec explicitly says `ci.yml` stays intact
 
@@ -138,12 +147,14 @@ The repo root README gets one new bullet in its Getting-started section:
 ```
 
 **Rationale**:
+
 - `.changeset/README.md` is the Changesets convention — `pnpm changeset init` auto-creates a starter version, and we customize it for our needs
 - Co-located with the workflow (a contributor who runs `pnpm changeset` is looking in `.changeset/` and finds the doc naturally)
 - The README pointer ensures discoverability from the repo entry point
 - Avoids spinning up a new top-level `CONTRIBUTING.md` for what's currently a single contributor topic — that file can land later when there are more contributor concerns to document
 
 **Alternatives considered**:
+
 - `CONTRIBUTING.md` at repo root: appropriate later when there's a broader contributor doc to write. Single-topic CONTRIBUTING.md feels premature.
 - Section in repo `README.md` only: keeps everything in one file but bloats the README. The README is consumer-facing too, and contributor specifics there dilute the consumer message.
 
@@ -158,11 +169,13 @@ The header note (one per CHANGELOG file, placed before the `## 0.2.0` heading):
 ```
 
 **Rationale**:
+
 - Per FR-009, the 0.2.0 entries stay intact — they've been published and consumers have read them
 - The header note satisfies Story 4's acceptance scenario that a future contributor looking at the CHANGELOG finds an explanation for the format gap
 - Pointing at `.changeset/README.md` from the header note creates a forward path for any contributor who wants more context
 
 **Alternatives considered**:
+
 - Retroactively author `.changeset/*.md` files matching the 0.2.0 content, then have Changesets "consume" them to regenerate the CHANGELOG: would work but rewrites already-shipped content. The current 0.2.0 entries are good; rewriting them risks subtle prose differences that confuse anyone who already read the shipped version.
 - No header note (rely on the contributor doc alone): less discoverable. Someone reading just the CHANGELOG without knowing about the workflow change would be confused.
 
@@ -212,5 +225,6 @@ If spec 005's Section XI amendment has already landed (constitution would be at 
 **Rationale**: The PATCH choice keeps the version bump small and proportional. The compliance review extension is one sentence appended to an existing rule about the same scope of PRs — adding rigor, not redirecting principle.
 
 **Alternatives considered**:
+
 - MINOR bump on the grounds that any new MUST is significant: defensible but inflated for a one-sentence extension of an existing compliance rule
 - A separate constitution amendment PR landed before this spec's implementation: more ceremony, no benefit — the amendment IS part of this spec's deliverable

@@ -1,7 +1,7 @@
+import type { ResolvedLayer } from './resolve.js';
 import { describe, expect, it } from 'vitest';
 import { canonicalDefaultTokens } from './defaults.js';
 import { composeTokens, resolveTheme } from './resolve.js';
-import type { ResolvedLayer } from './resolve.js';
 
 describe('resolveTheme', () => {
 	it('returns the canonical defaults verbatim for an empty override', () => {

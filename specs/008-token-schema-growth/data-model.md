@@ -6,17 +6,17 @@ No runtime database. The "data model" is the token vocabulary, the two theme rep
 
 ## Token categories after this spec
 
-| Category | Status | Keys added | DTCG `$type` | Required? |
-| --- | --- | --- | --- | --- |
-| `color` | unchanged | — | `color` | required |
-| `spacing` | unchanged | — | `dimension` | required |
-| `typography` | extended | `font-serif`, `size-2xl`, `size-3xl` | `fontFamily`, `dimension` | required |
-| `radius` | unchanged | — | `dimension` | required |
-| `shadow` | unchanged | — | `shadow` | required |
-| `opacity` | unchanged | — | `number` | required |
-| `motion` | **new** | `duration.{fast,base,slow}`, `easing.{standard,decelerate,accelerate}` | `duration`, `cubicBezier` | required |
-| `ring` | **new** | `width` | `dimension` | **optional** |
-| `z-index` | **new** | layering scale (e.g. `overlay`, `popover`, `tooltip`) | `number` | **optional** |
+| Category     | Status    | Keys added                                                             | DTCG `$type`              | Required?    |
+| ------------ | --------- | ---------------------------------------------------------------------- | ------------------------- | ------------ |
+| `color`      | unchanged | —                                                                      | `color`                   | required     |
+| `spacing`    | unchanged | —                                                                      | `dimension`               | required     |
+| `typography` | extended  | `font-serif`, `size-2xl`, `size-3xl`                                   | `fontFamily`, `dimension` | required     |
+| `radius`     | unchanged | —                                                                      | `dimension`               | required     |
+| `shadow`     | unchanged | —                                                                      | `shadow`                  | required     |
+| `opacity`    | unchanged | —                                                                      | `number`                  | required     |
+| `motion`     | **new**   | `duration.{fast,base,slow}`, `easing.{standard,decelerate,accelerate}` | `duration`, `cubicBezier` | required     |
+| `ring`       | **new**   | `width`                                                                | `dimension`               | **optional** |
+| `z-index`    | **new**   | layering scale (e.g. `overlay`, `popover`, `tooltip`)                  | `number`                  | **optional** |
 
 Two tiers: the for-coleman additions are required (breaking, drives the version bump); `ring` and `z-index` are optional (inherit defaults, non-breaking). The optional tokens are the first in-repo consumers of the inherit-on-omit mechanism.
 
@@ -24,14 +24,14 @@ Two tiers: the for-coleman additions are required (breaking, drives the version 
 
 The `motion` category is the one category whose emitted CSS-var names diverge from the `--{category}-{key}` pattern, to align with Tailwind v4:
 
-| Token | Emitted CSS var | Tailwind utility |
-| --- | --- | --- |
-| `motion.easing.standard` | `--ease-standard` | `ease-standard` (real utility) |
-| `motion.easing.decelerate` | `--ease-decelerate` | `ease-decelerate` |
-| `motion.easing.accelerate` | `--ease-accelerate` | `ease-accelerate` |
-| `motion.duration.fast` | `--duration-fast` | none; via `duration-[var(--duration-fast)]` |
-| `motion.duration.base` | `--duration-base` | none; via arbitrary value |
-| `motion.duration.slow` | `--duration-slow` | none; via arbitrary value |
+| Token                      | Emitted CSS var     | Tailwind utility                            |
+| -------------------------- | ------------------- | ------------------------------------------- |
+| `motion.easing.standard`   | `--ease-standard`   | `ease-standard` (real utility)              |
+| `motion.easing.decelerate` | `--ease-decelerate` | `ease-decelerate`                           |
+| `motion.easing.accelerate` | `--ease-accelerate` | `ease-accelerate`                           |
+| `motion.duration.fast`     | `--duration-fast`   | none; via `duration-[var(--duration-fast)]` |
+| `motion.duration.base`     | `--duration-base`   | none; via arbitrary value                   |
+| `motion.duration.slow`     | `--duration-slow`   | none; via arbitrary value                   |
 
 The build special-cases motion var naming in `sd.config.ts`.
 

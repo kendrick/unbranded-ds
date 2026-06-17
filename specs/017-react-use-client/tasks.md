@@ -42,8 +42,8 @@ No standalone foundational phase. The one blocking prerequisite for US2 and US3 
 
 ### Implementation for User Story 1
 
-- [X] T001 [US1] Add a `'use client'` banner to the build in `packages/react/tsup.config.ts` — set `banner: { js: "'use client';" }` in the tsup config object, so the bundled entry begins with the directive. (Per research: a banner is the reliable way to land the directive as the literal first line; esbuild does not carry a source-level directive through bundling.)
-- [X] T002 [US1] Build the package (`pnpm --filter @unbranded-ds/react build`) and confirm `packages/react/dist/index.js` first line is `'use client';` (`head -n 1`). Maps to AS3 / SC-002.
+- [x] T001 [US1] Add a `'use client'` banner to the build in `packages/react/tsup.config.ts` — set `banner: { js: "'use client';" }` in the tsup config object, so the bundled entry begins with the directive. (Per research: a banner is the reliable way to land the directive as the literal first line; esbuild does not carry a source-level directive through bundling.)
+- [x] T002 [US1] Build the package (`pnpm --filter @unbranded-ds/react build`) and confirm `packages/react/dist/index.js` first line is `'use client';` (`head -n 1`). Maps to AS3 / SC-002.
 
 **Checkpoint**: The bundle declares itself a client module. A server component can import the design system and build — the consumer break is closed.
 
@@ -55,12 +55,12 @@ No standalone foundational phase. The one blocking prerequisite for US2 and US3 
 
 **Independent Test**: Remove the banner, rebuild, and the directive unit test fails; restore it and the test passes.
 
-**Note on the two-part guard (per clarification)**: the *directive check* is the new unit test below. The *server-component build* half is delivered by US3 — the example app's production `next build` in the `example-e2e` CI job — not a separate smoke fixture. So US2's only new artifact is the unit test; the build-guard rides US3.
+**Note on the two-part guard (per clarification)**: the _directive check_ is the new unit test below. The _server-component build_ half is delivered by US3 — the example app's production `next build` in the `example-e2e` CI job — not a separate smoke fixture. So US2's only new artifact is the unit test; the build-guard rides US3.
 
 ### Implementation for User Story 2
 
-- [X] T003 [P] [US2] Add a Vitest unit test at `packages/react/src/use-client-directive.test.ts` that reads the built `packages/react/dist/index.js` via `node:fs` and asserts its first line is `'use client';`. The `unit` project's glob (`src/**/*.test.{ts,tsx}`) picks it up; the test reads the build artifact, so it depends on a prior `pnpm build` — the same build-first order the token-query MCP smoke test relies on, which the `verify` CI job already runs.
-- [X] T004 [US2] Verify the guard trips: temporarily remove the banner from `tsup.config.ts`, rebuild, confirm T003's test fails, then restore the banner and confirm it passes (quickstart step 2). Run this in isolation — it mutates the shared build config, so no concurrent `@unbranded-ds/react` build (T002, T008) should overlap it.
+- [x] T003 [P] [US2] Add a Vitest unit test at `packages/react/src/use-client-directive.test.ts` that reads the built `packages/react/dist/index.js` via `node:fs` and asserts its first line is `'use client';`. The `unit` project's glob (`src/**/*.test.{ts,tsx}`) picks it up; the test reads the build artifact, so it depends on a prior `pnpm build` — the same build-first order the token-query MCP smoke test relies on, which the `verify` CI job already runs.
+- [x] T004 [US2] Verify the guard trips: temporarily remove the banner from `tsup.config.ts`, rebuild, confirm T003's test fails, then restore the banner and confirm it passes (quickstart step 2). Run this in isolation — it mutates the shared build config, so no concurrent `@unbranded-ds/react` build (T002, T008) should overlap it.
 
 **Checkpoint**: A dropped directive is caught — by the unit test on the package's own path, and by the example build once US3 lands.
 
@@ -74,10 +74,10 @@ No standalone foundational phase. The one blocking prerequisite for US2 and US3 
 
 ### Implementation for User Story 3
 
-- [X] T005 [US3] Rewrite `examples/nextjs-15-app-router/app/layout.tsx` to import `ThemeProvider`, `SkipLink`, and `Header` from `@unbranded-ds/react` directly and render them inline in the server layout, moving `AppShell`'s structure (the `<main id="main">` wrapper around `{children}`) into the layout. The layout stays a server component (`next/font/local` still runs here); `{children}` continue to pass through as server content inside the client `ThemeProvider`.
-- [X] T006 [US3] Delete `examples/nextjs-15-app-router/app/components/app-shell.tsx` — the wrapper existed solely to be the `'use client'` boundary the package now carries itself.
-- [X] T007 [P] [US3] Audit the remaining `'use client'` files under `examples/nextjs-15-app-router/app/components/` (`header.tsx`, `gallery.tsx`, `cq-demo.tsx`, `pinned-vaporwave.tsx`): keep the directive where the component holds its own client state (hooks, handlers), drop it where it only stood in for the missing package directive. `header.tsx` composes the client toggles but holds no state of its own, so it is the prime candidate to become a server component; verify each of the others against its actual usage before removing anything.
-- [X] T008 [US3] Build the packages and run the example end to end: `pnpm --filter @unbranded-ds/tokens --filter @unbranded-ds/react build` then `pnpm --filter @unbranded-ds/example-nextjs e2e`. Playwright's webServer runs the production `next build` (the real RSC-import guard) then `next start`; confirm the build and the suite pass. Maps to SC-004.
+- [x] T005 [US3] Rewrite `examples/nextjs-15-app-router/app/layout.tsx` to import `ThemeProvider`, `SkipLink`, and `Header` from `@unbranded-ds/react` directly and render them inline in the server layout, moving `AppShell`'s structure (the `<main id="main">` wrapper around `{children}`) into the layout. The layout stays a server component (`next/font/local` still runs here); `{children}` continue to pass through as server content inside the client `ThemeProvider`.
+- [x] T006 [US3] Delete `examples/nextjs-15-app-router/app/components/app-shell.tsx` — the wrapper existed solely to be the `'use client'` boundary the package now carries itself.
+- [x] T007 [P] [US3] Audit the remaining `'use client'` files under `examples/nextjs-15-app-router/app/components/` (`header.tsx`, `gallery.tsx`, `cq-demo.tsx`, `pinned-vaporwave.tsx`): keep the directive where the component holds its own client state (hooks, handlers), drop it where it only stood in for the missing package directive. `header.tsx` composes the client toggles but holds no state of its own, so it is the prime candidate to become a server component; verify each of the others against its actual usage before removing anything.
+- [x] T008 [US3] Build the packages and run the example end to end: `pnpm --filter @unbranded-ds/tokens --filter @unbranded-ds/react build` then `pnpm --filter @unbranded-ds/example-nextjs e2e`. Playwright's webServer runs the production `next build` (the real RSC-import guard) then `next start`; confirm the build and the suite pass. Maps to SC-004.
 
 **Checkpoint**: The example shows the intended boilerplate-free pattern, and its production build is the live RSC guard for US2.
 
@@ -85,8 +85,8 @@ No standalone foundational phase. The one blocking prerequisite for US2 and US3 
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-- [X] T009 [P] Add a changeset at `.changeset/react-rsc-use-client.md` declaring a **patch** on `@unbranded-ds/react` (build-only change; the public API is unchanged). Satisfies FR-007 and Constitution X. Prose passes through the `humanizer` skill before merge.
-- [X] T010 Run the CI-equivalent locally as the final gate: `pnpm typecheck`, `pnpm build`, `pnpm test:unit` (now including T003's directive test), and the example e2e (T008). Green across all confirms the guard works, the example builds RSC-clean, and existing client-component usage is unchanged (FR-006).
+- [x] T009 [P] Add a changeset at `.changeset/react-rsc-use-client.md` declaring a **patch** on `@unbranded-ds/react` (build-only change; the public API is unchanged). Satisfies FR-007 and Constitution X. Prose passes through the `humanizer` skill before merge.
+- [x] T010 Run the CI-equivalent locally as the final gate: `pnpm typecheck`, `pnpm build`, `pnpm test:unit` (now including T003's directive test), and the example e2e (T008). Green across all confirms the guard works, the example builds RSC-clean, and existing client-component usage is unchanged (FR-006).
 
 ---
 

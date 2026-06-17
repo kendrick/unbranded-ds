@@ -21,7 +21,7 @@ Consume the spec 008 tokens in component source: swap the focus-ring width (`rin
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 - [x] **Section I (Repository shape)** — no new package; all work in `packages/react`.
 - [x] **Section IV (Components style through tokens)** — the swaps move from Tailwind built-in utilities (`ring-3`, `z-50`, `duration-100`) to utilities that reference design-system tokens. This increases token alignment. No hex/rgb/hsl literals introduced; the lint rule passes.
@@ -75,6 +75,7 @@ packages/react/                    # a new interaction test for tooltip-in-dialo
 The user asked to parallelize. This spec parallelizes well because the work is **per-file and the files are disjoint** — once the consumption syntax is locked, ten component edits run concurrently with zero shared state.
 
 **Step 1 — Lock the syntax (foundational, blocks the swaps).** Verify the four consumption patterns generate correctly against a real Tailwind build (see `contracts/token-consumption-patterns.md`):
+
 - ring: `ring-(length:--ring-width)`
 - z-index: `z-(--z-index-overlay)` / `z-(--z-index-popover)` / `z-(--z-index-tooltip)`
 - duration: `duration-(--duration-fast)` — confirm it applies to **both** a `transition` (Tooltip) and a keyframe `animate-in/out` (Dialog, Select)
@@ -83,6 +84,7 @@ The user asked to parallelize. This spec parallelizes well because the work is *
 This produces the exact snippets every component copies, so the parallel edits are uniform and cannot drift.
 
 **Step 2 — Per-component swaps (10-way parallel).** Each file is owned by one worker:
+
 - **Ring-only (7)**: Button, Checkbox, Input, Switch, Slider, SegmentedControl, SkipLink. Each swaps its `ring-3` for the locked ring snippet. SkipLink does its ring swap but keeps its `z-50`.
 - **Overlay (3)**: Dialog, Select, Tooltip. Each does its z-index stop + motion swap; Select also does its ring swap. One worker per overlay file does all of that file's swaps together.
 
@@ -108,5 +110,5 @@ See [research.md](research.md). Resolved:
 > No constitution violations to justify.
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| — | — | — |
+| --------- | ---------- | ------------------------------------ |
+| —         | —          | —                                    |

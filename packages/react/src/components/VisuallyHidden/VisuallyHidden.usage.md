@@ -14,12 +14,12 @@ import { VisuallyHidden } from '@unbranded-ds/react';
 
 ## Props
 
-| Prop        | Type                                                        | Default    | Description                                                                                                                                                         |
-| ----------- | ----------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `as`        | `keyof JSX.IntrinsicElements`                               | `'span'`   | The underlying HTML element to render. Use `'div'` when a `<span>` would be invalid in the surrounding context (e.g., wrapping block-level children).               |
-| `children`  | `React.ReactNode`                                           | —          | The content to hide visually. Stays present in the accessibility tree.                                                                                              |
-| `className` | `string`                                                    | —          | Merged with the built-in `sr-only` class via `cn()`. Useful for adding layout context like `contents` when needed.                                                  |
-| `...rest`   | `React.ComponentPropsWithoutRef<T>` (minus owned props)     | —          | All other props forward to the underlying element. Useful for `id` when pairing with `aria-describedby`, or `data-*` attributes for test selectors.                 |
+| Prop        | Type                                                    | Default  | Description                                                                                                                                           |
+| ----------- | ------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `as`        | `keyof JSX.IntrinsicElements`                           | `'span'` | The underlying HTML element to render. Use `'div'` when a `<span>` would be invalid in the surrounding context (e.g., wrapping block-level children). |
+| `children`  | `React.ReactNode`                                       | —        | The content to hide visually. Stays present in the accessibility tree.                                                                                |
+| `className` | `string`                                                | —        | Merged with the built-in `sr-only` class via `cn()`. Useful for adding layout context like `contents` when needed.                                    |
+| `...rest`   | `React.ComponentPropsWithoutRef<T>` (minus owned props) | —        | All other props forward to the underlying element. Useful for `id` when pairing with `aria-describedby`, or `data-*` attributes for test selectors.   |
 
 ## Common patterns
 

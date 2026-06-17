@@ -15,7 +15,7 @@
 
 ## Phase 1: Setup
 
-- [X] T001 Confirm baseline green: `pnpm --filter @unbranded-ds/tokens test && pnpm --filter @unbranded-ds/tokens build && pnpm typecheck`. Record the current tokens test count as the regression net (the suite must stay green and behavior-identical through this spec).
+- [x] T001 Confirm baseline green: `pnpm --filter @unbranded-ds/tokens test && pnpm --filter @unbranded-ds/tokens build && pnpm typecheck`. Record the current tokens test count as the regression net (the suite must stay green and behavior-identical through this spec).
 
 ---
 
@@ -23,8 +23,8 @@
 
 **⚠️ Everything downstream reads these artifacts. Both tasks must land before Phase 3.**
 
-- [X] T002 In `sd.config.ts`: emit, per bundled theme, a resolved-delta JSON artifact — a Style Dictionary pass sourced on `themes/<axis>/<name>.json` ALONE (no base `src/tokens/**`), emitting the theme's resolved keys as flat JSON. This mirrors the proven density-delta CSS path (`dist/css/tokens-compact.css` already emits delta-only via theme-alone sourcing). Confirm `defaults ⊕ delta == the theme's full CSS set` for a spot-checked theme.
-- [X] T003 In `sd.config.ts` + `src/defaults.generated.ts` (new) + `src/defaults.ts`: emit the resolved base (`src/tokens/**`) and generate a committed `defaults.generated.ts` (a branded `ResolvedTokens`); point `defaults.ts` at it (re-export) or replace it. Confirm the generated baseline equals today's hand-maintained `canonicalDefaultTokens` (behavior-preserving). (After T002 or parallel — different concern, but both edit `sd.config.ts`, so sequence them.)
+- [x] T002 In `sd.config.ts`: emit, per bundled theme, a resolved-delta JSON artifact — a Style Dictionary pass sourced on `themes/<axis>/<name>.json` ALONE (no base `src/tokens/**`), emitting the theme's resolved keys as flat JSON. This mirrors the proven density-delta CSS path (`dist/css/tokens-compact.css` already emits delta-only via theme-alone sourcing). Confirm `defaults ⊕ delta == the theme's full CSS set` for a spot-checked theme.
+- [x] T003 In `sd.config.ts` + `src/defaults.generated.ts` (new) + `src/defaults.ts`: emit the resolved base (`src/tokens/**`) and generate a committed `defaults.generated.ts` (a branded `ResolvedTokens`); point `defaults.ts` at it (re-export) or replace it. Confirm the generated baseline equals today's hand-maintained `canonicalDefaultTokens` (behavior-preserving). (After T002 or parallel — different concern, but both edit `sd.config.ts`, so sequence them.)
 
 **Checkpoint**: the build emits per-theme deltas + a generated defaults baseline. The suite still passes.
 
@@ -36,9 +36,9 @@
 
 **Independent Test**: The existing MCP and contrast suites pass unchanged after the repoint (the read works and changes no values), and no JS path re-resolves a bundled theme.
 
-- [X] T004 [P] [US1] In `src/mcp/compose.ts`: read each axis's delta artifact and fold via the existing `composeTokens`, replacing the `dtcgToResolved(getTheme())` path. Keep the branded `ResolvedTokens` boundary. (Depends on T002.)
-- [X] T005 [P] [US1] In `src/themes-contrast.test.ts`: read the delta artifact (composed onto the generated defaults) for the bundled-theme contrast check, instead of walking raw DTCG. (Depends on T002/T003.)
-- [X] T006 [US1] Confirm the existing MCP tool suite (`src/mcp/tools/*.test.ts`) and the contrast suite pass UNCHANGED after T004/T005 — no value edits. If any test needs a value changed, the refactor altered behavior and is wrong; stop and fix. (After T004/T005.)
+- [x] T004 [P] [US1] In `src/mcp/compose.ts`: read each axis's delta artifact and fold via the existing `composeTokens`, replacing the `dtcgToResolved(getTheme())` path. Keep the branded `ResolvedTokens` boundary. (Depends on T002.)
+- [x] T005 [P] [US1] In `src/themes-contrast.test.ts`: read the delta artifact (composed onto the generated defaults) for the bundled-theme contrast check, instead of walking raw DTCG. (Depends on T002/T003.)
+- [x] T006 [US1] Confirm the existing MCP tool suite (`src/mcp/tools/*.test.ts`) and the contrast suite pass UNCHANGED after T004/T005 — no value edits. If any test needs a value changed, the refactor altered behavior and is wrong; stop and fix. (After T004/T005.)
 
 **Checkpoint**: bundled-theme values come from the build's emitted data; the 009 surfaces behave identically.
 
@@ -50,8 +50,8 @@
 
 **Independent Test**: With the single-resolver change landed, removing the matrix and the drift guard leaves the suite green; the thin canary and the regen check hold.
 
-- [X] T007 [P] [US2] In `src/resolution-parity.test.ts`: reduce the `(combination × token)` matrix to a thin canary — for one composition (vaporwave + compact), assert the MCP value equals the artifact-composed value equals the CSS value for a sample of tokens. Add a one-line note recording that the full-matrix invariant is now structural. (Depends on T002 + T004.)
-- [X] T008 [P] [US2] In `src/defaults.test.ts`: convert the hand-maintained drift guard to a regenerate-and-diff check — regenerate the baseline from the resolved base and assert it equals the committed `defaults.generated.ts`. (Depends on T003.)
+- [x] T007 [P] [US2] In `src/resolution-parity.test.ts`: reduce the `(combination × token)` matrix to a thin canary — for one composition (vaporwave + compact), assert the MCP value equals the artifact-composed value equals the CSS value for a sample of tokens. Add a one-line note recording that the full-matrix invariant is now structural. (Depends on T002 + T004.)
+- [x] T008 [P] [US2] In `src/defaults.test.ts`: convert the hand-maintained drift guard to a regenerate-and-diff check — regenerate the baseline from the resolved base and assert it equals the committed `defaults.generated.ts`. (Depends on T003.)
 
 **Checkpoint**: the standing test tax is gone; what remains guards the one residual risk (a consumer reading stale data) and baseline staleness.
 
@@ -63,8 +63,8 @@
 
 **Independent Test**: `dtcgToResolved` is gone, the suite is green, and a grep confirms no JS path re-resolves a bundled theme.
 
-- [X] T009 [US3] Remove `dtcgToResolved` from `src/resolve.ts` and its export from `src/index.ts`; drop its `src/resolve.test.ts` cases; switch the `src/validate.test.ts` helper that used it to the emitted artifact. (Depends on T004 + T007 — no caller remains once the MCP and the canary read the artifact.)
-- [X] T010 [US3] Add a single-engine assertion (SC-001): a structural check that `dtcgToResolved` is absent from production code and no JS path re-resolves a bundled source theme (e.g. an explicit `grep -rn "dtcgToResolved" src` expectation in a test or a CI step), recorded so the absence is intentional. Confirm the runtime consumer-theme path (`registerTheme` / `resolveTheme`) is unchanged and the branded boundary still holds. (After T009.)
+- [x] T009 [US3] Remove `dtcgToResolved` from `src/resolve.ts` and its export from `src/index.ts`; drop its `src/resolve.test.ts` cases; switch the `src/validate.test.ts` helper that used it to the emitted artifact. (Depends on T004 + T007 — no caller remains once the MCP and the canary read the artifact.)
+- [x] T010 [US3] Add a single-engine assertion (SC-001): a structural check that `dtcgToResolved` is absent from production code and no JS path re-resolves a bundled source theme (e.g. an explicit `grep -rn "dtcgToResolved" src` expectation in a test or a CI step), recorded so the absence is intentional. Confirm the runtime consumer-theme path (`registerTheme` / `resolveTheme`) is unchanged and the branded boundary still holds. (After T009.)
 
 **Checkpoint**: one bundled-theme engine, one isolated runtime engine, nothing in between.
 
@@ -72,8 +72,8 @@
 
 ## Phase 6: Polish & Release
 
-- [X] T011 Full verification: `pnpm --filter @unbranded-ds/tokens build`, `pnpm --filter @unbranded-ds/tokens test` (the 009 suites green and behavior-identical — the regression net), `pnpm typecheck`, `pnpm --filter @unbranded-ds/storybook build` (composition story renders), the MCP `tools/list` smoke, and `grep -rn "dtcgToResolved" packages/tokens/src` (expect none in production code).
-- [X] T012 Add `.changeset/*.md` (`@unbranded-ds/tokens`: **patch** — internal plumbing, no consumer-facing change). Confirm whether Constitution Section III's "themes validated, fail loudly" wording references the old validation path closely enough to warrant a one-line patch clarification; if so, amend it in this PR. Run the changeset prose through the `humanizer`.
+- [x] T011 Full verification: `pnpm --filter @unbranded-ds/tokens build`, `pnpm --filter @unbranded-ds/tokens test` (the 009 suites green and behavior-identical — the regression net), `pnpm typecheck`, `pnpm --filter @unbranded-ds/storybook build` (composition story renders), the MCP `tools/list` smoke, and `grep -rn "dtcgToResolved" packages/tokens/src` (expect none in production code).
+- [x] T012 Add `.changeset/*.md` (`@unbranded-ds/tokens`: **patch** — internal plumbing, no consumer-facing change). Confirm whether Constitution Section III's "themes validated, fail loudly" wording references the old validation path closely enough to warrant a one-line patch clarification; if so, amend it in this PR. Run the changeset prose through the `humanizer`.
 
 ---
 

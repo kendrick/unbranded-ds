@@ -13,6 +13,7 @@ The technical approach: install `@changesets/cli` at the workspace root, drop a 
 
 **Language/Version**: TypeScript 5.x (existing); no language additions
 **Primary Dependencies**:
+
 - `@changesets/cli` (new) — workspace-root devDependency, pinned to the latest stable major
 - `changesets/action` (GitHub Action, new in workflow files) — canonical release integration
 - Existing: pnpm workspaces, Turborepo, GitHub Actions runner environment
@@ -20,6 +21,7 @@ The technical approach: install `@changesets/cli` at the workspace root, drop a 
 **Storage**: filesystem only. `.changeset/*.md` files under `.changeset/`; `package.json` `version` field per package; `CHANGELOG.md` per package. No database, no external state.
 
 **Testing**:
+
 - Manual smoke test by opening a test PR and verifying the changeset-presence check fires correctly
 - End-to-end validation by running `pnpm changeset` and `pnpm changeset version` locally to confirm output shape
 - The integration test is SC-005 (spec 006's release ships entirely through this workflow with zero hand-authored content) — that's a real future verification
@@ -29,17 +31,20 @@ The technical approach: install `@changesets/cli` at the workspace root, drop a 
 **Project Type**: Monorepo infrastructure spec. No new packages; root-level tooling and CI additions.
 
 **Performance Goals**:
+
 - Changeset-presence CI check completes in under 30 seconds (it's a tiny file-existence check)
 - Release workflow opens or updates the "Version Packages" PR within 2 minutes of a push to `main`
 - Publish step completes within 5 minutes of the "Version Packages" PR being merged
 
 **Constraints**:
+
 - ESM only (constitution Section VIII) — `@changesets/cli` is itself ESM-compatible
 - Must not break the existing `ci.yml` (verify + publish to Chromatic + MCP smoke test all stay green)
 - Constitution amendments are part of scope, not deferred (FR-008)
 - NPM_TOKEN must be provisioned before the release workflow can publish; provisioning is a one-time prerequisite, not a recurring task
 
 **Scale/Scope**:
+
 - 1 new workspace-root devDependency (`@changesets/cli`)
 - 1 new directory (`.changeset/`) with `config.json`, `README.md`, and per-PR `*.md` files
 - 2 new GitHub Actions workflow files (`changeset-check.yml`, `release.yml`)
@@ -49,20 +54,20 @@ The technical approach: install `@changesets/cli` at the workspace root, drop a 
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
-| Section | Status | Notes |
-|---|---|---|
-| I. Repository shape | PASS | No new packages. The new directory `.changeset/` at repo root is workflow infrastructure, not a workspace member |
-| II. Tokens independent of components | PASS | No token changes |
-| III. Theming contract | PASS | Unrelated |
-| IV. Components: shadcn/ui Base UI | PASS | No component changes |
-| V. Stories are source of truth | PASS | Unrelated |
-| VI. Testing | PASS | Component testing rules unaffected. The new CI workflows are tested manually + via the SC-005 integration moment with spec 006 |
-| VII. Deployment + MCP | PASS | The existing `ci.yml` verify and publish jobs stay intact. The new release workflow runs on different triggers and does not interfere with Chromatic publishing or MCP smoke tests |
-| VIII. Tooling baseline | AMENDMENT IN SCOPE | This spec adds `@changesets/cli` to the tool list. The amendment text is part of FR-008. PATCH-level constitution bump (clarification to existing tooling list, not a new principle) |
-| IX. Definition of done for any component | PASS | Not component work |
-| X. Governance | AMENDMENT IN SCOPE | This spec extends Section X Compliance Review with a one-sentence rule about changeset presence. Same PATCH-level constitution bump as Section VIII (combined amendment) |
+| Section                                  | Status             | Notes                                                                                                                                                                                |
+| ---------------------------------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| I. Repository shape                      | PASS               | No new packages. The new directory `.changeset/` at repo root is workflow infrastructure, not a workspace member                                                                     |
+| II. Tokens independent of components     | PASS               | No token changes                                                                                                                                                                     |
+| III. Theming contract                    | PASS               | Unrelated                                                                                                                                                                            |
+| IV. Components: shadcn/ui Base UI        | PASS               | No component changes                                                                                                                                                                 |
+| V. Stories are source of truth           | PASS               | Unrelated                                                                                                                                                                            |
+| VI. Testing                              | PASS               | Component testing rules unaffected. The new CI workflows are tested manually + via the SC-005 integration moment with spec 006                                                       |
+| VII. Deployment + MCP                    | PASS               | The existing `ci.yml` verify and publish jobs stay intact. The new release workflow runs on different triggers and does not interfere with Chromatic publishing or MCP smoke tests   |
+| VIII. Tooling baseline                   | AMENDMENT IN SCOPE | This spec adds `@changesets/cli` to the tool list. The amendment text is part of FR-008. PATCH-level constitution bump (clarification to existing tooling list, not a new principle) |
+| IX. Definition of done for any component | PASS               | Not component work                                                                                                                                                                   |
+| X. Governance                            | AMENDMENT IN SCOPE | This spec extends Section X Compliance Review with a one-sentence rule about changeset presence. Same PATCH-level constitution bump as Section VIII (combined amendment)             |
 
 **Bridge rules from Section XI (not yet ratified)**: humanizer pass on contributor doc and CHANGELOG entries, no three-item lists in any new prose, predictable command shapes (just `pnpm changeset` and `pnpm changeset version` — both well-known to anyone who has used Changesets elsewhere).
 

@@ -21,7 +21,7 @@ Grow the canonical `@unbranded-ds/tokens` schema with the for-coleman additions 
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 - [x] **Section I (Repository shape)** — no new package. All work in the existing `packages/tokens`; `packages/react` takes a dependency bump only.
 - [x] **Section II (Tokens independent of components)** — new tokens authored in DTCG (`$value`/`$type`), compiled by Style Dictionary to the four artifacts. No React/Storybook in the tokens dependency graph.
@@ -83,13 +83,15 @@ The user asked what's parallelizable. Spec 008 is one package with a build pipel
 
 **Track A — Token additions (independent).** Author the DTCG sources (`motion.json`, `ring.json`, `z-index.json`, typography edits) and extend the Zod schema (motion required; typography keys required; ring/z-index optional). Self-contained: it's "what tokens exist."
 
-**Track B — Validator resolve-then-validate (independent).** Refactor `validate.ts` and `runtime.ts` to merge a partial theme onto the canonical defaults before checking completeness and contrast, fixing the `if (!fg || !bg) continue` skip at both sites. This depends on the *mechanism*, not on Track A's specific tokens, so it runs concurrently.
+**Track B — Validator resolve-then-validate (independent).** Refactor `validate.ts` and `runtime.ts` to merge a partial theme onto the canonical defaults before checking completeness and contrast, fixing the `if (!fg || !bg) continue` skip at both sites. This depends on the _mechanism_, not on Track A's specific tokens, so it runs concurrently.
 
 **Then converge (depend on A):**
+
 - **Track C — Build wiring**: `sd.config.ts` — extend the TS `categoryMap` + `TokenCategory` union for the new categories, and special-case the motion category's CSS-var naming (`--ease-*` / `--duration-*`).
 - **Track D — Themes**: enrich `brand.json` with the multi-category override (radius + typography); confirm the resolved build output of all three themes carries the new required tokens via inheritance.
 
 **Then serialize:**
+
 - **Track E — Docs** (THEMING.md): depends on A–D being settled; the three additions (extend-schema walkthrough, override-non-color subsection, two-formats distinction). Prose drafts can start early but verify last. Runs through the humanizer before merge.
 - **Track F — Release**: the tokens minor changeset; react patch is automatic.
 
@@ -109,5 +111,5 @@ See [research.md](research.md). Key resolved decisions:
 > No constitution violations to justify.
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| — | — | — |
+| --------- | ---------- | ------------------------------------ |
+| —         | —          | —                                    |

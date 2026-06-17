@@ -1,8 +1,8 @@
 {
 	"name": "@unbranded-ds/example-nextjs",
+	"type": "module",
 	"version": "0.0.0",
 	"private": true,
-	"type": "module",
 	"description": "A minimal, clone-able Next.js 15 App Router starter wired up with @unbranded-ds/tokens and @unbranded-ds/react.",
 	"scripts": {
 		"dev": "next dev",

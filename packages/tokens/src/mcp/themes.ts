@@ -6,12 +6,13 @@
  * scope so subsequent calls are free.
  */
 
+import type { Axis } from '../axes.js';
+import type { ResolvedLayer } from '../resolve.js';
 import { existsSync, readdirSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { AXES, AXIS_ATTRIBUTE, type Axis } from '../axes.js';
-import type { ResolvedLayer } from '../resolve.js';
+import { AXES, AXIS_ATTRIBUTE } from '../axes.js';
 
 const MCP_DIR = dirname(fileURLToPath(import.meta.url));
 

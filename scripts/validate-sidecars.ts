@@ -47,7 +47,8 @@ async function findUsageFiles(root: string): Promise<string[]> {
 			const full = join(dir, entry.name);
 			if (entry.isDirectory()) {
 				await walk(full);
-			} else if (entry.name.endsWith('.usage.md')) {
+			}
+			else if (entry.name.endsWith('.usage.md')) {
 				found.push(full);
 			}
 		}
@@ -55,7 +56,8 @@ async function findUsageFiles(root: string): Promise<string[]> {
 
 	try {
 		await walk(root);
-	} catch (err) {
+	}
+	catch (err) {
 		if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
 			return [];
 		}
@@ -77,10 +79,12 @@ function extractTsxBlocks(content: string, file: string): CodeBlock[] {
 			inBlock = true;
 			blockStartLine = i + 2;
 			currentBlock = [];
-		} else if (inBlock && line.trim() === '```') {
+		}
+		else if (inBlock && line.trim() === '```') {
 			blocks.push({ file, line: blockStartLine, code: currentBlock.join('\n') });
 			inBlock = false;
-		} else if (inBlock) {
+		}
+		else if (inBlock) {
 			currentBlock.push(line);
 		}
 	}
@@ -95,9 +99,9 @@ function extractTsxBlocks(content: string, file: string): CodeBlock[] {
  */
 function isExcludedTsxFile(name: string): boolean {
 	return (
-		name.endsWith('.stories.tsx') ||
-		name.endsWith('.test.tsx') ||
-		name.startsWith('__ssr__')
+		name.endsWith('.stories.tsx')
+		|| name.endsWith('.test.tsx')
+		|| name.startsWith('__ssr__')
 	);
 }
 
@@ -113,7 +117,8 @@ async function findTsxSourceFiles(root: string): Promise<string[]> {
 			const full = join(dir, entry.name);
 			if (entry.isDirectory()) {
 				await walk(full);
-			} else if (entry.name.endsWith('.tsx') && !isExcludedTsxFile(entry.name)) {
+			}
+			else if (entry.name.endsWith('.tsx') && !isExcludedTsxFile(entry.name)) {
 				found.push(full);
 			}
 		}
@@ -121,7 +126,8 @@ async function findTsxSourceFiles(root: string): Promise<string[]> {
 
 	try {
 		await walk(root);
-	} catch (err) {
+	}
+	catch (err) {
 		if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
 			return [];
 		}
@@ -178,7 +184,8 @@ function extractTsDocExamples(content: string, file: string): CodeBlock[] {
 			continue;
 		}
 
-		if (!inComment) continue;
+		if (!inComment)
+			continue;
 
 		// Detect comment close
 		if (trimmed === '*/' || trimmed.endsWith('*/')) {
@@ -209,18 +216,21 @@ function extractTsDocExamples(content: string, file: string): CodeBlock[] {
 			continue;
 		}
 
-		if (!inExample) continue;
+		if (!inExample)
+			continue;
 
 		// Inside an @example section — look for tsx code fences
 		if (!inCodeFence && stripped.trim() === '```tsx') {
 			inCodeFence = true;
 			blockStartLine = i + 2; // 1-indexed, next line
 			currentBlock = [];
-		} else if (inCodeFence && stripped.trim() === '```') {
+		}
+		else if (inCodeFence && stripped.trim() === '```') {
 			blocks.push({ file, line: blockStartLine, code: currentBlock.join('\n') });
 			inCodeFence = false;
 			currentBlock = [];
-		} else if (inCodeFence) {
+		}
+		else if (inCodeFence) {
 			currentBlock.push(stripped);
 		}
 	}
@@ -234,7 +244,7 @@ function wrapBlock(block: CodeBlock): string {
 
 	const alreadyExportsFunction = /^export\s+(?:function|default|const)/m.test(code);
 	if (alreadyExportsFunction) {
-		const reactImport = code.includes('react') ? '' : "import * as React from 'react';\n";
+		const reactImport = code.includes('react') ? '' : 'import * as React from \'react\';\n';
 		return `${header}${reactImport}${code}\n`;
 	}
 
@@ -245,7 +255,8 @@ function wrapBlock(block: CodeBlock): string {
 	for (const raw of lines) {
 		if (!pastImports && (raw.startsWith('import ') || raw.trim() === '')) {
 			imports.push(raw);
-		} else {
+		}
+		else {
 			pastImports = true;
 			body.push(raw);
 		}
@@ -261,7 +272,7 @@ function wrapBlock(block: CodeBlock): string {
 
 	const reactImport = imports.some((i) => i.includes('react'))
 		? ''
-		: "import * as React from 'react';";
+		: 'import * as React from \'react\';';
 	const importBlock = [reactImport, ...imports].filter(Boolean).join('\n');
 	return `${header}${importBlock}\n\nexport function _Example() {\n  return (\n    <>\n${body.map((l) => `      ${l}`).join('\n')}\n    </>\n  );\n}\n`;
 }
@@ -356,7 +367,8 @@ async function main(): Promise<void> {
 		console.log(
 			`✓ Validated ${sidecarBlocks.length} sidecar block(s) across ${sidecarFiles.length} file(s) + ${tsdocBlocks.length} TSDoc @example block(s) across ${tsxSourceFiles.length} source file(s).`,
 		);
-	} finally {
+	}
+	finally {
 		await rm(tempDir, { recursive: true, force: true });
 	}
 }

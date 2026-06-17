@@ -9,7 +9,7 @@ Use Tabs when you have multiple distinct content sections that share the same sc
 ## Import
 
 ```tsx
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@unbranded-ds/react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@unbranded-ds/react';
 ```
 
 ## Props
@@ -18,48 +18,48 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@unbranded-ds/react';
 
 The root component. Manages the active tab value and passes orientation through context to all child slots.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `any \| null` | — | Controls the active tab in controlled mode. Pair with `onValueChange`. When `null`, no tab is active. |
-| `defaultValue` | `any \| null` | `0` | Seeds the active tab for uncontrolled usage. Ignored once `value` is set. |
-| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Sets the layout direction. `'horizontal'` stacks the list above the panels; `'vertical'` places the list beside them. Also governs which arrow keys move focus between tabs. |
-| `onValueChange` | `(value: any, eventDetails: TabsRoot.ChangeEventDetails) => void` | — | Fires when the active tab changes. `eventDetails.activationDirection` indicates the direction of movement (`'left'`, `'right'`, `'up'`, `'down'`, or `'none'`). |
-| `className` | `string` | — | Merged with the root's flex-layout classes via `cn()`. |
-| `children` | `React.ReactNode` | — | The tabs tree. Compose `TabsList` (with `TabsTrigger` children) and the corresponding `TabsContent` panels. |
+| Prop            | Type                                                              | Default        | Description                                                                                                                                                                  |
+| --------------- | ----------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`         | `any \| null`                                                     | —              | Controls the active tab in controlled mode. Pair with `onValueChange`. When `null`, no tab is active.                                                                        |
+| `defaultValue`  | `any \| null`                                                     | `0`            | Seeds the active tab for uncontrolled usage. Ignored once `value` is set.                                                                                                    |
+| `orientation`   | `'horizontal' \| 'vertical'`                                      | `'horizontal'` | Sets the layout direction. `'horizontal'` stacks the list above the panels; `'vertical'` places the list beside them. Also governs which arrow keys move focus between tabs. |
+| `onValueChange` | `(value: any, eventDetails: TabsRoot.ChangeEventDetails) => void` | —              | Fires when the active tab changes. `eventDetails.activationDirection` indicates the direction of movement (`'left'`, `'right'`, `'up'`, `'down'`, or `'none'`).              |
+| `className`     | `string`                                                          | —              | Merged with the root's flex-layout classes via `cn()`.                                                                                                                       |
+| `children`      | `React.ReactNode`                                                 | —              | The tabs tree. Compose `TabsList` (with `TabsTrigger` children) and the corresponding `TabsContent` panels.                                                                  |
 
 ### TabsList
 
 Groups the tab trigger buttons. Renders a `<div>` with `role="tablist"`.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `variant` | `'default' \| 'line'` | `'default'` | Visual style of the list container. `'default'` uses a muted pill background; `'line'` uses a transparent background and renders an underline indicator on the active trigger. |
-| `activateOnFocus` | `boolean` | `false` | When `true`, moving focus with arrow keys immediately activates the focused tab (automatic activation). When `false`, the user must press Enter or Space to activate (manual activation). |
-| `loopFocus` | `boolean` | `true` | When `true`, arrow-key focus wraps from the last tab back to the first (and vice versa). |
-| `className` | `string` | — | Merged with the list's layout classes. |
-| `children` | `React.ReactNode` | — | The `TabsTrigger` elements. |
+| Prop              | Type                  | Default     | Description                                                                                                                                                                               |
+| ----------------- | --------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`         | `'default' \| 'line'` | `'default'` | Visual style of the list container. `'default'` uses a muted pill background; `'line'` uses a transparent background and renders an underline indicator on the active trigger.            |
+| `activateOnFocus` | `boolean`             | `false`     | When `true`, moving focus with arrow keys immediately activates the focused tab (automatic activation). When `false`, the user must press Enter or Space to activate (manual activation). |
+| `loopFocus`       | `boolean`             | `true`      | When `true`, arrow-key focus wraps from the last tab back to the first (and vice versa).                                                                                                  |
+| `className`       | `string`              | —           | Merged with the list's layout classes.                                                                                                                                                    |
+| `children`        | `React.ReactNode`     | —           | The `TabsTrigger` elements.                                                                                                                                                               |
 
 ### TabsTrigger
 
 An individual tab button. Renders a `<button>` with `role="tab"`.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `any` | — | **Required.** Identifies which panel this trigger activates. Must match the `value` on the corresponding `TabsContent`. |
-| `disabled` | `boolean` | — | Prevents the trigger from being activated and marks it as disabled for assistive technology. |
-| `className` | `string` | — | Merged with the trigger's style classes. |
-| `children` | `React.ReactNode` | — | The tab label. Can include text, an icon, or both. |
+| Prop        | Type              | Default | Description                                                                                                             |
+| ----------- | ----------------- | ------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `value`     | `any`             | —       | **Required.** Identifies which panel this trigger activates. Must match the `value` on the corresponding `TabsContent`. |
+| `disabled`  | `boolean`         | —       | Prevents the trigger from being activated and marks it as disabled for assistive technology.                            |
+| `className` | `string`          | —       | Merged with the trigger's style classes.                                                                                |
+| `children`  | `React.ReactNode` | —       | The tab label. Can include text, an icon, or both.                                                                      |
 
 ### TabsContent
 
 A panel that is shown when its corresponding trigger is active. Renders a `<div>` with `role="tabpanel"`.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `value` | `any` | — | **Required.** The tab value this panel corresponds to. Must match the `value` on its `TabsTrigger`. |
-| `keepMounted` | `boolean` | `false` | When `true`, keeps the panel's DOM node in the tree while it is hidden. Useful when panel content is expensive to remount or carries its own scroll position. |
-| `className` | `string` | — | Merged with the panel's default classes. |
-| `children` | `React.ReactNode` | — | The panel content. |
+| Prop          | Type              | Default | Description                                                                                                                                                   |
+| ------------- | ----------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `value`       | `any`             | —       | **Required.** The tab value this panel corresponds to. Must match the `value` on its `TabsTrigger`.                                                           |
+| `keepMounted` | `boolean`         | `false` | When `true`, keeps the panel's DOM node in the tree while it is hidden. Useful when panel content is expensive to remount or carries its own scroll position. |
+| `className`   | `string`          | —       | Merged with the panel's default classes.                                                                                                                      |
+| `children`    | `React.ReactNode` | —       | The panel content.                                                                                                                                            |
 
 ## Common patterns
 
@@ -68,23 +68,23 @@ A panel that is shown when its corresponding trigger is active. Renders a `<div>
 The simplest usage. Pass `defaultValue` matching one of the trigger values and let the component manage state internally.
 
 ```tsx
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@unbranded-ds/react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@unbranded-ds/react';
 
 export function AccountTabs() {
-  return (
-    <Tabs defaultValue="account">
-      <TabsList>
-        <TabsTrigger value="account">Account</TabsTrigger>
-        <TabsTrigger value="password">Password</TabsTrigger>
-      </TabsList>
-      <TabsContent value="account">
-        <p>Manage your account settings.</p>
-      </TabsContent>
-      <TabsContent value="password">
-        <p>Change your password here.</p>
-      </TabsContent>
-    </Tabs>
-  );
+	return (
+		<Tabs defaultValue="account">
+			<TabsList>
+				<TabsTrigger value="account">Account</TabsTrigger>
+				<TabsTrigger value="password">Password</TabsTrigger>
+			</TabsList>
+			<TabsContent value="account">
+				<p>Manage your account settings.</p>
+			</TabsContent>
+			<TabsContent value="password">
+				<p>Change your password here.</p>
+			</TabsContent>
+		</Tabs>
+	);
 }
 ```
 
@@ -93,26 +93,26 @@ export function AccountTabs() {
 When external logic drives the active tab — a URL parameter, a sidebar selection, a notification — manage `value` yourself.
 
 ```tsx
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@unbranded-ds/react';
 import * as React from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@unbranded-ds/react';
 
 export function ControlledTabs() {
-  const [tab, setTab] = React.useState<string>('account');
+	const [tab, setTab] = React.useState<string>('account');
 
-  return (
-    <Tabs value={tab} onValueChange={(v) => setTab(String(v))}>
-      <TabsList>
-        <TabsTrigger value="account">Account</TabsTrigger>
-        <TabsTrigger value="password">Password</TabsTrigger>
-      </TabsList>
-      <TabsContent value="account">
-        <p>Manage your account settings.</p>
-      </TabsContent>
-      <TabsContent value="password">
-        <p>Change your password here.</p>
-      </TabsContent>
-    </Tabs>
-  );
+	return (
+		<Tabs value={tab} onValueChange={(v) => setTab(String(v))}>
+			<TabsList>
+				<TabsTrigger value="account">Account</TabsTrigger>
+				<TabsTrigger value="password">Password</TabsTrigger>
+			</TabsList>
+			<TabsContent value="account">
+				<p>Manage your account settings.</p>
+			</TabsContent>
+			<TabsContent value="password">
+				<p>Change your password here.</p>
+			</TabsContent>
+		</Tabs>
+	);
 }
 ```
 
@@ -121,31 +121,31 @@ export function ControlledTabs() {
 Pass `orientation="vertical"` when the tab list should sit beside the panels rather than above them. Arrow-key navigation switches to Up/Down automatically.
 
 ```tsx
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@unbranded-ds/react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@unbranded-ds/react';
 
 export function VerticalTabs() {
-  return (
-    <Tabs defaultValue="profile" orientation="vertical">
-      <TabsList>
-        <TabsTrigger value="profile">Profile</TabsTrigger>
-        <TabsTrigger value="notifications">Notifications</TabsTrigger>
-        <TabsTrigger value="security">Security</TabsTrigger>
-        <TabsTrigger value="billing">Billing</TabsTrigger>
-      </TabsList>
-      <TabsContent value="profile">
-        <p>Profile settings.</p>
-      </TabsContent>
-      <TabsContent value="notifications">
-        <p>Notification preferences.</p>
-      </TabsContent>
-      <TabsContent value="security">
-        <p>Security settings.</p>
-      </TabsContent>
-      <TabsContent value="billing">
-        <p>Billing information.</p>
-      </TabsContent>
-    </Tabs>
-  );
+	return (
+		<Tabs defaultValue="profile" orientation="vertical">
+			<TabsList>
+				<TabsTrigger value="profile">Profile</TabsTrigger>
+				<TabsTrigger value="notifications">Notifications</TabsTrigger>
+				<TabsTrigger value="security">Security</TabsTrigger>
+				<TabsTrigger value="billing">Billing</TabsTrigger>
+			</TabsList>
+			<TabsContent value="profile">
+				<p>Profile settings.</p>
+			</TabsContent>
+			<TabsContent value="notifications">
+				<p>Notification preferences.</p>
+			</TabsContent>
+			<TabsContent value="security">
+				<p>Security settings.</p>
+			</TabsContent>
+			<TabsContent value="billing">
+				<p>Billing information.</p>
+			</TabsContent>
+		</Tabs>
+	);
 }
 ```
 
@@ -154,31 +154,31 @@ export function VerticalTabs() {
 Use `variant="line"` on `TabsList` for a lighter visual treatment that works better on white or image backgrounds where the muted pill would clash.
 
 ```tsx
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@unbranded-ds/react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@unbranded-ds/react';
 
 export function LineTabs() {
-  return (
-    <Tabs defaultValue="overview">
-      <TabsList variant="line">
-        <TabsTrigger value="overview">Overview</TabsTrigger>
-        <TabsTrigger value="details">Details</TabsTrigger>
-        <TabsTrigger value="history">History</TabsTrigger>
-        <TabsTrigger value="settings">Settings</TabsTrigger>
-      </TabsList>
-      <TabsContent value="overview">
-        <p>Overview content.</p>
-      </TabsContent>
-      <TabsContent value="details">
-        <p>Detail content.</p>
-      </TabsContent>
-      <TabsContent value="history">
-        <p>History content.</p>
-      </TabsContent>
-      <TabsContent value="settings">
-        <p>Settings content.</p>
-      </TabsContent>
-    </Tabs>
-  );
+	return (
+		<Tabs defaultValue="overview">
+			<TabsList variant="line">
+				<TabsTrigger value="overview">Overview</TabsTrigger>
+				<TabsTrigger value="details">Details</TabsTrigger>
+				<TabsTrigger value="history">History</TabsTrigger>
+				<TabsTrigger value="settings">Settings</TabsTrigger>
+			</TabsList>
+			<TabsContent value="overview">
+				<p>Overview content.</p>
+			</TabsContent>
+			<TabsContent value="details">
+				<p>Detail content.</p>
+			</TabsContent>
+			<TabsContent value="history">
+				<p>History content.</p>
+			</TabsContent>
+			<TabsContent value="settings">
+				<p>Settings content.</p>
+			</TabsContent>
+		</Tabs>
+	);
 }
 ```
 
@@ -214,8 +214,8 @@ Disabled triggers receive `aria-disabled` and are skipped during arrow-key navig
 
 `tabsListVariants` is a CVA helper exported alongside the components for consumers who need to apply the same list styling to a custom container. It exposes one variant axis:
 
-| Axis | Values | Default |
-| --- | --- | --- |
+| Axis      | Values                  | Default     |
+| --------- | ----------------------- | ----------- |
 | `variant` | `'default'` \| `'line'` | `'default'` |
 
 `'default'` renders a muted rounded pill background. `'line'` renders a transparent background; the active trigger's underline indicator is provided by the `::after` pseudo-element on `TabsTrigger` via the `group-data-[variant=line]` Tailwind selector.

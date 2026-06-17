@@ -110,7 +110,7 @@ Both should report the new version numbers.
 
 Same flow as above, but the changeset is `major` (or `minor` pre-1.0) and the body is the full migration guide:
 
-```markdown
+````markdown
 ---
 "@unbranded-ds/tokens": minor
 ---
@@ -130,9 +130,11 @@ if (old) {
   localStorage.removeItem('unbranded-ds-theme')
 }
 ```
+````
 
 Place this script in `<head>` before the bootstrap script for a one-time migration window. After 0.5.0, the bootstrap script reads only from the new key.
-```
+
+````
 
 After merge, the resulting CHANGELOG entry is the full migration guide — consumers can migrate from the CHANGELOG alone without chasing the PR or other docs (per SC-006).
 
@@ -144,7 +146,7 @@ A PR that modifies a published file in a way that does not ship to consumers (a 
 
 ```sh
 pnpm changeset --empty
-```
+````
 
 This writes a changeset with empty frontmatter and a one-line body explaining the no-op reason. It produces no CHANGELOG entry but passes `changeset-check.yml`.
 

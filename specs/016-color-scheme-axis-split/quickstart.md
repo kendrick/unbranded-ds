@@ -5,7 +5,7 @@
 Set the two attributes independently (the bootstrap does this before paint; the toggles do it at runtime):
 
 ```html
-<html data-color-scheme="dark" data-theme="vaporwave" data-density="compact">
+<html data-color-scheme="dark" data-theme="vaporwave" data-density="compact"></html>
 ```
 
 That renders the vaporwave identity, in dark, at compact density. Switch `data-color-scheme` to `light` and the identity stays vaporwave.
@@ -18,8 +18,12 @@ import { ColorSchemeToggle, DensityToggle, ThemeProvider, ThemeToggle } from '@u
 function Header() {
 	return (
 		<ThemeProvider>
-			<ColorSchemeToggle />  {/* light / system / dark */}
-			<ThemeToggle />        {/* default / brand / vaporwave (data-driven) */}
+			<ColorSchemeToggle />
+			{' '}
+			{/* light / system / dark */}
+			<ThemeToggle />
+			{' '}
+			{/* default / brand / vaporwave (data-driven) */}
 			<DensityToggle />
 		</ThemeProvider>
 	);
@@ -31,7 +35,7 @@ function Header() {
 ```tsx
 const { resolved, colorScheme, set } = useTheme();
 // resolved.theme === 'vaporwave', resolved.colorScheme === 'dark'
-colorScheme.set('light');           // the convenience for the common case
+colorScheme.set('light'); // the convenience for the common case
 set({ theme: 'brand', colorScheme: 'dark' }); // any subset of axes at once
 ```
 

@@ -23,7 +23,7 @@ The work is almost entirely in `packages/tokens`, plus docs and one Storybook co
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+_GATE: Must pass before Phase 0 research. Re-check after Phase 1 design._
 
 - [x] **Section I (Repository shape)** — no new package; all code in `packages/tokens`, docs at root, one story in the existing Storybook surface.
 - [x] **Section II (Tokens independent of components)** — all work stays in `@unbranded-ds/tokens`; no React/Storybook/Base UI enters its dependency graph. The composition resolver and adapter are pure TS.
@@ -94,13 +94,13 @@ F1 and F2 touch disjoint files, so they run in parallel with each other.
 
 ### Parallel wave (each consumes F1/F2, each ships its own tests)
 
-| Unit | Files | What |
-|------|-------|------|
-| **P1 Validator** | `validate.ts` (+test) | resolve per-axis → `composeTokens`; structured axis-conflict error; single-axis regression |
-| **P2 Build + token-map** | `sd.config.ts`, `token-map.ts`, `index.ts`, `exports.test.ts`, new `token-map.test.ts` | per-axis `@layer` CSS (density delta-only, density layer wins); generated token map = schema ∪ bundled-theme extensions with `source`; drift guard |
-| **P3 MCP** | `src/mcp/*`, the contract doc (+tests) | multi-axis input object; `composeTokens` via the adapter; `source` labels; soft extension-absent response |
-| **P4 Runtime** | `runtime.ts` (+test) | per-axis selector emission; bootstrap writes `data-density`; cascade mirrors the resolver |
-| **P5 Docs + constitution** | `THEMING.md`, `README.md`, `constitution.md` | composition + extension sections (humanizer); Section III amendment |
+| Unit                       | Files                                                                                  | What                                                                                                                                               |
+| -------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **P1 Validator**           | `validate.ts` (+test)                                                                  | resolve per-axis → `composeTokens`; structured axis-conflict error; single-axis regression                                                         |
+| **P2 Build + token-map**   | `sd.config.ts`, `token-map.ts`, `index.ts`, `exports.test.ts`, new `token-map.test.ts` | per-axis `@layer` CSS (density delta-only, density layer wins); generated token map = schema ∪ bundled-theme extensions with `source`; drift guard |
+| **P3 MCP**                 | `src/mcp/*`, the contract doc (+tests)                                                 | multi-axis input object; `composeTokens` via the adapter; `source` labels; soft extension-absent response                                          |
+| **P4 Runtime**             | `runtime.ts` (+test)                                                                   | per-axis selector emission; bootstrap writes `data-density`; cascade mirrors the resolver                                                          |
+| **P5 Docs + constitution** | `THEMING.md`, `README.md`, `constitution.md`                                           | composition + extension sections (humanizer); Section III amendment                                                                                |
 
 P2 owns all of `sd.config.ts` (both the CSS loop and the token-map format live there) plus the token-map export files — one owner avoids a same-file race. No two units share a file.
 
@@ -133,14 +133,14 @@ The user asked explicitly to test everything we should. Because this is a tokens
 
 **The resolution-parity oracle is the headline backstop** (`resolution-parity.test.ts`). For every `(aesthetic ∈ {light,dark,brand,vaporwave,∅}) × (density ∈ {compact,∅})` combination, for every token, it asserts three values agree: `composeTokens(...)` (the JS resolver), the value the emitted CSS yields (parse `dist` CSS, apply the known `@layer` order — no browser needed), and the MCP response. That single test catches all three drift modes at once — Style-Dictionary-vs-`resolveTheme` divergence (JS vs CSS), MCP drift (JS vs MCP), and `@layer` precedence bugs — across the full matrix, not hand-picked cases. The browser `play` story then confirms one combo against the real cascade.
 
-This spec inherits a multi-engine resolution stack (SD at build, `resolveTheme` in JS, plus a hand-maintained defaults copy) kept in sync by convention; composition makes that fragility load-bearing. The oracle plus a **branded `ResolvedTokens` type** — so `dtcgToResolved` is the compiler-enforced *only* door from DTCG to the flat shape — turn "an invariant we hope holds" into "any drift fails CI on the next commit." That services the interest on the debt; the principal (collapse the engines) is the follow-up spec at `docs/workshops/2026-06-11/spec-014-resolution-unification.md`, after which this oracle becomes trivially true and is deleted. See research D9.
+This spec inherits a multi-engine resolution stack (SD at build, `resolveTheme` in JS, plus a hand-maintained defaults copy) kept in sync by convention; composition makes that fragility load-bearing. The oracle plus a **branded `ResolvedTokens` type** — so `dtcgToResolved` is the compiler-enforced _only_ door from DTCG to the flat shape — turn "an invariant we hope holds" into "any drift fails CI on the next commit." That services the interest on the debt; the principal (collapse the engines) is the follow-up spec at `docs/workshops/2026-06-11/spec-014-resolution-unification.md`, after which this oracle becomes trivially true and is deleted. See research D9.
 
 ## Research Summary
 
 See [research.md](research.md). Nine decisions resolved against the actual code:
 
 1. **One merge** — extract `mergeLayer`; `resolveTheme` and the new `composeTokens` both fold through it. No second hand-rolled merge.
-2. **Compose by folding override deltas onto the base** — `composeTokens` = `resolveTheme` generalized to N ordered partials (density last wins). Each axis layer is its resolved *delta*, not a complete set: merging complete sets would clobber (density's inherited defaults would overwrite the aesthetic's colors). This matches the CSS delta-emission, so resolver and cascade agree by construction.
+2. **Compose by folding override deltas onto the base** — `composeTokens` = `resolveTheme` generalized to N ordered partials (density last wins). Each axis layer is its resolved _delta_, not a complete set: merging complete sets would clobber (density's inherited defaults would overwrite the aesthetic's colors). This matches the CSS delta-emission, so resolver and cascade agree by construction.
 3. **Bridge the two formats** — one `dtcgToResolved()` adapter; the MCP routes through `composeTokens` instead of walking raw DTCG, so the MCP, validator, and runtime compose identically. This is the spec's "one shared resolver" made real, and the biggest drift risk if skipped.
 4. **Axis = directory** — `themes/aesthetic/` + `themes/density/`, read via `listThemesByAxis()`. No in-file axis key (Style Dictionary would mis-parse it).
 5. **Precedence = cascade `@layer`** — aesthetic and density emit into ordered layers (`@layer ds-aesthetic, ds-density;`), so density wins independent of consumer import order. Density emits its delta only, not the full base set.
@@ -154,5 +154,5 @@ See [research.md](research.md). Nine decisions resolved against the actual code:
 > No constitution violations to justify. The Section III change is a governed amendment, tracked in the Constitution Check above, not a violation.
 
 | Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| — | — | — |
+| --------- | ---------- | ------------------------------------ |
+| —         | —          | —                                    |

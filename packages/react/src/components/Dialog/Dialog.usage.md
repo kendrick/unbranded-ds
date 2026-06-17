@@ -10,14 +10,14 @@ Reach for Dialog when the user must confirm an action, fill out a short form, or
 
 ```tsx
 import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
 } from '@unbranded-ds/react';
 ```
 
@@ -27,92 +27,92 @@ import {
 
 The root component. It manages open state and passes it to all child slots through context.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `open` | `boolean` | — | Controls open state when you need to manage it externally (controlled mode). Pair with `onOpenChange`. |
-| `defaultOpen` | `boolean` | `false` | Seeds the open state for uncontrolled usage. Ignored once `open` is set. |
-| `modal` | `boolean \| 'trap-focus'` | `true` | `true` traps focus, locks page scroll, and blocks pointer events outside the dialog. `false` leaves all three open. `'trap-focus'` traps focus only, which suits slide-out panels that coexist with the rest of the page. |
-| `onOpenChange` | `(open: boolean, eventDetails: ChangeEventDetails) => void` | — | Fires when the dialog opens or closes. `eventDetails.reason` tells you what triggered the change (`'escapeKey'`, `'outsidePress'`, `'closePress'`, etc.). |
-| `onOpenChangeComplete` | `(open: boolean) => void` | — | Fires after all close/open animations finish. Use this to unmount heavy content only after the exit animation completes. |
-| `disablePointerDismissal` | `boolean` | `false` | When `true`, clicking outside the dialog does not close it. Reach for this in destructive confirmation flows where accidental dismissal could confuse users. |
-| `actionsRef` | `React.RefObject<DialogRoot.Actions>` | — | Imperative handle. Exposes `close()` and `unmount()` for situations where you need to close the dialog programmatically from outside the tree. |
-| `handle` | `DialogHandle` | — | Associates the root with an external trigger via `Dialog.createHandle()`. Useful when the trigger lives outside the Dialog's React subtree. |
-| `triggerId` | `string \| null` | — | In controlled mode, identifies which trigger is currently active. Maps to a `DialogTrigger`'s `id` prop. |
-| `defaultTriggerId` | `string \| null` | — | Same as `triggerId` but for uncontrolled, initially-open dialogs. |
-| `children` | `React.ReactNode` | — | The dialog tree. Accepts a render function `(payload) => React.ReactNode` when using the `handle`/`payload` pattern. |
+| Prop                      | Type                                                        | Default | Description                                                                                                                                                                                                               |
+| ------------------------- | ----------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `open`                    | `boolean`                                                   | —       | Controls open state when you need to manage it externally (controlled mode). Pair with `onOpenChange`.                                                                                                                    |
+| `defaultOpen`             | `boolean`                                                   | `false` | Seeds the open state for uncontrolled usage. Ignored once `open` is set.                                                                                                                                                  |
+| `modal`                   | `boolean \| 'trap-focus'`                                   | `true`  | `true` traps focus, locks page scroll, and blocks pointer events outside the dialog. `false` leaves all three open. `'trap-focus'` traps focus only, which suits slide-out panels that coexist with the rest of the page. |
+| `onOpenChange`            | `(open: boolean, eventDetails: ChangeEventDetails) => void` | —       | Fires when the dialog opens or closes. `eventDetails.reason` tells you what triggered the change (`'escapeKey'`, `'outsidePress'`, `'closePress'`, etc.).                                                                 |
+| `onOpenChangeComplete`    | `(open: boolean) => void`                                   | —       | Fires after all close/open animations finish. Use this to unmount heavy content only after the exit animation completes.                                                                                                  |
+| `disablePointerDismissal` | `boolean`                                                   | `false` | When `true`, clicking outside the dialog does not close it. Reach for this in destructive confirmation flows where accidental dismissal could confuse users.                                                              |
+| `actionsRef`              | `React.RefObject<DialogRoot.Actions>`                       | —       | Imperative handle. Exposes `close()` and `unmount()` for situations where you need to close the dialog programmatically from outside the tree.                                                                            |
+| `handle`                  | `DialogHandle`                                              | —       | Associates the root with an external trigger via `Dialog.createHandle()`. Useful when the trigger lives outside the Dialog's React subtree.                                                                               |
+| `triggerId`               | `string \| null`                                            | —       | In controlled mode, identifies which trigger is currently active. Maps to a `DialogTrigger`'s `id` prop.                                                                                                                  |
+| `defaultTriggerId`        | `string \| null`                                            | —       | Same as `triggerId` but for uncontrolled, initially-open dialogs.                                                                                                                                                         |
+| `children`                | `React.ReactNode`                                           | —       | The dialog tree. Accepts a render function `(payload) => React.ReactNode` when using the `handle`/`payload` pattern.                                                                                                      |
 
 ### DialogTrigger
 
 The element that opens the dialog on click. Renders a `<button>` by default; pass `render` to swap the element.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `render` | `React.ReactElement` | — | Replaces the rendered element. Pass an existing component (e.g., `render={<Button />}`) to forward all trigger behavior without an extra DOM wrapper. |
-| `handle` | `DialogHandle` | — | Links this trigger to a specific Dialog root when they aren't in the same subtree. |
-| `payload` | `unknown` | — | Data passed through to the dialog's children render function when this trigger opens the dialog. |
-| `id` | `string` | — | Identifies this trigger. The Dialog root uses this via `triggerId` in controlled mode to know which trigger is active. |
-| `disabled` | `boolean` | — | Prevents the trigger from opening the dialog and announces it as disabled to assistive technology. |
-| `className` | `string` | — | Applied to the trigger element. |
+| Prop        | Type                 | Default | Description                                                                                                                                           |
+| ----------- | -------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `render`    | `React.ReactElement` | —       | Replaces the rendered element. Pass an existing component (e.g., `render={<Button />}`) to forward all trigger behavior without an extra DOM wrapper. |
+| `handle`    | `DialogHandle`       | —       | Links this trigger to a specific Dialog root when they aren't in the same subtree.                                                                    |
+| `payload`   | `unknown`            | —       | Data passed through to the dialog's children render function when this trigger opens the dialog.                                                      |
+| `id`        | `string`             | —       | Identifies this trigger. The Dialog root uses this via `triggerId` in controlled mode to know which trigger is active.                                |
+| `disabled`  | `boolean`            | —       | Prevents the trigger from opening the dialog and announces it as disabled to assistive technology.                                                    |
+| `className` | `string`             | —       | Applied to the trigger element.                                                                                                                       |
 
 ### DialogContent
 
 Renders the dialog panel inside a portal with the overlay behind it. This is the most-composed slot; it accepts all `<div>` props plus two component-specific ones.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `showCloseButton` | `boolean` | `true` | When `true`, renders an `XIcon` close button in the top-right corner of the panel. Set to `false` when your DialogFooter already provides a close action and you want a cleaner header. |
-| `initialFocus` | `boolean \| React.RefObject<HTMLElement \| null> \| ((openType: InteractionType) => boolean \| HTMLElement \| null \| void)` | — | Controls which element receives focus when the dialog opens. Pass a `RefObject` to focus a specific input, or a function to vary behavior by interaction type (`'mouse'`, `'keyboard'`, etc.). `false` suppresses focus movement entirely. |
-| `finalFocus` | `boolean \| React.RefObject<HTMLElement \| null> \| ((closeType: InteractionType) => boolean \| HTMLElement \| null \| void)` | — | Controls which element receives focus when the dialog closes. Defaults to the trigger. Override when the trigger is no longer in the DOM after the dialog closes. |
-| `className` | `string` | — | Merged with the panel's default classes via `cn()`. Use to adjust max-width, padding, or background on a per-dialog basis. |
-| `children` | `React.ReactNode` | — | The panel contents. Compose with `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogFooter`. |
+| Prop              | Type                                                                                                                          | Default | Description                                                                                                                                                                                                                                |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `showCloseButton` | `boolean`                                                                                                                     | `true`  | When `true`, renders an `XIcon` close button in the top-right corner of the panel. Set to `false` when your DialogFooter already provides a close action and you want a cleaner header.                                                    |
+| `initialFocus`    | `boolean \| React.RefObject<HTMLElement \| null> \| ((openType: InteractionType) => boolean \| HTMLElement \| null \| void)`  | —       | Controls which element receives focus when the dialog opens. Pass a `RefObject` to focus a specific input, or a function to vary behavior by interaction type (`'mouse'`, `'keyboard'`, etc.). `false` suppresses focus movement entirely. |
+| `finalFocus`      | `boolean \| React.RefObject<HTMLElement \| null> \| ((closeType: InteractionType) => boolean \| HTMLElement \| null \| void)` | —       | Controls which element receives focus when the dialog closes. Defaults to the trigger. Override when the trigger is no longer in the DOM after the dialog closes.                                                                          |
+| `className`       | `string`                                                                                                                      | —       | Merged with the panel's default classes via `cn()`. Use to adjust max-width, padding, or background on a per-dialog basis.                                                                                                                 |
+| `children`        | `React.ReactNode`                                                                                                             | —       | The panel contents. Compose with `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogFooter`.                                                                                                                                       |
 
 ### DialogHeader
 
 A layout wrapper that stacks its children vertically with a small gap. Renders a `<div>`.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | — | Merged with the default flex-column layout classes. |
-| `children` | `React.ReactNode` | — | Typically `DialogTitle` and `DialogDescription`. |
+| Prop        | Type              | Default | Description                                         |
+| ----------- | ----------------- | ------- | --------------------------------------------------- |
+| `className` | `string`          | —       | Merged with the default flex-column layout classes. |
+| `children`  | `React.ReactNode` | —       | Typically `DialogTitle` and `DialogDescription`.    |
 
 ### DialogTitle
 
 The dialog's accessible heading. Renders an `<h2>` and is automatically wired to the dialog popup via `aria-labelledby`.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | — | Merged with the title's typography classes. |
-| `children` | `React.ReactNode` | — | The title text. Keep it concise — screen readers announce this first when the dialog opens. |
+| Prop        | Type              | Default | Description                                                                                 |
+| ----------- | ----------------- | ------- | ------------------------------------------------------------------------------------------- |
+| `className` | `string`          | —       | Merged with the title's typography classes.                                                 |
+| `children`  | `React.ReactNode` | —       | The title text. Keep it concise — screen readers announce this first when the dialog opens. |
 
 ### DialogDescription
 
 Supporting text beneath the title. Renders a `<p>` and is wired to the dialog popup via `aria-describedby`. Anchor tags inside it receive underline styling automatically.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `className` | `string` | — | Merged with the muted-foreground typography classes. |
-| `children` | `React.ReactNode` | — | Explanatory prose or a brief instruction. Omit when the title alone is self-explanatory; the `aria-describedby` wiring is only applied when this component is rendered. |
+| Prop        | Type              | Default | Description                                                                                                                                                             |
+| ----------- | ----------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `className` | `string`          | —       | Merged with the muted-foreground typography classes.                                                                                                                    |
+| `children`  | `React.ReactNode` | —       | Explanatory prose or a brief instruction. Omit when the title alone is self-explanatory; the `aria-describedby` wiring is only applied when this component is rendered. |
 
 ### DialogFooter
 
 A layout wrapper for action buttons. Stacks buttons vertically on mobile and arranges them in a row end-aligned on larger viewports. Can optionally render its own close button.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `showCloseButton` | `boolean` | `false` | When `true`, appends an outline-styled "Close" `DialogClose` button at the end of the footer's action row. Useful when `DialogContent`'s top-right close button is hidden (`showCloseButton={false}`) and you want a named close action in the footer instead. |
-| `className` | `string` | — | Merged with the flex layout classes. |
-| `children` | `React.ReactNode` | — | The action buttons. Standard pattern is a cancel `DialogClose` followed by the primary action. |
+| Prop              | Type              | Default | Description                                                                                                                                                                                                                                                    |
+| ----------------- | ----------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `showCloseButton` | `boolean`         | `false` | When `true`, appends an outline-styled "Close" `DialogClose` button at the end of the footer's action row. Useful when `DialogContent`'s top-right close button is hidden (`showCloseButton={false}`) and you want a named close action in the footer instead. |
+| `className`       | `string`          | —       | Merged with the flex layout classes.                                                                                                                                                                                                                           |
+| `children`        | `React.ReactNode` | —       | The action buttons. Standard pattern is a cancel `DialogClose` followed by the primary action.                                                                                                                                                                 |
 
 ### DialogClose
 
 A button that closes the dialog when clicked. Renders a `<button>` by default; pass `render` to swap the element.
 
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `render` | `React.ReactElement` | — | Replaces the rendered element. Pass `render={<Button variant="outline" />}` to style it as a secondary button without breaking the close wiring. |
-| `disabled` | `boolean` | — | Prevents the close action and announces the button as disabled. |
-| `className` | `string` | — | Applied to the close element. |
-| `children` | `React.ReactNode` | — | The button label. Typically "Cancel" or "Close". |
+| Prop        | Type                 | Default | Description                                                                                                                                      |
+| ----------- | -------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `render`    | `React.ReactElement` | —       | Replaces the rendered element. Pass `render={<Button variant="outline" />}` to style it as a secondary button without breaking the close wiring. |
+| `disabled`  | `boolean`            | —       | Prevents the close action and announces the button as disabled.                                                                                  |
+| `className` | `string`             | —       | Applied to the close element.                                                                                                                    |
+| `children`  | `React.ReactNode`    | —       | The button label. Typically "Cancel" or "Close".                                                                                                 |
 
 ### DialogPortal
 
@@ -130,35 +130,35 @@ The default layout: a title, a description, a cancel action, and a confirm actio
 
 ```tsx
 import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
+	Button,
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger
 } from '@unbranded-ds/react';
-import { Button } from '@unbranded-ds/react';
 
 export function ConfirmationDialog() {
-  return (
-    <Dialog>
-      <DialogTrigger render={<Button />}>Open</DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Save changes</DialogTitle>
-          <DialogDescription>
-            Your edits will be saved and published immediately.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
-          <Button>Save</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
+	return (
+		<Dialog>
+			<DialogTrigger render={<Button />}>Open</DialogTrigger>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>Save changes</DialogTitle>
+					<DialogDescription>
+						Your edits will be saved and published immediately.
+					</DialogDescription>
+				</DialogHeader>
+				<DialogFooter>
+					<DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
+					<Button>Save</Button>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
+	);
 }
 ```
 
@@ -168,37 +168,37 @@ Pair `Button variant="destructive"` with `disablePointerDismissal` so clicking o
 
 ```tsx
 import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
+	Button,
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger
 } from '@unbranded-ds/react';
-import { Button } from '@unbranded-ds/react';
 
 export function DeleteDialog() {
-  return (
-    <Dialog disablePointerDismissal>
-      <DialogTrigger render={<Button variant="destructive" />}>
-        Delete account
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Delete account</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. All your data will be permanently removed.
-          </DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
-          <Button variant="destructive">Delete</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
+	return (
+		<Dialog disablePointerDismissal>
+			<DialogTrigger render={<Button variant="destructive" />}>
+				Delete account
+			</DialogTrigger>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>Delete account</DialogTitle>
+					<DialogDescription>
+						This action cannot be undone. All your data will be permanently removed.
+					</DialogDescription>
+				</DialogHeader>
+				<DialogFooter>
+					<DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
+					<Button variant="destructive">Delete</Button>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
+	);
 }
 ```
 
@@ -207,51 +207,51 @@ export function DeleteDialog() {
 Place form fields between `DialogHeader` and `DialogFooter`. The `initialFocus` prop on `DialogContent` moves focus straight to the first input when the dialog opens.
 
 ```tsx
-import * as React from 'react';
 import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
+	Button,
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+	Input,
+	Label
 } from '@unbranded-ds/react';
-import { Button } from '@unbranded-ds/react';
-import { Input } from '@unbranded-ds/react';
-import { Label } from '@unbranded-ds/react';
+import * as React from 'react';
 
 export function EditProfileDialog() {
-  const nameRef = React.useRef<HTMLInputElement>(null);
+	const nameRef = React.useRef<HTMLInputElement>(null);
 
-  return (
-    <Dialog>
-      <DialogTrigger render={<Button />}>Edit profile</DialogTrigger>
-      <DialogContent initialFocus={nameRef}>
-        <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>
-            Changes take effect immediately after saving.
-          </DialogDescription>
-        </DialogHeader>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <Label htmlFor="name">Name</Label>
-            <Input id="name" ref={nameRef} defaultValue="Jane Smith" />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" defaultValue="jane@example.com" />
-          </div>
-        </div>
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
-          <Button>Save changes</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
+	return (
+		<Dialog>
+			<DialogTrigger render={<Button />}>Edit profile</DialogTrigger>
+			<DialogContent initialFocus={nameRef}>
+				<DialogHeader>
+					<DialogTitle>Edit profile</DialogTitle>
+					<DialogDescription>
+						Changes take effect immediately after saving.
+					</DialogDescription>
+				</DialogHeader>
+				<div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+					<div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+						<Label htmlFor="name">Name</Label>
+						<Input id="name" ref={nameRef} defaultValue="Jane Smith" />
+					</div>
+					<div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+						<Label htmlFor="email">Email</Label>
+						<Input id="email" type="email" defaultValue="jane@example.com" />
+					</div>
+				</div>
+				<DialogFooter>
+					<DialogClose render={<Button variant="outline" />}>Cancel</DialogClose>
+					<Button>Save changes</Button>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
+	);
 }
 ```
 
@@ -260,39 +260,39 @@ export function EditProfileDialog() {
 When external logic drives the dialog (a keyboard shortcut, a route change, a server response), manage `open` yourself.
 
 ```tsx
-import * as React from 'react';
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
+	Button,
+	Dialog,
+	DialogClose,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle
 } from '@unbranded-ds/react';
-import { Button } from '@unbranded-ds/react';
+import * as React from 'react';
 
 export function ControlledDialog() {
-  const [open, setOpen] = React.useState(false);
+	const [open, setOpen] = React.useState(false);
 
-  return (
-    <>
-      <Button onClick={() => setOpen(true)}>Open externally</Button>
-      <Dialog open={open} onOpenChange={(next) => setOpen(next)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Controlled dialog</DialogTitle>
-            <DialogDescription>
-              State lives outside the Dialog tree.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <DialogClose render={<Button variant="outline" />}>Close</DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
-  );
+	return (
+		<>
+			<Button onClick={() => setOpen(true)}>Open externally</Button>
+			<Dialog open={open} onOpenChange={(next) => setOpen(next)}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>Controlled dialog</DialogTitle>
+						<DialogDescription>
+							State lives outside the Dialog tree.
+						</DialogDescription>
+					</DialogHeader>
+					<DialogFooter>
+						<DialogClose render={<Button variant="outline" />}>Close</DialogClose>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
+		</>
+	);
 }
 ```
 

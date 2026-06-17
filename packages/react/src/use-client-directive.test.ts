@@ -17,7 +17,7 @@ import { describe, expect, it } from 'vitest';
 const here = dirname(fileURLToPath(import.meta.url));
 const bundlePath = join(here, '..', 'dist', 'index.js');
 
-describe("published bundle declares itself a client module (spec 017 FR-002/FR-004)", () => {
+describe('published bundle declares itself a client module (spec 017 FR-002/FR-004)', () => {
 	it('begins with a use-client directive on the first line', () => {
 		const firstLine = readFileSync(bundlePath, 'utf8').split('\n', 1)[0]!.trim();
 		// Quote style and the trailing semicolon are incidental; what matters is

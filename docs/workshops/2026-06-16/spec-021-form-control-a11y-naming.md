@@ -9,7 +9,7 @@
 
 ## The problem
 
-Base UI's Checkbox, Switch, and Slider expose a `role="checkbox"` / `role="switch"` / `role="slider"` element (for Slider, a clipped `<input type="range">`). A native `<label>` — whether wrapping the control or associated with `htmlFor` — only names *native* form controls, not these ARIA-role elements. So the documented pattern leaves the control with no accessible name, and axe flags `aria-toggle-field-name` / `label`.
+Base UI's Checkbox, Switch, and Slider expose a `role="checkbox"` / `role="switch"` / `role="slider"` element (for Slider, a clipped `<input type="range">`). A native `<label>` — whether wrapping the control or associated with `htmlFor` — only names _native_ form controls, not these ARIA-role elements. So the documented pattern leaves the control with no accessible name, and axe flags `aria-toggle-field-name` / `label`.
 
 The `@example` blocks in `Checkbox.tsx`, `Switch.tsx`, and `Slider.tsx`, and the matching `*.usage.md` sidecars, all show this broken pattern. A consumer who copies them ships an inaccessible control. The fix that spec 019 applied to the stories — `aria-label` for an unlabeled control, `aria-labelledby` pointing at the visible `<Label>` for a labeled one — is the pattern the docs should teach.
 

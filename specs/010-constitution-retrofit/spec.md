@@ -26,7 +26,7 @@ Two items confirmed against the codebase rather than asked:
 - The `z-index` scale stops shipped by spec 008 are overlay (50), popover (55), tooltip (60). Dialog maps to overlay, Select to popover, Tooltip to tooltip.
 - Default token values match the hardcoded values they replace (`ring.width` is 3px, the value `ring-3` resolves to), so the swap is visually identical at the default and only the nested-overlay stacking order changes.
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Nested overlays stack correctly (Priority: P1) 🎯 MVP
 
@@ -84,7 +84,7 @@ Every component's focus-visible ring reads its width from the `ring.width` token
 - **`ring-1` is not `ring-3`**: the hairline `ring-1` rings on cards and popovers are a border treatment, a different concern from the focus-ring width. Only `ring-3` (the focus ring, 14 sites) maps to `ring.width`; `ring-1` is left as-is.
 - **Reduced motion**: any existing `prefers-reduced-motion` handling stays intact; the token swap changes which duration value is referenced, not whether reduced-motion short-circuits it.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -97,12 +97,12 @@ Every component's focus-visible ring reads its width from the `ring.width` token
 - **FR-007**: Default rendered output MUST match today at the default token values (identical focus-ring thickness and standalone-overlay depth); only the nested-overlay order and the design-system motion timing change.
 - **FR-008**: The release MUST ship a `.changeset/*.md` declaring a `@unbranded-ds/react` patch. No consumer migration note is required.
 
-### Key Entities *(include if feature involves data)*
+### Key Entities _(include if feature involves data)_
 
 - **Token consumption site**: a single location in component source that hardcodes a value the spec 008 schema now names. Three kinds: a `ring-3` focus ring (14 sites), a `z-50` overlay layer in Dialog, Select, and Tooltip (SkipLink's focus-reveal z excluded), and a built-in enter/exit transition timing on an overlay component (Tooltip, Dialog, Select). Each in-scope site is rewritten to reference its token.
 - **Overlay layer**: the stacking depth of one of the three overlay-family components (Dialog, Select, Tooltip). After this spec, each maps to a named stop in the `z-index` scale (`overlay`, `popover`, `tooltip`) rather than the shared `z-50`.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 

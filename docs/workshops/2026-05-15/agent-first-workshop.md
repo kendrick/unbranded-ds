@@ -35,6 +35,7 @@ Concretely, three layers:
 Use `/speckit-constitution` or hand-edit. Single PR. Add Section XI. Bump SYNC IMPACT REPORT to 1.0.0 → 1.1.0. Update [.specify/templates/plan-template.md](.specify/templates/plan-template.md)'s Constitution Check gate to include "does this PR consider agent legibility (Section XI)?" as a checkbox. That last bit is what makes the principle bite — every future plan has to answer it.
 
 **Layer 2 — Specs, one per coherent wave.** Each becomes a directory under `specs/`:
+
 - `specs/002-consumer-dx-preset/` — G.1 + A.3 + A.4
 - `specs/003-agent-experience/` — E.2 expanded + autodoc audit + (maybe) a token-query MCP if you want to scope that in
 - `specs/004-token-schema-growth/` — B.1 + B.2 + B.3 + C.2

@@ -9,7 +9,7 @@ The one merge that the validator, runtime, and MCP all call. New code in `packag
 // from today's resolveTheme inner loop (resolve.ts:51-63): seed from base,
 // override per key, skip `undefined` so inherited values survive. Per-key, not
 // category-replace.
-function mergeLayer(base: ResolvedTokens, override: Partial<ResolvedTokens>): ResolvedTokens
+function mergeLayer(base: ResolvedTokens, override: Partial<ResolvedTokens>): ResolvedTokens;
 ```
 
 `resolveTheme(partial)` is refactored to `mergeLayer(seedFromDefaults(), partial)` — same behavior, same existing tests pass.
@@ -21,7 +21,7 @@ function mergeLayer(base: ResolvedTokens, override: Partial<ResolvedTokens>): Re
 // resolved delta onto the defaults base, left to right; later layers win per key.
 // Callers pass [aestheticOverrides, densityOverrides] so density wins.
 //   composeTokens(parts) === parts.reduce(mergeLayer, seedFromDefaults())
-export function composeTokens(orderedPartials: Array<Partial<ResolvedTokens>>): ResolvedTokens
+export function composeTokens(orderedPartials: Array<Partial<ResolvedTokens>>): ResolvedTokens;
 ```
 
 - Empty list → the defaults seed. Order-significant: the last layer wins collisions.
@@ -33,7 +33,7 @@ export function composeTokens(orderedPartials: Array<Partial<ResolvedTokens>>): 
 ```ts
 // Flatten a DTCG theme ({cat:{key:{$value,$type}}}) into the flat runtime shape
 // ({cat:{key:string}}). Reuses the walkSubtree recursion from mcp/themes.ts.
-export function dtcgToResolved(dtcg: DtcgTheme): Partial<ResolvedTokens>
+export function dtcgToResolved(dtcg: DtcgTheme): Partial<ResolvedTokens>;
 ```
 
 The bridge between the on-disk DTCG themes and the flat resolver. The MCP uses this so it composes through `composeTokens` rather than walking raw DTCG — the seam that keeps MCP/validator/runtime from drifting.
@@ -46,7 +46,7 @@ The bridge between the on-disk DTCG themes and the flat resolver. The MCP uses t
 export type Axis = 'aesthetic' | 'density';
 export const AXIS_ATTRIBUTE: Record<Axis, string>; // { aesthetic: 'data-theme', density: 'data-density' }
 // Reads themes/<axis>/*.json; the single source the build + MCP + validator share.
-export function listThemesByAxis(): Record<Axis, string[]>
+export function listThemesByAxis(): Record<Axis, string[]>;
 ```
 
 ## Validator usage

@@ -1,3 +1,4 @@
+import type { ResolvedLayer } from './resolve.js';
 import { readFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -6,7 +7,6 @@ import { composeAxes, flatValueOf } from './mcp/compose.js';
 import { getResolvedDelta, loadThemes } from './mcp/themes.js';
 import { tokenMap } from './token-map.js';
 import { validateComposedTheme } from './validate.js';
-import type { ResolvedLayer } from './resolve.js';
 
 // ---------------------------------------------------------------------------
 // Parity canary (spec 014, reduced from the 009 matrix).
@@ -34,8 +34,8 @@ const cssDir = resolve(here, '..', 'dist', 'css');
 function normalize(value: string): string {
 	return value
 		.toLowerCase()
-		.replace(/(\d+(?:\.\d+)?)ms\b/g, (_, n) => `${parseFloat(n) / 1000}s`)
-		.replace(/-?\d+(?:\.\d+)?/g, (n) => String(parseFloat(n)))
+		.replace(/(\d+(?:\.\d+)?)ms\b/g, (_, n) => `${Number.parseFloat(n) / 1000}s`)
+		.replace(/-?\d+(?:\.\d+)?/g, (n) => String(Number.parseFloat(n)))
 		.replace(/\s+/g, ' ')
 		.trim();
 }

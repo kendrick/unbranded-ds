@@ -27,7 +27,7 @@ Then, as clearly-commented additive imports, the theme CSS the app actually uses
 @import '@unbranded-ds/tokens/themes/compact.css';
 ```
 
-**Rationale**: The verified exports confirm `@unbranded-ds/react/preset.css` and `@unbranded-ds/tokens/themes/*.css` (which map to `dist/css/tokens-*.css`). The preset carries the base/light layer and the utility-to-variable mappings; light is the default, so only dark, vaporwave, and compact need explicit imports. FR-003 constrains the *Tailwind/preset* wiring to the two lines; the theme imports are a separate, labeled concern (loading the themes this app exercises), which keeps SC-004 honest: the base styling still traces to the two lines.
+**Rationale**: The verified exports confirm `@unbranded-ds/react/preset.css` and `@unbranded-ds/tokens/themes/*.css` (which map to `dist/css/tokens-*.css`). The preset carries the base/light layer and the utility-to-variable mappings; light is the default, so only dark, vaporwave, and compact need explicit imports. FR-003 constrains the _Tailwind/preset_ wiring to the two lines; the theme imports are a separate, labeled concern (loading the themes this app exercises), which keeps SC-004 honest: the base styling still traces to the two lines.
 
 **Alternatives considered**: Importing every bundled theme. Rejected as misleading bloat; the app imports only what it uses. Bundling theme CSS into the preset. Rejected: that is a tokens-package decision, out of scope, and would defeat per-theme opt-in.
 
@@ -59,7 +59,7 @@ Then, as clearly-commented additive imports, the theme CSS the app actually uses
 
 **Decision**: A self-hosted variable font loaded with `next/font/local`, applied by overriding the `--typography-font-sans` token; and a small `:root { --color-* }` block overriding a few palette tokens. Both sit in a clearly-commented, removable block.
 
-**Rationale**: These are the documented override seam (spec 002): a consumer supplies their own values for the locked token names. Overriding token *values* (not hardcoding component styles) is the sanctioned pattern, so it does not fight Constitution IV. Removing the block reverts to design-system defaults (SC-005). An open-licensed font ships in `fonts/` so the clone-out copy has no missing asset.
+**Rationale**: These are the documented override seam (spec 002): a consumer supplies their own values for the locked token names. Overriding token _values_ (not hardcoding component styles) is the sanctioned pattern, so it does not fight Constitution IV. Removing the block reverts to design-system defaults (SC-005). An open-licensed font ships in `fonts/` so the clone-out copy has no missing asset.
 
 **Alternatives considered**: A Google-hosted font via `next/font/google`. Rejected: self-hosted via `next/font/local` is what the brief asks for and avoids a network dependency in a clone-out.
 

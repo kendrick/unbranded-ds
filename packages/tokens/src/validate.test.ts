@@ -1,3 +1,4 @@
+import type { ResolvedLayer } from './resolve.js';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
@@ -8,7 +9,6 @@ import partialTheme from './__fixtures__/partial-theme.json';
 import validCustom from './__fixtures__/valid-custom.json';
 import { checkAxisAssignment } from './axes';
 import { canonicalDefaultTokens } from './defaults.js';
-import type { ResolvedLayer } from './resolve.js';
 import {
 	checkThemeCompleteness,
 	validateComposedTheme,
@@ -202,7 +202,7 @@ describe('checkThemeCompleteness (SC-005: MISSING_TOKEN after merge)', () => {
 			Record<string, string>
 		>;
 		// non-null: we just cloned a complete default set, so `color` is present.
-		delete incompleteTokens.color!['primary'];
+		delete incompleteTokens.color!.primary;
 
 		const issues = checkThemeCompleteness({
 			name: 'incomplete-defaults',

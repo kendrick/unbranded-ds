@@ -9,7 +9,7 @@
 
 Spec 008 fixed the small structural gap that let a theme override only `color`; now a theme can override any token category. But "themes as color skins" still misses the heart of unbranded-ds. A genuinely themable design system supports aesthetics that move more than color: brutalist (sharper radii, harder shadows, condensed type), solarpunk (serif typography, generous spacing, earthy color), vaporwave (decorative type, glow shadows, saturated color). Two gaps block that today.
 
-**Composition.** Consumers want orthogonal axes at once: an aesthetic *and* a density. "Vaporwave plus compact" is one choice in the consumer's head and should be one choice in the API. Today a theme is single-valued, so a consumer who wants two axes either hand-authors every combination as a merged theme or nests `data-theme` DOM scopes. Neither is the API they want.
+**Composition.** Consumers want orthogonal axes at once: an aesthetic _and_ a density. "Vaporwave plus compact" is one choice in the consumer's head and should be one choice in the API. Today a theme is single-valued, so a consumer who wants two axes either hand-authors every combination as a merged theme or nests `data-theme` DOM scopes. Neither is the API they want.
 
 **Extension tokens.** A vaporwave theme might want `shadows.neon` (a glow) that the base schema does not declare. The build already emits such tokens as CSS variables (THEMING.md calls extra tokens "forward compatible by design"), but they are invisible to the typed token map and to the token-query MCP. An agent introspecting the MCP cannot discover them; a TypeScript consumer cannot type-check against them. Half-supported extension tokens are a rough edge that pushes consumers toward forking.
 
@@ -17,7 +17,7 @@ This spec closes both gaps and amends Constitution Section III to name the compo
 
 ## Clarifications
 
-One decision was settled before this pass and is not re-opened: **composition merges *resolved* values, not source themes.** Each axis resolves to its final value set first, then the resolved sets merge. This keeps the door open for derived tokens (a roadmap item) to slot in as a different resolver with no rework, and it matches the resolve-then-validate model spec 008 established.
+One decision was settled before this pass and is not re-opened: **composition merges _resolved_ values, not source themes.** Each axis resolves to its final value set first, then the resolved sets merge. This keeps the door open for derived tokens (a roadmap item) to slot in as a different resolver with no rework, and it matches the resolve-then-validate model spec 008 established.
 
 ### Session 2026-06-11
 
@@ -29,7 +29,7 @@ One decision was settled before this pass and is not re-opened: **composition me
 - Q: Whose extension tokens appear in the build-time typed token map? → A: Bundled themes only. Consumer-authored theme tokens get runtime MCP visibility but not build-time TS types (the package build cannot see consumer files); the limitation is documented.
 - Q: Is the typed-token-map change additive or breaking? → A: Additive / non-breaking. Existing schema-token entries keep their shape (`source` optional, defaulted to `'schema'`); extension entries and the discriminator are purely added. Ships as a minor; the runtime stays additive (single-axis `data-theme` keeps working).
 
-## User Scenarios & Testing *(mandatory)*
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Compose orthogonal theme axes (Priority: P1) 🎯 MVP
 
@@ -44,13 +44,13 @@ A consumer wants an aesthetic and a density at the same time: "vaporwave, and co
 1. **Given** two themes on orthogonal axes (aesthetic + density), **When** a consumer applies both at once, **Then** the resolved CSS variables reflect the union of the two themes' values, and a collision resolves to the documented winner.
 2. **Given** an existing single-axis theme, **When** it is applied the way it was before this spec, **Then** it resolves exactly as before (no regression to the existing theming path).
 3. **Given** an invalid axis combination (e.g. two themes assigned to the same axis), **When** the theme is validated, **Then** the validator returns a structured error naming the axis and the conflict. (Ordinary value collisions between different axes resolve silently by the density-over-aesthetic precedence, not as errors.)
-4. **Given** the resolved theme, **When** the runtime applies it, **Then** the merge operates on each axis's *resolved* values (not raw source fragments), so the result is independent of how each axis was authored.
+4. **Given** the resolved theme, **When** the runtime applies it, **Then** the merge operates on each axis's _resolved_ values (not raw source fragments), so the result is independent of how each axis was authored.
 
 ---
 
 ### User Story 2 - First-class theme-extension tokens (Priority: P2)
 
-A consumer adds a token the base schema does not declare (a `shadows.neon` glow on a vaporwave theme). It works as a CSS variable, *and* it shows up as a typed entry in the token map and in the token-query MCP, labeled as a theme-extension token so consumers know it is not portable to themes that lack it. An agent introspecting the MCP can discover it; a TypeScript consumer can type-check against it.
+A consumer adds a token the base schema does not declare (a `shadows.neon` glow on a vaporwave theme). It works as a CSS variable, _and_ it shows up as a typed entry in the token map and in the token-query MCP, labeled as a theme-extension token so consumers know it is not portable to themes that lack it. An agent introspecting the MCP can discover it; a TypeScript consumer can type-check against it.
 
 **Why this priority**: It removes the footgun in the current passthrough behavior, where extension tokens exist but are invisible to the two agent-and-human surfaces (the typed map and the MCP). It is a smaller audience than composition but central to the agent-legibility differentiator. It depends on nothing in US1.
 
@@ -84,13 +84,13 @@ A consumer learning the system applies the shipped `vaporwave` and `compact` the
 ### Edge Cases
 
 - **Two axes collide on the same token**: the density axis wins (the documented precedence) and the merge resolves silently. The validator's structured error is reserved for invalid combinations (e.g. two themes on one axis), not ordinary cross-axis value overlaps.
-- **An attribute names a theme the system does not recognize**: that axis resolves to nothing (the others still apply) rather than failing the whole page. Because the axis set is fixed (aesthetic, density), an unrecognized *axis attribute* is simply ignored.
+- **An attribute names a theme the system does not recognize**: that axis resolves to nothing (the others still apply) rather than failing the whole page. Because the axis set is fixed (aesthetic, density), an unrecognized _axis attribute_ is simply ignored.
 - **A theme-extension token shadows a schema token name**: treated as a collision; the resolution and the token map keep them distinguishable by source so a consumer can tell which one they are getting.
 - **A consumer queries the MCP for a theme-extension token that the active theme does not carry**: the response indicates the token is a theme-extension absent from the active theme, not a hard "unknown token" error, so the consumer learns it is theme-scoped.
 - **A single-axis (pre-009) theme**: keeps working unchanged. Composition is additive; the existing single-theme path is preserved.
 - **Extension token fails the existing structured-value checks** (malformed value, or a color pair that should meet contrast): the existing validation behavior applies unchanged.
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
@@ -123,14 +123,14 @@ A consumer learning the system applies the shipped `vaporwave` and `compact` the
 - **FR-016**: All validation output MUST stay structured (`{ ok, issues: [{ code, path, message }] }`), consistent with the existing failure-mode pattern (Section XI.4). Human-readable messages layer on top.
 - **FR-017**: The MCP tool contract at `specs/005-agent-experience-foundation/contracts/token-query-mcp.md` MUST be updated to reflect the multi-axis input shape and the extension-token response fields.
 
-### Key Entities *(include if feature involves data)*
+### Key Entities _(include if feature involves data)_
 
 - **Theme axis**: a named dimension of theming, applied via its own `data-` attribute — `data-theme` (aesthetic) and `data-density` (density). Each axis carries its own set of theme files. A consumer activates at most one theme per axis at a time.
 - **Composed theme**: the runtime result of resolving every active axis to its values and merging the resolved sets, density overriding aesthetic on collision. Independent of how each axis was authored.
 - **Theme-extension token**: a token a theme declares that the base schema does not. It resolves as a CSS variable and is theme-scoped (not part of the locked schema). It is typed in the build-time token map when it comes from a bundled theme, and is visible at runtime through the MCP for any theme; either way it carries a `source: 'theme-extension'` discriminator.
 - **Recognized axis set**: the fixed pair this spec ships — **aesthetic** (`data-theme`) and **density** (`data-density`) — named in Constitution Section III after the amendment. Density takes precedence over aesthetic on collision. Consumer-defined axes are a later spec.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 
