@@ -73,9 +73,10 @@ describe('themeSchema', () => {
 });
 
 describe('contrastPairs', () => {
-	it('declares 6 foreground/background pairs', () => {
-		// 6 since spec 018 added destructive-subtle-foreground/destructive-subtle.
-		expect(contrastPairs).toHaveLength(6);
+	it('declares 8 foreground/background pairs', () => {
+		// 8 since spec 022 added the two popover pairs (popover-foreground/popover
+		// and muted-foreground/popover) on top of spec 018's destructive-subtle pair.
+		expect(contrastPairs).toHaveLength(8);
 	});
 
 	it('includes the destructive-subtle pair (spec 018)', () => {
@@ -141,6 +142,18 @@ describe('themeSchema — new required typography keys', () => {
 		(key) => {
 			const theme = structuredClone(completeTheme);
 			delete (theme.tokens.typography as Record<string, unknown>)[key];
+			const result = themeSchema.safeParse(theme);
+			expect(result.success).toBe(false);
+		},
+	);
+});
+
+describe('themeSchema — popover color (required, spec 022)', () => {
+	it.each(['popover', 'popover-foreground'])(
+		'rejects a complete theme missing color.%s',
+		(key) => {
+			const theme = structuredClone(completeTheme);
+			delete (theme.tokens.color as Record<string, unknown>)[key];
 			const result = themeSchema.safeParse(theme);
 			expect(result.success).toBe(false);
 		},

@@ -47,6 +47,14 @@
 		"destructive-subtle-foreground": {
 			"$value": "oklch(0.4400 0.1600 17.58)",
 			"$type": "color"
+		},
+		"popover": {
+			"$value": "oklch(0.9768 0.0142 308.30)",
+			"$type": "color"
+		},
+		"popover-foreground": {
+			"$value": "oklch(0.2352 0.0362 290.58)",
+			"$type": "color"
 		}
 	},
 	"radius": {

@@ -11,7 +11,9 @@
 		"destructive": { "$value": "oklch(0.5858 0.2220 17.58)", "$type": "color" },
 		"destructive-foreground": { "$value": "oklch(1.0000 0.0000 89.88)", "$type": "color" },
 		"destructive-subtle": { "$value": "oklch(0.2700 0.0800 17.58)", "$type": "color" },
-		"destructive-subtle-foreground": { "$value": "oklch(0.8600 0.0900 17.58)", "$type": "color" }
+		"destructive-subtle-foreground": { "$value": "oklch(0.8600 0.0900 17.58)", "$type": "color" },
+		"popover": { "$value": "oklch(0.1900 0.0250 293.00)", "$type": "color" },
+		"popover-foreground": { "$value": "oklch(0.9700 0.0100 308.00)", "$type": "color" }
 	},
 	"radius": {
 		"sm": { "$value": "0.375rem", "$type": "dimension" },

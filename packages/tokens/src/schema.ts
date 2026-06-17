@@ -25,6 +25,14 @@ const colorTokens = z.object({
 	// destructive content on a quiet surface reuses them, like muted/muted-foreground.
 	'destructive-subtle': z.string(),
 	'destructive-subtle-foreground': z.string(),
+	// The popover surface that Dialog, Tooltip, and Select content render on.
+	// Required, not optional: every shipped cell must declare it, so a consumer
+	// theme that omits it fails validation loudly instead of rendering a
+	// transparent panel. Authored flat-equal to background/foreground per cell;
+	// the components carry their elevation as ring + shadow, so the surface needs
+	// no distinct tone (spec 022).
+	'popover': z.string(),
+	'popover-foreground': z.string(),
 });
 
 const spacingTokens = z.object({
@@ -226,6 +234,21 @@ export const contrastPairs: ContrastPair[] = [
 	{
 		foreground: 'color.destructive-subtle-foreground',
 		background: 'color.destructive-subtle',
+		threshold: 4.5,
+	},
+	// The popover surface (spec 022). Two pairs mirror the coverage `background`
+	// has: its own foreground on it, plus muted-foreground (the Dialog
+	// description's color) on it. Guarding both keeps a future identity that
+	// diverges popover from background from silently shipping an inaccessible
+	// surface.
+	{
+		foreground: 'color.popover-foreground',
+		background: 'color.popover',
+		threshold: 4.5,
+	},
+	{
+		foreground: 'color.muted-foreground',
+		background: 'color.popover',
 		threshold: 4.5,
 	},
 ];

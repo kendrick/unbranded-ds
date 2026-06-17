@@ -15,6 +15,8 @@ export const canonicalDefaultTokens = {
 		'destructive-foreground': 'oklch(0.9851 0.0000 89.88)',
 		'destructive-subtle': 'oklch(0.9300 0.0500 25.33)',
 		'destructive-subtle-foreground': 'oklch(0.4400 0.1600 25.33)',
+		'popover': 'oklch(1.0000 0.0000 89.88)',
+		'popover-foreground': 'oklch(0.1408 0.0044 285.82)',
 	},
 	'motion': {
 		'duration-fast': '120ms',

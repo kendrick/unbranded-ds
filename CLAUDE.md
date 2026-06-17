@@ -5,6 +5,8 @@ Auto-generated from all feature plans. Last updated: 2026-06-17
 ## Active Technologies
 - TypeScript 5.x, strict, no `any` (Constitution VIII). React 19. + `@base-ui-components/react` (peer), the existing `lib/warn.ts` helper, `lib/cn`. No new dependencies. (021-form-control-a11y-naming)
 - N/A — a dev-only console warning; no runtime or persisted state. (021-form-control-a11y-naming)
+- TypeScript 5.x, strict, no `any` (Constitution VIII). DTCG JSON token sources. + Style Dictionary v4 (the token build, `sd.config.ts`), Zod (the theme schema + `contrastPairs`), the `color.ts` WCAG contrast math, Tailwind CSS v4 (`@theme` preset auto-maps `--color-*` to utilities), `@modelcontextprotocol/sdk` (the token-query MCP reads the token map). No new dependencies. (022-popover-tokens-contrast)
+- N/A — build-time DTCG JSON compiled to CSS variables, a Tailwind preset, JSON, and a typed token map. No runtime or persisted state. (022-popover-tokens-contrast)
 
 - TypeScript 5.x, strict, no `any` (Constitution VIII). React 19, Next.js 15 (App Router). + `next` ^15, `react`/`react-dom` 19, `@unbranded-ds/tokens` and `@unbranded-ds/react` at `workspace:*`, Tailwind CSS v4 (consumed through `@unbranded-ds/react/preset.css`), `next/font/local` (self-hosted font), `@playwright/test`, `@axe-core/playwright`. (015-nextjs-example-app)
 - `localStorage` only, through the design system's existing keys (`unbranded-ds-theme`, `unbranded-ds-density`, `unbranded-ds-theme-preference`). No new storage. (015-nextjs-example-app)
@@ -63,10 +65,10 @@ npm test && npm run lint
 TypeScript 5.x, strict mode, no `any` (EVER): Follow standard conventions
 
 ## Recent Changes
+- 022-popover-tokens-contrast: Added TypeScript 5.x, strict, no `any` (Constitution VIII). DTCG JSON token sources. + Style Dictionary v4 (the token build, `sd.config.ts`), Zod (the theme schema + `contrastPairs`), the `color.ts` WCAG contrast math, Tailwind CSS v4 (`@theme` preset auto-maps `--color-*` to utilities), `@modelcontextprotocol/sdk` (the token-query MCP reads the token map). No new dependencies.
 - 021-form-control-a11y-naming: Added TypeScript 5.x, strict, no `any` (Constitution VIII). React 19. + `@base-ui-components/react` (peer), the existing `lib/warn.ts` helper, `lib/cn`. No new dependencies.
 
 - 020-storybook-zindex-test-env: Added TypeScript 5.x, strict, no `any` (Constitution VIII) + Vitest 3 (browser mode), `@vitest/browser` + `playwright` (Chromium), `@storybook/addon-vitest` (`storybookTest()`), `@storybook/addon-a11y`, Storybook 10.3 `@storybook/react-vite`, Tailwind CSS v4 (`@tailwindcss/vite`; the preset's `@theme inline` block)
-- 019-storybook-test-runner-ci: Added TypeScript 5.x, strict, no `any` (Constitution VIII) + Vitest 3 (browser mode), `@vitest/browser` (^3, the optional peer that is currently absent), `playwright` (Chromium; `playwright@1.61.0` is already in the workspace store), `@storybook/addon-vitest` ^10.3 (`storybookTest()` plugin, already a devDep), `@storybook/addon-a11y` ^10.3 (axe, `test: 'error'` already set), Storybook 10.3 `@storybook/react-vite`, GitHub Actions
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

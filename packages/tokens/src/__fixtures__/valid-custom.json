@@ -14,7 +14,9 @@
 			"destructive": "#dc3545",
 			"destructive-foreground": "#ffffff",
 			"destructive-subtle": "#f8d7da",
-			"destructive-subtle-foreground": "#842029"
+			"destructive-subtle-foreground": "#842029",
+			"popover": "#f8f9fa",
+			"popover-foreground": "#212529"
 		},
 		"spacing": {
 			"px": "1px",
