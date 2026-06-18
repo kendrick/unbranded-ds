@@ -1,0 +1,9 @@
+{
+	"srcGlobs": ["packages/react/src/**/*.{ts,tsx}"],
+	"fixtureGlobs": ["fixtures/themes/**/*.{css,tsx}"],
+	"partAttrs": ["data-slot", "data-part"],
+	"dsImportPattern": "^@unbranded-ds/react",
+	"dsDeepImportPattern": "(/internal|/internals|/dist/|/src/)",
+	"allowHairlineBorders": false,
+	"partsFile": "fixtures/parts.json"
+}
