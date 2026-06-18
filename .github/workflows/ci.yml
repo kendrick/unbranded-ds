@@ -151,13 +151,21 @@ jobs:
           pnpm --filter @unbranded-ds/example-nextjs typecheck
 
       - name: Cache Playwright browsers
+        id: playwright-cache
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
+      # The ubuntu-24.04 image already ships Chromium's system libraries (Chrome is
+      # preinstalled), so we skip --with-deps and the flaky apt round-trip it triggers.
+      # On a cache hit the browser binary is already restored, so the install is a
+      # no-op we skip. timeout-minutes caps a stalled download so it can't ride the
+      # 6-hour job default.
       - name: Install Playwright browser
-        run: pnpm --filter @unbranded-ds/example-nextjs exec playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        timeout-minutes: 5
+        run: pnpm --filter @unbranded-ds/example-nextjs exec playwright install chromium
 
       # The Playwright webServer runs `next build` then `next start` itself.
       - name: Playwright e2e (production build)
@@ -192,13 +200,21 @@ jobs:
         run: pnpm --filter @unbranded-ds/tokens --filter @unbranded-ds/react build
 
       - name: Cache Playwright browsers
+        id: playwright-cache
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
+      # The ubuntu-24.04 image already ships Chromium's system libraries (Chrome is
+      # preinstalled), so we skip --with-deps and the flaky apt round-trip it triggers.
+      # On a cache hit the browser binary is already restored, so the install is a
+      # no-op we skip. timeout-minutes caps a stalled download so it can't ride the
+      # 6-hour job default.
       - name: Install Playwright browser
-        run: pnpm --filter @unbranded-ds/storybook exec playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        timeout-minutes: 5
+        run: pnpm --filter @unbranded-ds/storybook exec playwright install chromium
 
       - name: Storybook test-runner (interaction + a11y)
         run: pnpm --filter @unbranded-ds/storybook test:storybook
