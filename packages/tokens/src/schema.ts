@@ -80,6 +80,9 @@ const radiiTokens = z.object({
 	sm: z.string(),
 	md: z.string(),
 	lg: z.string(),
+	xl: z.string(),
+	'2xl': z.string(),
+	'3xl': z.string(),
 	full: z.string(),
 });
 
