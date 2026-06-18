@@ -14,6 +14,10 @@ import '@unbranded-ds/tokens/themes/brand-light.css';
 import '@unbranded-ds/tokens/themes/brand-dark.css';
 import '@unbranded-ds/tokens/themes/vaporwave-light.css';
 import '@unbranded-ds/tokens/themes/vaporwave-dark.css';
+// LCARS is an expressivity fixture identity (spec-023 spike), built through the
+// same pipeline so its CSS resolves here and the Fixtures/LCARS stories render.
+import '@unbranded-ds/tokens/themes/lcars-light.css';
+import '@unbranded-ds/tokens/themes/lcars-dark.css';
 import '@unbranded-ds/tokens/themes/compact.css';
 import './styles.css';
 
@@ -40,6 +44,7 @@ const preview: Preview = {
 					{ value: 'default', title: 'Default' },
 					{ value: 'brand', title: 'Brand' },
 					{ value: 'vaporwave', title: 'Vaporwave' },
+					{ value: 'lcars', title: 'LCARS (fixture)' },
 				],
 				dynamicTitle: true,
 			},

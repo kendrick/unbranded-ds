@@ -1,0 +1,13 @@
+{
+	"$generated": "hand-authored fixtures index",
+	"$note": "The expressivity fixture corpus. Each skin is an honest attempt at a divergent look through sanctioned channels only (validated theme identity + published parts); the audit scores every place the skin had to leave the DS. Live blocker counts: fixtures/expressivity-report.json. Targetable part surface: fixtures/parts.manifest.json.",
+	"skins": [
+		{
+			"name": "lcars",
+			"dir": "fixtures/themes/lcars",
+			"meta": "fixtures/themes/lcars/meta.json",
+			"stressesAxes": ["shape", "type-tracking"],
+			"blockers": 5
+		}
+	]
+}

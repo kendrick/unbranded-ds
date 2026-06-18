@@ -1,0 +1,26 @@
+{
+	"$generated": "hand-authored fixture descriptor",
+	"name": "lcars",
+	"displayName": "LCARS",
+	"northStar": "Star Trek LCARS — asymmetric elbow panels, condensed all-caps type with wide tracking, flat (shadowless) surfaces, an amber/mauve/black palette.",
+	"axes": {
+		"color": "pipeline",
+		"elevation": "pipeline",
+		"type-family": "pipeline",
+		"shape": "audited",
+		"type-tracking": "audited",
+		"texture": "n/a",
+		"motion": "n/a"
+	},
+	"channels": {
+		"validatedIdentity": "packages/tokens/themes/theme/lcars/{light,dark}.json",
+		"auditedLayer": "fixtures/themes/lcars/parts.css",
+		"composition": "fixtures/themes/lcars/LCARS.stories.tsx"
+	},
+	"guard": "Storybook test-runner (addon-a11y axe) under [data-theme=lcars], both color schemes",
+	"blockers": {
+		"total": 5,
+		"byAxis": { "type": 3, "shape": 2 },
+		"source": "fixtures/expressivity-report.json"
+	}
+}
