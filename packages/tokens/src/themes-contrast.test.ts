@@ -32,6 +32,12 @@ const CELLS: Array<{ name: string; layers: ResolvedLayer[] }> = [
 	{ name: 'brand-dark', layers: [delta('dark'), delta('brand-dark')] },
 	{ name: 'vaporwave-light', layers: [delta('vaporwave-light')] },
 	{ name: 'vaporwave-dark', layers: [delta('dark'), delta('vaporwave-dark')] },
+	// LCARS is an expressivity fixture identity (spec-023 spike): built and
+	// AA-validated through the same pipeline as the shipped identities, so the
+	// invariant a11y contract holds under the wild skin. It is intentionally not in
+	// the browser registry — a fixture, not a shipped product theme.
+	{ name: 'lcars-light', layers: [delta('lcars-light')] },
+	{ name: 'lcars-dark', layers: [delta('dark'), delta('lcars-dark')] },
 ];
 
 describe('matrix cells are complete and WCAG AA (spec 016 FR-004/FR-005)', () => {
