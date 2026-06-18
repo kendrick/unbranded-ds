@@ -22,6 +22,10 @@ export default defineConfig({
 		projects: [
 			{
 				plugins: [storybookTest({ configDir: join(dir, '.storybook') })],
+				// The expressivity fixtures live at <repo-root>/fixtures, outside this
+				// project's root (apps/storybook), so the browser-mode server must be
+				// allowed to serve them or the story module fails to fetch.
+				server: { fs: { allow: [join(dir, '..', '..')] } },
 				test: {
 					name: 'storybook',
 					// Retry interaction plays that lose the render race in CI's slower

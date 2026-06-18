@@ -1,0 +1,26 @@
+{
+	"color": {
+		"background": { "$value": "oklch(0.9700 0.0150 75.00)", "$type": "color" },
+		"foreground": { "$value": "oklch(0.2000 0.0200 285.00)", "$type": "color" },
+		"primary": { "$value": "oklch(0.7000 0.1600 55.00)", "$type": "color" },
+		"primary-foreground": { "$value": "oklch(0.2000 0.0300 55.00)", "$type": "color" },
+		"muted": { "$value": "oklch(0.9200 0.0400 320.00)", "$type": "color" },
+		"muted-foreground": { "$value": "oklch(0.4200 0.0900 320.00)", "$type": "color" },
+		"border": { "$value": "oklch(0.8500 0.0500 320.00)", "$type": "color" },
+		"ring": { "$value": "oklch(0.6500 0.1600 55.00)", "$type": "color" },
+		"destructive": { "$value": "oklch(0.5800 0.2078 25.33)", "$type": "color" },
+		"destructive-foreground": { "$value": "oklch(0.9851 0.0000 90.00)", "$type": "color" },
+		"destructive-subtle": { "$value": "oklch(0.9300 0.0500 25.33)", "$type": "color" },
+		"destructive-subtle-foreground": { "$value": "oklch(0.4400 0.1600 25.33)", "$type": "color" },
+		"popover": { "$value": "oklch(0.9700 0.0150 75.00)", "$type": "color" },
+		"popover-foreground": { "$value": "oklch(0.2000 0.0200 285.00)", "$type": "color" }
+	},
+	"shadow": {
+		"sm": { "$value": "none", "$type": "shadow" },
+		"md": { "$value": "none", "$type": "shadow" },
+		"lg": { "$value": "none", "$type": "shadow" }
+	},
+	"typography": {
+		"font-sans": { "$value": "\"Antonio\", \"Oswald\", \"Arial Narrow\", ui-sans-serif, system-ui, sans-serif", "$type": "fontFamily" }
+	}
+}

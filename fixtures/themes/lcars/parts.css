@@ -1,0 +1,44 @@
+/*
+ * LCARS — the audited fixture layer (spec-023 expressivity spike).
+ *
+ * Everything LCARS needs that the validated token pipeline ALREADY expresses —
+ * its amber/mauve/black palette, flat (shadowless) surfaces, condensed type —
+ * lives in packages/tokens/themes/theme/lcars/{light,dark}.json and rides the
+ * sanctioned channel, so it scores zero. What's left here is exactly what the
+ * token schema cannot yet say, and every raw value below is a LITERAL the audit
+ * counts — a ranked entry in the spec-023 token-taxonomy backlog:
+ *
+ *   - shape: the asymmetric "elbow" radius. Radius tokens are scalar
+ *     (sm/md/lg/full), so per-corner asymmetry has no channel.
+ *   - type:  the wide all-caps tracking. There is no letter-spacing token.
+ *
+ * Scoped under [data-theme="lcars"] so it only paints the skin, never a shipped
+ * theme. text-transform is a stylistic keyword the audit (rightly) does not
+ * count — it is a choice, not a magic number fighting a missing token.
+ */
+
+/* The signature LCARS panel: one squared elbow, the rest rounded away. */
+[data-theme="lcars"] [data-slot="card"] {
+	border-radius: 1.75rem 0 1.75rem 0;
+	overflow: hidden;
+}
+
+/* The header reads as the LCARS elbow bar — squared into the panel's corner,
+   set in wide all-caps. The tracking is a raw length; no tracking token exists. */
+[data-theme="lcars"] [data-slot="card-header"] {
+	border-radius: 1.75rem 0 0 0;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+}
+
+[data-theme="lcars"] [data-slot="card-title"] {
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+}
+
+/* LCARS controls are flat caps in wide tracking. The pill rides the existing
+   radius-full token (no literal); only the tracking has no channel. */
+[data-theme="lcars"] [data-slot="button"] {
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+}
