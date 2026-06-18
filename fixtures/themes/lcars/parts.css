@@ -18,27 +18,27 @@
  */
 
 /* The signature LCARS panel: one squared elbow, the rest rounded away. */
-[data-theme="lcars"] [data-slot="card"] {
+[data-theme='lcars'] [data-slot='card'] {
 	border-radius: 1.75rem 0 1.75rem 0;
 	overflow: hidden;
 }
 
 /* The header reads as the LCARS elbow bar — squared into the panel's corner,
    set in wide all-caps. The tracking is a raw length; no tracking token exists. */
-[data-theme="lcars"] [data-slot="card-header"] {
+[data-theme='lcars'] [data-slot='card-header'] {
 	border-radius: 1.75rem 0 0 0;
-	letter-spacing: 0.18em;
+	letter-spacing: var(--tracking-widest);
 	text-transform: uppercase;
 }
 
-[data-theme="lcars"] [data-slot="card-title"] {
-	letter-spacing: 0.1em;
+[data-theme='lcars'] [data-slot='card-title'] {
+	letter-spacing: var(--tracking-widest);
 	text-transform: uppercase;
 }
 
 /* LCARS controls are flat caps in wide tracking. The pill rides the existing
    radius-full token (no literal); only the tracking has no channel. */
-[data-theme="lcars"] [data-slot="button"] {
-	letter-spacing: 0.12em;
+[data-theme='lcars'] [data-slot='button'] {
+	letter-spacing: var(--tracking-widest);
 	text-transform: uppercase;
 }

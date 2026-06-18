@@ -25,10 +25,8 @@ import { AXIS_ATTRIBUTE } from './src/axes.js';
 function flattenedName(token: TransformedToken): string {
 	if (token.path[0] === 'motion') {
 		const [, group, key] = token.path;
-		if (group === 'duration')
-			return `duration-${key}`;
-		if (group === 'easing')
-			return `ease-${key}`;
+		if (group === 'duration') return `duration-${key}`;
+		if (group === 'easing') return `ease-${key}`;
 	}
 	return token.name;
 }
@@ -94,8 +92,7 @@ StyleDictionary.registerFormat({
 	format: async (args) => {
 		const layer = (args.options as { layer?: string }).layer ?? 'ds';
 		const builtin = StyleDictionary.hooks.formats['css/variables'];
-		if (!builtin)
-			throw new Error('built-in css/variables format not found');
+		if (!builtin) throw new Error('built-in css/variables format not found');
 		const body = await builtin(args);
 		// Indent the built-in body one level so it reads as nested in the layer,
 		// and keep the auto-generated header comment outside the layer block.
@@ -141,20 +138,20 @@ StyleDictionary.registerFormat({
 	name: 'typescript/token-map',
 	format: ({ dictionary }) => {
 		const categoryMap: Record<string, string> = {
-			'color': 'color',
-			'spacing': 'spacing',
-			'typography': 'typography',
-			'radius': 'radii',
-			'shadow': 'shadows',
-			'opacity': 'opacity',
-			'motion': 'motion',
-			'ring': 'ring',
+			color: 'color',
+			spacing: 'spacing',
+			typography: 'typography',
+			radius: 'radii',
+			tracking: 'tracking',
+			shadow: 'shadows',
+			opacity: 'opacity',
+			motion: 'motion',
+			ring: 'ring',
 			'z-index': 'z-index',
 		};
 
 		const entries = dictionary.allTokens.map((token) => {
-			const category
-				= categoryMap[token.path[0] ?? ''] ?? token.path[0] ?? 'unknown';
+			const category = categoryMap[token.path[0] ?? ''] ?? token.path[0] ?? 'unknown';
 			return `  "${token.path.join('.')}": {
     name: "${token.path.join('.')}",
     category: "${category}" as const,
@@ -163,7 +160,7 @@ StyleDictionary.registerFormat({
   }`;
 		});
 
-		return `export type TokenCategory = "color" | "spacing" | "typography" | "radii" | "shadows" | "opacity" | "motion" | "ring" | "z-index";
+		return `export type TokenCategory = "color" | "spacing" | "typography" | "radii" | "tracking" | "shadows" | "opacity" | "motion" | "ring" | "z-index";
 
 export type TokenDefinition = {
   name: string;
@@ -212,9 +209,7 @@ StyleDictionary.registerFormat({
 // single resolver: the MCP and the defaults baseline read THIS, instead of a
 // hand-maintained copy (defaults) or a re-walk of the raw source (the MCP).
 // ---------------------------------------------------------------------------
-function flatResolved(
-	allTokens: TransformedToken[],
-): Record<string, Record<string, unknown>> {
+function flatResolved(allTokens: TransformedToken[]): Record<string, Record<string, unknown>> {
 	const out: Record<string, Record<string, unknown>> = {};
 	for (const token of allTokens) {
 		const category = String(token.path[0]);
@@ -227,8 +222,7 @@ function flatResolved(
 
 StyleDictionary.registerFormat({
 	name: 'json/resolved-layer',
-	format: ({ dictionary }) =>
-		`${JSON.stringify(flatResolved(dictionary.allTokens), null, 2)}\n`,
+	format: ({ dictionary }) => `${JSON.stringify(flatResolved(dictionary.allTokens), null, 2)}\n`,
 });
 
 StyleDictionary.registerFormat({
@@ -259,8 +253,7 @@ function jsonNames(dir: string): string[] {
 			.filter((f) => f.endsWith('.json'))
 			.map((f) => f.replace(/\.json$/, ''))
 			.sort();
-	}
-	catch {
+	} catch {
 		return [];
 	}
 }
@@ -347,13 +340,11 @@ function cleanPerCellArtifacts() {
 		for (const f of (() => {
 			try {
 				return readdirSync(dir);
-			}
-			catch {
+			} catch {
 				return [];
 			}
 		})()) {
-			if (pattern.test(f))
-				rmSync(join(dir, f));
+			if (pattern.test(f)) rmSync(join(dir, f));
 		}
 	}
 }
@@ -389,8 +380,7 @@ async function build() {
 		});
 		await sd.buildAllPlatforms();
 
-		if (!e.deltaSource)
-			continue;
+		if (!e.deltaSource) continue;
 		const sdDelta = new StyleDictionary({
 			source: e.deltaSource,
 			log: { warnings: 'disabled' },
@@ -398,9 +388,7 @@ async function build() {
 				json: {
 					transformGroup: 'css-motion',
 					buildPath: 'dist/json/themes/',
-					files: [
-						{ destination: `${e.artifact}.json`, format: 'json/resolved-layer' },
-					],
+					files: [{ destination: `${e.artifact}.json`, format: 'json/resolved-layer' }],
 				},
 			},
 		});
@@ -417,9 +405,7 @@ async function build() {
 			css: {
 				transformGroup: 'css-motion',
 				buildPath: 'dist/css/',
-				files: [
-					{ destination: 'layer-order.css', format: 'css/layer-order' },
-				],
+				files: [{ destination: 'layer-order.css', format: 'css/layer-order' }],
 			},
 		},
 	});

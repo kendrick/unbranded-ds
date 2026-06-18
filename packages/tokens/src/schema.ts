@@ -9,15 +9,15 @@ import { z } from 'zod';
 // ---------------------------------------------------------------------------
 
 const colorTokens = z.object({
-	'background': z.string(),
-	'foreground': z.string(),
-	'primary': z.string(),
+	background: z.string(),
+	foreground: z.string(),
+	primary: z.string(),
 	'primary-foreground': z.string(),
-	'muted': z.string(),
+	muted: z.string(),
 	'muted-foreground': z.string(),
-	'border': z.string(),
-	'ring': z.string(),
-	'destructive': z.string(),
+	border: z.string(),
+	ring: z.string(),
+	destructive: z.string(),
 	'destructive-foreground': z.string(),
 	// The soft destructive treatment (spec 018): an opaque subtle destructive
 	// surface and a darker destructive text/icon color that clears AA on it. The
@@ -31,7 +31,7 @@ const colorTokens = z.object({
 	// transparent panel. Authored flat-equal to background/foreground per cell;
 	// the components carry their elevation as ring + shadow, so the surface needs
 	// no distinct tone (spec 022).
-	'popover': z.string(),
+	popover: z.string(),
 	'popover-foreground': z.string(),
 });
 
@@ -112,6 +112,18 @@ const motionTokens = z.object({
 	'easing-accelerate': z.string(),
 });
 
+// Letter-spacing scale (spec 023). Its own top-level category that emits the
+// Tailwind-aligned `--tracking-*` names, mirroring how `motion` is its own
+// category emitting `--duration-*` / `--ease-*` rather than `--motion-*`.
+const trackingTokens = z.object({
+	tighter: z.string(),
+	tight: z.string(),
+	normal: z.string(),
+	wide: z.string(),
+	wider: z.string(),
+	widest: z.string(),
+});
+
 // ring + z-index are the optional drift-killing categories (spec 008 US4): a
 // theme that omits them inherits the canonical defaults, so they never break an
 // existing color-only theme. Optional-ness is applied at the category level in
@@ -133,14 +145,15 @@ const zIndexTokens = z.object({
 // The `z-index` key carries a hyphen, so the lint rule quotes every sibling key
 // for consistency; the emitted dot-paths stay `z-index.overlay` etc.
 const tokensSchema = z.object({
-	'color': colorTokens,
-	'spacing': spacingTokens,
-	'typography': typographyTokens,
-	'radius': radiiTokens,
-	'shadow': shadowTokens,
-	'opacity': opacityTokens,
-	'motion': motionTokens,
-	'ring': ringTokens.optional(),
+	color: colorTokens,
+	spacing: spacingTokens,
+	typography: typographyTokens,
+	radius: radiiTokens,
+	tracking: trackingTokens,
+	shadow: shadowTokens,
+	opacity: opacityTokens,
+	motion: motionTokens,
+	ring: ringTokens.optional(),
 	'z-index': zIndexTokens.optional(),
 });
 
