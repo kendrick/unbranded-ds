@@ -50,7 +50,7 @@
 		"themes"
 	],
 	"scripts": {
-		"build": "tsx sd.config.ts && tsc -p tsconfig.build.json",
+		"build": "tsx sd.config.ts && prettier --write --log-level warn src/defaults.generated.ts && tsc -p tsconfig.build.json",
 		"lint": "eslint src/",
 		"test": "vitest run",
 		"test:unit": "vitest run",
@@ -61,6 +61,7 @@
 	},
 	"devDependencies": {
 		"@modelcontextprotocol/sdk": "^1",
+		"prettier": "^3",
 		"style-dictionary": "^4",
 		"tsx": "^4.21.0",
 		"typescript": "^5",
