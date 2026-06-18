@@ -6,7 +6,40 @@ on:
   pull_request:
     branches: [main]
 
+# Cancel a PR's in-flight run when a newer commit lands (free-tier queue saver).
+# Scoped to PRs: a push to main is never cancelled, so a Chromatic/MCP deploy finishes.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
+  # On a pull request, decide whether the change is docs-only so the heavy jobs
+  # (Storybook a11y, example e2e, Chromatic) can skip. Fail-safe: a PR counts as
+  # docs-only only if EVERY changed file is docs/markdown/changeset/LICENSE; any
+  # other path runs the full gate. Push events ignore this (the heavy jobs' `if`
+  # forces them on for main).
+  changes:
+    name: Detect docs-only change
+    runs-on: ubuntu-latest
+    outputs:
+      docs_only: ${{ steps.detect.outputs.docs_only }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Detect
+        id: detect
+        run: |
+          NONDOC=$(git diff --name-only origin/main...HEAD | grep -vE '^(docs/|specs/|\.changeset/|.*\.md$|LICENSE$)' || true)
+          if [ -z "$NONDOC" ]; then
+            echo "docs_only=true" >> "$GITHUB_OUTPUT"
+            echo "Docs-only change; the Storybook, example-e2e, and Chromatic jobs will be skipped."
+          else
+            echo "docs_only=false" >> "$GITHUB_OUTPUT"
+            { echo "Non-docs paths changed; running the full gate:"; echo "$NONDOC"; }
+          fi
+
   verify:
     name: Lint, typecheck, test, build
     runs-on: ubuntu-latest
@@ -47,9 +80,11 @@ jobs:
 
   publish:
     name: Chromatic publish + MCP smoke test
-    needs: verify
+    needs: [verify, changes]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    # Always on a push to main (the deploy). On a PR, only when same-repo (forks lack
+    # the secret) AND not docs-only.
+    if: github.event_name == 'push' || (github.event.pull_request.head.repo.full_name == github.repository && needs.changes.outputs.docs_only != 'true')
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -85,7 +120,8 @@ jobs:
 
   example-e2e:
     name: Example app (lint, typecheck, Playwright)
-    needs: verify
+    needs: [verify, changes]
+    if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -114,6 +150,12 @@ jobs:
           pnpm --filter @unbranded-ds/example-nextjs lint
           pnpm --filter @unbranded-ds/example-nextjs typecheck
 
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
       - name: Install Playwright browser
         run: pnpm --filter @unbranded-ds/example-nextjs exec playwright install --with-deps chromium
 
@@ -123,7 +165,8 @@ jobs:
 
   storybook-test:
     name: Storybook test-runner (interaction + a11y)
-    needs: verify
+    needs: [verify, changes]
+    if: github.event_name != 'pull_request' || needs.changes.outputs.docs_only != 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -147,6 +190,12 @@ jobs:
       # so build them before the gate runs.
       - name: Build packages
         run: pnpm --filter @unbranded-ds/tokens --filter @unbranded-ds/react build
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install Playwright browser
         run: pnpm --filter @unbranded-ds/storybook exec playwright install --with-deps chromium
