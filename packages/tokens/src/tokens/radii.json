@@ -12,6 +12,18 @@
 			"$value": "0.5rem",
 			"$type": "dimension"
 		},
+		"xl": {
+			"$value": "0.75rem",
+			"$type": "dimension"
+		},
+		"2xl": {
+			"$value": "1rem",
+			"$type": "dimension"
+		},
+		"3xl": {
+			"$value": "1.5rem",
+			"$type": "dimension"
+		},
 		"full": {
 			"$value": "9999px",
 			"$type": "dimension"

@@ -29,13 +29,13 @@ The contract is the whole point. A skin may add any expressive surface it likes,
 
 ## Where It Stands
 
-One skin so far, **LCARS**, and the audit reads 5 blockers, every one a real gap:
+One skin so far, **LCARS**, and the audit reads **0** blockers. It started at 5, all from two missing token scales; spec 023 added them, so the skin now expresses its complete look through tokens alone:
 
-| Axis  | Count | What LCARS needed        | The DS gap                                                      |
-| ----- | ----- | ------------------------ | -------------------------------------------------------------- |
-| shape | 2     | asymmetric "elbow" radii | radius tokens are scalar (sm/md/lg/full); no per-corner channel |
-| type  | 3     | wide all-caps tracking   | no `letter-spacing` token exists                               |
+| Axis  | Was | What LCARS needed        | How it's expressed now                                                            |
+| ----- | --- | ------------------------ | --------------------------------------------------------------------------------- |
+| shape | 2   | asymmetric "elbow" radii | composed per-corner from the radius scale, now with chunky `xl`/`2xl`/`3xl` steps |
+| type  | 3   | wide all-caps tracking   | the `tracking` scale, through `--tracking-*`                                      |
 
-Everything else LCARS wanted (its amber/mauve/black palette, flat shadowless surfaces, condensed type) went through the validated pipeline cleanly, contrast-checked, zero blockers. Both LCARS cells pass the token-level contrast suite, and the rendered axe pass is clean in light and dark.
+Everything else LCARS wanted (its amber/mauve/black palette, flat shadowless surfaces, condensed type) always went through the validated pipeline. Both LCARS cells pass the token-level contrast suite, and the rendered axe pass stays clean in light and dark, so the skin is fully expressible with the accessibility contract intact.
 
-That table is the backlog. The two gaps, a tracking (letter-spacing) token and a way to express asymmetric radii, are the first entries for spec 023. More skins (a dense enterprise grid, a glass-and-glow console) will surface the axes LCARS doesn't touch: texture, motion, density.
+Next skins (a dense enterprise grid, a glass-and-glow console) will stress the axes LCARS doesn't touch: texture, motion, density.

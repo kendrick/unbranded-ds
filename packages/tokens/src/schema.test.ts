@@ -136,28 +136,57 @@ describe('themeSchema — motion category (required)', () => {
 	});
 });
 
-describe('themeSchema — new required typography keys', () => {
-	it.each(['font-serif', 'size-2xl', 'size-3xl'])(
-		'requires typography.%s',
+describe('themeSchema — tracking category (required, spec 023)', () => {
+	it('accepts a complete theme carrying the tracking category', () => {
+		const result = themeSchema.safeParse(completeTheme);
+		expect(result.success).toBe(true);
+	});
+
+	it('rejects a complete theme missing the entire tracking category', () => {
+		const theme = structuredClone(completeTheme);
+		delete (theme.tokens as Record<string, unknown>).tracking;
+		const result = themeSchema.safeParse(theme);
+		expect(result.success).toBe(false);
+	});
+
+	it.each(['tighter', 'tight', 'normal', 'wide', 'wider', 'widest'])(
+		'requires tracking.%s',
 		(key) => {
 			const theme = structuredClone(completeTheme);
-			delete (theme.tokens.typography as Record<string, unknown>)[key];
+			delete (theme.tokens.tracking as Record<string, unknown>)[key];
 			const result = themeSchema.safeParse(theme);
 			expect(result.success).toBe(false);
 		},
 	);
+
+	it('names the missing token in the structured issue (FR-007)', () => {
+		const theme = structuredClone(completeTheme);
+		delete (theme.tokens.tracking as Record<string, unknown>).widest;
+		const result = themeSchema.safeParse(theme);
+		expect(result.success).toBe(false);
+		if (!result.success) {
+			const paths = result.error.issues.map((i) => i.path.join('.'));
+			expect(paths).toContain('tokens.tracking.widest');
+		}
+	});
+});
+
+describe('themeSchema — new required typography keys', () => {
+	it.each(['font-serif', 'size-2xl', 'size-3xl'])('requires typography.%s', (key) => {
+		const theme = structuredClone(completeTheme);
+		delete (theme.tokens.typography as Record<string, unknown>)[key];
+		const result = themeSchema.safeParse(theme);
+		expect(result.success).toBe(false);
+	});
 });
 
 describe('themeSchema — popover color (required, spec 022)', () => {
-	it.each(['popover', 'popover-foreground'])(
-		'rejects a complete theme missing color.%s',
-		(key) => {
-			const theme = structuredClone(completeTheme);
-			delete (theme.tokens.color as Record<string, unknown>)[key];
-			const result = themeSchema.safeParse(theme);
-			expect(result.success).toBe(false);
-		},
-	);
+	it.each(['popover', 'popover-foreground'])('rejects a complete theme missing color.%s', (key) => {
+		const theme = structuredClone(completeTheme);
+		delete (theme.tokens.color as Record<string, unknown>)[key];
+		const result = themeSchema.safeParse(theme);
+		expect(result.success).toBe(false);
+	});
 });
 
 describe('themeSchema — ring and z-index are optional', () => {
@@ -207,7 +236,7 @@ describe('partialThemeSchema — optional ring/z-index inheritance', () => {
 			name: 'drift-only',
 			displayName: 'Drift Only',
 			tokens: {
-				'ring': { width: '2px' },
+				ring: { width: '2px' },
 				'z-index': { overlay: '40', popover: '45', tooltip: '50' },
 			},
 		};
@@ -220,6 +249,16 @@ describe('partialThemeSchema — optional ring/z-index inheritance', () => {
 			name: 'no-drift',
 			displayName: 'No Drift',
 			tokens: { radius: { md: '0.5rem' } },
+		};
+		const result = partialThemeSchema.safeParse(partial);
+		expect(result.success).toBe(true);
+	});
+
+	it('parses a partial theme overriding only part of tracking (spec 023 FR-002)', () => {
+		const partial = {
+			name: 'wide-only',
+			displayName: 'Wide Only',
+			tokens: { tracking: { widest: '0.15em' } },
 		};
 		const result = partialThemeSchema.safeParse(partial);
 		expect(result.success).toBe(true);

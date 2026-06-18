@@ -19,8 +19,9 @@
 	},
 	"guard": "Storybook test-runner (addon-a11y axe) under [data-theme=lcars], both color schemes",
 	"blockers": {
-		"total": 5,
-		"byAxis": { "type": 3, "shape": 2 },
-		"source": "fixtures/expressivity-report.json"
+		"total": 0,
+		"byAxis": {},
+		"source": "fixtures/expressivity-report.json",
+		"closedBy": "spec 023 (tracking + larger radius scales)"
 	}
 }

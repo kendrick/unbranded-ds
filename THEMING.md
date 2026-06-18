@@ -14,7 +14,7 @@ A **token-source override** is a build-time file under `packages/tokens/themes/`
 // packages/tokens/themes/sunset.json: a token-source override (DTCG)
 {
 	"color": { "primary": { "$value": "oklch(0.65 0.2 35)", "$type": "color" } },
-	"radius": { "md": { "$value": "0.75rem", "$type": "dimension" } }
+	"radius": { "md": { "$value": "0.75rem", "$type": "dimension" } },
 }
 ```
 
@@ -27,8 +27,8 @@ A **runtime theme document** is a flat object passed to `registerTheme()` or `va
 	"displayName": "Sunset",
 	"tokens": {
 		"color": { "primary": "oklch(0.65 0.2 35)" },
-		"radius": { "md": "0.75rem" }
-	}
+		"radius": { "md": "0.75rem" },
+	},
 }
 ```
 
@@ -116,8 +116,7 @@ const result = validateTheme(myTheme);
 
 if (result.ok) {
 	console.log('Theme is valid!');
-}
-else {
+} else {
 	for (const issue of result.issues) {
 		console.error(`${issue.code}: ${issue.message} (at ${issue.path})`);
 	}
@@ -294,18 +293,18 @@ The built-in `brand` theme shows this. On top of its color palette it rounds the
 	"radius": {
 		"sm": { "$value": "0.375rem", "$type": "dimension" },
 		"md": { "$value": "0.5rem", "$type": "dimension" },
-		"lg": { "$value": "0.75rem", "$type": "dimension" }
+		"lg": { "$value": "0.75rem", "$type": "dimension" },
 	},
 	"typography": {
 		"font-sans": {
 			"$value": "\"Inter\", ui-sans-serif, system-ui, sans-serif",
-			"$type": "fontFamily"
-		}
-	}
+			"$type": "fontFamily",
+		},
+	},
 }
 ```
 
-It overrides three of the four radius stops and one typography token. `radius.full` and every other typography value (including `size-2xl`) go unmentioned, so they inherit. The resolved `tokens-brand.css` carries the rounded radii and the Inter stack next to the inherited defaults.
+It overrides three of the seven radius stops and one typography token. `radius.full` and every other typography value (including `size-2xl`) go unmentioned, so they inherit. The resolved `tokens-brand.css` carries the rounded radii and the Inter stack next to the inherited defaults.
 
 A runtime theme document does the same with flat values:
 
@@ -313,11 +312,29 @@ A runtime theme document does the same with flat values:
 {
 	"name": "rounded",
 	"displayName": "Rounded",
-	"tokens": { "radius": { "md": "0.75rem", "lg": "1rem" } }
+	"tokens": { "radius": { "md": "0.75rem", "lg": "1rem" } },
 }
 ```
 
 `validateTheme` resolves this against the defaults before checking, so the omitted categories are present in the validated result.
+
+### Tracking and chunky corners
+
+The `tracking` scale carries letter-spacing, from `tracking-tighter` to `tracking-widest`, the way the type scale carries weight and leading. A theme sets wide all-caps tracking, or the tight tracking a dense layout wants, through the token rather than a raw value:
+
+```jsonc
+{
+	"tokens": { "tracking": { "widest": "0.15em" } },
+}
+```
+
+The radius scale runs `sm` through `3xl`, then `full` (a pill). An asymmetric corner, the kind an LCARS panel uses, composes per-corner from those tokens, so a theme expresses it without a raw length:
+
+```css
+[data-slot='card'] {
+	border-radius: var(--radius-3xl) 0 var(--radius-3xl) 0;
+}
+```
 
 ## Theme-extension tokens
 
@@ -329,8 +346,8 @@ Declare it like any other token, in the theme JSON, under whatever category fits
 // themes/theme/vaporwave/dark.json (excerpt)
 {
 	"shadow": {
-		"neon": { "$value": "0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)", "$type": "shadow" }
-	}
+		"neon": { "$value": "0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)", "$type": "shadow" },
+	},
 }
 ```
 
@@ -357,7 +374,7 @@ And the token-query MCP reports the same `source`. Ask `lookupToken` for `shadow
 	"source": "theme-extension",
 	"present": true,
 	"cssVariable": "--shadow-neon",
-	"value": "0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)"
+	"value": "0 0 12px 2px oklch(0.7200 0.2000 330.00 / 0.6)",
 }
 ```
 
@@ -376,12 +393,12 @@ When a token you need does not exist in the schema, you add it to the canonical 
 	"motion": {
 		"duration": {
 			"fast": { "$value": "120ms", "$type": "duration" },
-			"base": { "$value": "240ms", "$type": "duration" }
+			"base": { "$value": "240ms", "$type": "duration" },
 		},
 		"easing": {
-			"standard": { "$value": "cubic-bezier(0.4, 0, 0.2, 1)", "$type": "cubicBezier" }
-		}
-	}
+			"standard": { "$value": "cubic-bezier(0.4, 0, 0.2, 1)", "$type": "cubicBezier" },
+		},
+	},
 }
 ```
 
