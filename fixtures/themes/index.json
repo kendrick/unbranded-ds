@@ -7,7 +7,7 @@
 			"dir": "fixtures/themes/lcars",
 			"meta": "fixtures/themes/lcars/meta.json",
 			"stressesAxes": ["shape", "type-tracking"],
-			"blockers": 5
+			"blockers": 0
 		}
 	]
 }

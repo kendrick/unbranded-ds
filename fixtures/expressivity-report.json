@@ -1,61 +1,8 @@
 {
-  "$generated": "scripts/expressivity-audit.mjs",
-  "total": 5,
-  "byType": {
-    "LITERAL": 5
-  },
-  "byAxis": {
-    "shape": 2,
-    "type": 3
-  },
-  "byFixture": {
-    "fixtures/themes/lcars": 5
-  },
-  "findings": [
-    {
-      "file": "fixtures/themes/lcars/parts.css",
-      "type": "LITERAL",
-      "line": 22,
-      "prop": "border-radius",
-      "msg": "border-radius: 1.75rem 0 1.75rem 0",
-      "axis": "shape",
-      "remedy": "Add a \"shape\" token for \"border-radius\" so themes route through var() instead of a raw value."
-    },
-    {
-      "file": "fixtures/themes/lcars/parts.css",
-      "type": "LITERAL",
-      "line": 29,
-      "prop": "border-radius",
-      "msg": "border-radius: 1.75rem 0 0 0",
-      "axis": "shape",
-      "remedy": "Add a \"shape\" token for \"border-radius\" so themes route through var() instead of a raw value."
-    },
-    {
-      "file": "fixtures/themes/lcars/parts.css",
-      "type": "LITERAL",
-      "line": 30,
-      "prop": "letter-spacing",
-      "msg": "letter-spacing: 0.18em",
-      "axis": "type",
-      "remedy": "Add a \"type\" token for \"letter-spacing\" so themes route through var() instead of a raw value."
-    },
-    {
-      "file": "fixtures/themes/lcars/parts.css",
-      "type": "LITERAL",
-      "line": 35,
-      "prop": "letter-spacing",
-      "msg": "letter-spacing: 0.1em",
-      "axis": "type",
-      "remedy": "Add a \"type\" token for \"letter-spacing\" so themes route through var() instead of a raw value."
-    },
-    {
-      "file": "fixtures/themes/lcars/parts.css",
-      "type": "LITERAL",
-      "line": 42,
-      "prop": "letter-spacing",
-      "msg": "letter-spacing: 0.12em",
-      "axis": "type",
-      "remedy": "Add a \"type\" token for \"letter-spacing\" so themes route through var() instead of a raw value."
-    }
-  ]
+	"$generated": "scripts/expressivity-audit.mjs",
+	"total": 0,
+	"byType": {},
+	"byAxis": {},
+	"byFixture": {},
+	"findings": []
 }
