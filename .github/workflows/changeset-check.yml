@@ -36,8 +36,17 @@ jobs:
 
       - name: Detect package changes
         id: detect
+        # A changeset is only required when a PR changes something that ships. Test
+        # files and the vitest config live under packages/ but never land in the
+        # published dist, so editing them can't affect consumers. Filter them out
+        # before deciding, so a test-only PR isn't forced into a version bump.
         run: |
-          if git diff --name-only origin/main...HEAD | grep -qE '^packages/(tokens|react)/'; then
+          PUBLISHABLE=$(git diff --name-only origin/main...HEAD \
+            | grep -E '^packages/(tokens|react)/' \
+            | grep -vE '\.test\.[jt]sx?$' \
+            | grep -vE '(^|/)vitest\.[^/]+$' \
+            || true)
+          if [ -n "$PUBLISHABLE" ]; then
             echo "package_changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "package_changed=false" >> "$GITHUB_OUTPUT"
