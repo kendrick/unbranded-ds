@@ -9,7 +9,8 @@ export default defineConfig({
 					name: 'unit',
 					environment: 'jsdom',
 					setupFiles: ['./vitest.setup.ts'],
-					include: ['src/**/*.test.{ts,tsx}'],
+					// The lint-rule test lives next to the rule it covers, outside src/.
+					include: ['src/**/*.test.{ts,tsx}', 'eslint/**/*.test.{ts,tsx}'],
 				},
 			},
 		],
