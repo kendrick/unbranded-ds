@@ -38,11 +38,12 @@ Storybook runs on `http://localhost:6006`. MCP endpoint is at `/mcp`.
 
 ## CI
 
-GitHub Actions runs on every PR and push to `main`. The pipeline has two jobs:
+GitHub Actions runs on every pull request and every push to `main`. A `changes` job runs first and flags docs-only PRs so the browser-heavy jobs can skip them. The rest:
 
-**verify** — lint, typecheck, unit tests, build every package, build Storybook, run the Storybook interaction and a11y tests. Any failure blocks the PR.
-
-**publish** — depends on verify. Publishes Storybook to Chromatic (with `skip: true` so no visual regression snapshots are consumed) and runs the MCP smoke test against the published endpoint.
+- `verify` — lint, typecheck, validate the sidecar docs, build every package, run the unit tests, and build Storybook. Lint covers the `tokens`, `react`, and `storybook` packages and fails on errors; the React 19 idiom warnings stay advisory. Any failure blocks the PR.
+- `storybook-test` — the Storybook interaction and accessibility tests, in a real browser via Playwright. Skipped on docs-only PRs.
+- `example-e2e` — lints and typechecks the example app, then runs its Playwright end-to-end suite against a production build. Skipped on docs-only PRs.
+- `publish` — depends on `verify`. Publishes Storybook to Chromatic (visual regression disabled, so no snapshots are consumed) and runs the MCP smoke test against the published endpoint.
 
 ### Chromatic setup
 
