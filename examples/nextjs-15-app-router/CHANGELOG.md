@@ -1,5 +1,16 @@
 # @unbranded-ds/example-nextjs
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [d32f629]
+- Updated dependencies [e3a0654]
+- Updated dependencies [22b015b]
+- Updated dependencies [4b71862]
+  - @unbranded-ds/tokens@0.7.0
+  - @unbranded-ds/react@0.5.1
+
 ## 0.0.1
 
 ### Patch Changes

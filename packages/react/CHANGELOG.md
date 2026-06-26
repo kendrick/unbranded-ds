@@ -1,5 +1,15 @@
 # @unbranded-ds/react changelog
 
+## 0.5.1
+
+### Patch Changes
+
+- 4b71862: Drop the redundant quotes inside the icon size-guard (`[&_svg:not([class*=size-])]`) on Button, Tabs, Select, and SegmentedControl. The quoted form escaped into the generated CSS as `[class*=\'size-\']`, which Tailwind's CSS optimizer couldn't parse and flagged on every build. Unquoted, the selector matches the same elements, so component rendering is unchanged.
+- Updated dependencies [d32f629]
+- Updated dependencies [e3a0654]
+- Updated dependencies [22b015b]
+  - @unbranded-ds/tokens@0.7.0
+
 ## 0.5.0
 
 ### Minor Changes

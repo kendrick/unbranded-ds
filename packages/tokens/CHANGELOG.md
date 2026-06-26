@@ -1,5 +1,20 @@
 # @unbranded-ds/tokens changelog
 
+## 0.7.0
+
+### Minor Changes
+
+- 22b015b: Add a `tracking` (letter-spacing) scale and larger `radius` steps, the two token scales a maximally divergent skin (the LCARS expressivity fixture) could not express through tokens before.
+
+  `tracking` is its own top-level category, like `motion`, that emits Tailwind's `--tracking-*` namespace (`tracking-tighter` through `tracking-widest`). `radius` gains `xl` (0.75rem), `2xl` (1rem), and `3xl` (1.5rem) between `lg` and the full pill; an asymmetric corner composes per-corner from the scale.
+
+  Both are required keys. The built-in themes inherit the new defaults and need no change. A fully-specified external theme must add the new keys, which is the breaking part of this pre-1.0 minor bump.
+
+### Patch Changes
+
+- d32f629: The token build now runs Prettier on the generated `defaults.generated.ts`, so it lands in the repo's single-quote style instead of raw JSON double quotes. `pnpm build` is idempotent again: it no longer leaves a dirty working tree, and the file stops flip-flopping between the build and a later `format` pass.
+- e3a0654: Add the LCARS expressivity-fixture identity under `themes/theme/lcars/`, built and AA-validated through the same pipeline as the shipped themes so the fixture corpus and its a11y guard are real. It stays out of the browser registry and `listThemes` on purpose, a fixture for stressing the design system rather than a registered product theme. Existing themes, the schema, and the exports are unchanged.
+
 ## 0.6.0
 
 ### Minor Changes
