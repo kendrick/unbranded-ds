@@ -49,6 +49,20 @@ export default defineMain({
 			'react/jsx-runtime',
 			'react/jsx-dev-runtime',
 		];
+		// Storybook bundles our package source (plus Base UI and lucide) into one flat
+		// client chunk, so Rollup strips every `'use client'` it meets and warns once per
+		// file; the sourcemap-location miss rides along with it. Neither is actionable in a
+		// client-only bundle, so swallow just those two codes and pass everything else through.
+		config.build ??= {};
+		config.build.rollupOptions ??= {};
+		const prevOnwarn = config.build.rollupOptions.onwarn;
+		config.build.rollupOptions.onwarn = (warning, defaultHandler) => {
+			if (warning.code === 'MODULE_LEVEL_DIRECTIVE' || warning.code === 'SOURCEMAP_ERROR')
+				return;
+			if (typeof prevOnwarn === 'function')
+				return prevOnwarn(warning, defaultHandler);
+			defaultHandler(warning);
+		};
 		return config;
 	},
 });
