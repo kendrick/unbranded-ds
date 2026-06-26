@@ -43,6 +43,7 @@ function normalize(value: string): string {
 function parseCssVars(themeName: string): Map<string, string> {
 	const css = readFileSync(join(cssDir, `tokens-${themeName}.css`), 'utf8');
 	const out = new Map<string, string>();
+	// eslint-disable-next-line regexp/no-super-linear-backtracking -- parses our own generated CSS at test time (trusted input), never user input, so the backtracking this rule guards against is not a DoS vector here
 	for (const m of css.matchAll(/(--[\w-]+):\s*([^;]+);/g))
 		out.set(m[1]!, m[2]!.trim());
 	return out;

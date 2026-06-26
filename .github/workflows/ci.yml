@@ -61,6 +61,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Lint runs before typecheck per the constitution's install → lint → typecheck
+      # job graph (Section VIII). errors-only is ESLint's default — the React-19 idiom
+      # warnings are intentionally non-blocking.
+      - name: Lint
+        run: pnpm lint
+
       - name: Typecheck
         run: pnpm typecheck
 

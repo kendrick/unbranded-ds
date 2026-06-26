@@ -23,6 +23,11 @@ export default antfu(
 			'camelcase': ['error', { ignoreImports: true }],
 			'style/multiline-ternary': 'off',
 			'style/arrow-parens': ['error', 'always'],
+			// antfu's quote-props consistency rule is pure churn on our token maps:
+			// it flagged 63 cosmetic "inconsistently quoted property" errors with no
+			// correctness value. Drop just this one rule; antfu still owns the rest of
+			// JS/TS formatting, and Prettier keeps CSS/HTML/Markdown.
+			'style/quote-props': 'off',
 
 			// eslint-plugin-pnpm (auto-enabled by antfu in pnpm monorepos) injects
 			// `trustPolicy: no-downgrade` into pnpm-workspace.yaml on every --fix,

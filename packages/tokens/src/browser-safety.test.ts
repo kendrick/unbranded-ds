@@ -16,6 +16,7 @@ const BROWSER_ENTRIES = ['client.ts', 'runtime.ts'];
 
 // `import type`/`export type` are erased before any bundler sees them, so a
 // type-only edge to a node module is harmless and must NOT be followed.
+// eslint-disable-next-line regexp/no-super-linear-backtracking -- runs only over this repo's own source at test time (trusted input), never user input, so the backtracking this rule guards against is not a DoS vector here
 const FROM_RE = /(?:import|export)\s+(?!type\b)[^'"]*?\sfrom\s*['"]([^'"]+)['"]/g;
 const SIDE_EFFECT_RE = /import\s+['"]([^'"]+)['"]/g;
 

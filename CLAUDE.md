@@ -1,6 +1,6 @@
 # heliostat Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-06-18
+Auto-generated from all feature plans. Last updated: 2026-06-19
 
 ## Active Technologies
 - TypeScript 5.x, strict, no `any` (Constitution VIII). React 19. + `@base-ui-components/react` (peer), the existing `lib/warn.ts` helper, `lib/cn`. No new dependencies. (021-form-control-a11y-naming)
@@ -8,6 +8,8 @@ Auto-generated from all feature plans. Last updated: 2026-06-18
 - TypeScript 5.x, strict, no `any` (Constitution VIII). DTCG JSON token sources. + Style Dictionary v4 (the token build, `sd.config.ts`), Zod (the theme schema + `contrastPairs`), the `color.ts` WCAG contrast math, Tailwind CSS v4 (`@theme` preset auto-maps `--color-*` to utilities), `@modelcontextprotocol/sdk` (the token-query MCP reads the token map). No new dependencies. (022-popover-tokens-contrast)
 - N/A — build-time DTCG JSON compiled to CSS variables, a Tailwind preset, JSON, and a typed token map. No runtime or persisted state. (022-popover-tokens-contrast)
 - TypeScript 5.x, strict, no `any` (Constitution VIII) + Style Dictionary v4 (the token build, `sd.config.ts`), Zod (theme schema + `contrastPairs`), Tailwind CSS v4 (`@theme` preset maps `--tracking-*` / `--radius-*` to utilities). No new dependencies. (023-expressivity-token-scales)
+- TypeScript 5.x (strict, no `any`) for `eslint.config.ts` and the rule test; YAML for the workflow; Node 24 in CI. + ESLint 9 (flat config) via `@antfu/eslint-config` ^9 and its peer plugins (`@eslint-react/eslint-plugin`, `eslint-plugin-format`, `eslint-plugin-jsx-a11y`, `eslint-plugin-react-refresh`), the in-house `no-hardcoded-colors` rule (`packages/react/eslint/no-hardcoded-colors.js`), Prettier ^3 (delegated by antfu for CSS/HTML/Markdown only), Turborepo (`turbo lint`), Vitest 3 (the rule test), GitHub Actions. (025-re-home-lint)
+- N/A — CI and config change, no runtime or persisted state. (025-re-home-lint)
 
 - TypeScript 5.x, strict, no `any` (Constitution VIII). React 19, Next.js 15 (App Router). + `next` ^15, `react`/`react-dom` 19, `@unbranded-ds/tokens` and `@unbranded-ds/react` at `workspace:*`, Tailwind CSS v4 (consumed through `@unbranded-ds/react/preset.css`), `next/font/local` (self-hosted font), `@playwright/test`, `@axe-core/playwright`. (015-nextjs-example-app)
 - `localStorage` only, through the design system's existing keys (`unbranded-ds-theme`, `unbranded-ds-density`, `unbranded-ds-theme-preference`). No new storage. (015-nextjs-example-app)
@@ -66,9 +68,9 @@ npm test && npm run lint
 TypeScript 5.x, strict mode, no `any` (EVER): Follow standard conventions
 
 ## Recent Changes
+- 025-re-home-lint: Added TypeScript 5.x (strict, no `any`) for `eslint.config.ts` and the rule test; YAML for the workflow; Node 24 in CI. + ESLint 9 (flat config) via `@antfu/eslint-config` ^9 and its peer plugins (`@eslint-react/eslint-plugin`, `eslint-plugin-format`, `eslint-plugin-jsx-a11y`, `eslint-plugin-react-refresh`), the in-house `no-hardcoded-colors` rule (`packages/react/eslint/no-hardcoded-colors.js`), Prettier ^3 (delegated by antfu for CSS/HTML/Markdown only), Turborepo (`turbo lint`), Vitest 3 (the rule test), GitHub Actions.
 - 023-expressivity-token-scales: Added TypeScript 5.x, strict, no `any` (Constitution VIII) + Style Dictionary v4 (the token build, `sd.config.ts`), Zod (theme schema + `contrastPairs`), Tailwind CSS v4 (`@theme` preset maps `--tracking-*` / `--radius-*` to utilities). No new dependencies.
 - 022-popover-tokens-contrast: Added TypeScript 5.x, strict, no `any` (Constitution VIII). DTCG JSON token sources. + Style Dictionary v4 (the token build, `sd.config.ts`), Zod (the theme schema + `contrastPairs`), the `color.ts` WCAG contrast math, Tailwind CSS v4 (`@theme` preset auto-maps `--color-*` to utilities), `@modelcontextprotocol/sdk` (the token-query MCP reads the token map). No new dependencies.
-- 021-form-control-a11y-naming: Added TypeScript 5.x, strict, no `any` (Constitution VIII). React 19. + `@base-ui-components/react` (peer), the existing `lib/warn.ts` helper, `lib/cn`. No new dependencies.
 
 
 <!-- MANUAL ADDITIONS START -->
